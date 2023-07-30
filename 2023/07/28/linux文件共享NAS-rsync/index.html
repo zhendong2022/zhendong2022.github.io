@@ -1,0 +1,566 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="文件共享NAS+rync日常使用：NAS比较多，公有云基本也是使用NAS，包括后续的PVC也有两种模式：云盘版本和NAS版本 NAS：直接进行挂载，要安装软件，NFS协议，可以共享挂载，存在一定的性能瓶颈 文件系统分类：EXT4，XFS，NFS（网络共享） VFS：屏蔽了底层文件系统的差异，给到操作系统指令去读，操作系统可以直接读到NAS内的内容，服务叫NAS，文件系统协议叫NFS 类似MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux文件共享NAS+rsync">
+<meta property="og:url" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="文件共享NAS+rync日常使用：NAS比较多，公有云基本也是使用NAS，包括后续的PVC也有两种模式：云盘版本和NAS版本 NAS：直接进行挂载，要安装软件，NFS协议，可以共享挂载，存在一定的性能瓶颈 文件系统分类：EXT4，XFS，NFS（网络共享） VFS：屏蔽了底层文件系统的差异，给到操作系统指令去读，操作系统可以直接读到NAS内的内容，服务叫NAS，文件系统协议叫NFS 类似MySQL">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232750861-1616131068.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232747504-1654273385.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232747954-1843971664.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232748354-1112462271.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232751192-225702285.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232751457-1386164171.png">
+<meta property="og:image" content="https://img2022.cnblogs.com/blog/2792175/202210/2792175-20221028232748918-255312001.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232751792-276836432.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232749632-1054540650.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232752358-113014360.png">
+<meta property="article:published_time" content="2023-07-28T19:53:38.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.162Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/2792175-20221028232750861-1616131068.png">
+  
+  
+  <title>linux文件共享NAS+rsync - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="linux文件共享NAS+rsync">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 19:53" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      26k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      214 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">linux文件共享NAS+rsync</h1>
+            
+            <div class="markdown-body">
+              <h1 id="文件共享NAS-rync"><a href="#文件共享NAS-rync" class="headerlink" title="文件共享NAS+rync"></a>文件共享NAS+rync</h1><p>日常使用：NAS比较多，公有云基本也是使用NAS，包括后续的PVC也有两种模式：云盘版本和NAS版本</p>
+<p>NAS：直接进行挂载，要安装软件，NFS协议，可以共享挂载，存在一定的性能瓶颈</p>
+<p>文件系统分类：EXT4，XFS，NFS（网络共享）</p>
+<p>VFS：屏蔽了底层文件系统的差异，给到操作系统指令去读，操作系统可以直接读到NAS内的内容，服务叫NAS，文件系统协议叫NFS</p>
+<p>类似MySQL的锁机制，NAS的文件共享也会被多个人访问，需要确保每个人的修改不要产生冲突，可以将用户上传的图片直接放到NAS上</p>
+<h2 id="注册中心"><a href="#注册中心" class="headerlink" title="注册中心"></a>注册中心</h2><p>NAS的服务起来后，会有端口号时常变化的情况，需要使用到注册中心；一旦NAS的服务启动了，就不会变了，包括NAS服务器的IP；用户想要访问NAS，就去到注册中心获取IP+端口，就可以访问了</p>
+<p>类似nacos注册中心，也是可以将微服务注册到nacos，用户/k8s/服务器等访问服务的时候，直接访问到nacos，访问微服务—&gt;pod，一个微服务=一个pod/services，对外提供服务</p>
+<p><img src="2792175-20221028232750861-1616131068.png" srcset="/img/loading.gif" lazyload alt="image-20221002115415916"></p>
+<p>基于RPC服务/协议来进行连接的(监听端口111)，RPMBIND服务</p>
+<p>先连接注册中心—访问到NAS服务—通过RPC服务(TCP)协议，连接到RPC，从而访问NFS服务，不管是mount也好还是访问/修改文件也好</p>
+<p><img src="2792175-20221028232747504-1654273385.png" srcset="/img/loading.gif" lazyload alt="image-20221002120706357"></p>
+<h1 id="搭建NFS文件共享系统"><a href="#搭建NFS文件共享系统" class="headerlink" title="搭建NFS文件共享系统"></a>搭建NFS文件共享系统</h1><h2 id="1-安装相关软件包"><a href="#1-安装相关软件包" class="headerlink" title="1.安装相关软件包"></a>1.安装相关软件包</h2><p>必备软件包：nfs-utils，客户端+服务端，自带nfs-server和nfs-utils客户端</p>
+<p>rpcbind：注册中心，监听111端口—&gt;相关依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">yum -y install rpcbind nfs-utils<br><br>rpm -ql nfs-utils | grep rpc<br>systemctl status rpcbind<br><br>ss -ntl | grep 111<br>netstat -ntlp | grep rpcbind<br>tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      4522/rpcbind        <br>tcp6       0      0 :::111                  :::*                    LISTEN      4522/rpcbind<br><br><span class="hljs-comment">##rpc服务以前叫portmapper</span><br>rpcinfo -p<br>   program vers proto   port  service<br>    100000    4   tcp    111  portmapper<br>    100000    3   tcp    111  portmapper<br>    100000    2   tcp    111  portmapper<br>    100000    4   udp    111  portmapper<br>    100000    3   udp    111  portmapper<br>    100000    2   udp    111  portmapper<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232747954-1843971664.png" srcset="/img/loading.gif" lazyload alt="image-20221002122141926"></p>
+<p>NFS监听端口号特别多，都是基于一些程序，服务提供的</p>
+<h2 id="2-启动nfs-server服务，观察端口号，只读权限查看"><a href="#2-启动nfs-server服务，观察端口号，只读权限查看" class="headerlink" title="2.启动nfs-server服务，观察端口号，只读权限查看"></a>2.启动nfs-server服务，观察端口号，只读权限查看</h2><p>showmount -e 10.0.0.129：看129的机器上有没有共享出来的目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl start nfs-server<br><br><span class="hljs-comment">##创建两个目录</span><br>[12:35:53 root@slave1 data]<span class="hljs-comment">#mkdir nfs-share1</span><br>[12:36:00 root@slave1 data]<span class="hljs-comment">#mkdir nfs-share2</span><br><br><span class="hljs-comment">##修改NFS共享目录配置</span><br>vim /etc/exports<br><br>/data/nfs-share1 *() ---&gt;共享哪个目录，其他人对他的权限，*代表所有，*(rw)代表读写<br>/data/nfs-share1 *(rw) ---&gt;*(rw)代表读写<br><br><span class="hljs-comment">##查看当前共享的目录</span><br>exportfs -v<br><span class="hljs-comment">##使配置文件生效</span><br>exportfs -r<br><br>[13:52:40 root@slave1 data]<span class="hljs-comment">#exportfs -v</span><br>/data/nfs-share1<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,ro,secure,root_squash,no_all_squash)<br>目前是只读的状态<br><br><span class="hljs-comment">##客户端挂载NAS</span><br>master<br>yum -y install nfsutils<br><span class="hljs-built_in">mkdir</span> -p /data/nfs<br><br><span class="hljs-comment">##showmount，这估计是访问111端口的</span><br>showmount -e 10.0.0.129<br>Export list <span class="hljs-keyword">for</span> 10.0.0.129:<br>/data/nfs-share1 *<br><br><span class="hljs-comment">##挂载NAS，使用的是nfs4的文件系统</span><br>mount 10.0.0.129:/data/nfs-share1 /data/nfs<br><span class="hljs-built_in">df</span> -Th | grep nfs<br>10.0.0.129:/data/nfs-share1 nfs4       98G   17G   82G  17% /data/nfs<br><br><span class="hljs-comment">##修改为rw读写权限</span><br>/data/nfs-share1 *(rw) ---&gt;*(rw)代表读写<br>[root@slave1 nfs-share1]<span class="hljs-comment">#exportfs -v</span><br>/data/nfs-share1<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-修改权限，映射账号，实现读写"><a href="#3-修改权限，映射账号，实现读写" class="headerlink" title="3.修改权限，映射账号，实现读写"></a>3.修改权限，映射账号，实现读写</h2><p>对于NFS的服务来讲：先在NFS服务器授权共享目录</p>
+<p>1.远程NFS客户端访问的用户，是根据UID来判断在nfs目录上写的用户/用户组的；比如root—&gt;nobody，但是普通用户就是普通用户，写上远端服务器的UID+GID</p>
+<p>2.修改共享目录的权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@slave1 nfs-share1]<span class="hljs-comment">#grep nobody /etc/passwd</span><br>nobody:x:99:99:Nobody:/:/sbin/nologin<br>nfsnobody:x:65534:65534:Anonymous NFS User:/var/lib/nfs:/sbin/nologin<br><br><span class="hljs-comment">##others实现读写</span><br><span class="hljs-built_in">chmod</span> 647 /data/nfs-share1<br>drw-r--rwx   2 root    root      32 Oct  2 13:54 nfs-share1<br><br><span class="hljs-comment">##root新建文件</span><br>这个变成nfsnobody了<br>[root@master nfs]<span class="hljs-comment">#echo 3test &gt;&gt; 3.txt</span><br>[root@master nfs]<span class="hljs-comment">#ll</span><br>total 12<br>-rw-r--r-- 1 root      root      501 Oct  2 13:54 1.txt<br>-rw-r--r-- 1 root      root      501 Oct  2 13:54 2.txt<br>-rw-r--r-- 1 nfsnobody nfsnobody   6 Oct  2 14:33 3.txt<br><br><span class="hljs-comment">##root用户被压榨成nfsnobody，root_squash</span><br><span class="hljs-comment">#这个ID为65534，证明是同一个账户，NFS服务器通过UID来判断</span><br>/data/nfs-share1<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)<br><br>[root@master nfs]<span class="hljs-comment">#id nfsnobody</span><br>uid=65534(nfsnobody) gid=65534(nfsnobody) <span class="hljs-built_in">groups</span>=65534(nfsnobody)<br><br>-rw-r--r-- 1 nfsnobody nfsnobody   6 Oct  2 14:33 3.txt<br>[root@slave1 nfs-share1]<span class="hljs-comment">#id nfsnobody</span><br>uid=65534(nfsnobody) gid=65534(nfsnobody) <span class="hljs-built_in">groups</span>=65534(nfsnobody)<br><br><br><span class="hljs-comment">#我使用普通用户来创建，ikun的uid和gid分别为1004和1006</span><br>[ikun@master nfs]$ <span class="hljs-built_in">echo</span> ikun &gt;&gt; ikun.txt<br>[ikun@master nfs]$ ll<br>total 16<br>-rw-r--r-- 1 root      root      501 Oct  2 13:54 1.txt<br>-rw-r--r-- 1 root      root      501 Oct  2 13:54 2.txt<br>-rw-r--r-- 1 nfsnobody nfsnobody   6 Oct  2 14:33 3.txt<br>-rw-rw-r-- 1 ikun      ikun        5 Oct  2 14:37 ikun.txt<br>[ikun@master nfs]$ <span class="hljs-built_in">id</span> ikun<br>uid=1004(ikun) gid=1006(ikun) <span class="hljs-built_in">groups</span>=1006(ikun)<br><br><span class="hljs-comment">#这边只会显示1004和1006的uid+gid，想实现在NFS服务器看到需要创建一个UID和GID和ikun一样的账号才行</span><br>[root@slave1 nfs-share1]<span class="hljs-comment">#ll</span><br>total 16<br>-rw-r--r-- 1 root      root      501 Oct  2 13:54 1.txt<br>-rw-r--r-- 1 root      root      501 Oct  2 13:54 2.txt<br>-rw-r--r-- 1 nfsnobody nfsnobody   6 Oct  2 14:33 3.txt<br>-rw-rw-r-- 1      1004      1006   5 Oct  2 14:37 ikun.txt<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-修改所有写入的账号映射成同一个账号nfsnobody，包括root"><a href="#4-修改所有写入的账号映射成同一个账号nfsnobody，包括root" class="headerlink" title="4.修改所有写入的账号映射成同一个账号nfsnobody，包括root"></a>4.修改所有写入的账号映射成同一个账号nfsnobody，包括root</h2><p>区分是那个账号写入的，也可以使用，统一映射成nfsnobody这个账号，统一UID和GID</p>
+<p>可以实现给多个WEB主机写图片，映射到他们的web目录下，比如说/apps/nginx/data/pic下，这样用户写图片的时候就写到nfs的空间，而不是写到web服务器的磁盘上，节省空间，高效云盘即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/exports<br><br>/data/nfs-share1 *(rw,all_squash)<br><span class="hljs-comment">#ro只读</span><br><span class="hljs-comment">#rw读写</span><br><span class="hljs-comment">#root_squash:映射成nfsnobody</span><br><span class="hljs-comment">#all_squash:所有映射成nfsnobody</span><br><span class="hljs-comment">#anonuid:特定用户UID，需要先创建好用户，useradd -u 6666 web -s /sbin/nologin</span><br><span class="hljs-comment">#anongid:特定用户GID</span><br><br>[root@slave1 nfs-share1]<span class="hljs-comment">#exportfs -r</span><br>[root@slave1 nfs-share1]<span class="hljs-comment">#exportfs -v</span><br>/data/nfs-share1<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,all_squash)<br><br>-rw-rw-r-- 1 nfsnobody nfsnobody   0 Oct  2 16:23 ikun1.txt<br>-rw-rw-r-- 1 ikun      ikun        5 Oct  2 14:37 ikun.txt<br>-rw-r--r-- 1 nfsnobody nfsnobody   0 Oct  2 16:23 root.txt<br><br>[root@slave1 nfs-share1]<span class="hljs-comment">#id nfsnobody</span><br>uid=65534(nfsnobody) gid=65534(nfsnobody) <span class="hljs-built_in">groups</span>=65534(nfsnobody)<br></code></pre></td></tr></table></figure>
+
+<p>针对特定的主机给特定的权限，不要所有人都可以读写，指定给132权限</p>
+<p>也可以给多个目录挂载规则</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">/data/nfs-share1 *(rw,all_squash) 10.0.0.132(ro)<br>/data/nfs-share2 *(ro)<br><br>[root@slave1 nfs-share1]<span class="hljs-comment">#exportfs -v</span><br>/data/nfs-share1<br>		10.0.0.132(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,ro,secure,root_squash,no_all_squash)<br>/data/nfs-share1<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,all_squash)<br><br>[root@rocky nfs]<span class="hljs-comment">#touch 111</span><br><span class="hljs-built_in">touch</span>: 无法创建 <span class="hljs-string">&#x27;111&#x27;</span>: 只读文件系统<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-实现nas设备永久挂载-客户端-etc-fstab"><a href="#5-实现nas设备永久挂载-客户端-etc-fstab" class="headerlink" title="5.实现nas设备永久挂载(客户端)/etc/fstab"></a>5.实现nas设备永久挂载(客户端)/etc/fstab</h2><p>记得是nfs，写fstab文件的时候</p>
+<p>一般内网都是通的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/fstab<br>10.0.0.129:/data/nfs-share1 /data/nfs nfs defaults,_netdev 0 0<br>mount -a<br>reboot重启测试<br><br>[root@rocky ~]<span class="hljs-comment">#df -Th | grep nfs</span><br>10.0.0.129:/data/nfs-share1 nfs4       98G   17G   82G   17% /data/nfs<br></code></pre></td></tr></table></figure>
+
+<h2 id="6-针对不同的项目写不同的exports规则-etc-exports-d-nginx-exports"><a href="#6-针对不同的项目写不同的exports规则-etc-exports-d-nginx-exports" class="headerlink" title="6.针对不同的项目写不同的exports规则/etc/exports.d/nginx.exports"></a>6.针对不同的项目写不同的exports规则/etc/exports.d/nginx.exports</h2><p>假设128是nginx机器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/exports.d/nginx.exports<br><br>/data/nfs-share2 10.0.0.128(rw)<br><br>exportfs -r <span class="hljs-comment">##配置文件生效</span><br>exportfs -v<br>/data/nfs-share1<br>		10.0.0.132(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,ro,secure,root_squash,no_all_squash)<br>/data/nfs-share2<br>		10.0.0.128(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)<br>/data/nfs-share1<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,all_squash)<br><br><span class="hljs-comment">##nfs-server</span><br><span class="hljs-built_in">chmod</span> 777 /data/nfs-share2/<br><br>[root@master nginx]<span class="hljs-comment">#touch nginx.pic</span><br>[root@master nginx]<span class="hljs-comment">#ll</span><br>total 0<br>-rw-r--r-- 1 nfsnobody nfsnobody 0 Oct  2 17:06 nginx.pic<br></code></pre></td></tr></table></figure>
+
+<h1 id="基于内核实现数据的实时同步inotify"><a href="#基于内核实现数据的实时同步inotify" class="headerlink" title="基于内核实现数据的实时同步inotify"></a>基于内核实现数据的实时同步inotify</h1><p>实现方式：inotify+rsync来实现</p>
+<p>查看内核文件，在/boot下面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@master boot]<span class="hljs-comment">#grep -i inotify config-3.10.0-1160.71.1.el7.x86_64</span><br>CONFIG_INOTIFY_USER=y<br><span class="hljs-comment">#功能已开启</span><br><br>inotify参数说明<br>[root@master boot]<span class="hljs-comment">#ll /proc/sys/fs/inotify/</span><br>total 0<br>-rw-r--r-- 1 root root 0 Oct  2 22:06 max_queued_events ---&gt;最大队列文件，代表能够监控最大变化事件。生产中调大<br>-rw-r--r-- 1 root root 0 Oct  2 22:06 max_user_instances ---&gt;每个用户创建inotify的最大值<br>-rw-r--r-- 1 root root 0 Oct  2 22:06 max_user_watches ---&gt;可以监控最大的文件个数，生产中调大<br><br>可以修改inotify的默认参数<br>grep -i max_queued_events /etc/sysctl.conf<br>grep -i max_user_watches<br><br>vim /etc/sysctl.conf <br>sysctl -p<br>net.nf_conntrack_max = 100000<br>net.ipv4.ip_forward = 1<br>fs.inotify.max_queued_events = 66666<br>fs.inotify.max_user_watches = 66666<br></code></pre></td></tr></table></figure>
+
+<h2 id="安装inotify-tools工具，实现inotifywait"><a href="#安装inotify-tools工具，实现inotifywait" class="headerlink" title="安装inotify-tools工具，实现inotifywait"></a>安装inotify-tools工具，实现inotifywait</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum -y install inotify-tools<br><br><span class="hljs-comment">##常用选项</span><br>inotifywait -m :保持事件监听<br>inotifywait -r :递归监控目录的数据变化<br>-q：输出少量的事件<br>-e：监听指定的事件<br><br>inotifywait -m /data/nfs-share1<br><br><span class="hljs-built_in">touch</span> nfs<br>[root@master boot]<span class="hljs-comment">#inotifywait -m /data/nfs</span><br>Setting up watches.<br>Watches established.<br>/data/nfs/ CREATE nfs<br>/data/nfs/ OPEN nfs<br>/data/nfs/ ATTRIB nfs<br>/data/nfs/ CLOSE_WRITE,CLOSE nfs<br><br>--format:输出的格式，可以自定义字样<br>--timefmt:时间格式<br>-e:监听指定事件，比如create，delete等<br><br><span class="hljs-comment">#持续后台监控，并记录日志</span><br>inotifywait -o /root/inotify.log -drq /data/www --timefmt <span class="hljs-string">&quot;%Y-%m-%d %H:%M:%S&quot;</span> --format <span class="hljs-string">&quot;%T %w%f event: %e&quot;</span><br><br><span class="hljs-comment">#持续前台监控特定事件，自定义格式</span><br>inotifywait -mrq /data/www --timefmt <span class="hljs-string">&quot;%F %H:%M:%S&quot;</span> --format <span class="hljs-string">&quot;%T %w%f event:%;e&quot;</span> -ecreate,delete,moved_to,close_write,attrib<br></code></pre></td></tr></table></figure>
+
+<h2 id="普通监控和自定义参数监控的区别：不需要额外去关注文件的操作"><a href="#普通监控和自定义参数监控的区别：不需要额外去关注文件的操作" class="headerlink" title="普通监控和自定义参数监控的区别：不需要额外去关注文件的操作"></a>普通监控和自定义参数监控的区别：不需要额外去关注文件的操作</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">编辑文件<br>vim d.txt<br>/data/nfs-share1/ CREATE d.txt<br>/data/nfs-share1/ ATTRIB d.txt<br>/data/nfs-share1/ CLOSE_WRITE,CLOSE d.txt<br><br>修改文件：涉及到东西太多，包括attrib，close_write等<br>删除文件：/data/nfs-share1/ DELETE a.txt<br><br>自定义参数：不用担心是否是哪个动作，直接显示时间+event，写入到变化日志中，可以查找，人为不需要去看他的文件具体是啥变化<br>不记录时间event<br>--format <span class="hljs-string">&quot;%T %w%f event:%;e&quot;</span><br>--format <span class="hljs-string">&#x27;%T %w %f&#x27;</span><br>inotifywait  -mrq  --exclude=<span class="hljs-string">&quot;.*\.swp&quot;</span> --timefmt <span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span> --format <span class="hljs-string">&#x27;%T %w %f&#x27;</span> -e create,delete,moved_to,close_write,attrib<br><br>2022-10-03 12:50:08 /data/nfs-share1/ e.txt<br>2022-10-03 12:50:08 /data/nfs-share1/ e.txt<br>2022-10-03 12:50:08 /data/nfs-share1/ e.txt<br></code></pre></td></tr></table></figure>
+
+<h2 id="实现inotify-rsync脚本同步备份数据"><a href="#实现inotify-rsync脚本同步备份数据" class="headerlink" title="实现inotify+rsync脚本同步备份数据"></a>实现inotify+rsync脚本同步备份数据</h2><p>实现rync实现增量复制</p>
+<p>rsync和rsync的协议</p>
+<p>rsync：实现源目录到目标目录的增量复制，但是需要提前准备好检测目录文件变化的脚本检测方式</p>
+<p>逻辑：一检测到nas服务器的/data/nfs-share1和2有变化，通过rsync同步过去</p>
+<p>环境：</p>
+<p>10.0.0.129 NAS服务器，共享目录</p>
+<p>10.0.0.132 NAS备份服务器</p>
+<h2 id="rsync常用参数"><a href="#rsync常用参数" class="headerlink" title="rsync常用参数"></a>rsync常用参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">-a:--archive 归档模式，表示以递归方式传输文件，并保持所有文件属性<br>-v:--verbose 详细模式输出<br>-z:-z, --compress 对备份的文件在传输时进行压缩处理<br>--delete:删除=删除，新建=新建，源+目的<br><br>一般<br>rsync -av 源目录/文件 目的目录/文件<br>rsync -av 源目录/文件 目的目录/文件<br><br>同步文件rsync -a 源 目的<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-在备份机器上安装rsync服务，监听873端口"><a href="#1-在备份机器上安装rsync服务，监听873端口" class="headerlink" title="1.在备份机器上安装rsync服务，监听873端口"></a>1.在备份机器上安装rsync服务，监听873端口</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum -y install rsync-daemon<br>systemctl <span class="hljs-built_in">enable</span> --now rsyncd<br>ss -ntl | grep 873<br><br><span class="hljs-comment">#主配置文件，共享一个目录出来，重启文件生效</span><br>vim /etc/rsyncd.conf<br><br>[bak]<br><span class="hljs-comment">##记得要写path，注释不要和具体的配置写在一行上面</span><br>path=/data/bak/<br><span class="hljs-comment">##不只读，可写，可以往里面同步数据</span><br><span class="hljs-built_in">read</span> only=no <br>systemctl restart rsyncd<br><br><span class="hljs-comment">#访问远程目录，已经显示出来了</span><br>rsync rsync://10.0.0.132<br><br>[root@slave1 ~]<span class="hljs-comment">#rsync rsync://10.0.0.132</span><br>bak        	<br><br><span class="hljs-comment">##修改备份目录的权限，使得others也可以写入，root用户写入被认为是例如nobody等</span><br><span class="hljs-built_in">chmod</span> 777 /data/bak<br>ll | grep bak<br>drwxrwxrwx.  2 root  root    33 10月  3 09:19 bak<br><br>ll /data/bak<br>总用量 4<br>-rw-r--r--. 1 root   root    0 10月  3 09:13 1.txt<br>-rw-r--r--. 1 nobody nobody 63 10月  3 09:19 shells<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-从数据机器进行备份"><a href="#2-从数据机器进行备份" class="headerlink" title="2.从数据机器进行备份"></a>2.从数据机器进行备份</h2><p>Cent OS7上面是nobody，Cent OS8上面是nfsnobody</p>
+<p>这里走的是rsync协议</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#尝试将文件同步到这个backup目录下，两周写法均可</span><br>rsync /etc/fstab rsync://root@10.0.0.132/bak<br>rsync /etc/fstab 10.0.0.132::bak<br><br>[root@rocky bak]<span class="hljs-comment">#ls</span><br>1.txt  shells<br><br><span class="hljs-comment">#尝试从远端拉取1.txt文件，成功，复制到当前目录.</span><br>rsync rsync://root@10.0.0.132/bak/1.txt .<br><br>ll /data/bak<br>总用量 4<br>-rw-r--r--. 1 root   root    0 10月  3 09:13 1.txt<br>-rw-r--r--. 1 nobody nobody 63 10月  3 09:19 shells<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-实现经过认证授权才可以同步文件，需要用到固定账号"><a href="#3-实现经过认证授权才可以同步文件，需要用到固定账号" class="headerlink" title="3.实现经过认证授权才可以同步文件，需要用到固定账号"></a>3.实现经过认证授权才可以同步文件，需要用到固定账号</h2><h2 id="注释和文本不要写在一行！！！"><a href="#注释和文本不要写在一行！！！" class="headerlink" title="注释和文本不要写在一行！！！"></a>注释和文本不要写在一行！！！</h2><p>基于账号验证，需要写到固定文件里，也可以expect交互式，最好是不要写到脚本里</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##在服务端编写配置文件</span><br>vim /etc/rsyncd.conf<br><br>uid = root<br>gid = root<br><span class="hljs-comment">#use chroot = yes</span><br>ignore errors<br>max connections = 0<br><span class="hljs-comment">##不限制连接数</span><br><span class="hljs-comment">#记录一下日志#</span><br><span class="hljs-built_in">log</span> file = /var/log/rsyncd.log<br>pid file = /var/run/rsyncd.pid<br>exclude = lost+found/<br><span class="hljs-comment">#transfer logging = yes</span><br><span class="hljs-comment">#timeout = 900</span><br><span class="hljs-comment">#ignore nonreadable = yes</span><br>dont compress   = *.gz *.tgz *.zip *.z *.Z *.rpm *.deb *.bz2 <span class="hljs-comment">##不要压缩</span><br><br>[bak]<br>path = /data/bak/<br><span class="hljs-comment">##记得要写path</span><br><span class="hljs-built_in">read</span> only = no<br><span class="hljs-comment">##不只读，可写</span><br>auth <span class="hljs-built_in">users</span> = rsyncuser <br><span class="hljs-comment">##默认用户</span><br>secrets file = /etc/rsync.pas <br><span class="hljs-comment">##默认密码</span><br><br><span class="hljs-comment">#服务端创建密码文件</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;rsyncuser:123&quot;</span> &gt; /etc/rsync.pas<br><span class="hljs-built_in">chmod</span> 600 /etc/rsync.pas <br><br><span class="hljs-comment">##加入开机启动</span><br>rsync --daemon<br>systemctl restart rsyncd<br><br><span class="hljs-comment">##客户端配置密码文件，只需要保留密码，修改权限</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;123&quot;</span> &gt; /etc/rsync.pas<br><span class="hljs-built_in">chmod</span> 600 /etc/rsync.pas<br></code></pre></td></tr></table></figure>
+
+<p>查看、上传和下载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##查看，调用自己客户端的密码文件，在服务端已经定义好了用户名和密码</span><br>[root@slave1 ~]<span class="hljs-comment">#rsync --password-file=/etc/rsync.pas rsync://rsyncuser@10.0.0.132/bak</span><br>drwxrwxrwx             46 2022/10/03 10:45:55 .<br>-rw-r--r--              0 2022/10/03 09:13:51 1.txt<br>-rw-r--r--            719 2022/10/03 10:45:55 fstab<br>-rw-r--r--             63 2022/10/03 09:19:59 shells<br><br><span class="hljs-comment">##上传</span><br>rsync -av /etc/group --password-file=/etc/rsync.pas rsync://rsyncuser@10.0.0.132/bak<br><br>sent 1,119 bytes  received 35 bytes  2,308.00 bytes/sec<br>total size is 1,028  speedup is 0.89<br><br><span class="hljs-comment">#查看</span><br>rsync --password-file=/etc/rsync.pas rsync://rsyncuser@10.0.0.132/bak<br>drwxrwxrwx             59 2022/10/03 11:27:30 .<br>-rw-r--r--              0 2022/10/03 09:13:51 1.txt<br>-rw-r--r--            719 2022/10/03 10:45:55 fstab<br>-rw-r--r--          1,028 2022/10/02 12:30:21 group<br>-rw-r--r--             63 2022/10/03 09:19:59 shells<br><br><span class="hljs-comment">#下载，到根目录</span><br>rsync -av --password-file=/etc/rsync.pas rsync://rsyncuser@10.0.0.132/bak/fstab .<br></code></pre></td></tr></table></figure>
+
+<h1 id="nas-inotify-rsync-shell实现实时同步文件"><a href="#nas-inotify-rsync-shell实现实时同步文件" class="headerlink" title="nas+inotify+rsync+shell实现实时同步文件"></a>nas+inotify+rsync+shell实现实时同步文件</h1><p>环境：</p>
+<p>10.0.0.132 备份服务器：搭建rsync同步服务端</p>
+<p>10.0.0.129 数据服务器：inotify实现监控挂载到本地的NAS目录文件变化，通过rsync实时同步到服务端，搭建NAS服务给到master服务nginx使用，存放nginx web端的文件(通过映射nobody)</p>
+<p><img src="2792175-20221028232748354-1112462271.png" srcset="/img/loading.gif" lazyload alt="image-20221003115501789"></p>
+<h2 id="1-基础环境"><a href="#1-基础环境" class="headerlink" title="1.基础环境"></a>1.基础环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">1.客户端<br>nginx端：10.0.0.128:/data/nfs<br><br><span class="hljs-comment">##挂载nas盘</span><br><span class="hljs-built_in">cat</span> /etc/fstab | grep nfs<br>10.0.0.129:/data/nfs-share1 /data/nfs nfs defaults,_netdev 0 0<br>mount -a<br>10.0.0.129:/data/nfs-share1 nfs4       98G   17G   82G  17% /data/nfs<br><br><span class="hljs-comment">##查看nas</span><br>[root@master nfs]<span class="hljs-comment">#ll</span><br>total 0<br>-rw-r--r-- 1 root root 0 Oct  3 12:04 test.txt<br><br>2.10.0.0.129 NAS服务端+inotify监控文件变化+rsync同步，基于/etc/rsync.pas密码文件来实现，inotifywait<br>监控/data/nfs-share1的数据变化，共享给到10.0.0.128使用<br><br>3.10.0.0.132 rsync同步远端目录 /data/bak，基于/etc/rsyncd.conf<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-编写脚本实现实时同步"><a href="#2-编写脚本实现实时同步" class="headerlink" title="2.编写脚本实现实时同步"></a>2.编写脚本实现实时同步</h2><p>逻辑：检查到源端有变化，则更新到目的端，10.0.0.132::bak</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim inotify_rsync.sh<br><br><span class="hljs-comment">##监控NAS目录的变化</span><br>SRC=<span class="hljs-string">&#x27;/data/nfs-share1/&#x27;</span><br><span class="hljs-comment">##备份服务器为132的bak，调用rsync的协议</span><br>DEST=<span class="hljs-string">&#x27;rsyncuser@10.0.0.132::bak&#x27;</span><br><br>rpm -q rsync &amp;&gt; /dev/null  || yum -y install rsync<br>rpm -q inotify-tools &amp;&gt; /dev/null  || yum -y install inotify-tools<br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;starting monitor file change...&quot;</span><br><span class="hljs-built_in">sleep</span> 2<br><span class="hljs-comment">#持续前台监控特定事件,定义时间格式、日期格式、动作(新建、删除、移动---重命名、写入、权限变化) + nas目录，输入到while内</span><br>inotifywait  -mrq  --exclude=<span class="hljs-string">&quot;.*\.swp&quot;</span> --timefmt <span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span> --format <span class="hljs-string">&#x27;%T %w %f&#x27;</span> -e create,delete,moved_to,close_write,attrib <span class="hljs-variable">$&#123;SRC&#125;</span> |<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> DATE TIME DIR FILE;<span class="hljs-keyword">do</span><br>        FILEPATH=<span class="hljs-variable">$&#123;DIR&#125;</span><span class="hljs-variable">$&#123;FILE&#125;</span><br>        <span class="hljs-comment">##表示新建=新建，删除=删除</span><br>        rsync -az --delete  --password-file=/etc/rsync.pas <span class="hljs-variable">$SRC</span> <span class="hljs-variable">$DEST</span> <br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;At <span class="hljs-variable">$&#123;TIME&#125;</span> on <span class="hljs-variable">$&#123;DATE&#125;</span>, file <span class="hljs-variable">$FILEPATH</span> was backuped up via rsync&quot;</span> &gt;&gt; /var/log/changelist.log<br>        <span class="hljs-comment">#日志在129上面，在129上执行的脚本</span><br><span class="hljs-keyword">done</span><br><br>2022-10-03 12:50:08 /data/nfs-share1/ e.txt<br>刚好4个变量，传参给DATE TIME DIR FILE<br><br>FILEPATH=<span class="hljs-variable">$&#123;DIR&#125;</span><span class="hljs-variable">$&#123;FILE&#125;</span>---&gt;/data/nfs-share1/e.txt<br></code></pre></td></tr></table></figure>
+
+<p>执行脚本，同时监控132的/data/bak</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#后台挂起监控，这个东西最好是实时跑的，或是不放心可以整个crontab -e让他实时跑</span><br><span class="hljs-built_in">nohup</span> ./inotify_rsync.sh<br>starting monitor file change...<br><br>crontab -e<br>* * * * * /root/inotify_rsync.sh<br><br>132上0.5监控一次，watch实时监控<br>watch -n0.5 <span class="hljs-built_in">ls</span> -l /data/bak<br><br><br><span class="hljs-comment">#在128nginx机器上实时写入文件</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;rsync test&quot;</span> &gt;&gt; rsync.txt<br><br>在129上查看实时日志，输出格式，查看变化的文件<br><span class="hljs-built_in">tail</span> -f /var/log/changelist.log<br>At 12:27:16 on 2022-10-03, file /data/nfs-share1/a.txt was backuped up via rsync<br>At 12:27:16 on 2022-10-03, file /data/nfs-share1/a.txt was backuped up via rsync<br><br>在132上查看实时rsyncd的日志<br><span class="hljs-built_in">tail</span> -f /var/log/rsyncd.log<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232751192-225702285.png" srcset="/img/loading.gif" lazyload alt="image-20221003131013163"><img src="2792175-20221028232751457-1386164171.png" srcset="/img/loading.gif" lazyload alt="image-20221003131143435"></p>
+<h1 id="基于sersync进行自动化同步"><a href="#基于sersync进行自动化同步" class="headerlink" title="基于sersync进行自动化同步"></a>基于sersync进行自动化同步</h1><p>使用sersync同步：省去了inotify监控很多不必要监控的事件，也是调用内核的inotify指令，inotify会重复调用rsync命令，造成资源的浪费</p>
+<p><img src="https://img2022.cnblogs.com/blog/2792175/202210/2792175-20221028232748918-255312001.png" srcset="/img/loading.gif" lazyload alt="image-20221003145413888"></p>
+<h2 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1.环境准备"></a>1.环境准备</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##获取软件包</span><br>sersync2.5.4_64bit_binary_stable_final.tar.gz<br><br>tar xf sersync2.5.4_64bit_binary_stable_final.tar.gz -C /apps/sersync<br><span class="hljs-built_in">ls</span> /apps/sersync<br><br>[root@slave1 GNU-Linux-x86]<span class="hljs-comment">#ls</span><br>confxml.xml  sersync2<br><br><span class="hljs-comment">##有关参数：</span><br>1.自动修改内核inotify的参数，grep fs.inotify.max_user_watches /etc/sysctl.conf<br>[root@slave1 GNU-Linux-x86]<span class="hljs-comment">#./sersync2 -h</span><br><span class="hljs-built_in">set</span> the system param<br>execute：<span class="hljs-built_in">echo</span> 50000000 &gt; /proc/sys/fs/inotify/max_user_watches<br>execute：<span class="hljs-built_in">echo</span> 327679 &gt; /proc/sys/fs/inotify/max_queued_events<br>parse the <span class="hljs-built_in">command</span> param<br>_______________________________________________________<br>参数-d:启用守护进程模式<br>参数-r:在监控前，将监控目录与远程主机用rsync命令推送一遍<br>c参数-n: 指定开启守护线程的数量，默认为10个<br>参数-o:指定配置文件，默认使用confxml.xml文件<br>参数-m:单独启用其他模块，使用 -m refreshCDN 开启刷新CDN模块<br>参数-m:单独启用其他模块，使用 -m socket 开启socket模块<br>参数-m:单独启用其他模块，使用 -m http 开启http模块<br>不加-m参数，则默认执行同步程序<br>________________________________________________________________<br><br>2.执行程序，后台运行<br>./sersync2 -dro confxml.xml <br><br>ps aux | grep sersync2<br>[root@slave1 GNU-Linux-x86]<span class="hljs-comment">#ps aux | grep sersync2</span><br>root      11708  0.0  0.2  92324  4856 ?        Ssl  14:59   0:00 ./sersync2 -dro confxml.xml<br><br>3.查看同步效果<br>master写/data/nfs<br>nas服务器获取新数据，inotify监控<br>调用rsync同步到远端服务器<br>watch -n0.5 <span class="hljs-built_in">ls</span> -l /data/bak<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232751792-276836432.png" srcset="/img/loading.gif" lazyload alt="image-20221003150955537"></p>
+<h2 id="2-config-xml的写法"><a href="#2-config-xml的写法" class="headerlink" title="2.config.xml的写法"></a>2.config.xml的写法</h2><p>注释的为修改部分</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;ISO-8859-1&quot;</span>?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;2.5&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">host</span> <span class="hljs-attr">hostip</span>=<span class="hljs-string">&quot;localhost&quot;</span> <span class="hljs-attr">port</span>=<span class="hljs-string">&quot;8008&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">host</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">debug</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">fileSystem</span> <span class="hljs-attr">xfs</span>=<span class="hljs-string">&quot;false&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">exclude</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;(.*)\.svn&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">exclude</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">exclude</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;(.*)\.gz&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">exclude</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">exclude</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;^info/*&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">exclude</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">exclude</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;^static/*&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">exclude</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">filter</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">inotify</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">delete</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">createFolder</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">createFile</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">closeWrite</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">moveFrom</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">moveTo</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">attrib</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span> <span class="hljs-comment">&lt;!--修改了属性后更新 --&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">modify</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">inotify</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">sersync</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">localpath</span> <span class="hljs-attr">watch</span>=<span class="hljs-string">&quot;/data/nfs-share1&quot;</span>&gt;</span> <span class="hljs-comment">&lt;!--修改同步目录为/data/nfs-share1 --&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">remote</span> <span class="hljs-attr">ip</span>=<span class="hljs-string">&quot;10.0.0.132&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;bak&quot;</span>/&gt;</span> <span class="hljs-comment">&lt;!--修改远端rsync备份服务器和备份目录/bak --&gt;</span><br>	    <span class="hljs-comment">&lt;!--&lt;remote ip=&quot;192.168.8.39&quot; name=&quot;tongbu&quot;/&gt;--&gt;</span><br>	    <span class="hljs-comment">&lt;!--&lt;remote ip=&quot;192.168.8.40&quot; name=&quot;tongbu&quot;/&gt;--&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">localpath</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">rsync</span>&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">commonParams</span> <span class="hljs-attr">params</span>=<span class="hljs-string">&quot;-artuz&quot;</span>/&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">auth</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-attr">users</span>=<span class="hljs-string">&quot;rsyncuser&quot;</span> <span class="hljs-attr">passwordfile</span>=<span class="hljs-string">&quot;/etc/rsync.pas&quot;</span>/&gt;</span> <span class="hljs-comment">&lt;!--鉴权用户名，调用本地的password文件 --&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">userDefinedPort</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span> <span class="hljs-attr">port</span>=<span class="hljs-string">&quot;874&quot;</span>/&gt;</span><span class="hljs-comment">&lt;!-- 默认端口port=874 --&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">timeout</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span> <span class="hljs-attr">time</span>=<span class="hljs-string">&quot;100&quot;</span>/&gt;</span><span class="hljs-comment">&lt;!-- timeout=100 --&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">ssh</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span>/&gt;</span> <span class="hljs-comment">&lt;!--禁用SSH协议 --&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">rsync</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">failLog</span> <span class="hljs-attr">path</span>=<span class="hljs-string">&quot;/tmp/rsync_fail_log.sh&quot;</span> <span class="hljs-attr">timeToExecute</span>=<span class="hljs-string">&quot;60&quot;</span>/&gt;</span><span class="hljs-comment">&lt;!--default every 60mins execute once--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">crontab</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span> <span class="hljs-attr">schedule</span>=<span class="hljs-string">&quot;600&quot;</span>&gt;</span><span class="hljs-comment">&lt;!--600mins--&gt;</span> <span class="hljs-comment">&lt;!--先禁用定时任务 --&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">crontabfilter</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">exclude</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;*.php&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">exclude</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">exclude</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;info/*&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">exclude</span>&gt;</span><br>	    <span class="hljs-tag">&lt;/<span class="hljs-name">crontabfilter</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">crontab</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">plugin</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;command&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">sersync</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;command&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">param</span> <span class="hljs-attr">prefix</span>=<span class="hljs-string">&quot;/bin/sh&quot;</span> <span class="hljs-attr">suffix</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">ignoreError</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span>	<span class="hljs-comment">&lt;!--prefix /opt/tongbu/mmm.sh suffix--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">filter</span> <span class="hljs-attr">start</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;(.*)\.php&quot;</span>/&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;(.*)\.sh&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">filter</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;socket&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">localpath</span> <span class="hljs-attr">watch</span>=<span class="hljs-string">&quot;/opt/tongbu&quot;</span>&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">deshost</span> <span class="hljs-attr">ip</span>=<span class="hljs-string">&quot;192.168.138.20&quot;</span> <span class="hljs-attr">port</span>=<span class="hljs-string">&quot;8009&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">localpath</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;refreshCDN&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">localpath</span> <span class="hljs-attr">watch</span>=<span class="hljs-string">&quot;/data0/htdocs/cms.xoyo.com/site/&quot;</span>&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">cdninfo</span> <span class="hljs-attr">domainname</span>=<span class="hljs-string">&quot;ccms.chinacache.com&quot;</span> <span class="hljs-attr">port</span>=<span class="hljs-string">&quot;80&quot;</span> <span class="hljs-attr">username</span>=<span class="hljs-string">&quot;xxxx&quot;</span> <span class="hljs-attr">passwd</span>=<span class="hljs-string">&quot;xxxx&quot;</span>/&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">sendurl</span> <span class="hljs-attr">base</span>=<span class="hljs-string">&quot;http://pic.xoyo.com/cms&quot;</span>/&gt;</span><br>	    <span class="hljs-tag">&lt;<span class="hljs-name">regexurl</span> <span class="hljs-attr">regex</span>=<span class="hljs-string">&quot;false&quot;</span> <span class="hljs-attr">match</span>=<span class="hljs-string">&quot;cms.xoyo.com/site([/a-zA-Z0-9]*).xoyo.com/images&quot;</span>/&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">localpath</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="基于LNMP架构搭建LB-web-mysql-nas架构，实现从web站点上传的图片自动同步"><a href="#基于LNMP架构搭建LB-web-mysql-nas架构，实现从web站点上传的图片自动同步" class="headerlink" title="基于LNMP架构搭建LB+web+mysql+nas架构，实现从web站点上传的图片自动同步"></a>基于LNMP架构搭建LB+web+mysql+nas架构，实现从web站点上传的图片自动同步</h1><p>环境：</p>
+<p>10.0.0.128 apache+wordpress服务，数据库主库指向10.0.0.132，基于docker来安装，映射出来，docker安装wordpress</p>
+<p>10.0.0.132 MySQL(主)，备份服务器</p>
+<p>10.0.0.129 MySQL(从)，NAS服务器，NAS服务器指向</p>
+<h2 id="1-docker搭建wordpress-MySQL"><a href="#1-docker搭建wordpress-MySQL" class="headerlink" title="1.docker搭建wordpress+MySQL"></a>1.docker搭建wordpress+MySQL</h2><p>docker run的时候，需要-v映射到nfs的共享目录，单个docker的映射目录()</p>
+<p>还是直接docker run得了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull wordpress<br>docker run --name wordpress -p 8002:80 -v /apps/wordpress:/var/www/html/  -d wordpress<br><br><span class="hljs-comment">#docker run --name wordpress -p 8002:80 -v /apps/uploads:/var/www/html/wp-content/uploads  -d wordpress</span><br><br>docker stop `docker ps  | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br>docker <span class="hljs-built_in">rm</span> -f `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br><br><span class="hljs-comment">##查看工作目录，查看从docker仓库下载下来的docker image镜像</span><br><span class="hljs-comment">##docker inspect imageID/image name，就是查看dockerfile</span><br>[root@master ~]<span class="hljs-comment">#docker inspect wordpress | grep -i working</span><br><span class="hljs-string">&quot;WorkingDir&quot;</span>: <span class="hljs-string">&quot;/var/www/html&quot;</span>,<br><br>[root@master ~]<span class="hljs-comment">#docker ps</span><br>CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                                   NAMES<br>974257bc8c36   wordpress   <span class="hljs-string">&quot;docker-entrypoint.s…&quot;</span>   4 seconds ago   Up 3 seconds   0.0.0.0:8002-&gt;80/tcp, :::8002-&gt;80/tcp   wordpress<br><br>ss -ntl | grep 8002<br>LISTEN     0      128          *:8002                     *:*                  <br>LISTEN     0      128       [::]:8002                  [::]:*      <br><br>10.0.0.128:8002<br><br><span class="hljs-comment">##MySQL操作，需要提前建库和用户</span><br><span class="hljs-comment">##所有的建站信息全部存放在表里</span><br><br>[(none)]&gt;create database wordpress;<br>Query OK, 1 row affected (0.01 sec)<br><br>[(none)]&gt;grant all on wordpress.* to wp@<span class="hljs-string">&#x27;%&#x27;</span>;<br>Query OK, 0 rows affected (0.01 sec)<br><br>[(none)]&gt;flush privileges;<br>Query OK, 0 rows affected (0.00 sec)<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232749632-1054540650.png" srcset="/img/loading.gif" lazyload alt="image-20221003210709016"></p>
+<h2 id="2-rsync直接同步uploads目录到备份机-wp"><a href="#2-rsync直接同步uploads目录到备份机-wp" class="headerlink" title="2.rsync直接同步uploads目录到备份机[wp]"></a>2.rsync直接同步uploads目录到备份机[wp]</h2><p>docker搭建映射出来的路径，不能再进行一次挂载，所以说API服务器有两个，IP+相同的端口号，uploads的rsync直接指向到10.0.0.132的复制目录，/data/bak</p>
+<p>[root@master uploads]#exportfs -r<br>exportfs: /apps/wordpress/wp-content/uploads does not support NFS export</p>
+<p>如果是多个web前端的话，程序可以控制写到LB的IP，负载均衡两个WEB，两个WEB的图片备份都指向备份机器，且两台WEB之间同步图片</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##安装rsync工具和inotify-tools工具</span><br>rpm -q rsync &amp;&gt; /dev/null  || yum -y install rsync<br>rpm -q inotify-tools &amp;&gt; /dev/null  || yum -y install inotify-tools<br><br><span class="hljs-comment">#1.站点图片目录，有记录日期，直接同步这个文件夹，发布新文章，新图片上面都有</span><br>/apps/wordpress/wp-content/uploads<br><br>[root@master 10]<span class="hljs-comment">#ls</span><br>0923test-01-1024x640.jpg  0923test-01-300x188.jpg  0923test-01.jpg     image-150x150.png   image-1568x842.png  image-768x412.png<br>0923test-01-150x150.jpg   0923test-01-768x480.jpg  image-1024x550.png  image-1536x825.png  image-300x161.png   image.png<br><br><span class="hljs-comment">#2.直接使用sersync或者是脚本同步uploads到备份服务器10.0.0.132</span><br>scp sersync2.5.4_64bit_binary_stable_final.tar.gz 10.0.0.128:/root<br>tar xf sersync2.5.4_64bit_binary_stable_final.tar.gz /apps/sersync<br><br><span class="hljs-comment">#3.编辑xml文件</span><br>vim confxml.xml<br>&lt;sersync&gt;<br>        &lt;localpath watch=<span class="hljs-string">&quot;/apps/wordpress/wp-content/uploads&quot;</span>&gt; &lt;!--/apps/wordpress/wp-content/uploads --&gt;<br>            &lt;remote ip=<span class="hljs-string">&quot;10.0.0.132&quot;</span> name=<span class="hljs-string">&quot;wp&quot;</span>/&gt; &lt;!--修改远端rsync备份服务器和备份目录 --&gt;<br>        &lt;/localpath&gt;<br>        &lt;rsync&gt;<br>            &lt;commonParams params=<span class="hljs-string">&quot;-artuz&quot;</span>/&gt;<br>            &lt;auth start=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-built_in">users</span>=<span class="hljs-string">&quot;rsyncuser&quot;</span> passwordfile=<span class="hljs-string">&quot;/etc/rsync.pas&quot;</span>/&gt; &lt;!--鉴权用户名，调用本地的password文件 --&gt;<br><br><span class="hljs-comment">#4.编辑备份端</span><br>rpm -q rsync &amp;&gt; /dev/null  || yum -y install rsync<br><br>vim /etc/rsyncd.conf<br>[wp]<br>path = /data/wordpress/<br><span class="hljs-comment">##记得要写path/</span><br><span class="hljs-built_in">read</span> only = no<br><span class="hljs-comment">##不只读，可写</span><br>auth <span class="hljs-built_in">users</span> = rsyncuser<br><span class="hljs-comment">##默认用户</span><br>secrets file = /etc/rsync.pas<br><span class="hljs-comment">##默认密码</span><br><br><span class="hljs-comment">##重启服务</span><br>systemctl restart rsyncd<br><br><span class="hljs-comment">#5.运行脚本，监控/data/wordpress/2022/10/的变化</span><br><span class="hljs-comment">#同步前先进行scp同步一遍先</span><br>scp /apps/wordpress/wp-content/uploads/* 10.0.0.132:/data/wordpress/<br><br><span class="hljs-comment">#执行脚本</span><br>master:[root@master GNU-Linux-x86]<span class="hljs-comment">#./sersync2 -dro confxml.xml</span><br><span class="hljs-built_in">nohup</span> ./sersync2 -dro confxml.xml<br><br>ps aux | grep ser<br>root      13227  0.0  0.0 125108   712 ?        Ssl  23:02   0:00 ./sersync2 -dro confxml.xml<br><br><span class="hljs-comment">##监控变化</span><br>backup:watch -n0.5 ll /data/wordpress/2022/10/<br><br>在wordpress站点发布图片，图片名字为10044444test.jpg<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232752358-113014360.png" srcset="/img/loading.gif" lazyload alt="image-20221003233819624"></p>
+<h2 id="3-rsync使用脚本-在没有包的情况下，常用"><a href="#3-rsync使用脚本-在没有包的情况下，常用" class="headerlink" title="3.rsync使用脚本(在没有包的情况下，常用)"></a>3.rsync使用脚本(在没有包的情况下，常用)</h2><p>顺便安装了rsync和inotify，可以作为定时任务，或者nohup也行</p>
+<p>缺点：调用多次rsync，有点小毛病，调用多次create，attribu等指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim inotify_rsync.sh<br><span class="hljs-built_in">nohup</span> ./inotify_rsync.sh<br><br><span class="hljs-comment">##监控NAS目录的变化</span><br>SRC=<span class="hljs-string">&#x27;/apps/wordpress/wp-content/uploads/&#x27;</span><br><span class="hljs-comment">##备份服务器为132的bak，调用rsync的协议</span><br>DEST=<span class="hljs-string">&#x27;rsyncuser@10.0.0.132::wp&#x27;</span><br><br>rpm -q rsync &amp;&gt; /dev/null  || yum -y install rsync<br>rpm -q inotify-tools &amp;&gt; /dev/null  || yum -y install inotify-tools<br><br><span class="hljs-comment">#修改参数，监控文件数量</span><br><span class="hljs-built_in">echo</span> 50000000 &gt; /proc/sys/fs/inotify/max_user_watches<br><span class="hljs-built_in">echo</span> 327679 &gt; /proc/sys/fs/inotify/max_queued_events<br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;starting monitor file change...&quot;</span><br><span class="hljs-built_in">sleep</span> 2<br><span class="hljs-comment">#持续前台监控特定事件,定义时间格式、日期格式、动作(新建、删除、移动---重命名、写入、权限变化) + nas目录，输入到while内</span><br>inotifywait  -mrq  --exclude=<span class="hljs-string">&quot;.*\.swp&quot;</span> --timefmt <span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span> --format <span class="hljs-string">&#x27;%T %w %f&#x27;</span> -e create,delete,moved_to,close_write,attrib <span class="hljs-variable">$&#123;SRC&#125;</span> |<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> DATE TIME DIR FILE;<span class="hljs-keyword">do</span><br>        FILEPATH=<span class="hljs-variable">$&#123;DIR&#125;</span><span class="hljs-variable">$&#123;FILE&#125;</span><br>        <span class="hljs-comment">##表示新建=新建，删除=删除</span><br>        rsync -az --delete  --password-file=/etc/rsync.pas <span class="hljs-variable">$SRC</span> <span class="hljs-variable">$DEST</span> <br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;At <span class="hljs-variable">$&#123;TIME&#125;</span> on <span class="hljs-variable">$&#123;DATE&#125;</span>, file <span class="hljs-variable">$FILEPATH</span> was backuped up via rsync&quot;</span> &gt;&gt; /var/log/changelist.log<br>        <span class="hljs-comment">#日志在129上面，在129上执行的脚本</span><br><span class="hljs-keyword">done</span><br><br>Every 0.5s: tree /data/wordpress/2022/10/  <br>├── test11-1024x640.jpg<br>├── test11-150x150.jpg<br>├── test11-300x188.jpg<br>├── test11-768x480.jpg<br></code></pre></td></tr></table></figure>
+
+<h2 id="nohup-英文全称-no-hang-up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。"><a href="#nohup-英文全称-no-hang-up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。" class="headerlink" title="nohup 英文全称 no hang up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。"></a><strong>nohup</strong> 英文全称 no hang up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。</h2><h2 id="4-负载均衡架构"><a href="#4-负载均衡架构" class="headerlink" title="4.负载均衡架构"></a>4.负载均衡架构</h2><p>nginx：前端负载均衡</p>
+<p>web01，web02：docker部署</p>
+<p>备份服务器：web01和web02互相使用rsync脚本同步，同步前先完成一遍复制确保一致</p>
+<p>web01和web02再备份一次到备份服务器</p>
+<p>3方—4方—多方同步解决</p>
+<p>目前只能实现docker单节点部署wordpress，通过脚本自动备份到远端132的机器</p>
+<p>1.环境：可以在slave1上面搭建web02站点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs bash">搭建docker环境，搭建私有仓库<br>1.关闭防火墙，SELINUX<br>sed <span class="hljs-string">&#x27;s/enable/disabled/g&#x27;</span> /etc/config/selinux<br><br>2.卸载旧版本的docker包<br>rpm -qa | grep docker<br>yum -y remove docker*，删除掉所有的依赖<br><br>3.docker安装存储库<br>yum install -y yum-utils device-mapper-persistent-data lvm2<br><br>4.添加阿里云的yum源<br>    yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo<br>修改内部的gpgcheck<br>:%s/gpgcheck=1/gpgcheck=0/g<br>sed -i <span class="hljs-string">&#x27;s/gpgcheck=1/gpgcheck=0/g&#x27;</span> /etc/yum.repos.d/docker-ce.repo<br><br>5.安装docker-ce<br>yum install docker-ce docker-ce-cli containerd.io -y<br><br>scp -r /etc/docker/* 10.0.0.129:/etc/docker/<br><br>6.修改docker的源daemon.json<br><br>systemctl daemon-reload;systemctl restart docker<br><br>7.测试安装服务<br>docker images<br>docker ps -a<br><br><br>yum -y install httpd php php-mysqlnd php-json<br><span class="hljs-built_in">chown</span> apache.apache /var/www/html/*<br>ll /var/www/html/*<br></code></pre></td></tr></table></figure>
+
+<p>2.拷贝所有web01站点的信息过去，docker需要映射出来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs bash">1.配置docker基础环境<br><br>--拉取最新镜像<br>docker pull wordpress<br><br>--拉取仓库镜像，运行<br>docker pull registry<br>docker run -d -p 5000:5000 --restart=always --name registry -v /apps/myregistry:/var/lib/registry registry<br><br>--打标签<br>docker image tag wordpress 10.0.0.128:5000/wordpress:v1.0<br>[root@master registry]<span class="hljs-comment">#docker images</span><br>REPOSITORY                  TAG       IMAGE ID       CREATED         SIZE<br>10.0.0.128:5000/wordpress   v1.0      c3c92cc3dcb1   9 months ago    616MB<br><br>--配置insucure的镜像仓库地址<br>vim /etc/docker/daemon.json<br>&#123;<br>    <span class="hljs-string">&quot;registry-mirrors&quot;</span>: [<br>        <span class="hljs-string">&quot;https://plqjafsr.mirror.aliyuncs.com&quot;</span><br>    ],<br>    <span class="hljs-string">&quot;exec-opts&quot;</span>: [<br>        <span class="hljs-string">&quot;native.cgroupdriver=systemd&quot;</span><br>    ],<br>    <span class="hljs-string">&quot;log-driver&quot;</span>: <span class="hljs-string">&quot;json-file&quot;</span>,<br>    <span class="hljs-string">&quot;log-opts&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;max-size&quot;</span>: <span class="hljs-string">&quot;100m&quot;</span><br>    &#125;,<br>    <span class="hljs-string">&quot;storage-driver&quot;</span>: <span class="hljs-string">&quot;overlay2&quot;</span>,<br>    <span class="hljs-string">&quot;insecure-registries&quot;</span>: [<span class="hljs-string">&quot;10.0.0.128:5000&quot;</span>] ---配置本地仓库<br>&#125;<br><br>--重新加载<br>systemctl daemon-reload<br>systemctl restart docker<br><br>--推送，查看<br>docker push 10.0.0.128:5000/wordpress:v1.0<br>curl http://10.0.0.128:5000/v2/_catalog<br>&#123;<span class="hljs-string">&quot;repositories&quot;</span>:[<span class="hljs-string">&quot;wordpress&quot;</span>]&#125;<br><br>--slave1尝试<br>[root@slave1 ~]<span class="hljs-comment">#curl http://10.0.0.128:5000/v2/_catalog</span><br>&#123;<span class="hljs-string">&quot;repositories&quot;</span>:[<span class="hljs-string">&quot;wordpress&quot;</span>]&#125;<br><br><br>2.slave1拉取镜像，运行<br><br>--slave1<br>docker pull 10.0.0.128:5000/wordpress:v1.0<br><br>docker run --name wordpress -p 8002:80 --restart=always -v /apps/wordpress:/var/www/html/  -d 10.0.0.128:5000/wordpress:v1.0<br>docker run --name wordpress -p 8002:80 --restart=always -v /apps/wordpress:/var/www/html/  -d wordpress<br>docker start `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br><br>--拷贝web01的文件到/apps/wordpress<br>scp -r -p /apps/wordpress/* 10.0.0.129:/apps/wordpress/<br><br>rsync -a /apps/wordpress/* 10.0.0.129:/apps/wordpress/<br><br>3.试运行<br>docker stop `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br>docker start `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br>docker <span class="hljs-built_in">rm</span> -f `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br></code></pre></td></tr></table></figure>
+
+<p>3.配置WEB01的DNS解析，添加A记录</p>
+<p>4.前端添加一个nginx或者是LVS，实现前端负载均衡</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#将docker的目录共享出来</span><br>/apps/wordpress *(rw,all_squash)<br><br>exportfs -r<br>exportfs -v<br>/apps/wordpress<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,all_squash)<br><br><span class="hljs-comment">#10.0.0.129挂载docker目录</span><br>[root@slave1 wordpress]<span class="hljs-comment">#showmount -e 10.0.0.128</span><br>Export list <span class="hljs-keyword">for</span> 10.0.0.128:<br>/apps/wordpress *<br><br>[root@slave1 wordpress]<span class="hljs-comment">#docker restart ae516f4c8676</span><br>ae516f4c8676<br>[root@slave1 wordpress]<span class="hljs-comment">#docker ps</span><br>CONTAINER ID   IMAGE                            COMMAND                  CREATED      STATUS         PORTS                                   NAMES<br>ae516f4c8676   10.0.0.128:5000/wordpress:v1.0   <span class="hljs-string">&quot;docker-entrypoint.s…&quot;</span>   4 days ago   Up 2 seconds   0.0.0.0:8002-&gt;80/tcp, :::8002-&gt;80/tcp   wordpress<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第九周</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E4%B8%8E%E9%9B%86%E7%BE%A4/">
+                        <span class="hidden-mobile">MySQL主从复制与集群</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

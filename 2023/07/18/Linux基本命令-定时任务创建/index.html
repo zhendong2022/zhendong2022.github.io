@@ -1,0 +1,583 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1、基本命令 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465uname -m 显示机器的处理器架构uname -r 显示正在使用的内核版本dmidecode -q 显示硬件系统部件(SMBIOS &#x2F; DM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux基本命令+定时任务创建">
+<meta property="og:url" content="http://example.com/2023/07/18/Linux%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%88%9B%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="1、基本命令 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465uname -m 显示机器的处理器架构uname -r 显示正在使用的内核版本dmidecode -q 显示硬件系统部件(SMBIOS &#x2F; DM">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-18T15:11:41.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.911Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Linux基本命令+定时任务创建 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux基本命令+定时任务创建">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-18 15:11" pubdate>
+        July 18, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      20k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      171 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux基本命令+定时任务创建</h1>
+            
+            <div class="markdown-body">
+              <p>1、基本命令</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></div></td><td class="code"><pre><code class="hljs tcl">uname -m 显示机器的处理器架构<br>uname -r 显示正在使用的内核版本<br>dmidecode -q 显示硬件系统部件<br>(SMBIOS / DMI) hdparm -i /dev/hda 罗列一个磁盘的架构特性<br>hdparm -tT /dev/sda 在磁盘上执行测试性读取操作系统信息<br>arch 显示机器的处理器架构<br>uname -m 显示机器的处理器架构<br>uname -r 显示正在使用的内核版本<br>dmidecode -q 显示硬件系统部件 - (SMBIOS / DMI)<br>hdparm -i /dev/hda 罗列一个磁盘的架构特性<br>hdparm -tT /dev/sda 在磁盘上执行测试性读取操作<br>cat /<span class="hljs-keyword">proc</span>/cpuinfo 显示CPU<span class="hljs-title"> info的信息</span><br>cat /<span class="hljs-keyword">proc</span>/interrupts 显示中断<span class="hljs-title"></span><br><span class="hljs-title">cat</span> /<span class="hljs-keyword">proc</span>/meminfo 校验内存使用<span class="hljs-title"></span><br><span class="hljs-title">cat</span> /<span class="hljs-keyword">proc</span>/swaps 显示哪些swap被使用<span class="hljs-title"></span><br><span class="hljs-title">cat</span> /<span class="hljs-keyword">proc</span>/version 显示内核的版本<span class="hljs-title"></span><br><span class="hljs-title">cat</span> /<span class="hljs-keyword">proc</span>/net/dev 显示网络适配器及统计<span class="hljs-title"></span><br><span class="hljs-title">cat</span> /<span class="hljs-keyword">proc</span>/mounts 显示已加载的文件系统<span class="hljs-title"></span><br><span class="hljs-title">lspci</span> -tv 罗列<span class="hljs-title"> PCI</span> 设备<span class="hljs-title"></span><br><span class="hljs-title">lsusb</span> -tv 显示<span class="hljs-title"> USB</span> 设备<span class="hljs-title"></span><br><span class="hljs-title">date</span> 显示系统日期<span class="hljs-title"></span><br><span class="hljs-title">cal</span> 2007 显示2007年的日历表<span class="hljs-title"></span><br><span class="hljs-title">date</span> 041217002007.00 设置日期和时间 - 月日时分年.秒<span class="hljs-title"></span><br><span class="hljs-title">clock</span> -w 将时间修改保存到<span class="hljs-title"> BIOS2、关机：</span><br>shutdown -h<span class="hljs-title"> now</span> 关闭系统(1)<span class="hljs-title"></span><br><span class="hljs-title">init</span> 0 关闭系统(2)<span class="hljs-title"></span><br><span class="hljs-title">telinit</span> 0 关闭系统(3)<span class="hljs-title"></span><br><span class="hljs-title">shutdown</span> -h<span class="hljs-title"> hours:minutes</span> &amp; 按预定时间关闭系统<span class="hljs-title"></span><br><span class="hljs-title">shutdown</span> -c 取消按预定时间关闭系统<span class="hljs-title"></span><br><span class="hljs-title">shutdown</span> -r<span class="hljs-title"> now</span> 重启(1)<span class="hljs-title"></span><br><span class="hljs-title">reboot</span> 重启(2)<span class="hljs-title"></span><br><span class="hljs-title">logout</span> 注销3、文件目录操作：<span class="hljs-title"></span><br><span class="hljs-title">cd</span> /home 进入 &#x27;/<span class="hljs-title"> home&#x27;</span> 目录&#x27;<span class="hljs-title"></span><br><span class="hljs-title">cd</span> .. 返回上一级目录<span class="hljs-title"></span><br><span class="hljs-title">cd</span> ../.. 返回上两级目录<span class="hljs-title"></span><br><span class="hljs-title">cd</span> 进入个人的主目录<span class="hljs-title"></span><br><span class="hljs-title">cd</span> ~user1 进入个人的主目录<span class="hljs-title"></span><br><span class="hljs-title">cd</span> - 返回上次所在的目录<span class="hljs-title"></span><br><span class="hljs-title">pwd</span> 显示工作路径<span class="hljs-title"></span><br><span class="hljs-title">ls</span> 查看目录中的文件<span class="hljs-title"></span><br><span class="hljs-title">ls</span> -F 查看目录中的文件<span class="hljs-title"></span><br><span class="hljs-title">ls</span> -l 显示文件和目录的详细资料<span class="hljs-title"></span><br><span class="hljs-title">ls</span> -a 显示隐藏文件<span class="hljs-title"></span><br><span class="hljs-title">ls</span> *[0-9]* 显示包含数字的文件名和目录名<span class="hljs-title"></span><br><span class="hljs-title">tree</span> 显示文件和目录由根目录开始的树形结构(1)<span class="hljs-title"></span><br><span class="hljs-title">lstree</span> 显示文件和目录由根目录开始的树形结构(2)<span class="hljs-title"></span><br><span class="hljs-title">mkdir</span> dir1 创建一个叫做 &#x27;dir1&#x27; 的目录&#x27;<span class="hljs-title"></span><br><span class="hljs-title">mkdir</span> dir1<span class="hljs-title"> dir2</span> 同时创建两个目录<span class="hljs-title"></span><br><span class="hljs-title">mkdir</span> -p /tmp/dir1/dir2 创建一个目录树<span class="hljs-title"></span><br><span class="hljs-title">rm</span> -f<span class="hljs-title"> file1</span> 删除一个叫做 &#x27;file1&#x27; 的文件&#x27;<span class="hljs-title"></span><br><span class="hljs-title">rmdir</span> dir1 删除一个叫做 &#x27;dir1&#x27; 的目录&#x27;<span class="hljs-title"></span><br><span class="hljs-title">rm</span> -rf<span class="hljs-title"> dir1</span> 删除一个叫做 &#x27;dir1&#x27; 的目录并同时删除其内容<span class="hljs-title"></span><br><span class="hljs-title">rm</span> -rf<span class="hljs-title"> dir1</span> dir2 同时删除两个目录及它们的内容<span class="hljs-title"></span><br><span class="hljs-title">mv</span> dir1<span class="hljs-title"> new_dir</span> 重命名/移动 一个目录<span class="hljs-title"></span><br><span class="hljs-title">cp</span> file1<span class="hljs-title"> file2</span> 复制一个文件<span class="hljs-title"></span><br><span class="hljs-title">cp</span> dir/* . 复制一个目录下的所有文件到当前工作目录<span class="hljs-title"></span><br><span class="hljs-title">cp</span> -a /tmp/dir1 . 复制一个目录到当前工作目录<span class="hljs-title"></span><br><span class="hljs-title">cp</span> -a<span class="hljs-title"> dir1</span> dir2 复制一个目录<span class="hljs-title"></span><br><span class="hljs-title">ln</span> -s<span class="hljs-title"> file1</span> lnk1 创建一个指向文件或目录的软链接<span class="hljs-title"></span><br><span class="hljs-title">ln</span> file1<span class="hljs-title"> lnk1</span> 创建一个指向文件或目录的物理链接<span class="hljs-title"></span><br><span class="hljs-title">touch</span> -t 0712250000<span class="hljs-title"> file1</span> 修改一个文件或目录的时间戳 - (YYMMDDhhmm)<span class="hljs-title"></span><br><span class="hljs-title">file</span> file1<span class="hljs-title"> outputs</span> the<span class="hljs-title"> mime</span> type<span class="hljs-title"> of</span> the<span class="hljs-title"> file</span> as<span class="hljs-title"> text</span><br>iconv -l 列出已知的编码<span class="hljs-title"></span><br><span class="hljs-title">iconv</span> -f<span class="hljs-title"> fromEncoding</span> -t<span class="hljs-title"> toEncoding</span> inputFile &gt;<span class="hljs-title"> outputFile</span> creates<span class="hljs-title"> a</span> new<span class="hljs-title"> from</span> the<span class="hljs-title"> given</span> input<span class="hljs-title"> file</span> by<span class="hljs-title"> assuming</span> it<span class="hljs-title"> is</span> encoded<span class="hljs-title"> in</span> fromEncoding<span class="hljs-title"> and</span> converting<span class="hljs-title"> it</span> to<span class="hljs-title"> toEncoding.</span><br>find . -maxdepth 1 -name *.jpg -print -exec<span class="hljs-title"> convert</span> &quot;&#123;&#125;<span class="hljs-string">&quot; -resize 80x60 &quot;</span>thumbs/&#123;&#125;<span class="hljs-string">&quot; \; batch resize files in the current directory and send them to a thumbnails directory (requires convert from Imagemagick)</span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>查找</li>
+</ol>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-built_in">find</span> / -<span class="hljs-built_in">name</span> file1 从 <span class="hljs-string">&#x27;/&#x27;</span> 开始进入根文件系统搜索文件和目录<br><span class="hljs-built_in">find</span> / -user user1 搜索属于用户 <span class="hljs-string">&#x27;user1&#x27;</span> 的文件和目录<br><span class="hljs-built_in">find</span> /home/user1 -<span class="hljs-built_in">name</span> \*.bin 在目录 <span class="hljs-string">&#x27;/ home/user1&#x27;</span> 中搜索带有<span class="hljs-string">&#x27;.bin&#x27;</span> 结尾的文件<br><span class="hljs-built_in">find</span> /usr/bin -<span class="hljs-built_in">type</span> f -atime +<span class="hljs-number">100</span> 搜索在过去<span class="hljs-number">100</span>天内未被使用过的执行文件<br><span class="hljs-built_in">find</span> /usr/bin -<span class="hljs-built_in">type</span> f -mtime -<span class="hljs-number">10</span> 搜索在<span class="hljs-number">10</span>天内被创建或者修改过的文件<br><span class="hljs-built_in">find</span> / -<span class="hljs-built_in">name</span> \*.rpm -<span class="hljs-built_in">exec</span> chmod <span class="hljs-number">755</span> <span class="hljs-string">&#x27;&#123;&#125;&#x27;</span> \; 搜索以 <span class="hljs-string">&#x27;.rpm&#x27;</span> 结尾的文件并定义其权限<br><span class="hljs-built_in">find</span> / -xdev -<span class="hljs-built_in">name</span> \*.rpm 搜索以 <span class="hljs-string">&#x27;.rpm&#x27;</span> 结尾的文件，忽略光驱、捷盘等可移动设备<br>locate \*.ps 寻找以 <span class="hljs-string">&#x27;.ps&#x27;</span> 结尾的文件 - 先运行 <span class="hljs-string">&#x27;updatedb&#x27;</span> 命令<br>whereis <span class="hljs-built_in">halt</span> 显示一个二进制文件、源码或man的位置<br>which <span class="hljs-built_in">halt</span> 显示一个二进制文件或可执行文件的完整路径<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>挂载一个文件系统</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs awk">mount <span class="hljs-regexp">/dev/</span>hda2 <span class="hljs-regexp">/mnt/</span>hda2 挂载一个叫做hda2的盘 - 确定目录 <span class="hljs-string">&#x27;/ mnt/hda2&#x27;</span> 已经存在<br>umount <span class="hljs-regexp">/dev/</span>hda2 卸载一个叫做hda2的盘 - 先从挂载点 <span class="hljs-string">&#x27;/ mnt/hda2&#x27;</span> 退出<br>fuser -km <span class="hljs-regexp">/mnt/</span>hda2 当设备繁忙时强制卸载<br>umount -n <span class="hljs-regexp">/mnt/</span>hda2 运行卸载操作而不写入 <span class="hljs-regexp">/etc/m</span>tab 文件- 当文件为只读或当磁盘写满时非常有用<br>mount <span class="hljs-regexp">/dev/</span>fd0 <span class="hljs-regexp">/mnt/</span>floppy 挂载一个软盘<br>mount <span class="hljs-regexp">/dev/</span>cdrom <span class="hljs-regexp">/mnt/</span>cdrom 挂载一个cdrom或dvdrom<br>mount <span class="hljs-regexp">/dev/</span>hdc <span class="hljs-regexp">/mnt/</span>cdrecorder 挂载一个cdrw或dvdrom<br>mount <span class="hljs-regexp">/dev/</span>hdb <span class="hljs-regexp">/mnt/</span>cdrecorder 挂载一个cdrw或dvdrom<br>mount -o loop file.iso <span class="hljs-regexp">/mnt/</span>cdrom 挂载一个文件或ISO镜像文件<br>mount -t vfat <span class="hljs-regexp">/dev/</span>hda5 <span class="hljs-regexp">/mnt/</span>hda5 挂载一个Windows FAT32文件系统<br>mount <span class="hljs-regexp">/dev/</span>sda1 <span class="hljs-regexp">/mnt/u</span>sbdisk 挂载一个usb 捷盘或闪存设备<br>mount -t smbfs -o username=user,password=pass <span class="hljs-regexp">//</span>WinClient<span class="hljs-regexp">/share /m</span>nt/share 挂载一个windows网络共享<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>磁盘空间</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">df</span> -h 显示已经挂载的分区列表<br><span class="hljs-built_in">ls</span> -lSr |more 以尺寸大小排列文件和目录<br><span class="hljs-built_in">du</span> -sh dir1 估算目录 <span class="hljs-string">&#x27;dir1&#x27;</span> 已经使用的磁盘空间<span class="hljs-string">&#x27;</span><br><span class="hljs-string">du -sk * | sort -rn 以容量大小为依据依次显示文件和目录的大小</span><br><span class="hljs-string">rpm -q -a --qf &#x27;</span>%10&#123;SIZE&#125;t%&#123;NAME&#125;n<span class="hljs-string">&#x27; | sort -k1,1n 以大小为依据依次显示已安装的rpm包所使用的空间 (fedora, redhat类系统)</span><br><span class="hljs-string">dpkg-query -W -f=&#x27;</span><span class="hljs-variable">$&#123;Installed-Size;10&#125;</span>t<span class="hljs-variable">$&#123;Package&#125;</span>n<span class="hljs-string">&#x27; | sort -k1,1n 以大小为依据显示已安装的deb包所使用的空间 (ubuntu, debian类系统)</span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>用户和群组</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs awk">groupadd group_name 创建一个新用户组<br>groupdel group_name 删除一个用户组<br>groupmod -n new_group_name old_group_name 重命名一个用户组<br>useradd -c <span class="hljs-string">&quot;Name Surname &quot;</span> -g admin -d <span class="hljs-regexp">/home/u</span>ser1 -s <span class="hljs-regexp">/bin/</span>bash user1 创建一个属于 <span class="hljs-string">&quot;admin&quot;</span> 用户组的用户<br>useradd user1 创建一个新用户<br>userdel -r user1 删除一个用户 ( <span class="hljs-string">&#x27;-r&#x27;</span> 排除主目录)<br>usermod -c <span class="hljs-string">&quot;User FTP&quot;</span> -g system -d <span class="hljs-regexp">/ftp/u</span>ser1 -s <span class="hljs-regexp">/bin/</span>nologin user1 修改用户属性<br>passwd 修改口令<br>passwd user1 修改一个用户的口令 (只允许root执行)<br>chage -E <span class="hljs-number">2005</span>-<span class="hljs-number">12</span>-<span class="hljs-number">31</span> user1 设置用户口令的失效期限<br>pwck 检查 <span class="hljs-string">&#x27;/etc/passwd&#x27;</span> 的文件格式和语法修正以及存在的用户<br>grpck 检查 <span class="hljs-string">&#x27;/etc/passwd&#x27;</span> 的文件格式和语法修正以及存在的群组<br>newgrp group_name 登陆进一个新的群组以改变新创建文件的预设群组<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>文件的权限  使用 “+” 设置权限，使用 “-” 用于取消</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ls</span> -lh 显示权限<br><span class="hljs-built_in">ls</span> /tmp | <span class="hljs-built_in">pr</span> -T5 -W<span class="hljs-variable">$COLUMNS</span> 将终端划分成5栏显示<br><span class="hljs-built_in">chmod</span> ugo+rwx directory1 设置目录的所有人(u)、群组(g)以及其他人(o)以读（r ）、写(w)和执行(x)的权限<br><span class="hljs-built_in">chmod</span> go-rwx directory1 删除群组(g)与其他人(o)对目录的读写执行权限<br><span class="hljs-built_in">chown</span> user1 file1 改变一个文件的所有人属性<br><span class="hljs-built_in">chown</span> -R user1 directory1 改变一个目录的所有人属性并同时改变改目录下所有文件的属性<br><span class="hljs-built_in">chgrp</span> group1 file1 改变文件的群组<br><span class="hljs-built_in">chown</span> user1:group1 file1 改变一个文件的所有人和群组属性<br>find / -perm -u+s 罗列一个系统中所有使用了SUID控制的文件<br><span class="hljs-built_in">chmod</span> u+s /bin/file1 设置一个二进制文件的 SUID 位 - 运行该文件的用户也被赋予和所有者同样的权限<br><span class="hljs-built_in">chmod</span> u-s /bin/file1 禁用一个二进制文件的 SUID位<br><span class="hljs-built_in">chmod</span> g+s /home/public 设置一个目录的SGID 位 - 类似SUID ，不过这是针对目录的<br><span class="hljs-built_in">chmod</span> g-s /home/public 禁用一个目录的 SGID 位<br><span class="hljs-built_in">chmod</span> o+t /home/public 设置一个文件的 STIKY 位 - 只允许合法所有人删除文件<br><span class="hljs-built_in">chmod</span> o-t /home/public 禁用一个目录的 STIKY 位<br><span class="hljs-built_in">chmod</span> +x 文件路径 为所有者、所属组和其他用户添加执行的权限<br><span class="hljs-built_in">chmod</span> -x 文件路径 为所有者、所属组和其他用户删除执行的权限<br><span class="hljs-built_in">chmod</span> u+x 文件路径 为所有者添加执行的权限<br><span class="hljs-built_in">chmod</span> g+x 文件路径 为所属组添加执行的权限<br><span class="hljs-built_in">chmod</span> o+x 文件路径 为其他用户添加执行的权限<br><span class="hljs-built_in">chmod</span> ug+x 文件路径 为所有者、所属组添加执行的权限<br><span class="hljs-built_in">chmod</span> =wx 文件路径 为所有者、所属组和其他用户添加写、执行的权限，取消读权限<br><span class="hljs-built_in">chmod</span> ug=wx 文件路径 为所有者、所属组添加写、执行的权限，取消读权限<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>文件的特殊属性 ，使用 “+” 设置权限，使用 “-” 用于取消</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs css">chattr +<span class="hljs-selector-tag">a</span> file1 只允许以追加方式读写文件<br>chattr +c file1 允许这个文件能被内核自动压缩/解压<br>chattr +d file1 在进行文件系统备份时，dump程序将忽略这个文件<br>chattr +<span class="hljs-selector-tag">i</span> file1 设置成不可变的文件，不能被删除、修改、重命名或者链接<br>chattr +s file1 允许一个文件被安全地删除<br>chattr +S file1 一旦应用程序对这个文件执行了写操作，使系统立刻把修改的结果写到磁盘<br>chattr +u file1 若文件被删除，系统会允许你在以后恢复这个被删除的文件<br>lsattr 显示特殊的属性<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>打包和压缩文件</li>
+</ol>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs stylus">bunzip2 file1<span class="hljs-selector-class">.bz2</span> 解压一个叫做 <span class="hljs-string">&#x27;file1.bz2&#x27;</span>的文件<br>bzip2 file1 压缩一个叫做 <span class="hljs-string">&#x27;file1&#x27;</span> 的文件<br>gunzip file1<span class="hljs-selector-class">.gz</span> 解压一个叫做 <span class="hljs-string">&#x27;file1.gz&#x27;</span>的文件<br>gzip file1 压缩一个叫做 <span class="hljs-string">&#x27;file1&#x27;</span>的文件<br>gzip -<span class="hljs-number">9</span> file1 最大程度压缩<br>rar <span class="hljs-selector-tag">a</span> file1<span class="hljs-selector-class">.rar</span> test_file 创建一个叫做 <span class="hljs-string">&#x27;file1.rar&#x27;</span> 的包<br>rar <span class="hljs-selector-tag">a</span> file1<span class="hljs-selector-class">.rar</span> file1 file2 dir1 同时压缩 <span class="hljs-string">&#x27;file1&#x27;</span>, <span class="hljs-string">&#x27;file2&#x27;</span> 以及目录 <span class="hljs-string">&#x27;dir1&#x27;</span><br>rar x file1<span class="hljs-selector-class">.rar</span> 解压rar包<br>unrar x file1<span class="hljs-selector-class">.rar</span> 解压rar包<br>tar -cvf archive<span class="hljs-selector-class">.tar</span> file1 创建一个非压缩的 tarball<br>tar -cvf archive<span class="hljs-selector-class">.tar</span> file1 file2 dir1 创建一个包含了 <span class="hljs-string">&#x27;file1&#x27;</span>, <span class="hljs-string">&#x27;file2&#x27;</span> 以及 <span class="hljs-string">&#x27;dir1&#x27;</span>的档案文件<br>tar -tf archive<span class="hljs-selector-class">.tar</span> 显示一个包中的内容<br>tar -xvf archive<span class="hljs-selector-class">.tar</span> 释放一个包<br>tar -xvf archive<span class="hljs-selector-class">.tar</span> -C /tmp 将压缩包释放到 /tmp目录下<br>tar -cvfj archive<span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.bz2</span> dir1 创建一个bzip2格式的压缩包<br>tar -xvfj archive<span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.bz2</span> 解压一个bzip2格式的压缩包<br>tar -cvfz archive<span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.gz</span> dir1 创建一个gzip格式的压缩包<br>tar -xvfz archive<span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.gz</span> 解压一个gzip格式的压缩包<br>zip file1<span class="hljs-selector-class">.zip</span> file1 创建一个zip格式的压缩包<br>zip -r file1<span class="hljs-selector-class">.zip</span> file1 file2 dir1 将几个文件和目录同时压缩成一个zip格式的压缩包<br>unzip file1<span class="hljs-selector-class">.zip</span> 解压一个zip格式压缩包<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>RPM 包</li>
+</ol>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs gradle">rpm -ivh <span class="hljs-keyword">package</span>.rpm 安装一个rpm包<br>rpm -ivh --nodeeps <span class="hljs-keyword">package</span>.rpm 安装一个rpm包而忽略依赖关系警告<br>rpm -U <span class="hljs-keyword">package</span>.rpm 更新一个rpm包但不改变其配置文件<br>rpm -F <span class="hljs-keyword">package</span>.rpm 更新一个确定已经安装的rpm包<br>rpm -e package_name.rpm 删除一个rpm包<br>rpm -qa 显示系统中所有已经安装的rpm包<br>rpm -qa | <span class="hljs-keyword">grep</span> httpd 显示所有名称中包含 <span class="hljs-string">&quot;httpd&quot;</span> 字样的rpm包<br>rpm -qi package_name 获取一个已安装包的特殊信息<br>rpm -qg <span class="hljs-string">&quot;System Environment/Daemons&quot;</span> 显示一个组件的rpm包<br>rpm -ql package_name 显示一个已经安装的rpm包提供的文件列表<br>rpm -qc package_name 显示一个已经安装的rpm包提供的配置文件列表<br>rpm -q package_name --whatrequires 显示与一个rpm包存在依赖关系的列表<br>rpm -q package_name --whatprovides 显示一个rpm包所占的体积<br>rpm -q package_name --scripts 显示在安装/删除期间所执行的脚本l<br>rpm -q package_name --changelog 显示一个rpm包的修改历史<br>rpm -qf <span class="hljs-regexp">/etc/</span>httpd<span class="hljs-regexp">/conf/</span>httpd.conf 确认所给的文件由哪个rpm包所提供<br>rpm -qp <span class="hljs-keyword">package</span>.rpm -l 显示由一个尚未安装的rpm包提供的文件列表<br>rpm --<span class="hljs-keyword">import</span> <span class="hljs-regexp">/media/</span>cdrom/RPM-GPG-KEY 导入公钥数字证书<br>rpm --checksig <span class="hljs-keyword">package</span>.rpm 确认一个rpm包的完整性<br>rpm -qa gpg-pubkey 确认已安装的所有rpm包的完整性<br>rpm -V package_name 检查文件尺寸、 许可、类型、所有者、群组、MD5检查以及最后修改时间<br>rpm -Va 检查系统中所有已安装的rpm包- 小心使用<br>rpm -Vp <span class="hljs-keyword">package</span>.rpm 确认一个rpm包还未安装<br>rpm2cpio <span class="hljs-keyword">package</span>.rpm | cpio --extract --make-directories *bin* 从一个rpm包运行可执行文件<br>rpm -ivh <span class="hljs-regexp">/usr/</span>src<span class="hljs-regexp">/redhat/</span>RPMS<span class="hljs-regexp">/`arch`/</span><span class="hljs-keyword">package</span>.rpm 从一个rpm源码安装一个构建好的包<br>rpmbuild --rebuild package_name.src.rpm 从一个rpm源码构建一个 rpm 包<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>YUM 软件包升级器</li>
+</ol>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ceylon">yum install <span class="hljs-keyword">package</span><span class="hljs-number">_n</span>ame 下载并安装一个rpm包<br>yum localinstall <span class="hljs-keyword">package</span><span class="hljs-number">_n</span>ame.rpm 将安装一个rpm包，使用你自己的软件仓库为你解决所有依赖关系<br>yum update <span class="hljs-keyword">package</span><span class="hljs-number">_n</span>ame.rpm 更新当前系统中所有安装的rpm包<br>yum update <span class="hljs-keyword">package</span><span class="hljs-number">_n</span>ame 更新一个rpm包<br>yum remove <span class="hljs-keyword">package</span><span class="hljs-number">_n</span>ame 删除一个rpm包<br>yum list 列出当前系统中安装的所有包<br>yum search <span class="hljs-keyword">package</span><span class="hljs-number">_n</span>ame 在rpm仓库中搜寻软件包<br>yum clean packages 清理rpm缓存删除下载的包<br>yum clean headers 删除所有头文件<br>yum clean all 删除所有缓存的包和头文件<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>deb 包</li>
+</ol>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs vim">dpkg -i package.<span class="hljs-keyword">deb</span> 安装/更新一个 <span class="hljs-keyword">deb</span> 包<br>dpkg -r package_name 从系统删除一个 <span class="hljs-keyword">deb</span> 包<br>dpkg -<span class="hljs-keyword">l</span> 显示系统中所有已经安装的 <span class="hljs-keyword">deb</span> 包<br>dpkg -<span class="hljs-keyword">l</span> | <span class="hljs-keyword">grep</span> httpd 显示所有名称中包含 <span class="hljs-string">&quot;httpd&quot;</span> 字样的<span class="hljs-keyword">deb</span>包<br>dpkg -s package_name 获得已经安装在系统中一个特殊包的信息<br>dpkg -L package_name 显示系统中已经安装的一个<span class="hljs-keyword">deb</span>包所提供的文件列表<br>dpkg --contents package.<span class="hljs-keyword">deb</span> 显示尚未安装的一个包所提供的文件列表<br>dpkg -S /bin/ping 确认所给的文件由哪个<span class="hljs-keyword">deb</span>包提供<br>APT 软件工具 (Debian, Ubuntu 以及类似系统)<br>apt-<span class="hljs-built_in">get</span> install package_name 安装/更新一个 <span class="hljs-keyword">deb</span> 包<br>apt-cdrom install package_name 从光盘安装/更新一个 <span class="hljs-keyword">deb</span> 包<br>apt-<span class="hljs-built_in">get</span> <span class="hljs-keyword">update</span> 升级列表中的软件包<br>apt-<span class="hljs-built_in">get</span> upgrade 升级所有已安装的软件<br>apt-<span class="hljs-built_in">get</span> <span class="hljs-built_in">remove</span> package_name 从系统删除一个<span class="hljs-keyword">deb</span>包<br>apt-<span class="hljs-built_in">get</span> check 确认依赖的软件仓库正确<br>apt-<span class="hljs-built_in">get</span> clean 从下载的软件包中清理缓存<br>apt-cache <span class="hljs-built_in">search</span> searched-package 返回包含所要搜索字符串的软件包名称<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>查看文件内容</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> file1 从第一个字节开始正向查看文件的内容<br><span class="hljs-built_in">tac</span> file1 从最后一行开始反向查看一个文件的内容<br>more file1 查看一个长文件的内容<br>less file1 类似于 <span class="hljs-string">&#x27;more&#x27;</span> 命令，但是它允许在文件中和正向操作一样的反向操作<br><span class="hljs-built_in">head</span> -2 file1 查看一个文件的前两行<br><span class="hljs-built_in">tail</span> -2 file1 查看一个文件的最后两行<br><span class="hljs-built_in">tail</span> -f /var/log/messages 实时查看被添加到一个文件中的内容<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>文本处理</li>
+</ol>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">cat</span> file1 file2 ... | <span class="hljs-keyword">command</span> &lt;&gt; file1_in.txt_or_file1_out.txt general <span class="hljs-keyword">syntax</span> <span class="hljs-keyword">for</span> text manipulation using PIPE, STDIN <span class="hljs-built_in">and</span> STDOUT<br><span class="hljs-keyword">cat</span> file1 | <span class="hljs-keyword">command</span>( sed, <span class="hljs-keyword">grep</span>, awk, <span class="hljs-keyword">grep</span>, etc...) &gt; result.txt 合并一个文件的详细说明文本，并将简介写入一个新文件中<br><span class="hljs-keyword">cat</span> file1 | <span class="hljs-keyword">command</span>( sed, <span class="hljs-keyword">grep</span>, awk, <span class="hljs-keyword">grep</span>, etc...) &gt;&gt; result.txt 合并一个文件的详细说明文本，并将简介写入一个已有的文件中<br><span class="hljs-keyword">grep</span> Aug /var/<span class="hljs-built_in">log</span>/<span class="hljs-keyword">messages</span> 在文件 <span class="hljs-string">&#x27;/var/log/messages&#x27;</span>中查找关键词<span class="hljs-string">&quot;Aug&quot;</span><br><span class="hljs-keyword">grep</span> ^Aug /var/<span class="hljs-built_in">log</span>/<span class="hljs-keyword">messages</span> 在文件 <span class="hljs-string">&#x27;/var/log/messages&#x27;</span>中查找以<span class="hljs-string">&quot;Aug&quot;</span>开始的词汇<br><span class="hljs-keyword">grep</span> [<span class="hljs-number">0</span>-<span class="hljs-number">9</span>] /var/<span class="hljs-built_in">log</span>/<span class="hljs-keyword">messages</span> 选择 <span class="hljs-string">&#x27;/var/log/messages&#x27;</span> 文件中所有包含数字的行<br><span class="hljs-keyword">grep</span> Aug -R /var/<span class="hljs-built_in">log</span>/* 在目录 <span class="hljs-string">&#x27;/var/log&#x27;</span> 及随后的目录中搜索字符串<span class="hljs-string">&quot;Aug&quot;</span><br>sed <span class="hljs-string">&#x27;s/stringa1/stringa2/g&#x27;</span> example.txt 将example.txt文件中的 <span class="hljs-string">&quot;string1&quot;</span> 替换成 <span class="hljs-string">&quot;string2&quot;</span><br>sed <span class="hljs-string">&#x27;/^$/d&#x27;</span> example.txt 从example.txt文件中删除所有空白行<br>sed <span class="hljs-string">&#x27;/ *#/d; /^$/d&#x27;</span> example.txt 从example.txt文件中删除所有注释和空白行<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;esempio&#x27;</span> | <span class="hljs-keyword">tr</span> <span class="hljs-string">&#x27;[:lower:]&#x27;</span> <span class="hljs-string">&#x27;[:upper:]&#x27;</span> 合并上下单元格内容<br>sed -<span class="hljs-keyword">e</span> <span class="hljs-string">&#x27;1d&#x27;</span> result.txt 从文件example.txt 中排除第一行<br>sed -n <span class="hljs-string">&#x27;/stringa1/p&#x27;</span> 查看只包含词汇 <span class="hljs-string">&quot;string1&quot;</span>的行<br>sed -<span class="hljs-keyword">e</span> <span class="hljs-string">&#x27;s/ *$//&#x27;</span> example.txt 删除每一行最后的空白字符<br>sed -<span class="hljs-keyword">e</span> <span class="hljs-string">&#x27;s/stringa1//g&#x27;</span> example.txt 从文档中只删除词汇 <span class="hljs-string">&quot;string1&quot;</span> 并保留剩余全部<br>sed -n <span class="hljs-string">&#x27;1,5p;5q&#x27;</span> example.txt 查看从第一行到第<span class="hljs-number">5</span>行内容<br>sed -n <span class="hljs-string">&#x27;5p;5q&#x27;</span> example.txt 查看第<span class="hljs-number">5</span>行<br>sed -<span class="hljs-keyword">e</span> <span class="hljs-string">&#x27;s/00*/0/g&#x27;</span> example.txt 用单个零替换多个零<br><span class="hljs-keyword">cat</span> -n file1 标示文件的行数<br><span class="hljs-keyword">cat</span> example.txt | awk <span class="hljs-string">&#x27;NR%2==1&#x27;</span> 删除example.txt文件中的所有偶数行<br><span class="hljs-keyword">echo</span> <span class="hljs-keyword">a</span> <span class="hljs-keyword">b</span> <span class="hljs-keyword">c</span> | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span> 查看一行第一栏<br><span class="hljs-keyword">echo</span> <span class="hljs-keyword">a</span> <span class="hljs-keyword">b</span> <span class="hljs-keyword">c</span> | awk <span class="hljs-string">&#x27;&#123;print $1,$3&#125;&#x27;</span> 查看一行的第一和第三栏<br>paste file1 file2 合并两个文件或两栏的内容<br>paste -d <span class="hljs-string">&#x27;+&#x27;</span> file1 file2 合并两个文件或两栏的内容，中间用<span class="hljs-string">&quot;+&quot;</span>区分<br><span class="hljs-keyword">sort</span> file1 file2 排序两个文件的内容<br><span class="hljs-keyword">sort</span> file1 file2 | uniq 取出两个文件的并集(重复的行只保留一份)<br><span class="hljs-keyword">sort</span> file1 file2 | uniq -<span class="hljs-keyword">u</span> 删除交集，留下其他的行<br><span class="hljs-keyword">sort</span> file1 file2 | uniq -d 取出两个文件的交集(只留下同时存在于两个文件中的文件)<br>comm -<span class="hljs-number">1</span> file1 file2 比较两个文件的内容只删除 <span class="hljs-string">&#x27;file1&#x27;</span> 所包含的内容<br>comm -<span class="hljs-number">2</span> file1 file2 比较两个文件的内容只删除 <span class="hljs-string">&#x27;file2&#x27;</span> 所包含的内容<br>comm -<span class="hljs-number">3</span> file1 file2 比较两个文件的内容只删除两个文件共有的部分<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>字符设置和文件格式转换</li>
+</ol>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stata">dos2unix filedos.txt fileunix.txt 将一个文本文件的格式从MSDOS转换成UNIX<br>unix2dos fileunix.txt filedos.txt 将一个文本文件的格式从UNIX转换成MSDOS<br><span class="hljs-keyword">recode</span> ..HTML &lt; page.txt &gt; page.html 将一个文本文件转换成html<br><span class="hljs-keyword">recode</span> -<span class="hljs-keyword">l</span> | <span class="hljs-keyword">more</span> 显示所有允许的转换格式<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>文件系统分析</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs awk">badblocks -v <span class="hljs-regexp">/dev/</span>hda1 检查磁盘hda1上的坏磁块<br>fsck <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上linux文件系统的完整性<br>fsck.ext2 <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上ext2文件系统的完整性<br>e2fsck <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上ext2文件系统的完整性<br>e2fsck -j <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上ext3文件系统的完整性<br>fsck.ext3 <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上ext3文件系统的完整性<br>fsck.vfat <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上fat文件系统的完整性<br>fsck.msdos <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上dos文件系统的完整性<br>dosfsck <span class="hljs-regexp">/dev/</span>hda1 修复/检查hda1磁盘上dos文件系统的完整性<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>初始化一个文件系统</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkfs <span class="hljs-regexp">/dev/</span>hda1 在hda1分区创建一个文件系统<br>mke2fs <span class="hljs-regexp">/dev/</span>hda1 在hda1分区创建一个linux ext2的文件系统<br>mke2fs -j <span class="hljs-regexp">/dev/</span>hda1 在hda1分区创建一个linux ext3(日志型)的文件系统<br>mkfs -t vfat <span class="hljs-number">32</span> -F <span class="hljs-regexp">/dev/</span>hda1 创建一个 FAT32 文件系统<br>fdformat -n <span class="hljs-regexp">/dev/</span>fd0 格式化一个软盘<br>mkswap <span class="hljs-regexp">/dev/</span>hda3 创建一个swap文件系统<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>SWAP文件系统</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkswap <span class="hljs-regexp">/dev/</span>hda3 创建一个swap文件系统<br>swapon <span class="hljs-regexp">/dev/</span>hda3 启用一个新的swap文件系统<br>swapon <span class="hljs-regexp">/dev/</span>hda2 <span class="hljs-regexp">/dev/</span>hdb3 启用两个swap分区<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>备份</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">dump -0aj -f /tmp/home0.bak /home 制作一个 <span class="hljs-string">&#x27;/home&#x27;</span> 目录的完整备份<br>dump -1aj -f /tmp/home0.bak /home 制作一个 <span class="hljs-string">&#x27;/home&#x27;</span> 目录的交互式备份<br>restore -<span class="hljs-keyword">if</span> /tmp/home0.bak 还原一个交互式备份<br>rsync -rogpav --delete /home /tmp 同步两边的目录<br>rsync -rogpav -e ssh --delete /home ip_address:/tmp 通过SSH通道rsync<br>rsync -az -e ssh --delete ip_addr:/home/public /home/local 通过ssh和压缩将一个远程目录同步到本地目录<br>rsync -az -e ssh --delete /home/local ip_addr:/home/public 通过ssh和压缩将本地目录同步到远程目录<br><span class="hljs-built_in">dd</span> bs=1M <span class="hljs-keyword">if</span>=/dev/hda | gzip | ssh user@ip_addr <span class="hljs-string">&#x27;dd of=hda.gz&#x27;</span> 通过ssh在远程主机上执行一次备份本地磁盘的操作<br><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/sda of=/tmp/file1 备份磁盘内容到一个文件<br>tar -Puf backup.tar /home/user 执行一次对 <span class="hljs-string">&#x27;/home/user&#x27;</span> 目录的交互式备份操作<br>( <span class="hljs-built_in">cd</span> /tmp/local/ &amp;&amp; tar c . ) | ssh -C user@ip_addr <span class="hljs-string">&#x27;cd /home/share/ &amp;&amp; tar x -p&#x27;</span> 通过ssh在远程目录中复制一个目录内容<br>( tar c /home ) | ssh -C user@ip_addr <span class="hljs-string">&#x27;cd /home/backup-home &amp;&amp; tar x -p&#x27;</span> 通过ssh在远程目录中复制一个本地目录<br>tar cf - . | (<span class="hljs-built_in">cd</span> /tmp/backup ; tar xf - ) 本地将一个目录复制到另一个地方，保留原有权限及链接<br>find /home/user1 -name <span class="hljs-string">&#x27;*.txt&#x27;</span> | xargs <span class="hljs-built_in">cp</span> -av --target-directory=/home/backup/ --parents 从一个目录查找并复制所有以 <span class="hljs-string">&#x27;.txt&#x27;</span> 结尾的文件到另一个目录<br>find /var/log -name <span class="hljs-string">&#x27;*.log&#x27;</span> | tar cv --files-from=- | bzip2 &gt; log.tar.bz2 查找所有以 <span class="hljs-string">&#x27;.log&#x27;</span> 结尾的文件并做成一个bzip包<br><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/hda of=/dev/fd0 bs=512 count=1 做一个将 MBR (Master Boot Record)内容复制到软盘的动作<br><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/fd0 of=/dev/hda bs=512 count=1 从已经保存到软盘的备份中恢复MBR内容<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>光盘</li>
+</ol>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">cdrecord -v gracetime=2 dev=<span class="hljs-string">/dev/cdrom</span> -eject blank=fast -force 清空一个可复写的光盘内容<br>mkisofs <span class="hljs-string">/dev/cdrom</span> &gt; <span class="hljs-keyword">cd</span>.iso 在磁盘上创建一个光盘的iso镜像文件<br>mkisofs <span class="hljs-string">/dev/cdrom</span> | gzip &gt; <span class="hljs-keyword">cd</span>_iso.gz 在磁盘上创建一个压缩了的光盘iso镜像文件<br>mkisofs -J -allow-leading-dots -R -V <span class="hljs-string">&quot;Label CD&quot;</span> -iso-level 4 -o <span class="hljs-string">./cd.iso</span> data_<span class="hljs-keyword">cd</span> 创建一个目录的iso镜像文件<br>cdrecord -v dev=<span class="hljs-string">/dev/cdrom</span> <span class="hljs-keyword">cd</span>.iso 刻录一个ISO镜像文件<br>gzip -dc <span class="hljs-keyword">cd</span>_iso.gz | cdrecord dev=<span class="hljs-string">/dev/cdrom</span> - 刻录一个压缩了的ISO镜像文件<br>mount -o loop <span class="hljs-keyword">cd</span>.iso <span class="hljs-string">/mnt/iso</span> 挂载一个ISO镜像文件<br>cd-paranoia -B 从一个CD光盘转录音轨到 wav 文件中<br>cd-paranoia -- <span class="hljs-string">&quot;-3&quot;</span> 从一个CD光盘转录音轨到 wav 文件中（参数-3）<br>cdrecord <span class="hljs-params">--scanbus</span> 扫描总线以识别scsi通道<br>dd <span class="hljs-keyword">if</span>=<span class="hljs-string">/dev/hdc</span> | md5sum 校验一个设备的md5sum编码，例如一张 CD<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>网络（以太网和WIFI无线）</li>
+</ol>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs tcl">ifconfig eth0 显示一个以太网卡的配置<br>ifup eth0 启用一个 &#x27;eth0&#x27; 网络设备<br>ifdown eth0 禁用一个 &#x27;eth0&#x27; 网络设备<br>ifconfig eth0 <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.1</span> netmask <span class="hljs-number">255.255</span><span class="hljs-number">.255</span><span class="hljs-number">.0</span> 控制IP地址<br>ifconfig eth0 promisc 设置 &#x27;eth0&#x27; 成混杂模式以嗅探数据包 (sniffing)<br>dhclient eth0 以dhcp模式启用 &#x27;eth0&#x27;<br>route -n show routing table<br>route add -net <span class="hljs-number">0</span>/<span class="hljs-number">0</span> gw IP_Gateway configura default gateway<br>route add -net <span class="hljs-number">192.168</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span> netmask <span class="hljs-number">255.255</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span> gw <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.1</span> configure static route to reach network &#x27;<span class="hljs-number">192.168</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>/<span class="hljs-number">16</span>&#x27;<br>route del <span class="hljs-number">0</span>/<span class="hljs-number">0</span> gw IP_gateway remove static route<br>echo <span class="hljs-string">&quot;1&quot;</span> &gt; /<span class="hljs-keyword">proc</span>/sys/net/ipv4/ip_forward<span class="hljs-title"> activate</span> ip<span class="hljs-title"> routing</span><br>hostname<span class="hljs-title"> show</span> hostname<span class="hljs-title"> of</span> system<span class="hljs-title"></span><br><span class="hljs-title">host</span> www.example.com<span class="hljs-title"> lookup</span> hostname<span class="hljs-title"> to</span> resolve<span class="hljs-title"> name</span> to<span class="hljs-title"> ip</span> address<span class="hljs-title"> and</span> viceversa(1)<span class="hljs-title"></span><br><span class="hljs-title">nslookup</span> www.example.com<span class="hljs-title"> lookup</span> hostname<span class="hljs-title"> to</span> resolve<span class="hljs-title"> name</span> to<span class="hljs-title"> ip</span> address<span class="hljs-title"> and</span> viceversa(2)<span class="hljs-title"></span><br><span class="hljs-title">ip</span> link<span class="hljs-title"> show</span> show<span class="hljs-title"> link</span> status<span class="hljs-title"> of</span> all<span class="hljs-title"> interfaces</span><br>mii-tool<span class="hljs-title"> eth0</span> show<span class="hljs-title"> link</span> status<span class="hljs-title"> of</span> &#x27;eth0&#x27;<span class="hljs-title"></span><br><span class="hljs-title">ethtool</span> eth0<span class="hljs-title"> show</span> statistics<span class="hljs-title"> of</span> network<span class="hljs-title"> card</span> &#x27;eth0&#x27;<span class="hljs-title"></span><br><span class="hljs-title">netstat</span> -tup<span class="hljs-title"> show</span> all<span class="hljs-title"> active</span> network<span class="hljs-title"> connections</span> and<span class="hljs-title"> their</span> PID<span class="hljs-title"></span><br><span class="hljs-title">netstat</span> -tupl<span class="hljs-title"> show</span> all<span class="hljs-title"> network</span> services<span class="hljs-title"> listening</span> on<span class="hljs-title"> the</span> system<span class="hljs-title"> and</span> their<span class="hljs-title"> PID</span><br>tcpdump<span class="hljs-title"> tcp</span> port 80<span class="hljs-title"> show</span> all<span class="hljs-title"> HTTP</span> traffic<span class="hljs-title"></span><br><span class="hljs-title">iwlist</span> scan<span class="hljs-title"> show</span> wireless<span class="hljs-title"> networks</span><br>iwconfig<span class="hljs-title"> eth1</span> show<span class="hljs-title"> configuration</span> of<span class="hljs-title"> a</span> wireless<span class="hljs-title"> network</span> card<span class="hljs-title"></span><br><span class="hljs-title">hostname</span> show<span class="hljs-title"> hostname</span><br>host<span class="hljs-title"> www.example.com</span> lookup<span class="hljs-title"> hostname</span> to<span class="hljs-title"> resolve</span> name<span class="hljs-title"> to</span> ip<span class="hljs-title"> address</span> and<span class="hljs-title"> viceversa</span><br>nslookup<span class="hljs-title"> www.example.com</span> lookup<span class="hljs-title"> hostname</span> to<span class="hljs-title"> resolve</span> name<span class="hljs-title"> to</span> ip<span class="hljs-title"> address</span> and<span class="hljs-title"> viceversa</span><br>whois<span class="hljs-title"> www.example.com</span> lookup<span class="hljs-title"> on</span> Whois<span class="hljs-title"> database</span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>列出目录内容</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">ls</span> <span class="hljs-literal">-a</span>：显示所有文件（包括隐藏文件）；<br><span class="hljs-built_in">ls</span> <span class="hljs-literal">-l</span>：显示详细信息；<br><span class="hljs-built_in">ls</span> <span class="hljs-literal">-R</span>：递归显示子目录结构；<br><span class="hljs-built_in">ls</span> <span class="hljs-literal">-ld</span>：显示目录和链接信息；<br>ctrl+<span class="hljs-built_in">r</span>：历史记录中所搜命令（输入命令中的任意一个字符）；<br>Linux中以.开头的文件是隐藏文件；<br><span class="hljs-built_in">pwd</span>:显示当前目录<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>查看文件的类型</li>
+</ol>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-built_in">file</span>:查看文件的类型<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>复制文件目录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs bash">1、<span class="hljs-built_in">cp</span>：复制文件和目录 <span class="hljs-built_in">cp</span>源文件（文件夹）目标文件（文件夹）<br><br>常用参数：-r:递归复制整个目录树；-v：显示详细信息；<br>复制文件夹时要在<span class="hljs-built_in">cp</span>命令后面加一个-r参数：<br>如：<span class="hljs-built_in">cp</span> -r 源文件夹  目标文件夹<br>2、<span class="hljs-built_in">touch</span>+文件名：当文件不存在的时候，创建相应的文件；当文件存在的时候，修改文件的创建时间。<br><br>功能：生成一个空文件或修改文件的存取/修改的时间记录值。<br><span class="hljs-built_in">touch</span> * ：将当前下的文件时间修改为系统的当前时间<br><span class="hljs-built_in">touch</span> –d 20040210 <span class="hljs-built_in">test</span>：将<span class="hljs-built_in">test</span>文件的日期改为20040210<br><span class="hljs-built_in">touch</span> abc　：若abc文件存在，则修改为系统的当前时间；若不存在，则生成一个为当前时间的空文件<br>3、<span class="hljs-built_in">mv</span> 文件 目标目录：移动或重命名文件或目录（如果指定文件名，则可以重命名文件）。可以将文件及目录移到另一目录下，或更改文件及目录的名称。<br><br>格式为：<span class="hljs-built_in">mv</span> [参数]&lt;源文件或目录&gt; &lt;目标文件或目录&gt;<br>mva.txt ../：将a.txt文件移动上层目录<br><span class="hljs-built_in">mv</span> a.txt b.txt：将a.txt改名为b.txt<br>mvdir2 ../：将dir2目录上移一层<br>4、<span class="hljs-built_in">rm</span>：删除文件；<br><br>常用参数：-i：交互式   -r：递归的删除包括目录中的所有内容<br>5、<span class="hljs-built_in">mkdir</span> +文件夹名称：创建文件夹；<br>6、<span class="hljs-built_in">rm</span> -r +文件夹名称：删除文件夹（空文件夹和非空文件夹都可删除）<br><br><span class="hljs-built_in">rmdir</span> 文件夹名称：删除文件夹（只能删除空文件夹）<br>7、<span class="hljs-built_in">mkdir</span>  -p dir1/dir2 ：在当前目录下创建dir1目录，并在dir1目录下创建dir2目录， 也就是连续创建两个目录（dir1/和dir1/dir2）<br>8、<span class="hljs-built_in">rmdir</span> –p dir1/dir2：删除dir1下的dir2目录，若dir1目录为空也删除它<br>9、<span class="hljs-built_in">rm</span> * ：删除当前目录下的所有文件<br>10、-f参数：强迫删除文件 <span class="hljs-built_in">rm</span> –f  *.txt：强迫删除所有以后缀名为txt文件<br>11、-i参数：删除文件时询问<br><br><span class="hljs-built_in">rm</span>　–i  * ：删除当前目录下的所有文件会有如下提示：<br><span class="hljs-built_in">rm</span>:backup:is a directory　　　 遇到目录会略过<br><span class="hljs-built_in">rm</span>: remove ‘myfiles.txt’ ? Y<br>删除文件时会询问,可按Y或N键表示允许或拒绝删除文件　<br>12、-r参数：递归删除（连子目录一同删除，这是一个相当常用的参数）<br><br><span class="hljs-built_in">rm</span>  -r <span class="hljs-built_in">test</span> ：删除<span class="hljs-built_in">test</span>目录（含<span class="hljs-built_in">test</span>目录下所有文件和子目录）<br><span class="hljs-built_in">rm</span>  -r  *：删除所有文件（含当前目录所有文件、所有子目录和子目录下的文件） 一般在删除目录时r和f一起用，避免麻烦<br><span class="hljs-built_in">rm</span>  -rf <span class="hljs-built_in">test</span> ：强行删除、不加询问<br>13、grep：功能：在文件中搜索匹配的字符并进行输出<br><br>格式：grep[参数] &lt;要找的字串&gt; &lt;要寻找字 串的源文件&gt;<br>greplinux test.txt：搜索test.txt文件中字符串linux并输出<br>14、<span class="hljs-built_in">ln</span>命令<br><br>功能：在文件和目录之间建立链接<br>格式：<span class="hljs-built_in">ln</span> [参数] &lt;源文件或目录&gt; &lt;目标文件或目录&gt;<br>链接分“软链接”和“硬链接”<br>1.软链接:<br><span class="hljs-built_in">ln</span>–s /usr/share/do  doc ：创建一个链接文件doc,并指向目录/usr/share/do<br>2.硬链接:<br><span class="hljs-built_in">ln</span>  /usr/share/test  hard：创建一个硬链接文件hard，这时对于<span class="hljs-built_in">test</span>文件对应 的存储区域来说，又多了一个文件指向它<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>系统常用命令</li>
+</ol>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><code class="hljs stata">1、显示命令<br><br>date:查看或设置当前系统的时间：格式化显示时间：+%Y--%<span class="hljs-keyword">m</span>--%<span class="hljs-keyword">d</span>；<br>date -s:设置当前系统的时间<br>hwclock(clock)：显示硬件时钟时间(需要管理员权限)；<br>cal：查看日历<br>格式cal [参数] 月年<br>cal：显示当月的日历   cal4 2004 ：显示2004年4月的日历<br>cal- y 2003：显示2003年的日历<br>uptime：查看系统运行时间<br>2、输出查看命令<br><br>echo：显示输入的内容  追加文件echo <span class="hljs-string">&quot;liuyazhuang&quot;</span> &gt;&gt; liuyazhuang.txt<br><span class="hljs-keyword">cat</span>：显示文件内容,也可以将数个文件合并成一个文件。<br>格式：格式：<span class="hljs-keyword">cat</span>[参数]&lt;文件名&gt;<br><span class="hljs-keyword">cat</span>  <span class="hljs-keyword">test</span>.txt：显示<span class="hljs-keyword">test</span>.txt文件内容<br><span class="hljs-keyword">cat</span>  <span class="hljs-keyword">test</span>.txt | <span class="hljs-keyword">more</span>  ：逐页显示<span class="hljs-keyword">test</span>.txt文件中的内容<br><span class="hljs-keyword">cat</span>  <span class="hljs-keyword">test</span>.txt &gt;&gt; test1.txt ：将<span class="hljs-keyword">test</span>.txt的内容附加到test1.txt文件之后<br><span class="hljs-keyword">cat</span>  <span class="hljs-keyword">test</span>.txt test2.txt &gt;readme.txt　: 将<span class="hljs-keyword">test</span>.txt和test2.txt文件合并成readme.txt 文件<br>head:显示文件的头几行（默认10行） -<span class="hljs-keyword">n</span>:指定显示的行数格式：head -<span class="hljs-keyword">n</span> 文件名<br>tail：显示文件的末尾几行（默认10行）-<span class="hljs-keyword">n</span>：指定显示的行数   -f：追踪显示文件更新 （一般用于查看日志，命令不会退出，而是持续显示新加入的内容）<br>格式：格式：tail[参数]&lt;文件名&gt;<br>tail-10 /etc/passwd ：显示/etc/passwd/文件的倒数10行内容<br>tail+10 /etc/passwd ：显示/etc/passwd/文件从第10行开始到末尾的内容<br><span class="hljs-keyword">more</span>：用于翻页显示文件内容（只能向下翻页）<br><span class="hljs-keyword">more</span>命令是一般用于要显示的内容会超过一个画面长度的情况。为了避免画  面显示时瞬间就闪过去，用户可以使用<span class="hljs-keyword">more</span>命令，让画面在显示满一页时暂停，此时可按空格健继续显示下一个画面，或按Q键停止显示。<br><span class="hljs-keyword">ls</span>  -al  |<span class="hljs-keyword">more</span>：以长格形式显示etc目录下的文件列表，显示满一个画面便暂停，可 按空格键继续显示下一画面，或按Q键跳离<br>less：翻页显示文件内容（带上下翻页）按下上键分页，按q退出、‘<br>less命令的用法与<span class="hljs-keyword">more</span>命令类似，也可以用来浏览超过一页的文件。所不同  的是less 命令除了可以按空格键向下显示文件外，还可以利用上下键来卷动文件。当要结束浏览时，只要在less命令的提示符“：”下按Q键即可。<br><span class="hljs-keyword">ls</span>  -al | less：以长格形式列出/etc目录中所有的内容。用户可按上下键浏览或按Q键跳离<br>3、查看硬件信息<br><br>Ispci：查看PCI设备  -v：查看详细信息<br>Isusb：查看USB设备 -v：查看详细信息<br>Ismod：查看加载的模块(驱动)<br>4、关机、重启<br><br>shutdown关闭、重启计算机<br>shutdown[关机、重启]时间  -<span class="hljs-keyword">h</span>关闭计算机   -r：重启计算机<br>如：立即关机：shutdown -<span class="hljs-keyword">h</span> now<br>10分钟后关机：shutdown -<span class="hljs-keyword">h</span> +10<br>23:30分关机：shutdown -<span class="hljs-keyword">h</span> 23:30<br>立即重启：shutdown -r now<br>poweroff：立即关闭计算机<br>reboot：立即重启计算机<br>5、归档、压缩<br><br><span class="hljs-keyword">zip</span>:压缩文件  <span class="hljs-keyword">zip</span> liuyazhuang.<span class="hljs-keyword">zip</span> myfile  格式为：“<span class="hljs-keyword">zip</span> 压缩后的<span class="hljs-keyword">zip</span>文件文件名”<br>unzip：解压文件  unzip liuyazhuang.<span class="hljs-keyword">zip</span><br>gzip：压缩文件 gzip 文件名<br>tar：归档文件<br>tar -cvf <span class="hljs-keyword">out</span>.tar liuyazhuang  打包一个归档（将文件<span class="hljs-string">&quot;liuyazhuang&quot;</span>打包成一个归档）<br>tar -xvf liuyazhuang.tar     释放一个归档（释放liuyazhuang.tar归档）<br>tar -cvzf backup.tar.gz/etc  <br>-z参数将归档后的归档文件进行gzip压缩以减少大小。<br>-c：创建一个新tar文件<br>-v：显示运行过程的信息<br>-f：指定文件名<br>-z：调用gzip压缩命令进行压缩<br>-t：查看压缩文件的内容<br>-x：解开tar文件<br>tar  -cvf <span class="hljs-keyword">test</span>.tar  *：将所有文件打包成<span class="hljs-keyword">test</span>.tar,扩展名.tar需自行加上<br>tar  -zcvf <span class="hljs-keyword">test</span>.tar.gz  *：将所有文件打包成<span class="hljs-keyword">test</span>.tar,再用gzip命令压缩<br>tar -tf   <span class="hljs-keyword">test</span>.tar ：查看<span class="hljs-keyword">test</span>.tar文件中包括了哪些文件<br>tar -xvf <span class="hljs-keyword">test</span>.tar       将<span class="hljs-keyword">test</span>.tar解开<br>tar -zxvf foo.tar.gz   解压缩<br>gzip各gunzip命令<br>gziptest.txt ：压缩文件时，不需要任何参数<br>gizp–<span class="hljs-keyword">l</span> <span class="hljs-keyword">test</span>.txt.gz：显示压缩率<br>6、查找<br><br>locate：快速查找文件、文件夹：locate keyword<br>此命令需要预先建立数据库，数据库默认每天更新一次，可用updatedb命令手工建立、更新数据库。欢迎关注我们，公号终码一生。<br>find查找位置查找参数<br>如：<br>find . -name *liuyazhuang* 查找当前目录下名称中含有<span class="hljs-string">&quot;liuyazhuang&quot;</span>的文件<br>find / -name *.<span class="hljs-keyword">conf</span>  查找根目录下（整个硬盘）下后缀为.<span class="hljs-keyword">conf</span>的文件<br>find / -perm 777 查找所有权限是777的文件<br>find / -<span class="hljs-keyword">type</span> <span class="hljs-keyword">d</span> 返回根目录下所有的目录<br>find . -name <span class="hljs-string">&quot;a*&quot;</span>-exec <span class="hljs-keyword">ls</span> -<span class="hljs-keyword">l</span> &#123;&#125; \;<br>find功能：用来寻找文件或目录。<br>格式：find [&lt;路径&gt;] [匹配条件]<br>find / -name httpd.<span class="hljs-keyword">conf</span>  搜索系统根目录下名为httpd.<span class="hljs-keyword">conf</span>的文件<br>7、ctrl+c :终止当前的命令<br>8、who或w命令<br><br>功能：查看当前系统中有哪些用户登录<br>格式：who/w[参数]<br>9、dmesg命令<br>功能：显示系统诊断信息、操作系统版本号、物理内存的大小以及其它信息<br>10、df命令<br>功能：用于查看文件系统的各个分区的占用情况<br><br>11、du命令<br><br>功能：查看某个目录中各级子目录所使用的硬盘空间数<br>格式：du [参数] &lt;目录名&gt;<br>12、free命令<br><br>功能：用于查看系统内存，虚拟内存（交换空间）的大小占用情况<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>VIM</li>
+</ol>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs vim">VIM是一款功能强大的命令行文本编辑器，在Linux中通过<span class="hljs-keyword">vim</span>命令可以启动<span class="hljs-keyword">vim</span>编辑器。<br>一般使用<span class="hljs-keyword">vim</span> + 目标文件路径 的形式使用<span class="hljs-keyword">vim</span><br><br>如果目标文件存在，则<span class="hljs-keyword">vim</span>打开目标文件，如果目标文件不存在，则<span class="hljs-keyword">vim</span>新建并打开该文件<br>:q：退出<span class="hljs-keyword">vim</span>编辑器<br>VIM模式<br><span class="hljs-keyword">vim</span>拥有三种模式：<br>（<span class="hljs-number">1</span>）命令模式（常规模式）<br><br><span class="hljs-keyword">vim</span>启动后，默认进入命令模式，任何模式都可以通过esc键回到命令模式（可以多按几次），命令模式下可以键入不同的命令完成选择、复制、粘贴、撤销等操作。<br>命名模式常用命令如下：<br>i : 在光标前插入文本；<br><span class="hljs-keyword">o</span>:在当前行的下面插入新行；<br>dd:删除整行；<br>yy：将当前行的内容放入缓冲区（复制当前行）<br>n+yy :将n行的内容放入缓冲区（复制n行）<br><span class="hljs-keyword">p</span>:将缓冲区中的文本放入光标后（粘贴）<br><span class="hljs-keyword">u</span>：撤销上一个操作<br>r:替换当前字符<br>/ 查找关键字<br>（<span class="hljs-number">2</span>）插入模式<br><br>在命令模式下按 <span class="hljs-string">&quot; i &quot;</span>键，即可进入插入模式，在插入模式可以输入编辑文本内容，使用esc键可以返回命令模式。<br>（<span class="hljs-number">3</span>）<span class="hljs-keyword">ex</span>模式<br><br>在命令模式中按<span class="hljs-string">&quot; : &quot;</span>键可以进入<span class="hljs-keyword">ex</span>模式，光标会移动到底部，在这里可以保存修改或退出<span class="hljs-keyword">vim</span>.<br>ext模式常用命令如下：<br>:<span class="hljs-keyword">w</span> ：保存当前的修改<br>:q ：退出<br>:q! ：强制退出，保存修改<br>:<span class="hljs-keyword">x</span>  :保存并退出，相当于:<span class="hljs-keyword">wq</span><br>:<span class="hljs-keyword">set</span> <span class="hljs-keyword">number</span> 显示行号<br>:! 系统命令  执行一个系统命令并显示结果<br>:<span class="hljs-keyword">sh</span> ：切换到命令行，使用ctrl+d切换回<span class="hljs-keyword">vim</span><br><span class="hljs-number">28</span>. 软件包管理命令(RPM)<br><br><span class="hljs-number">1</span>、软件包的安装<br><br>使用RPM命令的安装模式可以将软件包内所有的组件放到系统中的正确路径，安装软件包的命令是:rpm –ivh <span class="hljs-keyword">wu</span>-ftpd-<span class="hljs-number">2.6</span>.<span class="hljs-number">2</span>-<span class="hljs-number">8</span>.i386.rpm<br>i：作用rpm的安装模式 v: 校验文件信息h: 以＃号显示安装进度<br><span class="hljs-number">2</span>、软件包的删除<br><br>删除模式会将指定软件包的内容全部删除，但并不包括已更改过的配置文件，删除RPM软件包的命令如下：rpm –<span class="hljs-keyword">e</span>  <span class="hljs-keyword">wu</span>-ftpd<br>注意：这里必须使用软件名“<span class="hljs-keyword">wu</span>-ftpd”或”<span class="hljs-keyword">wu</span>-ftpd-<span class="hljs-number">2.6</span>.<span class="hljs-number">2</span>-<span class="hljs-number">8</span>而不是使用当初安装时的软件包名.<span class="hljs-keyword">wu</span>-ftpd-<span class="hljs-number">2.6</span>.<span class="hljs-number">2</span>-<span class="hljs-number">8</span>.i386.rpm<br><span class="hljs-number">3</span>、软件包升级<br><br>升级模式会安装用户所指定的更新版本，并删除已安装在系统中的相同软件包，升级软件包命令如下：rpm –Uvh <span class="hljs-keyword">wu</span>-ftpd-<span class="hljs-number">2.6</span>.<span class="hljs-number">2</span>-<span class="hljs-number">8</span>.i386.rpm  –Uvh：升级参数<br><span class="hljs-number">4</span>、软件包更新<br><br>更新模式下，rpm命令会检查在命令行中所指定的软件包是否比系统中原有的软件 包更新。如果情况属实，rpm命令会自动更新指定的软件包；反之，若系统中并没有指定软件包的较旧版本，rpm命令并不会安装此软件包。而在升级模式下，不管系统中是否有较旧的版本，rpm命令都会安装指定的软件包。<br>rpm –Fvhwu-ftpd-<span class="hljs-number">2.6</span>.<span class="hljs-number">2</span>-<span class="hljs-number">8</span>.i386.rpm   -Fvh：更新参数<br><span class="hljs-number">5</span>、软件包查询<br><br>若要获取RPM软件包的相关信息，可以使用查询模式。使用-q参数可查询一个已   安装的软件包的内容<br>rpm  –q <span class="hljs-keyword">wu</span>-ftpd<br>查询软件包所安装的位置：rpm –ql package-name<br>rpm –ql xv (<span class="hljs-keyword">l</span>参数：显示文件列表)<br></code></pre></td></tr></table></figure>
+
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
+<li>打开终端或者 SSH 登录到 CentOS 6.9 服务器。</li>
+<li>运行以下命令以编辑 crontab 文件：</li>
+</ol>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">crontab -e</span><br></code></pre></td></tr></table></figure>
+
+<p>在编辑器中添加您的定时任务。任务应该遵循以下格式：</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><span class="hljs-symbol">*</span> <span class="hljs-symbol">*</span> <span class="hljs-symbol">*</span> <span class="hljs-symbol">*</span> <span class="hljs-symbol">*</span> command<br>- - - - -<br>|<span class="hljs-string"> </span>|<span class="hljs-string"> </span>|<span class="hljs-string"> </span>|<span class="hljs-string"> </span>|<br>|<span class="hljs-string"> </span>|<span class="hljs-string"> </span>|<span class="hljs-string"> </span>|<span class="hljs-string"> ----- Day of the week (0 - 7) (Sunday is both 0 and 7)</span><br><span class="hljs-string"></span>|<span class="hljs-string"> </span>|<span class="hljs-string"> </span>|<span class="hljs-string"> ------- Month (1 - 12)</span><br><span class="hljs-string"></span>|<span class="hljs-string"> </span>|<span class="hljs-string"> --------- Day of the month (1 - 31)</span><br><span class="hljs-string"></span>|<span class="hljs-string"> ----------- Hour (0 - 23)</span><br><span class="hljs-string">------------- Minute (0 - 59)</span><br></code></pre></td></tr></table></figure>
+
+<p>例如，以上命令将每天的上午 10 点运行 /path/to/command：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">0 </span><span class="hljs-number">10</span> * * * /path/<span class="hljs-keyword">to</span>/command<br></code></pre></td></tr></table></figure>
+
+<p>例如，以下命令将在每周三的晚上9点30分运行一个脚本：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">30 </span><span class="hljs-number">21</span> * * <span class="hljs-number">3</span> /path/<span class="hljs-keyword">to</span>/script.sh<br></code></pre></td></tr></table></figure>
+
+<p>该命令的解释如下：</p>
+<ul>
+<li>分钟：30</li>
+<li>小时：21</li>
+<li>日：任意</li>
+<li>月份：任意</li>
+<li>星期几：3（星期三）</li>
+</ul>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>如果需要每分钟执行一次任务，可以在 crontab 中使用通配符 * 来代表“每”，如下所示：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs markdown">javascriptCopy code<br><span class="hljs-bullet">*</span> <span class="hljs-emphasis">* *</span> <span class="hljs-emphasis">* *</span> /root/script.sh <br></code></pre></td></tr></table></figure>
+
+<p>即/root有脚本script.sh, 此时每隔一分钟就会执行一次,要注意如果没有执行,注意检查用户是否有权限.</p>
+<h2 id="查看定时任务"><a href="#查看定时任务" class="headerlink" title="查看定时任务"></a>查看定时任务</h2><p>crontab -l</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">[root@xiaohua ~]<span class="hljs-comment"># crontab -l</span><br>* * * * * <span class="hljs-regexp">/root/</span>script.sh <br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux%E7%9A%84%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux的标准输入和输出</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4/">
+                        <span class="hidden-mobile">Linux 系统管理命令</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

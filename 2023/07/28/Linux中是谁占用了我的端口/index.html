@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是监听端口网络端口由其编号，关联的IP地址和通信协议（例如TCP或UDP）的类型标识。 侦听端口是应用程序或进程在其上侦听的网络端口，充当通信端点。 每个监听端口都可以使用防火墙打开或关闭（过滤）。一般而言，开放端口是一个网络端口，它接受来自远程位置的传入数据包。 你不能让两个服务监听同一IP地址上的同一端口。 例如，如果你正在运行一个监听端口80和443的Apache Web服务器，并且尝试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux中是谁占用了我的端口">
+<meta property="og:url" content="http://example.com/2023/07/28/Linux%E4%B8%AD%E6%98%AF%E8%B0%81%E5%8D%A0%E7%94%A8%E4%BA%86%E6%88%91%E7%9A%84%E7%AB%AF%E5%8F%A3/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="什么是监听端口网络端口由其编号，关联的IP地址和通信协议（例如TCP或UDP）的类型标识。 侦听端口是应用程序或进程在其上侦听的网络端口，充当通信端点。 每个监听端口都可以使用防火墙打开或关闭（过滤）。一般而言，开放端口是一个网络端口，它接受来自远程位置的传入数据包。 你不能让两个服务监听同一IP地址上的同一端口。 例如，如果你正在运行一个监听端口80和443的Apache Web服务器，并且尝试">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-28T21:59:39.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.910Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Linux中是谁占用了我的端口 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux中是谁占用了我的端口">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 21:59" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      23 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux中是谁占用了我的端口</h1>
+            
+            <div class="markdown-body">
+              <h2 id="什么是监听端口"><a href="#什么是监听端口" class="headerlink" title="什么是监听端口"></a>什么是监听端口</h2><p>网络端口由其编号，关联的IP地址和通信协议（例如TCP或UDP）的类型标识。</p>
+<p>侦听端口是应用程序或进程在其上侦听的网络端口，充当通信端点。</p>
+<p>每个监听端口都可以使用防火墙打开或关闭（过滤）。一般而言，开放端口是一个网络端口，它接受来自远程位置的传入数据包。</p>
+<p>你不能让两个服务监听同一IP地址上的同一端口。</p>
+<p>例如，如果你正在运行一个监听端口80和443的Apache Web服务器，并且尝试安装Nginx ，则后者将无法启动，因为HTTP和HTTPS端口是已经在使用中。</p>
+<h2 id="用netstat检查监听端口"><a href="#用netstat检查监听端口" class="headerlink" title="用netstat检查监听端口"></a>用netstat检查监听端口</h2><p>netstat是一个命令行工具，可以提供有关网络连接的信息。</p>
+<p>要列出所有正在侦听的TCP或UDP端口，包括使用端口的服务和套接字状态，请使用以下命令：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">sudo netstat -tunlp</span><br></code></pre></td></tr></table></figure>
+
+<p>此命令中使用的选项具有以下含义：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">-t -显示TCP端口。<br>-u -显示UDP端口。<br>-n -显示数字地址而不是解析主机。<br>-l -仅显示监听端口。<br>-p -显示侦听器进程的PID和名称。仅当你以root用户或 sudo 用户身份运行命令时，才会显示此信息。 COPY<br></code></pre></td></tr></table></figure>
+
+<p>输出将如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">Proto Recv-Q Send-Q Local Address   Foreign Address     State       PID/Program name      <br>tcp        0      0 0:22              0:*               LISTEN      445/sshd              <br>tcp        0      0 0:25              0:*               LISTEN      929/master            <br>tcp6       0      0 :::3306           ::*               LISTEN      534/mysqld            <br>tcp6       0      0 :::80             :::*              LISTEN      515/apache2            <br>tcp6       0      0 :::22             :::*              LISTEN      445/sshd              <br>tcp6       0      0 :::25             :::*              LISTEN      929/master            <br>tcp6       0      0 :::33060          :::*              LISTEN      534/mysqld            <br>udp        0      0 0:68              0:*                           966/dhclientCOPY<br></code></pre></td></tr></table></figure>
+
+<p>在我们的案例中，重要的几列是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">Proto-套接字使用的协议。<br>Local Address -进程侦听的IP地址和端口号。<br>PID/Program name -PID和进程名称。 COPY<br></code></pre></td></tr></table></figure>
+
+<p>如果要过滤结果，请使用 grep命令。例如，要查找在TCP端口22上侦听的进程，你可以输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo netstat -tnlp | grep :22COPY<br></code></pre></td></tr></table></figure>
+
+<p>输出显示此计算机上的端口22被SSH服务器使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">tcp        0      0 0:22              0:*               LISTEN      445/sshd  <br>tcp6       0      0 :::22             :::*              LISTEN      445/sshdCOPY<br></code></pre></td></tr></table></figure>
+
+<p>如果输出为空，则表示端口上没有监听。</p>
+<p>你也可以根据条件过滤列表，例如PID，协议，状态等。</p>
+<p>netstat已过时，被ss和 ip 取代，但它仍然是检查网络连接的最常用命令。</p>
+<h2 id="用ss-检查监听端口"><a href="#用ss-检查监听端口" class="headerlink" title="用ss 检查监听端口"></a>用ss 检查监听端口</h2><p>ss是新的netstat。它缺少netstat的某些功能，但是公开了更多的TCP状态，并且速度稍快。命令选项基本相同，因此从netstat到ss的转换并不困难。</p>
+<p>要使用ss获取所有监听端口的列表，请输入：<code>sudo ss -tunlp</code></p>
+<p>输出与netstat报告的输出几乎相同：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">State    Recv-Q   Send-Q     Local Address:Port      Peer Address:Port                                                                                    <br>LISTEN   0        128              0:22             0:*      <span class="hljs-built_in">users</span>:((<span class="hljs-string">&quot;sshd&quot;</span>,pid=445,fd=3))                                                          <br>LISTEN   0        100              0:25             0:*      <span class="hljs-built_in">users</span>:((<span class="hljs-string">&quot;master&quot;</span>,pid=929,fd=13))                                                        <br>LISTEN   0        128                    *:3306                 *:*      <span class="hljs-built_in">users</span>:((<span class="hljs-string">&quot;mysqld&quot;</span>,pid=534,fd=30))                                                        <br>LISTEN   0        128                    *:80                   *:*      <span class="hljs-built_in">users</span>:((<span class="hljs-string">&quot;apache2&quot;</span>,pid=765,fd=4),(<span class="hljs-string">&quot;apache2&quot;</span>,pid=764,fd=4),(<span class="hljs-string">&quot;apache2&quot;</span>,pid=515,fd=4))      <br>LISTEN   0        128                 [::]:22                [::]:*      <span class="hljs-built_in">users</span>:((<span class="hljs-string">&quot;sshd&quot;</span>,pid=445,fd=4))                                                          <br>LISTEN   0        100                 [::]:25                [::]:*      <span class="hljs-built_in">users</span>:((<span class="hljs-string">&quot;master&quot;</span>,pid=929,fd=14))                                                        <br>LISTEN   0        70                     *:33060                *:*      <span class="hljs-built_in">users</span>:((<span class="hljs-string">&quot;mysqld&quot;</span>,pid=534,fd=33))COPY<br></code></pre></td></tr></table></figure>
+
+<h2 id="使用lsof"><a href="#使用lsof" class="headerlink" title="使用lsof"></a>使用lsof</h2><p>检查监听端口</p>
+<p>lsof是功能强大的命令行应用程序，可提供有关进程打开的文件的信息。</p>
+<p>在Linux中，所有内容都是文件。你可以将套接字视为写入网络的文件。</p>
+<p>要获取具有lsof的所有侦听TCP端口的列表，请输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo lsof -nP -iTCP -sTCP:LISTENCOPY<br></code></pre></td></tr></table></figure>
+
+<p>使用的选项如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">-n-不要将端口号转换为端口名称。<br>-p -不解析主机名，显示数字地址。 COPY<br></code></pre></td></tr></table></figure>
+
+<p>-iTCP -sTCP:LISTEN -仅显示TCP状态为LISTEN的网络文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME  <br>sshd      445     root    3u  IPv4  16434      0t0  TCP *:22 (LISTEN)  <br>sshd      445     root    4u  IPv6  16445      0t0  TCP *:22 (LISTEN)  <br>apache2   515     root    4u  IPv6  16590      0t0  TCP *:80 (LISTEN)  <br>mysqld    534    mysql   30u  IPv6  17636      0t0  TCP *:3306 (LISTEN)  <br>mysqld    534    mysql   33u  IPv6  19973      0t0  TCP *:33060 (LISTEN)  <br>apache2   764 www-data    4u  IPv6  16590      0t0  TCP *:80 (LISTEN)  <br>apache2   765 www-data    4u  IPv6  16590      0t0  TCP *:80 (LISTEN)  <br>master    929     root   13u  IPv4  19637      0t0  TCP *:25 (LISTEN)  <br>master    929     root   14u  IPv6  19638      0t0  TCP *:25 (LISTEN)COPY<br></code></pre></td></tr></table></figure>
+
+<p>大多数输出列名称都是不言自明的:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">COMMAND，PID，USER-运行与端口关联的程序的名称，PID和用户。<br>NAME -端口号。 COPY<br></code></pre></td></tr></table></figure>
+
+<p>要查找正在侦听特定端口（例如端口3306）的进程，可以使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo lsof -nP -iTCP:3306 -sTCP:LISTENCOPY<br></code></pre></td></tr></table></figure>
+
+<p>输出显示MySQL服务器使用端口3306:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">COMMAND PID  USER   FD   TYPE DEVICE SIZE/OFF NODE NAME  <br>mysqld  534 mysql   30u  IPv6  17636      0t0  TCP *:3306 (LISTEN)<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/Linux%E8%BF%90%E7%BB%B4%E5%B7%A5%E7%A8%8B%E5%B8%8810%E4%B8%AA%E5%9F%BA%E6%9C%AC%E6%8A%80%E8%83%BD%E7%82%B9/">
+                        <span class="hidden-mobile">Linux运维工程师10个基本技能点</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

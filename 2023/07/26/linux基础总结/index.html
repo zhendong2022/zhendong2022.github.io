@@ -1,0 +1,1462 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux 的学习对于一个程序员的重要性是不言而喻的。前端开发相比后端开发，接触 Linux 机会相对较少，因此往往容易忽视它。但是学好它却是程序员必备修养之一。 Linux 基础 操作系统 操作系统 Operating System 简称 OS ，是软件的一部分，它是硬件基础上的第一层软件，是硬件和其它软件沟通的桥梁。 操作系统会控制其他程序运行，管理系统资源，提供最基本的计算功能，如管理及配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux基础总结">
+<meta property="og:url" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="Linux 的学习对于一个程序员的重要性是不言而喻的。前端开发相比后端开发，接触 Linux 机会相对较少，因此往往容易忽视它。但是学好它却是程序员必备修养之一。 Linux 基础 操作系统 操作系统 Operating System 简称 OS ，是软件的一部分，它是硬件基础上的第一层软件，是硬件和其它软件沟通的桥梁。 操作系统会控制其他程序运行，管理系统资源，提供最基本的计算功能，如管理及配置">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.9365049272426487&random=0.5303248102537135&random=0.8220009451519892&random=0.6958476699232452&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.6315947872318632&random=0.469442625726183&random=0.596998089326775&random=0.713743151709127&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.42844309081680043&random=0.7539888913364345&random=0.9011560287480525&random=0.3323769948954649&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=png&random=0.25201999846504086&random=0.5959545257332086&random=0.8082386466153098&random=0.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.3663720918334894&random=0.015724954262419377&random=0.6736048718721672&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=png&random=0.18288376351046476&random=0.012812092814984632&random=0.820939503931656&random=0.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=png&random=0.8588130067817377&random=0.7259365015630768&random=0.4314433411553025&random=0.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.8882761106001003&random=0.613835830105667&random=0.8422128463882474&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.5212440182460254&random=0.6340509087960582&random=0.508820799954437&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.9128325654773546&random=0.2634696345918439&random=0.2947447442804241&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.11293268100917353&random=0.5947480581080269&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.21886353549193416&random=0.6957152342347532&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.4840850080413186&random=0.13193035666547415&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.8668009778721499&random=0.13938900104200735&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.9200554254980926&random=0.16042377588978307&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.4558983160453647&random=0.8917503277603893&random=0.jpeg">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.6678721195239334&random=0.jpeg">
+<meta property="article:published_time" content="2023-07-26T22:43:44.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.123Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/640wx_fmt=jpeg&random=0.9365049272426487&random=0.5303248102537135&random=0.8220009451519892&random=0.6958476699232452&random=0.jpeg">
+  
+  
+  <title>linux基础总结 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="linux基础总结">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-26 22:43" pubdate>
+        July 26, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      25k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      210 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">linux基础总结</h1>
+            
+            <div class="markdown-body">
+              <p>Linux 的学习对于一个程序员的重要性是不言而喻的。前端开发相比后端开发，接触 Linux 机会相对较少，因此往往容易忽视它。但是学好它却是程序员必备修养之一。</p>
+<p>Linux 基础</p>
+<p><strong>操作系统</strong></p>
+<p>操作系统 <code>Operating System</code> 简称 <code>OS</code> ，是软件的一部分，它是硬件基础上的第一层软件，是硬件和其它软件沟通的桥梁。</p>
+<p>操作系统会控制其他程序运行，管理系统资源，提供最基本的计算功能，如管理及配置内存、决定系统资源供需的优先次序等，同时还提供一些基本的服务程序。</p>
+<p><img src="640wx_fmt=jpeg&random=0.9365049272426487&random=0.5303248102537135&random=0.8220009451519892&random=0.6958476699232452&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>什么是Linux</strong></p>
+<p><strong>Linux 系统内核与 Linux 发行套件的区别</strong></p>
+<ul>
+<li> <code>Linux</code> 系统内核指的是由 <code>Linus Torvalds</code> 负责维护，提供硬件抽象层、硬盘及文件系统控制及多任务功能的系统核心程序。 </li>
+<li> <code>Linux</code> 发行套件系统是我们常说的 <code>Linux</code> 操作系统，也即是由  <code>Linux</code> 内核与各种常用软件的集合产品。 </li>
+</ul>
+<p><strong>总结</strong>：<strong>真正的</strong> <code>Linux</code> <strong>指的是系统内核，而我们常说的</strong> <code>Linux</code> <strong>指的是“发行版完整的包含一些基础软件的操作系统”。</strong></p>
+<p><strong>Linux 对比 Windows</strong></p>
+<ol>
+<li><strong>稳定且有效率；</strong> </li>
+<li><strong>免费（或少许费用）；</strong> </li>
+<li><strong>漏洞少且快速修补；</strong> </li>
+<li><strong>多任务多用户；</strong> </li>
+<li><strong>更加安全的用户与文件权限策略；</strong> </li>
+<li><strong>适合小内核程序的嵌入系统；</strong> </li>
+<li><strong>相对不耗资源。</strong> </li>
+</ol>
+<p><strong>Linux 系统种类</strong></p>
+<ul>
+<li><strong>红帽企业版</strong> <code>Linux</code> ：<code>RHEL</code> 是全世界内使用最广泛的 <code>Linux</code> 系统。它具有极强的性能与稳定性，是众多生成环境中使用的（收费的）系统。 </li>
+<li><strong>Fedora</strong> ：由红帽公司发布的桌面版系统套件，用户可以免费体验到最新的技术或工具，这些技术或工具在成熟后会被加入到 <code>RHEL</code> 系统中，因此 <code>Fedora</code> 也成为 <code>RHEL</code> 系统的试验版本。 </li>
+<li><strong>CentO</strong>S ：通过把<code>RHEL</code> 系统重新编译并发布给用户免费使用的 <code>Linux</code> 系统，具有广泛的使用人群。 </li>
+<li><strong>Deepin</strong> ：中国发行，对优秀的开源成品进行集成和配置。 </li>
+<li><strong>Debian</strong> ：稳定性、安全性强，提供了免费的基础支持，在国外拥有很高的认可度和使用率。 </li>
+<li><strong>Ubuntu</strong> ：是一款派生自 <code>Debian</code> 的操作系统，对新款硬件具有极强的兼容能力。<code>Ubuntu</code> 与 <code>Fedora</code> 都是极其出色的 <code>Linux</code> 桌面系统，而且 <code>Ubuntu</code> 也可用于服务器领域。</li>
+</ul>
+<p><strong>终端连接阿里云服务器</strong></p>
+<p><img src="640wx_fmt=jpeg&random=0.6315947872318632&random=0.469442625726183&random=0.596998089326775&random=0.713743151709127&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>通过执行 <code>ssh root@121.42.11.34</code> 命令，然后输入服务器连接密码就可以顺利登录远程服务器。从现在开始我们就可以在本地电脑操作远程服务器。</p>
+<ol>
+<li>这个黑色的面板就是终端也就是 <code>Shell</code> （命令行环境）。 </li>
+<li><code>ssh root@xxx</code> 这是一条命令，必须要在 <code>Shell</code> 中才能执行。 </li>
+</ol>
+<p><strong>Shell</strong></p>
+<p><code>Shell</code> 这个单词的原意是“外壳”，跟 <code>kernel</code>（内核）相对应，比喻内核外面的一层，即用户跟内核交互的对话界面。</p>
+<ul>
+<li><code>Shell</code> 是一个程序，提供一个与用户对话的环境。这个环境只有一个命令提示符，让用户从键盘输入命令，所以又称为命令行环境（ <code>command line interface</code> ，简写为 <code>CLI</code> ）。<code>Shell</code> 接收到用户输入的命令，将命令送入操作系统执行，并将结果返回给用户。 </li>
+<li><code>Shell</code> 是一个命令解释器，解释用户输入的命令。它支持变量、条件判断、循环操作等语法，所以用户可以用 <code>Shell</code> 命令写出各种小程序，又称为 <code>Shell</code> 脚本。这些脚本都通过 <code>Shell</code> 的解释执行，而不通过编译。 </li>
+<li> <code>Shell</code> 是一个工具箱，提供了各种小工具，供用户方便地使用操作系统的功能。 </li>
+</ul>
+<p><strong>Shell 的种类</strong></p>
+<p><code>Shell</code> 有很多种，只要能给用户提供命令行环境的程序，都可以看作是 <code>Shell</code> 。</p>
+<p>历史上，主要的 <code>Shell</code> 有下面这些：</p>
+<ul>
+<li>Bourne Shell（sh） </li>
+<li>Bourne Again shell（bash） </li>
+<li>C Shell（csh） </li>
+<li>TENEX C Shell（tcsh） </li>
+<li>Korn shell（ksh） </li>
+<li>Z Shell（zsh） </li>
+<li>Friendly Interactive Shell（fish） </li>
+</ul>
+<p>其中 <code>Bash</code> 是目前最常用的 <code>Shell</code> 。MacOS 中的默认 <code>Shell</code> 就是 <code>Bash</code> 。</p>
+<p>通过执行 <code>echo $SHELL</code> 命令可以查看到当前正在使用的 <code>Shell</code> 。还可以通过 <code>cat /etc/shells</code> 查看当前系统安装的所有 <code>Shell</code> 种类。</p>
+<p><strong>命令</strong></p>
+<p><strong>命令行提示符</strong></p>
+<p>进入命令行环境以后，用户会看到 <code>Shell</code> 的提示符。提示符往往是一串前缀，最后以一个美元符号 <code>$</code> 结尾，用户可以在这个符号后面输入各种命令。</p>
+<p>执行一个简单的命令 <code>pwd</code>：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs autoit">[root<span class="hljs-symbol">@iZm5e8dsxce9ufaic7hi3uZ</span> ~]<span class="hljs-meta"># pwd</span><br>/root<br></code></pre></td></tr></table></figure>
+
+<p>命令解析：</p>
+<ul>
+<li><code>root</code> ：表示用户名；</li>
+<li><code>iZm5e8dsxce9ufaic7hi3uZ</code> ：表示主机名；</li>
+<li><code>~</code> ：表示目前所在目录为家目录，其中 <code>root</code> 用户的家目录是 <code>/root</code> 普通用户的家目录在 /home 下；</li>
+<li><code>#</code> ：指示你所具有的权限（<code>root</code> 用户为 <code>#</code> ，普通用户为 <code>$</code> ）。</li>
+<li>执行 <code>whoami</code> 命令可以查看当前用户名；</li>
+<li>执行 <code>hostname</code> 命令可以查看当前主机名；</li>
+</ul>
+<p>关于如何创建、切换、删除用户，在后面的用户与权限会具体讲解，这里先使用 <code>root</code> 用户进行演示。</p>
+<p>[备注] <code>root</code> 是超级用户，具备操作系统的一切权限。</p>
+<p><strong>命令格式</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">command</span> parameters（命令 参数）<br></code></pre></td></tr></table></figure>
+
+<p><strong>长短参数</strong></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs vim">单个参数：<span class="hljs-keyword">ls</span> -<span class="hljs-keyword">a</span>（<span class="hljs-keyword">a</span> 是英文 <span class="hljs-keyword">all</span> 的缩写，表示“全部”）<br>多个参数：<span class="hljs-keyword">ls</span> -<span class="hljs-keyword">al</span>（全部文件 + 列表形式展示）<br>单个长参数：<span class="hljs-keyword">ls</span> --<span class="hljs-keyword">all</span><br>多个长参数：<span class="hljs-keyword">ls</span> --<span class="hljs-built_in">reverse</span> --<span class="hljs-keyword">all</span><br>长短混合参数：<span class="hljs-keyword">ls</span> --<span class="hljs-keyword">all</span> -<span class="hljs-keyword">l</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>参数值</strong></p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">短参数：<span class="hljs-keyword">command</span> -p 10（例如：ssh root@121.42.11.34 -p 22）<br>长参数：<span class="hljs-keyword">command</span> <span class="hljs-params">--paramters=10</span>（例如：ssh root@121.42.11.34 <span class="hljs-params">--port=22</span>）<br></code></pre></td></tr></table></figure>
+
+<p><strong>快捷方式</strong></p>
+<p>在开始学习 <code>Linux</code> 命令之前，有这么一些快捷方式，是必须要提前掌握的，它将贯穿整个 <code>Linux</code> 使用生涯。</p>
+<ul>
+<li>通过上下方向键 ↑ ↓ 来调取过往执行过的 <code>Linux</code> 命令； </li>
+<li>命令或参数仅需输入前几位就可以用 Tab 键补全； </li>
+<li><code>Ctrl + R</code> ：用于查找使用过的命令（<code>history</code> 命令用于列出之前使用过的所有命令，然后输入 <code>!</code> 命令加上编号( <code>!2</code> )就可以直接执行该历史命令）； </li>
+<li><code>Ctrl + L</code> ：清除屏幕并将当前行移到页面顶部； </li>
+<li><code>Ctrl + C</code> ：中止当前正在执行的命令； </li>
+<li><code>Ctrl + U</code> ：从光标位置剪切到行首； </li>
+<li><code>Ctrl + K</code> ：从光标位置剪切到行尾； </li>
+<li><code>Ctrl + W</code> ：剪切光标左侧的一个单词； </li>
+<li><code>Ctrl + Y</code> ：粘贴 <code>Ctrl + U | K | Y</code> 剪切的命令； </li>
+<li><code>Ctrl + A</code> ：光标跳到命令行的开头； </li>
+<li><code>Ctrl + E</code> ：光标跳到命令行的结尾； </li>
+<li><code>Ctrl + D</code> ：关闭 <code>Shell</code> 会话； </li>
+</ul>
+<p><strong>文件和目录</strong></p>
+<p><strong>文件的组织</strong></p>
+<p><img src="640wx_fmt=jpeg&random=0.42844309081680043&random=0.7539888913364345&random=0.9011560287480525&random=0.3323769948954649&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>查看路径</strong></p>
+<p><strong>pwd****：</strong>显示当前目录的路径</p>
+<p><img src="640wx_fmt=png&random=0.25201999846504086&random=0.5959545257332086&random=0.8082386466153098&random=0.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>which</strong>：查看命令的可执行文件所在路径，<code>Linux</code> 下，每一条命令其实都对应一个可执行程序，在终端中输入命令，按回车的时候，就是执行了对应的那个程序，<code>which</code> 命令本身对应的程序也存在于 <code>Linux</code> 中。</p>
+<p>总的来说一个命令就是一个可执行程序。</p>
+<p><img src="640wx_fmt=jpeg&random=0.3663720918334894&random=0.015724954262419377&random=0.6736048718721672&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>浏览和切换目录</strong></p>
+<p><strong>ls****：</strong>列出文件和目录，它是 <code>Linux</code> 最常用的命令之一。</p>
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-a</code> 显示所有文件和目录包括隐藏的 </li>
+<li><code>-l</code> 显示详细列表 </li>
+<li><code>-h</code> 适合人类阅读的 </li>
+<li><code>-t</code> 按文件最近一次修改时间排序 </li>
+<li><code>-i</code> 显示文件的 <code>inode</code>（ <code>inode</code> 是文件内容的标识）</li>
+</ul>
+<p><img src="640wx_fmt=png&random=0.18288376351046476&random=0.012812092814984632&random=0.820939503931656&random=0.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>cd</strong>：<code>cd</code> 是英语 <code>change directory</code> 的缩写，表示切换目录。</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">cd</span> / --&gt;</span> 跳转到根目录<br><span class="hljs-function"><span class="hljs-title">cd</span> ~ --&gt;</span> 跳转到家目录<br><span class="hljs-function"><span class="hljs-title">cd</span> .. --&gt;</span> 跳转到上级目录<br><span class="hljs-function"><span class="hljs-title">cd</span> ./home --&gt;</span> 跳转到当前目录的home目录下<br><span class="hljs-function"><span class="hljs-title">cd</span> /home/lion --&gt;</span> 跳转到根目录下的home目录下的lion目录<br><span class="hljs-function"><span class="hljs-title">cd</span> --&gt;</span> 不添加任何参数，也是回到家目录<br></code></pre></td></tr></table></figure>
+
+<p>[<strong>注意</strong>] 输入 <code>cd /ho</code> 单次 <code>tab</code> 键会自动补全路径 + 两次 <code>tab</code> 键会列出所有可能的目录列表。</p>
+<p><strong>du****：</strong>列举目录大小信息。</p>
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-h</code> 适合人类阅读的； </li>
+<li><code>-a</code> 同时列举出目录下文件的大小信息； </li>
+<li><code>-s</code> 只显示总计大小，不显示具体信息。 </li>
+</ul>
+<p><strong>浏览和创建文件</strong></p>
+<p><strong>cat</strong>：一次性显示文件所有内容，更适合查看小的文件。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-built_in">cat</span> cloud-init.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-n</code> 显示行号。</li>
+</ul>
+<p><strong>less</strong>：分页显示文件内容，更适合查看大的文件。</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c">less cloud-init.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+
+<p>【<strong>快捷操作</strong>】</p>
+<ul>
+<li><strong>空格键</strong>：前进一页（一个屏幕）； </li>
+<li><strong>b 键</strong>：后退一页； </li>
+<li><strong>回车键</strong>：前进一行； </li>
+<li><strong>y 键</strong>：后退一行； </li>
+<li><strong>上下键</strong>：回退或前进一行； </li>
+<li><strong>d 键</strong>：前进半页； </li>
+<li><strong>u 键</strong>：后退半页； </li>
+<li><strong>q 键</strong>：停止读取文件，中止 <code>less</code> 命令； </li>
+<li><strong>= 键</strong>：显示当前页面的内容是文件中的第几行到第几行以及一些其它关于本页内容的详细信息； </li>
+<li><strong>h 键</strong>：显示帮助文档； </li>
+<li><strong>/ 键</strong>：进入搜索模式后，按 n 键跳到一个符合项目，按 N 键跳到上一个符合项目，同时也可以输入正则表达式匹配。 </li>
+</ul>
+<p><strong>head</strong>：显示文件的开头几行（默认是10行）</p>
+<figure class="highlight stan"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stan"><span class="hljs-built_in">head</span> cloud-init.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+
+<p>【<strong>参数</strong>】</p>
+<ul>
+<li><code>-n</code> 指定行数 <code>head cloud-init.log -n 2</code></li>
+</ul>
+<p><strong>tail</strong>：显示文件的结尾几行（默认是10行）</p>
+<figure class="highlight stan"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stan"><span class="hljs-built_in">tail</span> cloud-init.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+
+<p>【<strong>参数</strong>】</p>
+<ul>
+<li><code>-n</code> 指定行数 <code>tail cloud-init.log -n 2</code></li>
+<li><code>-f</code> 会每过1秒检查下文件是否有更新内容，也可以用 -s 参数指定间隔时间 <code>tail -f -s 4 xxx.log</code> </li>
+</ul>
+<p><strong>touch</strong>：创建一个文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">touch</span> new_file<br></code></pre></td></tr></table></figure>
+
+<p><strong>mkdir</strong>：创建一个目录</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">mkdir new_folder<br></code></pre></td></tr></table></figure>
+
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-p</code> 递归的创建目录结构 <code>mkdir -p one/two/three</code> </li>
+</ul>
+<p><strong>文件的复制和移动</strong></p>
+<p><strong>cp</strong>：拷贝文件和目录</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stata">cp <span class="hljs-keyword">file</span> file_copy --&gt; <span class="hljs-keyword">file</span> 是目标文件，file_copy 是拷贝出来的文件<br>cp <span class="hljs-keyword">file</span> <span class="hljs-keyword">one</span> --&gt; 把 <span class="hljs-keyword">file</span> 文件拷贝到 <span class="hljs-keyword">one</span> 目录下，并且文件名依然为 <span class="hljs-keyword">file</span><br>cp <span class="hljs-keyword">file</span> <span class="hljs-keyword">one</span>/file_copy --&gt; 把 <span class="hljs-keyword">file</span> 文件拷贝到 <span class="hljs-keyword">one</span> 目录下，文件名为file_copy<br>cp *.txt folder --&gt; 把当前目录下所有 txt 文件拷贝到 folder 目录下<br></code></pre></td></tr></table></figure>
+
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-r</code> 递归的拷贝，常用来拷贝一整个目录</li>
+</ul>
+<p><strong>mv</strong>：移动（重命名）文件或目录，与cp命令用法相似。</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">mv <span class="hljs-built_in">file</span> <span class="hljs-literal">one</span> <span class="hljs-comment">--&gt; 将 file 文件移动到 one 目录下</span><br>mv new_folder <span class="hljs-literal">one</span> <span class="hljs-comment">--&gt; 将 new_folder 文件夹移动到one目录下</span><br>mv *.txt <span class="hljs-built_in">folder</span> <span class="hljs-comment">--&gt; 把当前目录下所有 txt 文件移动到 folder 目录下</span><br>mv <span class="hljs-built_in">file</span> new_file <span class="hljs-comment">--&gt; file 文件重命名为 new_file</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>文件的删除和链接</strong></p>
+<p><strong>rm</strong>：删除文件和目录，由于 Linux 下没有回收站，一旦删除非常难恢复，因此需要谨慎操作</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">rm</span> new_file  --&gt; 删除 new_file 文件<br><span class="hljs-symbol">rm</span> <span class="hljs-built_in">f1</span> <span class="hljs-built_in">f2</span> <span class="hljs-built_in">f3</span>  --&gt; 同时删除 <span class="hljs-built_in">f1</span> <span class="hljs-built_in">f2</span> <span class="hljs-built_in">f3</span> <span class="hljs-number">3</span>个文件<br></code></pre></td></tr></table></figure>
+
+<p>【常用参数】</p>
+<ul>
+<li><code>-i</code> 向用户确认是否删除； </li>
+<li><code>-f</code> 文件强制删除； </li>
+<li><code>-r</code> 递归删除文件夹，著名的删除操作 <code>rm -rf</code> 。 </li>
+</ul>
+<p><strong>ln</strong>：英文 Link 的缩写，表示创建链接。</p>
+<p>学习创建链接之前，首先要理解链接是什么，我们先来看看 Linux 的文件是如何存储的：</p>
+<p>Linux  文件的存储方式分为3个部分，文件名、文件内容以及权限，其中文件名的列表是存储在硬盘的其它地方和文件内容是分开存放的，每个文件名通过 inode 标识绑定到文件内容。</p>
+<p>Linux 下有两种链接类型：硬链接和软链接。</p>
+<p><strong>硬链接</strong></p>
+<p>使链接的两个文件共享同样文件内容，就是同样的 inode ，一旦文件1和文件2之间有了硬链接，那么修改任何一个文件，修改的都是同一块内容，它的缺点是，只能创建指向文件的硬链接，不能创建指向目录的（其实也可以，但比较复杂）而软链接都可以，因此软链接使用更加广泛。</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-built_in">ln</span> file1 file2  <span class="hljs-comment">--&gt; 创建 file2 为 file1 的硬链接</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640wx_fmt=png&random=0.8588130067817377&random=0.7259365015630768&random=0.4314433411553025&random=0.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>如果我们用 rm file1 来删除 file1 ，对 file2 没有什么影响，对于硬链接来说，删除任意一方的文件，共同指向的文件内容并不会从硬盘上删除。只有同时删除了 file1 与 file2 后，它们共同指向的文件内容才会消失。</p>
+<p><strong>软链接</strong></p>
+<p>软链接就类似 windows 下快捷方式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ln</span> -s file1 file2<br></code></pre></td></tr></table></figure>
+
+<p><img src="640wx_fmt=jpeg&random=0.8882761106001003&random=0.613835830105667&random=0.8422128463882474&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>执行 <code>ls -l</code> 命名查看当前目录下文件的具体信息</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs tap">total 0<br>-rw-r--r--<span class="hljs-number"> 1 </span>root root<span class="hljs-number"> 0 </span>Jan<span class="hljs-number"> 14 </span>06:29 file1<br>lrwxrwxrwx<span class="hljs-number"> 1 </span>root root<span class="hljs-number"> 5 </span>Jan<span class="hljs-number"> 14 </span>06:42 file2 -&gt; file1  <span class="hljs-comment"># 表示file2 指向 file1</span><br></code></pre></td></tr></table></figure>
+
+<p>其实 <code>file2</code> 只是 <code>file1</code> 的一个快捷方式，它指向的是 <code>file1</code> ，所以显示的是 file1 的内容，但其实 <code>file2</code> 的 <code>inode</code> 与 <code>file1</code> 并不相同。如果我们删除了 <code>file2</code> 的话，<code>file1</code> 是不会受影响的，但如果删除 <code>file1</code> 的话， <code>file2</code> 就会变成死链接，因为指向的文件不见了。</p>
+<p>**用户与权限<br>**</p>
+<p><strong>用户</strong></p>
+<p><code>Linux</code> 是一个多用户的操作系统。在 <code>Linux</code> 中，理论上来说，我们可以创建无数个用户，但是这些用户是被划分到不同的群组里面的，有一个用户，名叫 <code>root</code> ，是一个很特殊的用户，它是超级用户，拥有最高权限。</p>
+<p><img src="640wx_fmt=jpeg&random=0.5212440182460254&random=0.6340509087960582&random=0.508820799954437&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>自己创建的用户是有限权限的用户，这样大大提高了 <code>Linux</code> 系统的安全性，有效防止误操作或是病毒攻击，但是我们执行的某些命令需要更高权限时可以使用 <code>sudo</code> 命令。</p>
+<p><strong>sudo</strong>：以 <code>root</code> 身份运行命令</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">sudo <span class="hljs-built_in">date</span>  <span class="hljs-comment">--&gt; 当然查看日期是不需要sudo的这里只是演示，sudo 完之后一般还需要输入用户密码的</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>useradd + passwd</strong></p>
+<ul>
+<li><code>useradd</code> 添加新用户</li>
+<li><code>passwd</code>  修改用户密码</li>
+</ul>
+<p>这两个命令需要 root 用户权限</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">useradd</span> lion --&gt;</span> 添加一个lion用户，添加完之后在 /home 路径下可以查看<br><span class="hljs-function"><span class="hljs-title">passwd</span> lion --&gt;</span> 修改lion用户的密码<br></code></pre></td></tr></table></figure>
+
+<p><strong>userdel****：</strong>删除用户，需要 root 用户权限</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">userdel</span> lion --&gt;</span> 只会删除用户名，不会从/home中删除对应文件夹<br><span class="hljs-function"><span class="hljs-title">userdel</span> lion -r --&gt;</span> 会同时删除/home下的对应文件夹<br></code></pre></td></tr></table></figure>
+
+<p><strong>su</strong>：切换用户，需要 root 用户权限</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">sudo su --&gt; 切换为root用户（<span class="hljs-keyword">exit</span> 命令或 CTRL + D 快捷键都可以使普通用户切换为 root 用户）<br>su lion --&gt; 切换为普通用户<br>su - --&gt; 切换为root用户<br></code></pre></td></tr></table></figure>
+
+<p><strong>群组的管理</strong></p>
+<p>Linux 中每个用户都属于一个特定的群组，如果你不设置用户的群组，默认会创建一个和它的用户名一样的群组，并且把用户划归到这个群组。</p>
+<p><strong>groupadd</strong>：创建群组，用法和 useradd 类似。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">groupadd friends</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>groupdel</strong>：删除一个已存在的群组</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">groupdel</span> foo  --&gt;</span> 删除foo群组<br></code></pre></td></tr></table></figure>
+
+<p><strong>groups</strong>：查看用户所在群组</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">groups</span> lion  <span class="hljs-comment">--&gt; 查看 lion 用户所在的群组</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>usermod</strong>：用于修改用户的账户。</p>
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-l</code> 对用户重命名。需要注意的是 <code>/home</code> 中的用户家目录的名字不会改变，需要手动修改。 </li>
+<li><code>-g</code> 修改用户所在的群组，例如 <code>usermod -g friends lion</code> 修改 <code>lion</code> 用户的群组为 <code>friends</code> 。 </li>
+<li><code>-G</code> 一次性让用户添加多个群组，例如 <code>usermod -G friends,foo,bar lion</code> 。 </li>
+<li><code>-a</code> <code>-G</code> 会让你离开原先的群组，如果你不想这样做的话，就得再添加 <code>-a</code> 参数，意味着 <code>append</code> 追加的意思。 </li>
+</ul>
+<p><strong>chgrp</strong>：用于修改文件的群组。</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">chgrp bar <span class="hljs-built_in">file</span>.txt <span class="hljs-comment">--&gt; file.txt文件的群组修改为bar</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>chown</strong>：改变文件的所有者，需要 root 身份才能运行。</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs applescript">chown lion <span class="hljs-built_in">file</span>.txt <span class="hljs-comment">--&gt; 把其它用户创建的file.txt转让给lion用户</span><br>chown lion:bar <span class="hljs-built_in">file</span>.txt <span class="hljs-comment">--&gt; 把file.txt的用户改为lion，群组改为bar</span><br></code></pre></td></tr></table></figure>
+
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-R</code> 递归设置子目录和子文件，<code>chown -R lion:lion /home/frank</code> 把 <code>frank</code> 文件夹的用户和群组都改为 <code>lion</code> 。</li>
+</ul>
+<p><strong>文件权限管理</strong></p>
+<p><strong>chmod</strong>：修改访问权限。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">chmod</span> <span class="hljs-number">740</span> file.txt<br></code></pre></td></tr></table></figure>
+
+<p>【<strong>常用参数</strong>】</p>
+<ul>
+<li><code>-R</code> 可以递归地修改文件访问权限，例如 <code>chmod -R 777 /home/lion</code></li>
+</ul>
+<p>修改权限的确简单，但是理解其深层次的意义才是更加重要的。下面我们来系统的学习 Linux 的文件权限。</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tap">[root@lion ~]<span class="hljs-comment"># ls -l</span><br>drwxr-xr-x<span class="hljs-number"> 5 </span>root root<span class="hljs-number"> 4096 </span>Apr<span class="hljs-number"> 13 </span><span class="hljs-number"> 2020 </span>climb<br>lrwxrwxrwx<span class="hljs-number"> 1 </span>root root   <span class="hljs-number"> 7 </span>Jan<span class="hljs-number"> 14 </span>06:41 hello2.c -&gt; hello.c<br>-rw-r--r--<span class="hljs-number"> 1 </span>root root <span class="hljs-number"> 149 </span>Jan<span class="hljs-number"> 13 </span>06:14 hello.c<br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>drwxr-xr-x</code> 表示文件或目录的权限。让我们一起来解读它具体代表什么？</p>
+<ul>
+<li><code>d</code> ：表示目录，就是说这是一个目录，普通文件是 - ，链接是 l 。 </li>
+<li><code>r</code> ：<code>read</code> 表示文件可读。 </li>
+<li><code>w</code> ：<code>write</code> 表示文件可写，一般有写的权限，就有删除的权限。 </li>
+<li><code>x</code> ：<code>execute</code> 表示文件可执行。 </li>
+<li><code>-</code> ：表示没有相应权限。 </li>
+</ul>
+<p>权限的整体是按用户来划分的，如下图所示：</p>
+<p><img src="640wx_fmt=jpeg&random=0.9128325654773546&random=0.2634696345918439&random=0.2947447442804241&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>现在再来理解这句权限 <code>drwxr-xr-x</code> 的意思：</p>
+<ul>
+<li>它是一个文件夹； </li>
+<li>它的所有者具有：读、写、执行权限； </li>
+<li>它的群组用户具有：读、执行的权限，没有写的权限； </li>
+<li>它的其它用户具有：读、执行的权限，没有写的权限。 </li>
+</ul>
+<p>现在理解了权限，我们使用 chmod 来尝试修改权限。chmod 它不需要是 root 用户才能运行的，只要你是此文件所有者，就可以用 chmod 来修改文件的访问权限。</p>
+<p><strong>数字分配权限</strong></p>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>数字</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>4</td>
+</tr>
+<tr>
+<td>w</td>
+<td>2</td>
+</tr>
+<tr>
+<td>x</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>因此要改变权限，只要做一些简单的加法就行：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs tap">chmod<span class="hljs-number"> 640 </span>hello.c <br><br><span class="hljs-comment"># 分析</span><br>6 =<span class="hljs-number"> 4 </span>+<span class="hljs-number"> 2 </span>+<span class="hljs-number"> 0 </span>表示所有者具有 rw 权限<br>4 =<span class="hljs-number"> 4 </span>+<span class="hljs-number"> 0 </span>+<span class="hljs-number"> 0 </span>表示群组用户具有 r 权限<br>0 =<span class="hljs-number"> 0 </span>+<span class="hljs-number"> 0 </span>+<span class="hljs-number"> 0 </span>表示其它用户没有权限<br><br>对应文字权限为：-rw-r--<span class="language-yaml"><span class="hljs-meta">---</span></span><br></code></pre></td></tr></table></figure>
+
+<p><strong>用字母来分配权限</strong></p>
+<ul>
+<li><code>u</code> ：user 的缩写，用户的意思，表示所有者。 </li>
+<li><code>g</code> ：group 的缩写，群组的意思，表示群组用户。 </li>
+<li><code>o</code> ：other 的缩写，其它的意思，表示其它用户。 </li>
+<li><code>a</code> ：all 的缩写，所有的意思，表示所有用户。 </li>
+<li><code>+</code> ：加号，表示添加权限。 </li>
+<li><code>-</code> ：减号，表示去除权限。 </li>
+<li><code>=</code> ：等于号，表示分配权限。</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs applescript">chmod u+rx <span class="hljs-built_in">file</span> <span class="hljs-comment">--&gt; 文件file的所有者增加读和运行的权限</span><br>chmod g+r <span class="hljs-built_in">file</span> <span class="hljs-comment">--&gt; 文件file的群组用户增加读的权限</span><br>chmod o-r <span class="hljs-built_in">file</span> <span class="hljs-comment">--&gt; 文件file的其它用户移除读的权限</span><br>chmod g+r o-r <span class="hljs-built_in">file</span> <span class="hljs-comment">--&gt; 文件file的群组用户增加读的权限，其它用户移除读的权限</span><br>chmod go-r <span class="hljs-built_in">file</span> <span class="hljs-comment">--&gt; 文件file的群组和其他用户移除读的权限</span><br>chmod +x <span class="hljs-built_in">file</span> <span class="hljs-comment">--&gt; 文件file的所有用户增加运行的权限</span><br>chmod u=rwx,g=r,o=- <span class="hljs-built_in">file</span> <span class="hljs-comment">--&gt; 文件file的所有者分配读写和执行的权限，群组其它用户分配读的权限，其他用户没有任何权限</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>查找文件</strong></p>
+<p><strong>locate</strong>：搜索包含关键字的所有文件和目录。后接需要查找的文件名，也可以用正则表达式。</p>
+<p><strong>安装locate</strong></p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">yum</span> -y install mlocate --&gt;</span> 安装包<br><span class="hljs-function"><span class="hljs-title">updatedb</span> --&gt;</span> 更新数据库<br>locate file.txt<br>locate fil*.txt<br></code></pre></td></tr></table></figure>
+
+<p>[<strong>注意</strong>] locate 命令会去文件数据库中查找命令，而不是全磁盘查找，因此刚创建的文件并不会更新到数据库中，所以无法被查找到，可以执行 updatedb 命令去更新数据库。</p>
+<p><strong>find</strong>：用于查找文件，它会去遍历你的实际硬盘进行查找，而且它允许我们对每个找到的文件进行后续操作，功能非常强大。</p>
+<figure class="highlight bnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bnf">find <span class="hljs-attribute">&lt;何处&gt;</span> <span class="hljs-attribute">&lt;何物&gt;</span> <span class="hljs-attribute">&lt;做什么&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>何处</strong>：指定在哪个目录查找，此目录的所有子目录也会被查找。 </li>
+<li><strong>何物</strong>：查找什么，可以根据文件的名字来查找，也可以根据其大小来查找，还可以根据其最近访问时间来查找。 </li>
+<li><strong>做什么</strong>：找到文件后，可以进行后续处理，如果不指定这个参数， find 命令只会显示找到的文件。 </li>
+</ul>
+<p><strong>根据文件名查找</strong></p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-built_in">find</span> -<span class="hljs-built_in">name</span> <span class="hljs-string">&quot;file.txt&quot;</span> --&gt; 当前目录以及子目录下通过名称查找文件<br><span class="hljs-built_in">find</span> . -<span class="hljs-built_in">name</span> <span class="hljs-string">&quot;syslog&quot;</span> --&gt; 当前目录以及子目录下通过名称查找文件<br><span class="hljs-built_in">find</span> / -<span class="hljs-built_in">name</span> <span class="hljs-string">&quot;syslog&quot;</span> --&gt; 整个硬盘下查找syslog<br><span class="hljs-built_in">find</span> /var/<span class="hljs-built_in">log</span> -<span class="hljs-built_in">name</span> <span class="hljs-string">&quot;syslog&quot;</span> --&gt; 在指定的目录/var/<span class="hljs-built_in">log</span>下查找syslog文件<br><span class="hljs-built_in">find</span> /var/<span class="hljs-built_in">log</span> -<span class="hljs-built_in">name</span> <span class="hljs-string">&quot;syslog*&quot;</span> --&gt; 查找syslog1、syslog2 ... 等文件，通配符表示所有<br><span class="hljs-built_in">find</span> /var/<span class="hljs-built_in">log</span> -<span class="hljs-built_in">name</span> <span class="hljs-string">&quot;*syslog*&quot;</span> --&gt; 查找包含syslog的文件 <br></code></pre></td></tr></table></figure>
+
+<p>[<strong>注意</strong>] find 命令只会查找完全符合 “何物” 字符串的文件，而 locate 会查找所有包含关键字的文件。</p>
+<p><strong>根据文件大小查找</strong></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">find</span> <span class="hljs-regexp">/var -size +10M --&gt; /</span>var 目录下查找文件大小超过 <span class="hljs-number">10</span>M 的文件<br><span class="hljs-keyword">find</span> <span class="hljs-regexp">/var -size -50k --&gt; /</span>var 目录下查找文件大小小于 <span class="hljs-number">50</span>k 的文件<br><span class="hljs-keyword">find</span> <span class="hljs-regexp">/var -size +1G --&gt; /</span>var 目录下查找文件大小查过 <span class="hljs-number">1</span>G 的文件<br><span class="hljs-keyword">find</span> <span class="hljs-regexp">/var -size 1M --&gt; /</span>var 目录下查找文件大小等于 <span class="hljs-number">1</span>M 的文件<br></code></pre></td></tr></table></figure>
+
+<p><strong>根据文件最近访问时间查找</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> -name <span class="hljs-string">&quot;*.txt&quot;</span> -atime -<span class="hljs-number">7</span>  --&gt; 近 <span class="hljs-number">7</span>天内访问过的.txt结尾的文件<br></code></pre></td></tr></table></figure>
+
+<p><strong>仅查找目录或文件</strong></p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ada">find . -name <span class="hljs-string">&quot;file&quot;</span> -<span class="hljs-keyword">type</span> <span class="hljs-type">f  </span><span class="hljs-comment">--&gt; 只查找当前目录下的file文件</span><br>find . -name <span class="hljs-string">&quot;file&quot;</span> -<span class="hljs-keyword">type</span> <span class="hljs-type">d  </span><span class="hljs-comment">--&gt; 只查找当前目录下的file目录</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>操作查找结果</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs perl">find -name <span class="hljs-string">&quot;*.txt&quot;</span> -<span class="hljs-keyword">printf</span> <span class="hljs-string">&quot;%p - %u\n&quot;</span> --&gt; 找出所有后缀为txt的文件，并按照 %p - %u\n 格式打印，其中%p=文件名，%u=文件所有者<br>find -name <span class="hljs-string">&quot;*.jpg&quot;</span> -<span class="hljs-keyword">delete</span> --&gt; 删除当前目录以及子目录下所有.jpg为后缀的文件，不会有删除提示，因此要慎用<br>find -name <span class="hljs-string">&quot;*.c&quot;</span> -<span class="hljs-keyword">exec</span> <span class="hljs-keyword">chmod</span> <span class="hljs-number">600</span> &#123;&#125; \; --&gt; 对每个.c结尾的文件，都进行 -<span class="hljs-keyword">exec</span> 参数指定的操作，&#123;&#125; 会被查找到的文件替代，\; 是必须的结尾<br>find -name <span class="hljs-string">&quot;*.c&quot;</span> -ok <span class="hljs-keyword">chmod</span> <span class="hljs-number">600</span> &#123;&#125; \; --&gt; 和上面的功能一直，会多一个确认提示<br></code></pre></td></tr></table></figure>
+
+<p><strong>软件仓库</strong></p>
+<p>Linux 下软件是以包的形式存在，一个软件包其实就是软件的所有文件的压缩包，是二进制的形式，包含了安装软件的所有指令。Red Hat 家族的软件包后缀名一般为 .rpm ， Debian 家族的软件包后缀是 .deb 。</p>
+<p>Linux 的包都存在一个仓库，叫做软件仓库，它可以使用 yum 来管理软件包， yum 是 CentOS 中默认的包管理工具，适用于 Red Hat 一族。可以理解成 Node.js 的 npm 。</p>
+<p><strong>yum 常用命令</strong></p>
+<ul>
+<li><code>yum update | yum upgrade</code> 更新软件包 </li>
+<li><code>yum search xxx</code> 搜索相应的软件包 </li>
+<li><code>yum install xxx</code> 安装软件包 </li>
+<li><code>yum remove xxx</code> 删除软件包 </li>
+</ul>
+<p><strong>切换 CentOS 软件源</strong></p>
+<p>有时候 CentOS 默认的 yum 源不一定是国内镜像，导致 yum  在线安装及更新速度不是很理想。这时候需要将 yum 源设置为国内镜像站点。国内主要开源的镜像站点是网易和阿里云。</p>
+<p>1、首先备份系统自带 yum 源配置文件 <code>mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</code> </p>
+<p>2、下载阿里云的 yum 源配置文件到 <code>/etc/yum.repos.d/CentOS7</code> </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">wget -O <span class="hljs-regexp">/etc/yum</span>.repos.d<span class="hljs-regexp">/CentOS-Base.repo http:/</span><span class="hljs-regexp">/mirrors.aliyun.com/</span>repo/Centos-<span class="hljs-number">7</span>.repo<br></code></pre></td></tr></table></figure>
+
+<p>3、生成缓存</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">yum makecache</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>阅读手册</strong></p>
+<p>Linux  命令种类繁杂，我们凭借记忆不可能全部记住，因此学会查用手册是非常重要的。</p>
+<p><strong>man</strong></p>
+<p><strong>安装更新 man</strong></p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">sudo</span> yum install -y man-pages --&gt;</span> 安装<br><span class="hljs-function"><span class="hljs-title">sudo</span> mandb --&gt;</span> 更新<br></code></pre></td></tr></table></figure>
+
+<p><strong>man 手册种类</strong></p>
+<ol>
+<li>可执行程序或 <code>Shell</code> 命令； </li>
+<li>系统调用（ Linux 内核提供的函数）； </li>
+<li>库调用（程序库中的函数）； </li>
+<li>文件（例如 <code>/etc/passwd</code> ）； </li>
+<li>特殊文件（通常在 <code>/dev</code> 下）； </li>
+<li>游戏； </li>
+<li>杂项（<code>man(7)</code> ，<code>groff(7)</code> ）； </li>
+<li>系统管理命令（通常只能被 <code>root</code> 用户使用）； </li>
+<li>内核子程序。 </li>
+</ol>
+<p><strong>man + 数字 + 命令</strong></p>
+<p>输入 man + 数字 + 命令/函数，可以查到相关的命令和函数，若不加数字， man 默认从数字较小的手册中寻找相关命令和函数</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mel">man <span class="hljs-number">3</span> <span class="hljs-keyword">rand</span>  --&gt; 表示在手册的第三部分查找 <span class="hljs-keyword">rand</span> 函数<br>man <span class="hljs-keyword">ls</span>    --&gt; 查找 <span class="hljs-keyword">ls</span> 用法手册<br></code></pre></td></tr></table></figure>
+
+<p>man 手册核心区域解析：(以 <code>man pwd</code> 为例)</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">NAME <span class="hljs-comment"># 命令名称和简单描述</span><br>     pwd <span class="hljs-comment">-- return working directory name</span><br><br>SYNOPSIS <span class="hljs-comment"># 使用此命令的所有方法</span><br>     pwd [-L | -P]<br><br>DESCRIPTION <span class="hljs-comment"># 包括所有参数以及用法</span><br>     The pwd utility writes <span class="hljs-keyword">the</span> absolute pathname <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> current working <span class="hljs-built_in">directory</span> <span class="hljs-built_in">to</span> <span class="hljs-keyword">the</span> standard output.<br><br>     Some shells may provide <span class="hljs-keyword">a</span> builtin pwd <span class="hljs-keyword">command</span> <span class="hljs-title">which</span> <span class="hljs-title">is</span> <span class="hljs-title">similar</span> <span class="hljs-title">or</span> <span class="hljs-title">identical</span> <span class="hljs-title">to</span> <span class="hljs-title">this</span> <span class="hljs-title">utility</span>.  <span class="hljs-title">Consult</span> <span class="hljs-title">the</span> <span class="hljs-title">builtin</span>(<span class="hljs-title">1</span>) <span class="hljs-title">manual</span> <span class="hljs-title">page</span>.<br><br>     The options are <span class="hljs-keyword">as</span> follows:<br><br>     -L      Display <span class="hljs-keyword">the</span> logical current working <span class="hljs-built_in">directory</span>.<br><br>     -P      Display <span class="hljs-keyword">the</span> physical current working <span class="hljs-built_in">directory</span> (all symbolic links resolved).<br><br>     If no options are specified, <span class="hljs-keyword">the</span> -L option is assumed.<br><br>SEE ALSO <span class="hljs-comment"># 扩展阅读相关命令</span><br>     builtin(<span class="hljs-number">1</span>), cd(<span class="hljs-number">1</span>), csh(<span class="hljs-number">1</span>), sh(<span class="hljs-number">1</span>), getcwd(<span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>help</strong></p>
+<p>man 命令像新华词典一样可以查询到命令或函数的详细信息，但其实我们还有更加快捷的方式去查询，<code>command --help</code> 或 <code>command -h</code> ，它没有 man 命令显示的那么详细，但是它更加易于阅读。</p>
+<p>Linux 进阶</p>
+<p><strong>文本操作</strong></p>
+<p><strong>grep</strong></p>
+<p>全局搜索一个正则表达式，并且打印到屏幕。简单来说就是，在文件中查找关键字，并显示关键字所在行。</p>
+<p><strong>基础语法</strong></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">grep</span> text <span class="hljs-keyword">file</span> # text代表要搜索的文本，<span class="hljs-keyword">file</span>代表供搜索的文件<br><br># 实例<br>[root@lion ~]# <span class="hljs-keyword">grep</span> path <span class="hljs-regexp">/etc/</span>profile<br>pathmunge () &#123;<br>    pathmunge <span class="hljs-regexp">/usr/</span>sbin<br>    pathmunge <span class="hljs-regexp">/usr/</span>local/sbin<br>    pathmunge <span class="hljs-regexp">/usr/</span>local/sbin after<br>    pathmunge <span class="hljs-regexp">/usr/</span>sbin after<br>unset -f pathmunge<br></code></pre></td></tr></table></figure>
+
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-i</code> 忽略大小写，<code>grep -i path /etc/profile</code> </li>
+<li><code>-n</code> 显示行号， <code>grep -i path /etc/profile</code> </li>
+<li><code>-v</code> 只显示搜索文本不在的那些行，<code>grep -v path /etc/profile</code></li>
+<li><code>-r</code> 递归查找，<code>grep -r hello /etc</code> ，Linux 中还有一个 rgrep 命令，作用相当于 <code>grep -r</code> </li>
+</ul>
+<p><strong>高级用法</strong></p>
+<p><code>grep</code> 可以配合正则表达式使用。</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">grep</span> -E <span class="hljs-built_in">path</span> /etc/profile --&gt;</span> 完全匹配<span class="hljs-built_in">path</span><br><span class="hljs-function"><span class="hljs-title">grep</span> -E ^<span class="hljs-built_in">path</span> /etc/profile --&gt;</span> 匹配<span class="hljs-built_in">path</span>开头的字符串<br><span class="hljs-function"><span class="hljs-title">grep</span> -E [Pp]ath /etc/profile --&gt;</span> 匹配<span class="hljs-built_in">path</span>或Path<br></code></pre></td></tr></table></figure>
+
+<p><strong>sort</strong></p>
+<p>对文件的行进行排序。</p>
+<p><strong>基础语法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sort</span> name.txt <span class="hljs-comment"># 对name.txt文件进行排序</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>实例用法</strong></p>
+<p>为了演示方便，我们首先创建一个文件 name.txt ，放入以下内容：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">Christopher</span><br><span class="hljs-attribute">Shawn</span><br><span class="hljs-attribute">Ted</span><br><span class="hljs-attribute">Rock</span><br><span class="hljs-attribute">Noah</span><br><span class="hljs-attribute">Zachary</span><br><span class="hljs-attribute">Bella</span><br></code></pre></td></tr></table></figure>
+
+<p>执行 <code>sort name.txt</code> 命令，会对文本内容进行排序。</p>
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-o</code> 将排序后的文件写入新文件，<code>sort -o name_sorted.txt name.txt</code> ； </li>
+<li><code>-r</code> 倒序排序，<code>sort -r name.txt</code> ； </li>
+<li><code>-R</code> 随机排序，<code>sort -R name.txt</code> ； </li>
+<li><code>-n</code> 对数字进行排序，默认是把数字识别成字符串的，因此 138 会排在 25 前面，如果添加了 -n 数字排序的话，则 25 会在 138 前面。 </li>
+</ul>
+<p><strong>wc</strong></p>
+<p><code>word count</code> 的缩写，用于文件的统计。它可以统计单词数目、行数、字符数，字节数等。</p>
+<p><strong>基础语法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">wc</span> name.txt <span class="hljs-comment"># 统计name.txt</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>实例用法</strong></p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs autoit">[root<span class="hljs-symbol">@lion</span> ~]<span class="hljs-meta"># wc name.txt </span><br><span class="hljs-number">13</span> <span class="hljs-number">13</span> <span class="hljs-number">91</span> name.txt<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>第一个13，表示行数； </li>
+<li>第二个13，表示单词数； </li>
+<li>第三个91，表示字节数。 </li>
+</ul>
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-l</code> 只统计行数， <code>wc -l name.txt</code> ； </li>
+<li><code>-w</code> 只统计单词数，<code>wc -w name.txt</code> ； </li>
+<li><code>-c</code> 只统计字节数，<code>wc -c name.txt</code> ； </li>
+<li><code>-m</code> 只统计字符数，<code>wc -m name.txt</code> 。 </li>
+</ul>
+<p><strong>uniq</strong></p>
+<p>删除文件中的重复内容。</p>
+<p><strong>基础语法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">uniq</span> name.txt <span class="hljs-comment"># 去除name.txt重复的行数，并打印到屏幕上</span><br><span class="hljs-built_in">uniq</span> name.txt uniq_name.txt <span class="hljs-comment"># 把去除重复后的文件保存为 uniq_name.txt</span><br></code></pre></td></tr></table></figure>
+
+<p>【<strong>注意</strong>】它只能去除连续重复的行数。</p>
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-c</code> 统计重复行数， <code>uniq -c name.txt</code>；</li>
+<li><code>-d</code> 只显示重复的行数， <code>uniq -d name.txt</code> 。</li>
+</ul>
+<p><strong>cut</strong></p>
+<p>剪切文件的一部分内容。</p>
+<p><strong>基础语法</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">cut</span> -c <span class="hljs-number">2</span>-<span class="hljs-number">4</span> name.txt # 剪切每一行第二到第四个字符<br></code></pre></td></tr></table></figure>
+
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-d</code> 用于指定用什么分隔符（比如逗号、分号、双引号等等）<code>cut -d , name.txt</code> ； </li>
+<li><code>-f</code> 表示剪切下用分隔符分割的哪一块或哪几块区域，<code>cut -d , -f 1 name.txt</code> 。 </li>
+</ul>
+<p><strong>重定向 管道 流</strong></p>
+<p>在 Linux 中一个命令的去向可以有3个地方：终端、文件、作为另外一个命令的入参。</p>
+<p><img src="640wx_fmt=jpeg&random=0.11293268100917353&random=0.5947480581080269&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>命令一般都是通过键盘输入，然后输出到终端、文件等地方，它的标准用语是 stdin 、 stdout 以及 stderr 。</p>
+<ul>
+<li>标准输入 <code>stdin</code> ，终端接收键盘输入的命令，会产生两种输出； </li>
+<li>标准输出 <code>stdout</code> ，终端输出的信息（不包含错误信息）； </li>
+<li>标准错误输出 <code>stderr</code> ，终端输出的错误信息。</li>
+</ul>
+<p><img src="640wx_fmt=jpeg&random=0.21886353549193416&random=0.6957152342347532&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>重定向</strong></p>
+<p>把本来要显示在终端的命令结果，输送到别的地方（到文件中或者作为其他命令的输入）。</p>
+<p><strong>输出重定向 &gt;</strong> </p>
+<p><code>&gt;</code> 表示重定向到新的文件，<code>cut -d , -f 1 notes.csv &gt; name.csv</code> ，它表示通过逗号剪切 <code>notes.csv</code> 文件（剪切完有3个部分）获取第一个部分，重定向到 <code>name.csv</code> 文件。</p>
+<p>我们来看一个具体示例，学习它的使用，假设我们有一个文件 <code>notes.csv</code> ，文件内容如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Mark1</span>,<span class="hljs-number">951</span>/<span class="hljs-number">100</span>,很不错<span class="hljs-number">1</span><br><span class="hljs-attribute">Mark2</span>,<span class="hljs-number">952</span>/<span class="hljs-number">100</span>,很不错<span class="hljs-number">2</span><br><span class="hljs-attribute">Mark3</span>,<span class="hljs-number">953</span>/<span class="hljs-number">100</span>,很不错<span class="hljs-number">3</span><br><span class="hljs-attribute">Mark4</span>,<span class="hljs-number">954</span>/<span class="hljs-number">100</span>,很不错<span class="hljs-number">4</span><br><span class="hljs-attribute">Mark5</span>,<span class="hljs-number">955</span>/<span class="hljs-number">100</span>,很不错<span class="hljs-number">5</span><br><span class="hljs-attribute">Mark6</span>,<span class="hljs-number">956</span>/<span class="hljs-number">100</span>,很不错<span class="hljs-number">6</span><br></code></pre></td></tr></table></figure>
+
+<p>执行命令：cut -d , -f 1 notes.csv &gt; name.csv 最后输出如下内容：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">Mark1</span><br>Mark2<br>Mark3<br>Mark4<br>Mark5<br>Mark6<br></code></pre></td></tr></table></figure>
+
+<p>【注意】使用 <code>&gt;</code> 要注意，如果输出的文件不存在它会新建一个，如果输出的文件已经存在，则会覆盖。因此执行这个操作要非常小心，以免覆盖其它重要文件。</p>
+<p><strong>输出重定向</strong> <code>&gt;&gt;</code> </p>
+<p>表示重定向到文件末尾，因此它不会像 &gt; 命令这么危险，它是追加到文件的末尾（当然如果文件不存在，也会被创建）。 </p>
+<p>再次执行<code>cut -d , -f 1 notes.csv &gt;&gt; name.csv</code>，则会把名字追加到 <code>name.csv</code> 里面。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">Mark1</span><br>Mark2<br>Mark3<br>Mark4<br>Mark5<br>Mark6<br>Mark1<br>Mark2<br>Mark3<br>Mark4<br>Mark5<br>Mark6<br></code></pre></td></tr></table></figure>
+
+<p>我们平时读的 log 日志文件其实都是用这个命令输出的。</p>
+<p><strong>输出重定向 2&gt;</strong> </p>
+<p>标准错误输出</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">cat</span> not_exist_file.csv &gt; <span class="hljs-keyword">res</span>.txt <span class="hljs-number">2</span>&gt; errors.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>当我们 <code>cat</code> 一个文件时，会把文件内容打印到屏幕上，这个是标准输出； </li>
+<li>当使用了 <code>&gt; res.txt</code> 时，则不会打印到屏幕，会把标准输出写入文件 <code>res.txt</code> 文件中； </li>
+<li><code>2&gt; errors.log</code> 当发生错误时会写入 <code>errors.log</code> 文件中。 </li>
+</ul>
+<p><strong>输出重定向</strong> <code>2&gt;&gt;</code> </p>
+<p>标准错误输出（追加到文件末尾）同 &gt;&gt; 相似。</p>
+<p><strong>输出重定向</strong> <code>2&gt;&amp;1</code> </p>
+<p>标准输出和标准错误输出都重定向都一个地方</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">cat</span> not_exist_file.csv &gt; res.txt <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span>  # 覆盖输出<br><span class="hljs-attribute">cat</span> not_exist_file.csv &gt;&gt; res.txt <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> # 追加输出<br></code></pre></td></tr></table></figure>
+
+<p>目前为止，我们接触的命令的输入都来自命令的参数，其实命令的输入还可以来自文件或者键盘的输入。</p>
+<p><img src="640wx_fmt=jpeg&random=0.4840850080413186&random=0.13193035666547415&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>输入重定向</strong> <code>&lt;</code> </p>
+<p><code>&lt;</code> 符号用于指定命令的输入。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt; name.csv <span class="hljs-comment"># 指定命令的输入为 name.csv</span><br></code></pre></td></tr></table></figure>
+
+<p>虽然它的运行结果与 <code>cat name.csv</code> 一样，但是它们的原理却完全不同。</p>
+<ul>
+<li><code>cat name.csv</code> 表示 <code>cat</code> 命令接收的输入是 <code>notes.csv</code> 文件名，那么要先打开这个文件，然后打印出文件内容。 </li>
+<li><code>cat &lt; name.csv</code> 表示 <code>cat</code> 命令接收的输入直接是 <code>notes.csv</code> 这个文件的内容， <code>cat</code> 命令只负责将其内容打印，打开文件并将文件内容传递给 <code>cat</code> 命令的工作则交给终端完成。 </li>
+</ul>
+<p><strong>输入重定向</strong> <code>&lt;&lt;</code> </p>
+<p>将键盘的输入重定向为某个命令的输入。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sort</span> -n &lt;&lt; <span class="hljs-string">END # 输入这个命令之后，按下回车，终端就进入键盘输入模式，其中END</span>为结束命令（这个可以自定义）<br><br><span class="hljs-built_in">wc</span> -m &lt;&lt; <span class="hljs-string">END # 统计输入的单词</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>管道</strong> <code>|</code> </p>
+<p>把两个命令连起来使用，一个命令的输出作为另外一个命令的输入，英文是 <code>pipeline</code> ，可以想象一个个水管连接起来，管道算是重定向流的一种。</p>
+<p><img src="640wx_fmt=jpeg&random=0.8668009778721499&random=0.13938900104200735&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>举几个实际用法案例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cut</span> -d , -f 1 name.csv | <span class="hljs-built_in">sort</span> &gt; sorted_name.txt <br><span class="hljs-comment"># 第一步获取到的 name 列表，通过管道符再进行排序，最后输出到sorted_name.txt</span><br><br><span class="hljs-built_in">du</span> | <span class="hljs-built_in">sort</span> -nr | <span class="hljs-built_in">head</span> <br><span class="hljs-comment"># du 表示列举目录大小信息</span><br><span class="hljs-comment"># sort 进行排序,-n 表示按数字排序，-r 表示倒序</span><br><span class="hljs-comment"># head 前10行文件</span><br><br>grep <span class="hljs-built_in">log</span> -Ir /var/log | <span class="hljs-built_in">cut</span> -d : -f 1 | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span><br><span class="hljs-comment"># grep log -Ir /var/log 表示在log文件夹下搜索 /var/log 文本，-r 表示递归，-I 用于排除二进制文件</span><br><span class="hljs-comment"># cut -d : -f 1 表示通过冒号进行剪切，获取剪切的第一部分</span><br><span class="hljs-comment"># sort 进行排序</span><br><span class="hljs-comment"># uniq 进行去重</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>流</strong></p>
+<p>流并非一个命令，在计算机科学中，流 stream 的含义是比较难理解的，记住一点即可：流就是读一点数据, 处理一点点数据。其中数据一般就是二进制格式。上面提及的重定向或管道，就是把数据当做流去运转的。</p>
+<p>到此我们就接触了，流、重定向、管道等 Linux 高级概念及指令。其实你会发现关于流和管道在其它语言中也有广泛的应用。Angular 中的模板语法中可以使用管道。Node.js 中也有 stream 流的概念。</p>
+<p><strong>查看进程</strong></p>
+<p>在 Windows 中通过 Ctrl + Alt + Delete 快捷键查看软件进程。</p>
+<p><strong>w</strong></p>
+<p>帮助我们快速了解系统中目前有哪些用户登录着，以及他们在干什么。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">[root@lion ~]# w<br> <span class="hljs-number">06</span>:<span class="hljs-number">31</span>:<span class="hljs-number">53</span> up <span class="hljs-number">25</span> days,  <span class="hljs-number">9</span>:<span class="hljs-number">53</span>,  <span class="hljs-number">1</span> <span class="hljs-keyword">user</span>,  <span class="hljs-keyword">load</span> average: <span class="hljs-number">0.00</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.05</span><br><span class="hljs-keyword">USER</span>     TTY      <span class="hljs-keyword">FROM</span>             <span class="hljs-keyword">LOGIN</span>@   IDLE   JCPU   PCPU WHAT<br>root     pts/<span class="hljs-number">0</span>    <span class="hljs-number">118.31</span><span class="hljs-number">.243</span><span class="hljs-number">.53</span>    <span class="hljs-number">05</span>:<span class="hljs-number">56</span>    <span class="hljs-number">1.00</span>s  <span class="hljs-number">0.02</span>s  <span class="hljs-number">0.00</span>s w<br> <br><span class="hljs-number">06</span>:<span class="hljs-number">31</span>:<span class="hljs-number">53</span>：表示当前时间<br>up <span class="hljs-number">25</span> days, <span class="hljs-number">9</span>:<span class="hljs-number">53</span>：表示系统已经正常运行了“<span class="hljs-number">25</span>天<span class="hljs-number">9</span>小时<span class="hljs-number">53</span>分钟”<br><span class="hljs-number">1</span> <span class="hljs-keyword">user</span>：表示一个用户<br><span class="hljs-keyword">load</span> average: <span class="hljs-number">0.00</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.05</span>：表示系统的负载，<span class="hljs-number">3</span>个值分别表示“<span class="hljs-number">1</span>分钟的平均负载”，“<span class="hljs-number">5</span>分钟的平均负载”，“<span class="hljs-number">15</span>分钟的平均负载”<br><br> <span class="hljs-keyword">USER</span>：表示登录的用于<br> TTY：登录的终端名称为pts/<span class="hljs-number">0</span><br> <span class="hljs-keyword">FROM</span>：连接到服务器的ip地址<br> <span class="hljs-keyword">LOGIN</span>@：登录时间<br> IDLE：用户有多久没有活跃了<br> JCPU：该终端所有相关的进程使用的 CPU 时间，每当进程结束就停止计时，开始新的进程则会重新计时<br> PCPU：表示 CPU 执行当前程序所消耗的时间，当前进程就是在 WHAT 列里显示的程序<br> WHAT：表示当下用户正运行的程序是什么，这里我运行的是 w<br></code></pre></td></tr></table></figure>
+
+<p><strong>ps</strong></p>
+<p>用于显示当前系统中的进程， ps 命令显示的进程列表不会随时间而更新，是静态的，是运行 ps 命令那个时刻的状态或者说是一个进程快照。</p>
+<p><strong>基础语法</strong></p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dos">[root@lion ~]# ps<br>  PID TTY          <span class="hljs-built_in">TIME</span> <span class="hljs-built_in">CMD</span><br> <span class="hljs-number">1793</span> pts/<span class="hljs-number">0</span>    <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> bash<br> <span class="hljs-number">4756</span> pts/<span class="hljs-number">0</span>    <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> ps<br> <br> PID：进程号，每个进程都有唯一的进程号<br> TTY：进程运行所在的终端<br> <span class="hljs-built_in">TIME</span>：进程运行时间<br> <span class="hljs-built_in">CMD</span>：产生这个进程的程序名，如果在进程列表中看到有好几行都是同样的程序名，那么就是同样的程序产生了不止一个进程<br></code></pre></td></tr></table></figure>
+
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-ef</code> 列出所有进程； </li>
+<li><code>-efH</code> 以乔木状列举出所有进程；</li>
+<li><code>-u</code> 列出此用户运行的进程；</li>
+<li><code>-aux</code> 通过 <code>CPU</code> 和内存使用来过滤进程 <code>ps -aux | less</code> ; </li>
+<li><code>-aux --sort -pcpu</code> 按 <code>CPU</code> 使用降序排列，<code>-aux --sort -pmem</code> 表示按内存使用降序排列; </li>
+<li><code>-axjf</code> 以树形结构显示进程， <code>ps -axjf</code> 它和 <code>pstree</code> 效果类似。 </li>
+</ul>
+<p><strong>top</strong></p>
+<p>获取进程的动态列表。</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs tap">top - 07:20:07 up<span class="hljs-number"> 25 </span>days, 10:41, <span class="hljs-number"> 1 </span>user,  load average: 0.30, 0.10, 0.07<br>Tasks: <span class="hljs-number"> 67 </span>total,  <span class="hljs-number"> 1 </span>running, <span class="hljs-number"> 66 </span>sleeping,  <span class="hljs-number"> 0 </span>stopped,  <span class="hljs-number"> 0 </span>zombie<br>%Cpu(s):  0.7 us,  0.3 sy,  0.0 ni, 99.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st<br>KiB Mem : <span class="hljs-number"> 1882072 </span>total,  <span class="hljs-number"> 552148 </span>free,  <span class="hljs-number"> 101048 </span>used, <span class="hljs-number"> 1228876 </span>buff/cache<br>KiB Swap:       <span class="hljs-number"> 0 </span>total,       <span class="hljs-number"> 0 </span>free,       <span class="hljs-number"> 0 </span>used. <span class="hljs-number"> 1594080 </span>avail Mem <br><br>  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                                                       <br> <span class="hljs-number"> 956 </span>root     <span class="hljs-number"> 10 </span>-10 <span class="hljs-number"> 133964 </span><span class="hljs-number"> 15848 </span><span class="hljs-number"> 10240 </span>S  0.7  0.8 263:13.01 AliYunDun                                                                                                     <br>   <span class="hljs-number"> 1 </span>root     <span class="hljs-number"> 20 </span> <span class="hljs-number"> 0 </span> <span class="hljs-number"> 51644 </span> <span class="hljs-number"> 3664 </span> <span class="hljs-number"> 2400 </span>S  0.0  0.2   3:23.63 systemd                                                                                                       <br>   <span class="hljs-number"> 2 </span>root     <span class="hljs-number"> 20 </span> <span class="hljs-number"> 0 </span>     <span class="hljs-number"> 0 </span>    <span class="hljs-number"> 0 </span>    <span class="hljs-number"> 0 </span>S  0.0  0.0   0:00.05 kthreadd                                                                                                      <br>   <span class="hljs-number"> 4 </span>root      <span class="hljs-number"> 0 </span>-20      <span class="hljs-number"> 0 </span>    <span class="hljs-number"> 0 </span>    <span class="hljs-number"> 0 </span>S  0.0  0.0   0:00.00 kworker/0:0H<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>top - 07:20:07 up 25 days, 10:41,  1 user,  load average: 0.30, 0.10, 0.07</code> 相当 <code>w</code> 命令的第一行的信息。 </li>
+<li>展示的这些进程是按照使用处理器 <code>%CPU</code> 的使用率来排序的。 </li>
+</ul>
+<p><strong>kill</strong></p>
+<p>结束一个进程，<code>kill + PID</code> 。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">kill</span> <span class="hljs-number">956</span> # 结束进程号为<span class="hljs-number">956</span>的进程<br><span class="hljs-attribute">kill</span> <span class="hljs-number">956</span> <span class="hljs-number">957</span> # 结束多个进程<br><span class="hljs-attribute">kill</span> -<span class="hljs-number">9</span> <span class="hljs-number">7291</span> # 强制结束进程<br></code></pre></td></tr></table></figure>
+
+<p><strong>管理进程</strong></p>
+<p><strong>进程状态</strong></p>
+<p>主要是切换进程的状态。我们先了解下 Linux 下进程的五种状态：</p>
+<ol>
+<li>状态码 R ：表示正在运行的状态； </li>
+<li>状态码 S ：表示中断（休眠中，受阻，当某个条件形成后或接受到信号时，则脱离该状态）； </li>
+<li>状态码 D ：表示不可中断（进程不响应系统异步信号，即使用kill命令也不能使其中断）； </li>
+<li>状态码 Z ：表示僵死（进程已终止，但进程描述符依然存在，直到父进程调用 wait4() 系统函数后将进程释放）； </li>
+<li>状态码 T ：表示停止（进程收到 SIGSTOP 、 SIGSTP 、 SIGTIN 、 SIGTOU 等停止信号后停止运行）。 </li>
+</ol>
+<p><strong>前台进程 &amp; 后台进程</strong></p>
+<p>默认情况下，用户创建的进程都是前台进程，前台进程从键盘读取数据，并把处理结果输出到显示器。例如运行 top 命令，这就是一个一直运行的前台进程。</p>
+<p>后台进程的优点是不必等待程序运行结束，就可以输入其它命令。在需要执行的命令后面添加 &amp; 符号，就表示启动一个后台进程。</p>
+<p><strong>&amp;</strong></p>
+<p>启动后台进程，它的缺点是后台进程与终端相关联，一旦关闭终端，进程就自动结束了。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">cp <span class="hljs-type">name</span>.csv <span class="hljs-type">name</span>-<span class="hljs-keyword">copy</span>.csv &amp;<br></code></pre></td></tr></table></figure>
+
+<p><strong>nohup</strong></p>
+<p>使进程不受挂断（关闭终端等动作）的影响。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">nohup cp <span class="hljs-type">name</span>.csv <span class="hljs-type">name</span>-<span class="hljs-keyword">copy</span>.csv<br></code></pre></td></tr></table></figure>
+
+<p>nohup 命令也可以和 &amp; 结合使用。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">nohup cp <span class="hljs-type">name</span>.csv <span class="hljs-type">name</span>-<span class="hljs-keyword">copy</span>.csv &amp;<br></code></pre></td></tr></table></figure>
+
+<p><strong>bg</strong></p>
+<p>使一个“后台暂停运行”的进程，状态改为“后台运行”。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">bg</span> %1 <span class="hljs-comment"># 不加任何参数的情况下，bg命令会默认作用于最近的一个后台进程，如果添加参数则会作用于指定标号的进程</span><br></code></pre></td></tr></table></figure>
+
+<p>实际案例1：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">1</span>. 执行 grep -r <span class="hljs-string">&quot;log&quot;</span> / &gt; grep_log <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> 命令启动一个前台进程，并且忘记添加 &amp; 符号<br><span class="hljs-attribute">2</span>. ctrl + z 使进程状态转为后台暂停<br><span class="hljs-attribute">3</span>. 执行 bg 将命令转为后台运行             <br></code></pre></td></tr></table></figure>
+
+<p>实际案例2：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">前端开发时我们经常会执行 yarn start 启动项目<br>此时我们执行 ctrl + z 先使其暂停<br>然后执行 <span class="hljs-built_in">bg</span> 使其转为后台运行<br>这样当前终端就空闲出来可以干其它事情了，如果想要唤醒它就使用 <span class="hljs-built_in">fg</span> 命令即可（后面会讲）<br></code></pre></td></tr></table></figure>
+
+<p><strong>jobs</strong></p>
+<p>显示当前终端后台进程状态。</p>
+<p><strong>fg</strong></p>
+<p>fg 使进程转为前台运行，用法和 bg 命令类似。</p>
+<p>我们用一张图来表示前后台进程切换：</p>
+<p><img src="640wx_fmt=jpeg&random=0.9200554254980926&random=0.16042377588978307&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>我们可以使程序在后台运行，成为后台进程，这样在当前终端中我们就可以做其他事情了，而不必等待此进程运行结束。</p>
+<p><strong>守护进程</strong></p>
+<p>一个运行起来的程序被称为进程。在 Linux 中有些进程是特殊的，它不与任何进程关联，不论用户的身份如何，都在后台运行，这些进程的父进程是 PID 为1的进程， PID 为1的进程只在系统关闭时才会被销毁。它们会在后台一直运行等待分配工作。我们将这类进程称之为守护进程 daemon 。</p>
+<p>守护进程的名字通常会在最后有一个 d ，表示 daemon 守护的意思，例如 systemd 、httpd 。</p>
+<p><strong>systemd</strong></p>
+<p>systemd 是一个 Linux 系统基础组件的集合，提供了一个系统和服务管理器，运行为 PID 1 并负责启动其它程序。</p>
+<p>通过命令也可以看到 PID 为1的进程就是 systemd 的系统进程。</p>
+<p>systemd 常用命令（它是一组命令的集合）：</p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">systemctl</span> <span class="hljs-string">start</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 启动服务</span><br><span class="hljs-string">systemctl</span> <span class="hljs-string">stop</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 停止服务</span><br><span class="hljs-string">systemctl</span> <span class="hljs-string">restart</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 重启服务</span><br><span class="hljs-string">systemctl</span> <span class="hljs-string">status</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 查看服务状态</span><br><span class="hljs-string">systemctl</span> <span class="hljs-string">reload</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 重载配置文件(不停止服务的情况)</span><br><span class="hljs-string">systemctl</span> <span class="hljs-string">enable</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 开机自动启动服务</span><br><span class="hljs-string">systemctl</span> <span class="hljs-string">disable</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 开机不自动启动服务</span><br><span class="hljs-string">systemctl</span> <span class="hljs-string">is-enabled</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># 查看服务是否开机自动启动</span><br><span class="hljs-string">systemctl</span> <span class="hljs-built_in">list-unit-files</span> <span class="hljs-built_in">--type=service</span> <span class="hljs-comment"># 查看各个级别下服务的启动和禁用情况</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>文件压缩解压</strong></p>
+<ul>
+<li><strong>打包</strong>：是将多个文件变成一个总的文件，它的学名叫存档、归档。 </li>
+<li><strong>压缩</strong>：是将一个大文件（通常指归档）压缩变成一个小文件。 </li>
+</ul>
+<p>我们常常使用 tar 将多个文件归档为一个总的文件，称为 archive 。然后用 gzip 或 bzip2 命令将 archive 压缩为更小的文件。</p>
+<p><img src="640wx_fmt=jpeg&random=0.4558983160453647&random=0.8917503277603893&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>tar</strong></p>
+<p>创建一个 <code>tar</code> 归档。</p>
+<p><strong>基础用法</strong></p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dos">tar -cvf <span class="hljs-built_in">sort</span>.tar <span class="hljs-built_in">sort</span>/ # 将<span class="hljs-built_in">sort</span>文件夹归档为<span class="hljs-built_in">sort</span>.tar<br>tar -cvf archive.tar file1 file2 file3 # 将 file1 file2 file3 归档为archive.tar<br></code></pre></td></tr></table></figure>
+
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-cvf</code> 表示 create（创建）+ verbose（细节）+ file（文件），创建归档文件并显示操作细节； </li>
+<li><code>-tf</code> 显示归档里的内容，并不解开归档； </li>
+<li><code>-rvf</code> 追加文件到归档，<code>tar -rvf archive.tar file.txt</code> ； </li>
+<li><code>-xvf</code> 解开归档，<code>tar -xvf archive.tar</code> 。 </li>
+</ul>
+<p><strong>gzip / gunzip</strong></p>
+<p>“压缩/解压”归档，默认用 <code>gzip</code> 命令，压缩后的文件后缀名为 <code>.tar.gz</code> 。</p>
+<p><strong>tar 归档+压缩</strong></p>
+<p>可以用 tar 命令同时完成归档和压缩的操作，就是给 tar 命令多加一个选项参数，使之完成归档操作后，还是调用 <code>gzip</code> 或 <code>bzip2</code> 命令来完成压缩操作。</p>
+<p><strong>zcat、zless、zmore</strong></p>
+<p>之前讲过使用 <code>cat less more</code> 可以查看文件内容，但是压缩文件的内容是不能使用这些命令进行查看的，而要使用 <code>zcat、zless、zmore</code> 进行查看。</p>
+<p><strong>zip/unzip</strong></p>
+<p>“压缩/解压” zip 文件（ zip 压缩文件一般来自 windows 操作系统）。</p>
+<p><strong>命令安装</strong></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># Red Hat 一族中的安装方式</span><br>yum <span class="hljs-keyword">install</span> zip <br>yum <span class="hljs-keyword">install</span> unzip <br></code></pre></td></tr></table></figure>
+
+<p>基础用法</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stata">unzip archive.<span class="hljs-keyword">zip</span> # 解压 .<span class="hljs-keyword">zip</span> 文件<br>unzip -<span class="hljs-keyword">l</span> archive.<span class="hljs-keyword">zip</span> # 不解开 .<span class="hljs-keyword">zip</span> 文件，只看其中内容<br><br><span class="hljs-keyword">zip</span> -r <span class="hljs-keyword">sort</span>.<span class="hljs-keyword">zip</span> <span class="hljs-keyword">sort</span>/ # 将<span class="hljs-keyword">sort</span>文件夹压缩为 <span class="hljs-keyword">sort</span>.<span class="hljs-keyword">zip</span>，其中-r表示递归                    <br></code></pre></td></tr></table></figure>
+
+<p><strong>编译安装软件</strong></p>
+<p>之前我们学会了使用 <code>yum</code> 命令进行软件安装，如果碰到 <code>yum</code> 仓库中没有的软件，我们就需要会更高级的软件安装“源码编译安装”。</p>
+<p><strong>编译安装</strong></p>
+<p>简单来说，编译就是将程序的源代码转换成可执 <code>yum</code> 行文件的过程。大多数 Linux 的程序都是开放源码的，可以编译成适合我们的电脑和操纵系统属性的可执行文件。</p>
+<p>基本步骤如下：</p>
+<ol>
+<li>下载源代码 </li>
+<li>解压压缩包 </li>
+<li>配置 </li>
+<li>编译 </li>
+<li>安装 </li>
+</ol>
+<p><strong>实际案例</strong></p>
+<p><strong>1、下载</strong></p>
+<p>我们来编译安装 htop 软件，首先在它的官网下载源码：<a target="_blank" rel="noopener" href="https://bintray.com/htop/source/htop#files">https://bintray.com/htop/source/htop#files</a></p>
+<p>下载好的源码在本机电脑上使用如下命令同步到服务器上：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">scp</span> 文件名 用户名@服务器ip:目标路径<br><br><span class="hljs-attribute">scp</span> ~/Desktop/htop-<span class="hljs-number">3</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.tar.gz root@<span class="hljs-number">121.42.11.34</span>:.<br></code></pre></td></tr></table></figure>
+
+<p>也可以使用 wegt 进行下载：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">wegt+下载地址<br><br>wegt https:<span class="hljs-regexp">//</span>bintray.com<span class="hljs-regexp">/htop/</span>source/download_file?file_path=htop-<span class="hljs-number">3.0</span>.<span class="hljs-number">0</span>.tar.gz<br></code></pre></td></tr></table></figure>
+
+<p><strong>2、解压文件</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">tar</span> -zxvf htop-<span class="hljs-number">3</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.tar.gz # 解压<br><br><span class="hljs-attribute">cd</span> htop-<span class="hljs-number">3</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span> # 进入目录<br></code></pre></td></tr></table></figure>
+
+<p><strong>3、配置</strong></p>
+<p>执行 <code>./configure</code> ，它会分析你的电脑去确认编译所需的工具是否都已经安装了。</p>
+<p><strong>4、编译</strong></p>
+<p>执行 <code>make</code> 命令</p>
+<p><strong>5、安装</strong></p>
+<p>执行 <code>make install</code> 命令，安装完成后执行 <code>ls /usr/local/bin/</code> 查看是否有 <code>htop</code> 命令。如果有就可以执行 <code>htop</code> 命令查看系统进程了。</p>
+<p><strong>网络</strong></p>
+<p><strong>ifconfig</strong></p>
+<p>查看 ip 网络相关信息，如果命令不存在的话， 执行命令 <code>yum install net-tools</code> 安装。</p>
+<p>参数解析：</p>
+<ul>
+<li><code>eth0</code> 对应有线连接（对应你的有线网卡），就是用网线来连接的上网。<code>eth</code> 是 Ethernet 的缩写，表示“以太网”。有些电脑可能同时有好几条网线连着，例如服务器，那么除了<code>eth0</code> ，你还会看到 <code>eth1</code> 、<code>eth2</code> 等。 </li>
+<li><code>lo</code> 表示本地回环（ Local Loopback 的缩写，对应一个虚拟网卡）可以看到它的 ip 地址是 127.0.0.1 。每台电脑都应该有这个接口，因为它对应着“连向自己的链接”。这也是被称之为“本地回环”的原因。所有经由这个接口发送的东西都会回到你自己的电脑。看起来好像并没有什么用，但有时为了某些缘故，我们需要连接自己。例如用来测试一个网络程序，但又不想让局域网或外网的用户查看，只能在此台主机上运行和查看所有的网络接口。例如在我们启动一个前端工程时，在浏览器输入 127.0.0.1:3000 启动项目就能查看到自己的 web 网站，并且它只有你能看到。 </li>
+<li><code>wlan0</code> 表示无线局域网（上面案例并未展示）。 </li>
+</ul>
+<p><strong>host</strong></p>
+<p>ip 地址和主机名的互相转换。</p>
+<p><strong>软件安装</strong></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">yum <span class="hljs-keyword">install</span> bind-utils<br></code></pre></td></tr></table></figure>
+
+<p><strong>基础用法</strong></p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs accesslog"><span class="hljs-string">[root@lion ~]</span># host github.com<br>baidu.com has address <span class="hljs-number">13</span>.<span class="hljs-number">229</span>.<span class="hljs-number">188</span>.<span class="hljs-number">59</span><br> <br><span class="hljs-string">[root@lion ~]</span># host <span class="hljs-number">13</span>.<span class="hljs-number">229</span>.<span class="hljs-number">188</span>.<span class="hljs-number">59</span><br><span class="hljs-number">59.188.229.13</span>.in-addr.arpa domain name pointer ec2-<span class="hljs-number">13</span>-<span class="hljs-number">229</span>-<span class="hljs-number">188</span>-<span class="hljs-number">59</span>.ap-southeast-<span class="hljs-number">1</span>.compute.amazonaws.com.<br></code></pre></td></tr></table></figure>
+
+<p><strong>ssh 连接远程服务器</strong></p>
+<p>通过非对称加密以及对称加密的方式（同 HTTPS 安全连接原理相似）连接到远端服务器。</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs elixir">ssh 用户<span class="hljs-variable">@ip</span><span class="hljs-symbol">:port</span><br><br><span class="hljs-number">1</span>、ssh root<span class="hljs-variable">@172</span>.<span class="hljs-number">20.10</span>.<span class="hljs-number">1</span><span class="hljs-symbol">:</span><span class="hljs-number">22</span> <span class="hljs-comment"># 端口号可以省略不写，默认是22端口</span><br><span class="hljs-number">2</span>、输入连接密码后就可以操作远端服务器了<br></code></pre></td></tr></table></figure>
+
+<p><strong>配置 ssh</strong></p>
+<p><code>config</code> 文件可以配置 <code>ssh</code> ，方便批量管理多个 <code>ssh</code> 连接。</p>
+<p>配置文件分为以下几种：</p>
+<ul>
+<li>全局 <code>ssh</code> 服务端的配置：<code>/etc/ssh/sshd_config</code> ； </li>
+<li>全局 <code>ssh</code> 客户端的配置： <code>/etc/ssh/ssh_config</code>（很少修改）； </li>
+<li>当前用户 <code>ssh</code> 客户端的配置：<code>~/.ssh/config</code> 。 </li>
+</ul>
+<p>【<strong>服务端</strong> <code>config</code> <strong>文件的常用配置参数</strong>】</p>
+<table>
+<thead>
+<tr>
+<th>服务端 config 参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Port</td>
+<td>sshd 服务端口号（默认是22）</td>
+</tr>
+<tr>
+<td>PermitRootLogin</td>
+<td>是否允许以 root 用户身份登录（默认是可以）</td>
+</tr>
+<tr>
+<td>PasswordAuthentication</td>
+<td>是否允许密码验证登录（默认是可以）</td>
+</tr>
+<tr>
+<td>PubkeyAuthentication</td>
+<td>是否允许公钥验证登录（默认是可以）</td>
+</tr>
+<tr>
+<td>PermitEmptyPasswords</td>
+<td>是否允许空密码登录（不安全，默认不可以）</td>
+</tr>
+</tbody></table>
+<p>[<strong>注意</strong>] 修改完服务端配置文件需要重启服务 <code>systemctl restart sshd</code> </p>
+<p>【客户端 <code>config</code> 文件的常用配置参数】</p>
+<table>
+<thead>
+<tr>
+<th>客户端 config 参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Host</td>
+<td>别名</td>
+</tr>
+<tr>
+<td>HostName</td>
+<td>远程主机名（或 IP 地址）</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>连接到远程主机的端口</td>
+</tr>
+<tr>
+<td>User</td>
+<td>用户名</td>
+</tr>
+</tbody></table>
+<p>配置当前用户的 <code>config</code> ：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><span class="hljs-comment"># 创建config</span><br>vim ~/.ssh/config<br><br><span class="hljs-comment"># 填写一下内容</span><br>Host lion <span class="hljs-comment"># 别名</span><br>    HostName <span class="hljs-number">172</span>.x.x.x <span class="hljs-comment"># ip 地址</span><br>  Port <span class="hljs-number">22</span> <span class="hljs-comment"># 端口</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">root</span> <span class="hljs-comment"># 用户</span><br></code></pre></td></tr></table></figure>
+
+<p>这样配置完成后，下次登录时，可以这样登录 ssh lion 会自动识别为 root 用户。</p>
+<p>[注意] 这段配置不是在服务器上，而是你自己的机器上，它仅仅是设置了一个别名。</p>
+<p><strong>免密登录</strong></p>
+<p><code>ssh</code> 登录分两种，一种是基于口令（账号密码），另外一种是基于密钥的方式。</p>
+<p>基于口令，就是每次登录输入账号和密码，显然这样做是比较麻烦的，今天主要学习如何基于密钥实现免密登录。</p>
+<p><strong>基于密钥验证原理</strong></p>
+<p>客户机生成密钥对（公钥和私钥），把公钥上传到服务器，每次登录会与服务器的公钥进行比较，这种验证登录的方法更加安全，也被称为“公钥验证登录”。</p>
+<p><strong>具体实现步骤</strong></p>
+<p>1、在客户机中生成密钥对（公钥和私钥） <code>ssh-keygen</code>（默认使用 RSA 非对称加密算法）</p>
+<p>运行完 <code>ssh-keygen</code> 会在 <code>~/.ssh/</code> 目录下，生成两个文件：</p>
+<ul>
+<li><code>id_rsa.pub</code> ：公钥 </li>
+<li><code>id_rsa</code> ：私钥 </li>
+</ul>
+<p>2、把客户机的公钥传送到服务</p>
+<p>执行 <code>ssh-copy-id root@172.x.x.x</code>（<code>ssh-copy-id</code> 它会把客户机的公钥追加到服务器 <code>~/.ssh/authorized_keys</code> 的文件中）。</p>
+<p>执行完成后，运行 <code>ssh root@172.x.x.x</code> 就可以实现免密登录服务器了。</p>
+<p>配合上面设置好的别名，直接执行 ssh lion 就可以登录，是不是非常方便。</p>
+<p><strong>wget</strong></p>
+<p>可以使我们直接从终端控制台下载文件，只需要给出文件的HTTP或FTP地址。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">wget</span><span class="hljs-meta"> [参数][URL地址]</span><br><br><span class="hljs-attribute">wget</span> http://www.minjieren.com/wordpress-<span class="hljs-number">3</span>.<span class="hljs-number">1</span>-zh_CN.zip<br></code></pre></td></tr></table></figure>
+
+<p><code>wget</code> 非常稳定，如果是由于网络原因下载失败，<code>wget</code> 会不断尝试，直到整个文件下载完毕。</p>
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-c</code> 继续中断的下载。 </li>
+</ul>
+<p><strong>备份</strong></p>
+<p><strong>scp</strong></p>
+<p>它是 <code>Secure Copy</code> 的缩写，表示安全拷贝。<code>scp</code> 可以使我们通过网络，把文件从一台电脑拷贝到另一台电脑。</p>
+<p><code>scp</code> 是基于 <code>ssh</code> 的原理来运作的，<code>ssh</code> 会在两台通过网络连接的电脑之间创建一条安全通信的管道，<code>scp</code> 就利用这条管道安全地拷贝文件。</p>
+<p>其中<code>source_file</code> 和<code>destination_file</code> 都可以这样表示：<code>user@ip:file_name</code>，<code>user</code> 是登录名，ip是域名或ip地址。 <code>file_name</code> 是文件路径。</p>
+<p><strong>rsync</strong></p>
+<p><code>rsync</code> 命令主要用于远程同步文件。它可以同步两个目录，不管它们是否处于同一台电脑。它应该是最常用于“增量备份”的命令了。它就是智能版的 <code>scp</code> 命令。</p>
+<p><strong>软件安装</strong></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">yum <span class="hljs-keyword">install</span> rsync<br></code></pre></td></tr></table></figure>
+
+<p><strong>基础用法</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">rsync -arv Images<span class="hljs-regexp">/ backups/</span> <span class="hljs-comment"># 将Images 目录下的所有文件备份到 backups 目录下</span><br>rsync -arv Images<span class="hljs-regexp">/ root@192.x.x.x:backups/</span> <span class="hljs-comment"># 同步到服务器的backups目录下</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>常用参数</strong></p>
+<ul>
+<li><code>-a</code> 保留文件的所有信息，包括权限，修改日期等； </li>
+<li><code>-r</code> 递归调用，表示子目录的所有文件也都包括； </li>
+<li><code>-v</code> 冗余模式，输出详细操作信息。 </li>
+</ul>
+<p>默认地，<code>rsync</code> 在同步时并不会删除目标目录的文件，例如你在源目录中删除一个文件，但是用 <code>rsync</code> 同步时，它并不会删除同步目录中的相同文件。如果向删除也可以这么做：<code>rsync -arv --delete Images/ backups/</code> 。</p>
+<p><strong>系统</strong></p>
+<p><strong>halt</strong></p>
+<p>关闭系统，需要 root 身份。</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cos"><span class="hljs-keyword">halt</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>reboot</strong></p>
+<p>重启系统，需要 root 身份。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">reboot</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>poweroff</strong></p>
+<p>直接运行即可关机，不需要 <code>root</code> 身份。</p>
+<p>Vim 编译器</p>
+<p><strong>Vim 是什么？</strong></p>
+<p>Vim 是从 vi 发展出来的一个文本编辑器。其代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。和 Emacs 并列成为类 Unix 系统用户最喜欢的编辑器。</p>
+<p><strong>Vim 常用模式</strong></p>
+<ul>
+<li><strong>交互模式</strong> </li>
+<li><strong>插入模式</strong> </li>
+<li><strong>命令模式</strong> </li>
+<li><strong>可视模式</strong> </li>
+</ul>
+<p><strong>交互模式</strong></p>
+<p>也成为正常模式，这是 Vim 的默认模式，每次运行 Vim 程序的时候，就会进入这个模式。</p>
+<p>例如执行 <code>vim name.txt</code> 则会进入交互模式。</p>
+<p>交互模式特征：</p>
+<ul>
+<li>在这个模式下，你不能输入文本； </li>
+<li>它可以让我们在文本间移动，删除一行文本，复制黏贴文本，跳转到指定行，撤销操作，等等。 </li>
+</ul>
+<p><strong>插入模式</strong></p>
+<p>这个模式是我们熟悉的文本编辑器的模式，就是可以输入任何你想输入的内容。进入这个模式有几种方法，最常用的方法是按字母键 i （ <code>i、I、a、A、o、O</code> 都可以进入插入模式，只是所处的位置不同），退出这种模式，只需要按下 Esc 键。</p>
+<ul>
+<li><code>i, I</code> 进入输入模式 Insert mode ：<code>i</code> 为“从目前光标所在处输入”， <code>I</code> 为“在目前所在行的第一个非空格符处开始输入”； </li>
+<li><code>a, A</code> 进入输入模式 Insert mode ：<code>a</code> 为“从目前光标所在的下一个字符处开始输入”，<code>A</code> 为“从光标所在行的最后一个字符处开始输入”； </li>
+<li><code>o, O</code> 进入输入模式 Insert mode ：<code>o</code> 为“在目前光标所在的下一行处输入新的一行”；<code>O</code> 为在目前光标所在处的上一行输入新的一行。 </li>
+</ul>
+<p><strong>命令模式</strong></p>
+<p>命令模式也称为底线命令模式，这个模式下可以运行一些命令例如“退出”，“保存”，等动作。</p>
+<p>也可以用这个模式来激活一些 Vim 配置，例如语法高亮，显示行号，等。甚至还可以发送一些命令给终端命令行，例如 <code>ls</code> 、<code>cp</code> 。</p>
+<p>为了进入命令模式，首先要进入交互模式，再按下冒号键。</p>
+<p>用一张图表示三种模式如何切换：</p>
+<p><img src="640wx_fmt=jpeg&random=0.6678721195239334&random=0.jpeg" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>基本操作</strong></p>
+<p><strong>打开 Vim</strong></p>
+<p>在终端命令行中输入 vim 回车后 Vim 就会被运行起来，也可以用 Vim 来打开一个文件，只需要在 vim 后面再加文件名。如 <code>vim file.name</code> ，如果文件不存在，那么会被创建。</p>
+<p><strong>插入</strong></p>
+<p>进入文件之后，此时处于交互模式，可以通过输入 i 进入插入模式。</p>
+<p><strong>移动</strong></p>
+<p>在 Vim 的交互模式下，我们可以在文本中移动光标。</p>
+<ul>
+<li>h 向左移动一个字符 </li>
+<li>j 向下移动一个字符 </li>
+<li>k 向上移动一个字符 </li>
+<li>i 向右移动一个字符 </li>
+</ul>
+<p>当然也可以使用四个方向键进行移动，效果是一样的。</p>
+<p><strong>跳至行首和行末</strong></p>
+<ul>
+<li><strong>行首</strong>：在交互模式下，为了将光标定位到一行的开始位置，只需要按下数字键 0 即可，键盘上的 Home 键也有相同效果。 </li>
+<li><strong>行末</strong>：在交互模式下，为了将光标定位到一行的末尾，只需要按下美元符号键 <code>$</code> 即可，键盘上的 End 键也有相同效果。 </li>
+</ul>
+<p><strong>按单词移动</strong></p>
+<p>在交互模式下，按字母键 <code>w</code> 可以一个单词一个单词的移动。</p>
+<p><strong>退出文件</strong></p>
+<p>在交互模式下，按下冒号键 : 进入命令模式，再按下 <code>q</code> 键，就可以退出了。</p>
+<p>如果在退出之前又修改了文件，就直接想用 <code>:q</code> 退出 Vim ，那么 Vim 会显示一个红字标明错误信息。此时我们有两个选择：</p>
+<ol>
+<li>保存并退出 <code>:wq</code> 或 <code>:x</code> ； </li>
+<li>不保存且退出  <code>:q!</code> 。 </li>
+</ol>
+<p><strong>标准操作</strong></p>
+<p><strong>删除字符</strong></p>
+<p>在交互模式下，将光标定位到一个你想要删除的字符上，按下字母键 x 你会发现这个字符被删除了。</p>
+<p>也可以一次性删除多个字符，只需要在按 x 键之前输入数字即可。</p>
+<p><strong>删除（剪切）单词，行</strong></p>
+<ul>
+<li>删除一行：连按两次 <code>d</code> 来删除光标所在的那一行。 </li>
+<li>删除多行：例如先输入数字 2 ，再按下 <code>dd</code> ，就会删除从光标所在行开始的两行。 </li>
+<li>删除一个单词：将光标置于一个单词的首字母处，然后按下 <code>dw</code> 。 </li>
+<li>删除多个单词：例如先按数字键 2 再按 <code>dw</code> 就可以删除两个单词了。 </li>
+<li>从光标所在位置删除至行首： <code>d0</code> 。 </li>
+<li>从光标所在位置删除至行末： <code>d$</code> 。 </li>
+</ul>
+<p><strong>复制单词，行</strong></p>
+<ul>
+<li><strong>复制行</strong>：按两次 <code>y</code> 会把光标所在行复制到内存中，和 <strong><code>dd</code></strong> 类似，<code>dd</code> 用于“剪切”光标所在行。 </li>
+<li><strong>复制单词</strong>：<code>yw</code> 会复制一个单词。 </li>
+<li><strong>复制到行末</strong>：<code>y$</code> 是复制从光标所在处到行末的所有字符。 </li>
+<li><strong>复制到行首</strong>：<code>y0</code> 是复制光标所在处到行首的所有字符。 </li>
+</ul>
+<p><strong>粘贴</strong></p>
+<p>如果之前用 <code>dd</code> 或者 <code>yy</code> 剪切复制过来的，可以使用 <code>p</code> 来粘贴。同样也可以使用 <code>数字+p</code> 来表示复制多次。</p>
+<p><strong>替换一个字符</strong></p>
+<p>在交互模式下，将光标置于想要替换的字符上。按下 <code>r</code> 键，接着输入你要替换的字符即可。</p>
+<p><strong>撤销操作</strong></p>
+<p>如果要撤销最近的修改，只需要按下 <code>u</code> 键，如果想要撤销最近四次修改，可以按下4，再按下 <code>u</code> 。</p>
+<p><strong>重做</strong></p>
+<p>取消撤销，也就是重做之前的修改使用 <code>ctrl + r</code> 。</p>
+<p>跳转到指定行</p>
+<p>Vim 编辑的文件中，每一行都有一个行号，行号从1开始，逐一递增。</p>
+<p>行号默认是不显示，如果需要它显示的话，可以进入命令模式，然后输入 <code>set nu</code> ，如果要隐藏行号的话，使用 <code>set nonu</code> 。</p>
+<ul>
+<li>跳转到指定行：<code>数字+gg</code> ，例如 <code>7gg</code> ，表示跳转到第7行。 </li>
+<li>要跳转到最后一行，按下 <code>G</code> 。 </li>
+<li>要跳转到第一行，按下 <code>gg</code> 。 </li>
+</ul>
+<p><strong>高级操作</strong></p>
+<p><strong>查找</strong></p>
+<p>处于交互模式下，按下 <code>/</code> 键，那么就进入查找模式，输入你要查找的字符串，然后按下回车。光标就会跳转到文件中下一个查找到的匹配处。如果字符串不存在，那么会显示 <code>&quot;pattern not found&quot;</code> 。</p>
+<ul>
+<li><code>n</code> 跳转到下一个匹配项； </li>
+<li><code>N</code> 跳转到上一个匹配项。 </li>
+</ul>
+<p>[<strong>注意</strong>] 用斜杠来进行的查找是从当前光标处开始向文件尾搜索，如果你要从当前光标处开始，向文件头搜索则使用 <code>?</code> ，当然也可以先按下 <code>gg</code> 跳转到第一行在进行全文搜索。</p>
+<p><strong>查找并替换</strong></p>
+<p>替换光标所在行第一个匹配的字符串：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-comment"># 语法</span><br><span class="hljs-symbol">:s/</span>旧字符串/新字符串<br><br><span class="hljs-comment"># 实例</span><br><span class="hljs-symbol">:s/one/two</span><br></code></pre></td></tr></table></figure>
+
+<p>替换光标所在行所有旧字符串为新字符串：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment"># 语法</span><br>:s<span class="hljs-regexp">/旧字符串/</span>新字符串/g<br></code></pre></td></tr></table></figure>
+
+<p>替换第几行到第几行中所有字符串：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment"># 语法</span><br>:n,m s<span class="hljs-regexp">/旧字符串/</span>新字符串/g<br><br><span class="hljs-comment"># 实例</span><br>:<span class="hljs-number">2</span>,<span class="hljs-number">4</span> s<span class="hljs-regexp">/one/</span>two/g<br></code></pre></td></tr></table></figure>
+
+<p>最常用的就是全文替换了：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-comment"># 语法</span><br><span class="hljs-symbol">:%s/</span>旧字符串/新字符串/g<br></code></pre></td></tr></table></figure>
+
+<p><strong>合并文件</strong></p>
+<p>可以用冒号 <code>+r</code> ( <code>:r</code> ) 实现在光标处插入一个文件的内容。</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-symbol">:r</span> filename <span class="hljs-comment"># 可以用Tab键来自动补全另外一个文件的路径</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>分屏</strong></p>
+<p>Vim 有一个特别便捷的功能那就是分屏，可以同时打开好几个文件，分屏之后，屏幕每一块被称为一个 viewport ，表示“视口”。</p>
+<ul>
+<li><strong>横向分屏</strong> : sp 文件名 </li>
+<li><strong>垂直分屏</strong> : vsp 文件名 </li>
+</ul>
+<p><strong>分屏模式下的快捷键</strong></p>
+<ul>
+<li><code>Ctrl + w</code> 再加 <code>Ctrl + w</code> ，表示从一个 viewport 移动光标到另外一个 viewport ； </li>
+<li><code>Ctrl + w</code> 再加 “方向键”，就可以移动到这个方向所处的下一个视口了； </li>
+<li><code>Ctrl + w</code> 再加 <code>+</code> 号，表示扩大当前视口； </li>
+<li><code>Ctrl + w</code> 再加 <code>-</code> 号，表示缩小当前视口； </li>
+<li><code>Ctrl + w</code> 再加 <code>=</code> 号，表示平均当前视口； </li>
+<li><code>Ctrl + w</code> 再加 <code>r</code> 键，会反向调换视口位置； </li>
+<li><code>Ctrl + w</code> 再加 <code>q</code> 键，会关闭当前视口； </li>
+<li><code>Ctrl + w</code> 再加 <code>o</code> 键，会关闭除当前视口以外的所有视口； </li>
+</ul>
+<p><strong>运行外部命令</strong> <code>:!</code></p>
+<p>在 Vim 中可以运行一些终端命令，只要先输入 :! ，然后接命令名称。</p>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">:!<span class="hljs-built_in">ls</span> <span class="hljs-comment"># 在Vim中打开的文件所在的目录运行ls命令</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>可视模式</strong></p>
+<p>前面只讲了 Vim 的三种模式，其实还有一种模式叫做可视模式。</p>
+<p>进入它的三种方式（都是从交互模式开始）：</p>
+<ul>
+<li><code>v</code> 字符可视模式，进入后配合方向键选中字符后，然后再按 <code>d</code> 键可以删除选中。 </li>
+<li><code>V</code> 行可视模式，进入后光标所在行默认被选中，然后再按 <code>d</code> 键可以删除所在行。 </li>
+<li><code>Ctrl + v</code> 块可视模式，它是可视模式最有用的功能了，配合 <code>d</code> 和 <code>I</code> 键可以实现删除选中的内容和插入内容。 </li>
+</ul>
+<p>同时选中多行，并在选中行头部插入内容的具体操作步骤：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> ctrl + v 进入块可视模式<br><span class="hljs-bullet">2.</span> 使用方向键进行选中（上下左右）假设选中5行<br><span class="hljs-bullet">3.</span> 输入 I 键进行多行同时插入操作<br><span class="hljs-bullet">4.</span> 插入完成后连续按两下 esc 键，实现多行同时插入相同字符<br></code></pre></td></tr></table></figure>
+
+<p>进入可视模式之后的操作键：</p>
+<ul>
+<li><code>d</code> 键，表示删除选中； </li>
+<li><code>I</code> 键，表示在选中之前插入； </li>
+<li><code>u</code> 键，表示选中变为小写； </li>
+<li><code>U</code> 键，表示选中变为大写； </li>
+</ul>
+<p><strong>Vim 配置</strong></p>
+<p><strong>选项参数</strong></p>
+<p>在 Vim 被启动后，可以运行一些指令来激活一些选项参数，但是这些选项参数的配置在退出 Vim 时会被忘记，例如前面讲解的激活行号。如果希望所在的配置是永久性的，那么需要在家目录（ <code>cd ~</code> ）创建一个 Vim 的配置文件 <code>.vimrc</code> 。</p>
+<p><strong>.vimrc</strong></p>
+<p>Vim 配置非常丰富，我们可以通过个性化配置把 Vim 打造成属于自己的 IDE 等等。在 github 上也可以搜索到一些强大的 Vim 配置文件。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">防火墙</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/">
+                        <span class="hidden-mobile">linux文件的定期备份，异常备份，删除备份</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

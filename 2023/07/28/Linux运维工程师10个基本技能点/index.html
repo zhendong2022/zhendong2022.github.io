@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1、linux系统基础这个不用说了，是基础中的基础，连这个都不会就别干了。 2、网络服务服务有很多种，每间公司都会用到不同的，但基础的服务肯定要掌握，如FTP, DNS,SAMBA, 邮件, 这几个大概学一下就行。 LAMP和LNMP是必须要熟练，我所指的不是光会搭建，而是要很熟悉里面的相当配置才行，因为公司最关键的绝对是WEB服务器，所以nginx和apache要熟悉，特别是nginx一定要很熟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维工程师10个基本技能点">
+<meta property="og:url" content="http://example.com/2023/07/28/Linux%E8%BF%90%E7%BB%B4%E5%B7%A5%E7%A8%8B%E5%B8%8810%E4%B8%AA%E5%9F%BA%E6%9C%AC%E6%8A%80%E8%83%BD%E7%82%B9/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="1、linux系统基础这个不用说了，是基础中的基础，连这个都不会就别干了。 2、网络服务服务有很多种，每间公司都会用到不同的，但基础的服务肯定要掌握，如FTP, DNS,SAMBA, 邮件, 这几个大概学一下就行。 LAMP和LNMP是必须要熟练，我所指的不是光会搭建，而是要很熟悉里面的相当配置才行，因为公司最关键的绝对是WEB服务器，所以nginx和apache要熟悉，特别是nginx一定要很熟">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-28T21:56:12.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.945Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Linux运维工程师10个基本技能点 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux运维工程师10个基本技能点">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 21:56" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      38 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux运维工程师10个基本技能点</h1>
+            
+            <div class="markdown-body">
+              <h2 id="1、linux系统基础"><a href="#1、linux系统基础" class="headerlink" title="1、linux系统基础"></a><strong>1、linux系统基础</strong></h2><p>这个不用说了，是基础中的基础，连这个都不会就别干了。</p>
+<h2 id="2、网络服务"><a href="#2、网络服务" class="headerlink" title="2、网络服务"></a><strong>2、网络服务</strong></h2><p>服务有很多种，每间公司都会用到不同的，但基础的服务肯定要掌握，如FTP, DNS,SAMBA, 邮件, 这几个大概学一下就行。</p>
+<p>LAMP和LNMP是必须要熟练，我所指的不是光会搭建，而是要很熟悉里面的相当配置才行，因为公司最关键的绝对是WEB服务器，所以nginx和apache要熟悉，特别是nginx一定要很熟悉才行。有些公司还会用tomcat，这个也最好学一下。</p>
+<p>其实网络服务方面不用太担心，一般公司的环境都已经搭建好，就算有新服务器或让你整改，公司会有相应的文档让你参照来弄，不会让你乱来的，但至少相关的配置一定要学熟，而且肯定是编译安装多，那些模块要熟悉一下他的作用，特别是PHP那些模块。</p>
+<p>这面2点只是基础，也是必要条件，不能说是工具，下以才是真正的要掌握的工具。</p>
+<h2 id="3、shell脚本和另一个脚本语言"><a href="#3、shell脚本和另一个脚本语言" class="headerlink" title="3、shell脚本和另一个脚本语言"></a><strong>3、shell脚本和另一个脚本语言</strong></h2><p>shell是运维人员必须具备的，不懂这个连入职都不行，至少也要写出一些系统管理脚本，最简单也得写个监控CPU，内存比率的脚本吧，这是最最最基本了。别以为会写那些猜数字和计算什么数的，这些没什么作用，只作学习意义，写系统脚本才是最有意义。</p>
+<p>而另一个脚本语言是可选的，一般是3P，即Python，Perl和PHP，PHP就不需要考虑了，除非你要做开发，我个人建议学Python会比较好，不难实现自动化运维，Perl是文本处理很强大，反正这两个学一个就行了。</p>
+<h2 id="4、sed和awk工具"><a href="#4、sed和awk工具" class="headerlink" title="4、sed和awk工具"></a><strong>4、sed和awk工具</strong></h2><p>必须要掌握，在掌握这两个工具同时，还要掌握正则表达式，这个就痛苦了，正则是最难学的表达式，但结合到sed和awk中会很强大，在处理文本内容和过滤WEB内容时十分有用，不过在学shell的同时一般会经常结合用到的，所以学第3点就会顺便学第4点。</p>
+<h2 id="5、文本处理命令"><a href="#5、文本处理命令" class="headerlink" title="5、文本处理命令"></a><strong>5、文本处理命令</strong></h2><p>sort , tr , cut, paste, uniq, tee等，必学，也是结合第3点时一并学习的。</p>
+<h2 id="6、数据库"><a href="#6、数据库" class="headerlink" title="6、数据库"></a><strong>6、数据库</strong></h2><p>首选MySQL，别问我为什么不学SQL Server和Oracle，因为Linux用得最多绝对是MySQL。增删改查必学，特别要学熟查，其它方面可能不太需要，因为运维人员使用最多还是查，哪些优化和开发语句不会让你弄的。</p>
+<h2 id="7、防火墙"><a href="#7、防火墙" class="headerlink" title="7、防火墙"></a><strong>7、防火墙</strong></h2><p>不学不行，防火墙也算是个难点，说难不难，说易不易，最重要弄懂规则。如果学过CCNA的朋友可能会比较好学，因为iptables也有NAT表，原理是一样的，而Filter表用得最多，反正不学就肯定不合格。</p>
+<h2 id="8、监控工具"><a href="#8、监控工具" class="headerlink" title="8、监控工具"></a><strong>8、监控工具</strong></h2><p>十分十分重要，我个人建议，最好学这3个，cacti，nagios，zabbix。企业用得最多应该是nagios和 zabbix，反正都学吧，但nagios会有点难，因为会涉及到用脚本写自动监控，那个地方很难。</p>
+<h2 id="9、集群和热备"><a href="#9、集群和热备" class="headerlink" title="9、集群和热备"></a><strong>9、集群和热备</strong></h2><p>这个很重要，肯定要懂的，但到了公司就不会让你去弄，因为新手基本不让你碰。集群工具有很多，最好学是LVS，这是必学，最好也学学nginx集群，反向代理。还有热备，这个就更多工具能实现了，像我公司是自己开发热备工具的，MySQL热备也要学，就是主从复制，这个别告诉我容易，其实不容易的，要学懂整个流程一点也不容易，只照着做根本没意思。</p>
+<h2 id="10、数据备份"><a href="#10、数据备份" class="headerlink" title="10、数据备份"></a><strong>10、数据备份</strong></h2><p>不学不行，工具有很多，但至少要把RAID的原理弄懂，特别是企业最常用的1+0或0+1，自己做实验也要弄出来，备份工具有很多，如tar, dump, rsync等，最好多了解一下。</p>
+<p>说到这10点，应该可以入门了，因为有些技术会比较难学。例如apache和nginx中还有些很重要的技术，如系统调优和服务优化，还有程序优化，这些在没接触工作前很难学习到的，所以先把这10点学了吧。估计要学熟至少3个月不止，就脚本那部分已经让你很吃力了。建议是先学熟shell，等工作后再学另一门脚本语言。</p>
+<p>以上就是踏入linux运维工程师需要掌握的工具，其实还有很多工具要掌握的，但你在学习环境中是很难学到，最后我再提醒一下，这里所指的工具相当于技能，而不是像windows或ubuntu那些图形化工具，那些工具没用的，还有，学linux就别装图形界面，这样虚拟机就不用吃太多内存，而且绝对不建议在真机上装linux，根本达不到学习效果。</p>
+<p>面试A君：<br>应聘职位：高级系统工程师  ， 工资要18K</p>
+<p>此君简历写的不错，在360干过几年，简历上写的是维护公司的360网盘平台，管理着2000多台机器，写了很多自动化工具。然后我就让他跟我聊聊他做的自动化工具，哥们娓娓到来跟我讲他写的那些脚本（自动部署、批量命令、日志分析），从他的表情中感觉他好像觉得他做过的这些东西很牛B（其实都是一堆SHELL+PYTHON拼凑起来的粗糙工具，需求稍一改变就不能满足，脚本的扩展性极差），他说他现在的工作基本上80%都能通过脚本完成，说完后直视我，貌似是等待着我的认可，出于尊重，我只好说那确实不错。接下来我就拿他写过的批量并发执行命令的脚本跟他深入聊了下，他说这个脚本是Python多线程并发的，1000台机器执行一次批量命令1分钟就能全部完成，我于是让他给我讲讲多线程与多进程的区别，在什么时候用线程或进程更合适，结果哥们说了很多废话也没有讲明白。然后我又让他用PYTHON多线程给我写个简单的生产者消费者模型，哥们愣是不知道这是啥东西？那我又问，如果你不知道生产者消费者模型是什么，那你的并发异步处理是怎么做的？哥们语塞说没在这方面做过深入研究，我于是又问了几个其它方面的问题，比如他的Ngnix 日志是如何分析的？自动部署如何跟git结合的？监控报警接口是如何优化才降低误报率的？但回答的都不理想，然后，就没有然后了….。   在这里我只能说，我不是想打击他，如果你只是写了几个脚本就声称自己就是自动化大拿了，未免有点牵强。所以他被PASS掉了，因为我觉得把他招过来，真的不会给我们公司的自动化水平提高多少!</p>
+<p>面试B君：<br>应聘职位：运维自动化开发工程师，  工资不能低于16K</p>
+<p>此君简历上说他擅长PHP\Python开发，在原公司做过运维自动化平台。我很感兴趣，让他讲一下他做的东西，主要是监控平台和CMDB资产数据库，让他着重讲了一下他的监控架构，他说他的项目主要是主动监控方式，就是监控服务器每隔一两分钟去轮巡一次所有的机器的SNMP接口，把各机器的基本系统性能信息抓回来，再通过RRDTOOL出图。他们有500多台机器散落在3个不同地区的机房，我问他你们这种做主动监控轮巡一次得多少时间？他说1分钟左右，我说如果轮巡过程中，如果有几台机器连不上怎么办？他说他的轮巡是并发的，连不上的不会影响其它机器的监控，我说但是你的线程池的线程个数是有限的，有几个线程因为机器连不上，那就会产生阻塞直至超时，但在超时之前这几个线程是不会再空闲出来的，因此肯定会导致整个轮巡时间的加长呀。哥们想了想说，确实存在这样的问题。然后我问他有没有考虑过用被动监控方式，就是让客户端自动汇报数据呢？他说当时他们也这样想过，但是一想到要在所有的机器上装个客户就觉得会增加复杂度，并且维护和管理不容易。我说采用被动模式确实会增加点复杂度，但会给你带来很多好处呀，监控客户端自动给你的服务器汇报数据会大大减少你主监控服务器的负载，并且可监控的东西要多的多呀，你还可以自定义插件，自动升级，并且还可以把监控客户端当做它用，比如自动化部署、任务下发等。可能是出于尊重，哥们假装同意了我的看法。</p>
+<p>然后我又问他们的项目是几个人开发的，他说算他在内有3个人一块做，我说那你们之前是如何协作的，比如接口互相是如何调用和约定的？他说基本上是每个人写自己的接口，互相之间约定好如何调用。我问那你们有没有遵循什么标准？比如是统一用http api还是其它的？接口格式是统一用Json还是用XML 或其它？哥们说他们有的用JSON、有的用XML。我说你们没有用restful标准吗？哥们表示没听过。。。。。OH，好吧！如果大家开发时都不遵循一定的标准和规范，我真心不知道他们的系统以后如何扩展，不知道这个哥们离职后谁还能看懂他的代码？不知道这种拿一堆随心所意写出来的脚本来拼凑起来的所谓的系统能满足多少实际需求？</p>
+<p>面试C君：<br>应聘职位：运维工程师    工资要求11K</p>
+<p>哥们刚工作不到2年就要11K，真比我当时工作了2年挣的多多了(即使去掉通货膨胀影响)，但如果技术好那也没有问题的。结果问了一堆基础问题都答不好，再要这些钱是否有点自不量力了？问他LVS，结果只是配置过，让他讲几种负载调度原理也讲不明白，问他平时怎么管理大量机器，他说用SaltStack 或自己批量写脚本，我问那你用脚本批量管理机器，是通过什么方式呢？他说是用SSH批量密钥登录，我说那你给我讲讲RSA密钥认证原理吧，他接下说的就是怎么通过ssh-keygen命令，怎么把公钥拷到客户端机器上等怎么实现密钥认证的过程。我打断他说我想听的是原理，不是认证方法，为什么需要把public_key拷到客户机上而不是private_key？为什么COPY过去后就登录不需要再输入密码了？结果哥们一点都说不出来，接下来问的一些其它问题也是这样，只知其然，不知其所以然，最后我说，你这种情况我们给不了11K，如果低点你愿意考虑吗？哥们说不太会考虑，那。。。。好吧，只能打发他走了。</p>
+<p>其它的一些面试者情况也好不到哪里去，一路十多个面下来，让我很失望，本以为过了这么多年以后，整个行业的从业素质会提高很多。但结果却还是老样子，所以大家可以想想业内大家都在炒的运维自动化到底实际有多水？如果从业人员技术水平都这样，还谈个妹自动化呢？自动化真的是写写脚本，再拿个开源软件拼拼凑凑下就完了吗？在我看来这撑死了只能叫辅助运维，不叫自动化，自动化应该是真正的开始让机器帮你监测问题＼发现问题＼处理问题＼解决问题＼自我修复＼自我维护＼自带干粮，各模块之间尽量低耦合＼可扩展＼可插拔。应该是真正能帮企业降低IT运营成本，使运营成本可视化＼可测量＼可对比，应该是真正能减轻运维人员的工作量而不是又制造一堆新的问题，应该是切合企业真正的实际需求做出来一些好用的工具和平台，而不是搞一些花里胡哨却最后扔在那里没人用的花架子（我自己在这方面就掉进过大坑，之前主导做的一个开源软件就是个失败案例）。</p>
+<p>总之最后给我的感觉是，会开发的不真正的懂业务逻辑，开发出来的东西没人用，会运维的开发水平又太烂，写出来的代码烂到哭。想找个真正合格的运维自动化人才真是不容易。</p>
+<p>我近期一共只面了10多个，确实不能代表全行业水平，有些真正技术牛人估计我也没有碰到，但是10多个样本里面一个合适的都找不到，我觉得这也能差不多从侧面说明一个行业的整体平均水平了，这些求职者水平不高，却又想要高工资，我能说这是眼高手低、好高骛远的表现么？打铁还需自身用，如果真想要高工资，请先踏实点把自身技术水平提高，如果真想做架构师，那请把架构技术和思想学好，如果真要做自动化运维，请先把至少一门开发语言学好、学透，不只是会写个脚本就完了，脚本只是脚本，那不是自动化，So，哥们别再逗了！</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/Linux%E4%B8%AD%E6%98%AF%E8%B0%81%E5%8D%A0%E7%94%A8%E4%BA%86%E6%88%91%E7%9A%84%E7%AB%AF%E5%8F%A3/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux中是谁占用了我的端口</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/Linux%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E9%A2%98%E6%94%B6%E9%9B%86/">
+                        <span class="hidden-mobile">Linux高级运维工程师面试题收集</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

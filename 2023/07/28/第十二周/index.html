@@ -1,0 +1,468 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、安装jumpserver基于容器部署单台：2核、4G内存、50G硬盘–最低配置mysql版本大于5.7redis版本大于6.0 基于docker部署：环境：10.0.0.136–rocky 1、设置docker.repo1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十二周">
+<meta property="og:url" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="一、安装jumpserver基于容器部署单台：2核、4G内存、50G硬盘–最低配置mysql版本大于5.7redis版本大于6.0 基于docker部署：环境：10.0.0.136–rocky 1、设置docker.repo1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jump1-1024x475.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jump2-1024x480.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jump3-1024x553.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up1-1024x472.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up2-1024x476.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up3-1024x479.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up4-1024x466.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up5-1024x445.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up6-1024x584.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up7-1024x470.jpg">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jm-up8.jpg">
+<meta property="article:published_time" content="2023-07-28T20:54:54.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.290Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8/jump1-1024x475.jpg">
+  
+  
+  <title>第十二周 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第十二周">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 20:54" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      89 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第十二周</h1>
+            
+            <div class="markdown-body">
+              <h3 id="一、安装jumpserver"><a href="#一、安装jumpserver" class="headerlink" title="一、安装jumpserver"></a>一、安装jumpserver</h3><p>基于容器部署单台：2核、4G内存、50G硬盘–最低配置<br>mysql版本大于5.7<br>redis版本大于6.0</p>
+<p>基于docker部署：<br>环境：10.0.0.136–rocky</p>
+<h4 id="1、设置docker-repo"><a href="#1、设置docker-repo" class="headerlink" title="1、设置docker.repo"></a>1、设置docker.repo</h4><figure class="highlight markdown"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></div></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-code">```bash</span><br><span class="hljs-code">cat /etc/yum.repo.d/docker.repo</span><br><span class="hljs-code">[docker-ce-stable]</span><br><span class="hljs-code">name=Docker CE Stable - $basearch</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/$basearch/stable</span><br><span class="hljs-code">enabled=1</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-stable-debuginfo]</span><br><span class="hljs-code">name=Docker CE Stable - Debuginfo $basearch</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/debug-$basearch/stable</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-stable-source]</span><br><span class="hljs-code">name=Docker CE Stable - Sources</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/source/stable</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-test]</span><br><span class="hljs-code">name=Docker CE Test - $basearch</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/$basearch/test</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-test-debuginfo]</span><br><span class="hljs-code">name=Docker CE Test - Debuginfo $basearch</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/debug-$basearch/test</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-test-source]</span><br><span class="hljs-code">name=Docker CE Test - Sources</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/source/test</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-nightly]</span><br><span class="hljs-code">name=Docker CE Nightly - $basearch</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/$basearch/nightly</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-nightly-debuginfo]</span><br><span class="hljs-code">name=Docker CE Nightly - Debuginfo $basearch</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/debug-$basearch/nightly</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg</span><br><span class="hljs-code"></span><br><span class="hljs-code">[docker-ce-nightly-source]</span><br><span class="hljs-code">name=Docker CE Nightly - Sources</span><br><span class="hljs-code">baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/source/nightly</span><br><span class="hljs-code">enabled=0</span><br><span class="hljs-code">gpgcheck=1</span><br><span class="hljs-code">gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpgCOPY</span><br><span class="hljs-code">#配置阿里云镜像加速：</span><br><span class="hljs-code">mkdir -p /etc/docker</span><br><span class="hljs-code">cat /etc/docker/daemon.json</span><br><span class="hljs-code">&#123;</span><br><span class="hljs-code">  &quot;registry-mirrors&quot;: [&quot;https://npud8xro.mirror.aliyuncs.com&quot;]</span><br><span class="hljs-code">&#125;COPY</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="2、安装mysql"><a href="#2、安装mysql" class="headerlink" title="2、安装mysql"></a>2、安装mysql</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs markdown">docker run --rm --name mysql -e MYSQL<span class="hljs-emphasis">_ROOT_</span>PASSWORD=123456 -e MYSQL<span class="hljs-emphasis">_DATABASE=jumpserver -e MYSQL_</span>USER=jumpserver -e MYSQL<span class="hljs-emphasis">_PASSWORD=123456 -d -p 3306:3306 mysql:5.7.30</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">###默认的mysql不符合jumpserver配置，需修改。</span><br><span class="hljs-emphasis">docker stop mysql</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">准备相关配置和目录</span><br><span class="hljs-emphasis">mkdir -p /etc/mysql/mysql.conf.d/</span><br><span class="hljs-emphasis">mkdir -p /etc/mysql/conf.d/</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">指定字符集</span><br><span class="hljs-emphasis">tee /etc/mysql/mysql.conf.d/mysqld.cnf &lt;<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">EOF</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis">[<span class="hljs-attr">mysqld</span>]</span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">pid-file</span>= <span class="hljs-string">/var/run/mysqld/mysqld.pid</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">socket</span>= <span class="hljs-string">/var/run/mysqld/mysqld.sock</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">datadir</span>= <span class="hljs-string">/var/lib/mysql</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">symbolic-links</span>=<span class="hljs-string">0</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">character-set-server</span>=<span class="hljs-string">utf8</span> </span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">EOF</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">tee</span> /<span class="hljs-attr">etc</span>/<span class="hljs-attr">mysql</span>/<span class="hljs-attr">conf.d</span>/<span class="hljs-attr">mysql.cnf</span> &lt;&lt;<span class="hljs-attr">EOF</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis">[<span class="hljs-attr">mysql</span>]</span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">default-character-set</span>=<span class="hljs-string">utf8</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">EOF</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis">将上面宿主机的设置好的配置文件挂载至<span class="hljs-attr">MySQL</span>容器</span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">docker</span> <span class="hljs-attr">run</span> <span class="hljs-attr">-d</span> <span class="hljs-attr">-p</span> <span class="hljs-attr">3306:3306</span> <span class="hljs-attr">--name</span> <span class="hljs-attr">mysql</span> <span class="hljs-attr">--restart</span> <span class="hljs-attr">always</span> <span class="hljs-attr">-e</span> <span class="hljs-attr">MYSQL_ROOT_PASSWORD</span>=<span class="hljs-string">123456</span> <span class="hljs-attr">-e</span> <span class="hljs-attr">MYSQL_DATABASE</span>=<span class="hljs-string">jumpserver</span> <span class="hljs-attr">-e</span> <span class="hljs-attr">MYSQL_USER</span>=<span class="hljs-string">jumpserver</span> <span class="hljs-attr">-e</span> <span class="hljs-attr">MYSQL_PASSWORD</span>=<span class="hljs-string">123456</span> <span class="hljs-attr">-v</span> /<span class="hljs-attr">data</span>/<span class="hljs-attr">mysql:</span>/<span class="hljs-attr">var</span>/<span class="hljs-attr">lib</span>/<span class="hljs-attr">mysql</span> <span class="hljs-attr">-v</span> /<span class="hljs-attr">etc</span>/<span class="hljs-attr">mysql</span>/<span class="hljs-attr">mysql.conf.d</span>/<span class="hljs-attr">mysqld.cnf:</span>/<span class="hljs-attr">etc</span>/<span class="hljs-attr">mysql</span>/<span class="hljs-attr">mysql.conf.d</span>/<span class="hljs-attr">mysqld.cnf</span> <span class="hljs-attr">-v</span> /<span class="hljs-attr">etc</span>/<span class="hljs-attr">mysql</span>/<span class="hljs-attr">conf.d</span>/<span class="hljs-attr">mysql.cnf:</span>/<span class="hljs-attr">etc</span>/<span class="hljs-attr">mysql</span>/<span class="hljs-attr">conf.d</span>/<span class="hljs-attr">mysql.cnf</span> <span class="hljs-attr">mysql:5.7.30</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis">验证<span class="hljs-attr">mysql</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"><span class="hljs-attr">docker</span> <span class="hljs-attr">exec</span> <span class="hljs-attr">-it</span> <span class="hljs-attr">mysql</span> <span class="hljs-attr">shCOPY</span></span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"># <span class="hljs-attr">mysql</span> <span class="hljs-attr">-p123456</span> <span class="hljs-attr">-e</span> &#x27;<span class="hljs-attr">show</span> <span class="hljs-attr">variables</span> <span class="hljs-attr">like</span> &quot;<span class="hljs-attr">character</span>%&quot;&#x27;</span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"># <span class="hljs-attr">mysql</span> <span class="hljs-attr">-p123456</span> <span class="hljs-attr">-e</span> &#x27;<span class="hljs-attr">show</span> <span class="hljs-attr">variables</span> <span class="hljs-attr">like</span> &quot;<span class="hljs-attr">collation</span>%&quot;&#x27;</span></span></span><br><span class="hljs-tag"><span class="language-xml"><span class="hljs-emphasis"># <span class="hljs-attr">mysql</span> <span class="hljs-attr">-p123456</span> <span class="hljs-attr">-e</span> &#x27;<span class="hljs-attr">select</span> <span class="hljs-attr">user</span>,<span class="hljs-attr">host</span> <span class="hljs-attr">from</span> <span class="hljs-attr">mysql.user</span>&#x27;<span class="hljs-attr">COPY</span></span></span></span><br></code></pre></td></tr></table></figure>
+
+<p>验证是否可以远程登录：<br>mysql -ujumpserver -p123456 -h10.0.0.136</p>
+<h4 id="3、安装redis"><a href="#3、安装redis" class="headerlink" title="3、安装redis"></a>3、安装redis</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-code">`docker run -d -p 6379:6379 --name redis --restart always redis:6.2.5`</span><br><br>验证redis是否正常连接<br>redis-cli -h 10.0.0.136COPY<br></code></pre></td></tr></table></figure>
+
+<h4 id="4、生成key-官方有文档"><a href="#4、生成key-官方有文档" class="headerlink" title="4、生成key,官方有文档"></a>4、生成key,官方有文档</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section">#!/bin/bash</span><br>if [ ! &quot;$SECRET<span class="hljs-emphasis">_KEY&quot; ]; then</span><br><span class="hljs-emphasis">SECRET_</span>KEY=<span class="hljs-code">`cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 50`</span>;<br>echo &quot;SECRET<span class="hljs-emphasis">_KEY=$SECRET_</span>KEY&quot; &gt;&gt; ~/.bashrc;<br>echo SECRET<span class="hljs-emphasis">_KEY=$SECRET_</span>KEY;<br>else<br>echo SECRET<span class="hljs-emphasis">_KEY=$SECRET_</span>KEY;<br>fi<br>if [ ! &quot;$BOOTSTRAP<span class="hljs-emphasis">_TOKEN&quot; ]; then</span><br><span class="hljs-emphasis">BOOTSTRAP_</span>TOKEN=<span class="hljs-code">`cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 16`</span>;<br>echo &quot;BOOTSTRAP<span class="hljs-emphasis">_TOKEN=$BOOTSTRAP_</span>TOKEN&quot; &gt;&gt; ~/.bashrc;<br>echo BOOTSTRAP<span class="hljs-emphasis">_TOKEN=$BOOTSTRAP_</span>TOKEN;<br>else<br>echo BOOTSTRAP<span class="hljs-emphasis">_TOKEN=$BOOTSTRAP_</span>TOKEN;<br>fiCOPY<br></code></pre></td></tr></table></figure>
+
+<p>运行脚本，结果显示key和token。<br>可用tail -n2 ~/.bashrc 查看生成的key和token</p>
+<h4 id="5、看官方文档、看官方文档、看官方文档。别人讲的终归是别人讲的也有可能是错的。。。"><a href="#5、看官方文档、看官方文档、看官方文档。别人讲的终归是别人讲的也有可能是错的。。。" class="headerlink" title="5、看官方文档、看官方文档、看官方文档。别人讲的终归是别人讲的也有可能是错的。。。"></a>5、看官方文档、看官方文档、看官方文档。别人讲的终归是别人讲的也有可能是错的。。。</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><code class="hljs markdown">地址：https://docs.jumpserver.org/zh/master/install/setup<span class="hljs-emphasis">_by_</span>fast/#<span class="hljs-emphasis">_3</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">官网安装命令：</span><br><span class="hljs-emphasis">cd /opt</span><br><span class="hljs-emphasis">wget https://github.com/jumpserver/installer/releases/download/v2.27.0/jumpserver-installer-v2.27.0.tar.gz #下载安装包</span><br><span class="hljs-emphasis">tar -xf jumpserver-installer-v2.27.0.tar.gz</span><br><span class="hljs-emphasis">cd jumpserver-installer-v2.27.0</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 根据需要修改配置文件模板, 如果不清楚用途可以跳过修改，这里是已经改过的。jumpserver安装是会根据配置文件自动选择</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">cat config-example.txt</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># JumpServer configuration file example.</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis"># 如果不了解用途可以跳过修改此配置文件, 系统会自动填入</span><br><span class="hljs-emphasis"># 完整参数文档 https://docs.jumpserver.org/zh/master/admin-guide/env/</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">################################## 镜像配置 ###################################</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis"># 国内连接 docker.io 会超时或下载速度较慢, 开启此选项使用华为云镜像加速</span><br><span class="hljs-emphasis"># 取代旧版本 DOCKER_</span>IMAGE<span class="hljs-emphasis">_PREFIX</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis">DOCKER_</span>IMAGE<span class="hljs-emphasis">_MIRROR=1</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">################################## 安装配置 ###################################</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis"># JumpServer 数据库持久化目录, 默认情况下录像、任务日志都在此目录</span><br><span class="hljs-emphasis"># 请根据实际情况修改, 升级时备份的数据库文件(.sql)和配置文件也会保存到该目录</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis">VOLUME_</span>DIR=/opt/jumpserver<br><br><span class="hljs-section"># 加密密钥, 迁移请保证 SECRET<span class="hljs-emphasis">_KEY 与旧环境一致, 请勿使用特殊字符串</span></span><br><span class="hljs-emphasis"><span class="hljs-section"># (*) Warning: Keep this value secret.</span></span><br><span class="hljs-emphasis"><span class="hljs-section"># (*) 勿向任何人泄露 SECRET_</span>KEY</span><br><span class="hljs-section">#</span><br>SECRET<span class="hljs-emphasis">_KEY=WoGoMXpkhmTN1lePpx694NysQfCefj8R9jLDuDuQ5W0MO9XCeS</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 组件向 core 注册使用的 token, 迁移请保持 BOOTSTRAP_</span>TOKEN 与旧环境一致,<br><span class="hljs-section"># 请勿使用特殊字符串</span><br><span class="hljs-section"># (<span class="hljs-emphasis">*) Warning: Keep this value secret.</span></span><br><span class="hljs-emphasis"><span class="hljs-section"># (*</span>) 勿向任何人泄露 BOOTSTRAP<span class="hljs-emphasis">_TOKEN</span></span><br><span class="hljs-emphasis"><span class="hljs-section">#</span></span><br><span class="hljs-emphasis"><span class="hljs-section">BOOTSTRAP_</span>TOKEN=LcvHUEldOsJ1ZAHO</span><br><br><span class="hljs-section"># 日志等级 INFO, WARN, ERROR</span><br><span class="hljs-section">#</span><br>LOG<span class="hljs-emphasis">_LEVEL=ERROR</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># JumpServer 容器使用的网段, 请勿与现有的网络冲突, 根据实际情况自行修改</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis">DOCKER_</span>SUBNET=192.168.250.0/24<br><br><span class="hljs-section"># ipv6 nat, 正常情况下无需开启</span><br><span class="hljs-section"># 如果宿主不支持 ipv6 开启此选项将会导致无法获取真实的客户端 ip 地址</span><br><span class="hljs-section">#</span><br>USE<span class="hljs-emphasis">_IPV6=0</span><br><span class="hljs-emphasis">DOCKER_</span>SUBNET<span class="hljs-emphasis">_IPV6=fc00:1010:1111:200::/64</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">################################# MySQL 配置 ##################################</span><br><span class="hljs-emphasis"># 外置 MySQL 需要输入正确的 MySQL 信息, 内置 MySQL 系统会自动处理</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis">DB_</span>HOST=10.0.0.136<br>DB<span class="hljs-emphasis">_PORT=3306</span><br><span class="hljs-emphasis">DB_</span>USER=jumpserver<br>DB<span class="hljs-emphasis">_PASSWORD=123456</span><br><span class="hljs-emphasis">DB_</span>NAME=jumpserver<br><br><span class="hljs-section">################################# Redis 配置 ##################################</span><br><span class="hljs-section"># 外置 Redis 需要请输入正确的 Redis 信息, 内置 Redis 系统会自动处理</span><br><span class="hljs-section">#</span><br>REDIS<span class="hljs-emphasis">_HOST=10.0.0.136</span><br><span class="hljs-emphasis">REDIS_</span>PORT=6379<br>REDIS<span class="hljs-emphasis">_PASSWORD=</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">################################## 访问配置 ###################################</span><br><span class="hljs-emphasis"># 对外提供服务端口, 如果与现有服务冲突请自行修改</span><br><span class="hljs-emphasis"># 如果不想对外提供访问可以使用 127.0.0.1:<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">port</span>&gt;</span></span>, eg: 127.0.0.1:33060</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis">HTTP_</span>PORT=80<br>SSH<span class="hljs-emphasis">_PORT=2222</span><br><span class="hljs-emphasis">MAGNUS_</span>PORTS=30000-30100<br><br><span class="hljs-section">################################# HTTPS 配置 #################################</span><br><span class="hljs-section"># 参考 https://docs.jumpserver.org/zh/master/admin-guide/proxy/ 配置</span><br><span class="hljs-section">#</span><br><span class="hljs-section"># USE<span class="hljs-emphasis">_LB=1</span></span><br><span class="hljs-emphasis"><span class="hljs-section"># HTTPS_</span>PORT=443</span><br><span class="hljs-section"># SERVER<span class="hljs-emphasis">_NAME=your_</span>domain<span class="hljs-emphasis">_name</span></span><br><span class="hljs-emphasis"><span class="hljs-section"># SSL_</span>CERTIFICATE=your<span class="hljs-emphasis">_cert</span></span><br><span class="hljs-emphasis"><span class="hljs-section"># SSL_</span>CERTIFICATE<span class="hljs-emphasis">_KEY=your_</span>cert<span class="hljs-emphasis">_key</span></span><br><span class="hljs-emphasis"><span class="hljs-section">#</span></span><br><span class="hljs-emphasis"><span class="hljs-section">CLIENT_</span>MAX<span class="hljs-emphasis">_BODY_</span>SIZE=4096m</span><br><br><span class="hljs-section">################################## 组件配置 ###################################</span><br><span class="hljs-section"># 组件注册使用, 默认情况下向 core 容器注册, 集群环境需要修改为集群 vip 地址</span><br><span class="hljs-section">#</span><br>CORE<span class="hljs-emphasis">_HOST=http://core:8080</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># Task 配置, 是否启动 jms_</span>celery 容器, 单节点必须开启<br><span class="hljs-section">#</span><br>USE<span class="hljs-emphasis">_TASK=1</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># XPack 包, 企业版本自动开启, 开源版本设置无效</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis">RDP_</span>PORT=3389<br><br><span class="hljs-section"># Core Session 定义,</span><br><span class="hljs-section"># SESSION<span class="hljs-emphasis">_COOKIE_</span>AGE 表示闲置多少秒后 session 过期,</span><br><span class="hljs-section"># SESSION<span class="hljs-emphasis">_EXPIRE_</span>AT<span class="hljs-emphasis">_BROWSER_</span>CLOSE=true 表示关闭浏览器即 session 过期</span><br><span class="hljs-section">#</span><br><span class="hljs-section"># SESSION<span class="hljs-emphasis">_COOKIE_</span>AGE=86400</span><br>SESSION<span class="hljs-emphasis">_EXPIRE_</span>AT<span class="hljs-emphasis">_BROWSER_</span>CLOSE=True<br><br><span class="hljs-section"># Lion 开启字体平滑, 优化体验</span><br><span class="hljs-section">#</span><br>JUMPSERVER<span class="hljs-emphasis">_ENABLE_</span>FONT<span class="hljs-emphasis">_SMOOTHING=True</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">################################## 其他配置 ##################################</span><br><span class="hljs-emphasis"># 终端使用宿主 HOSTNAME 标识, 首次安装自动生成</span><br><span class="hljs-emphasis">#</span><br><span class="hljs-emphasis">SERVER_</span>HOSTNAME=$&#123;HOSTNAME&#125;<br><br><span class="hljs-section"># 当前运行的 JumpServer 版本号, 安装和升级完成后自动生成</span><br><span class="hljs-section">#</span><br>CURRENT<span class="hljs-emphasis">_VERSION=COPY</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="6、安装过程基本都是默认即可。一路回车，安装完毕后-jmctl-sh-start启动即可"><a href="#6、安装过程基本都是默认即可。一路回车，安装完毕后-jmctl-sh-start启动即可" class="headerlink" title="6、安装过程基本都是默认即可。一路回车，安装完毕后./jmctl.sh start启动即可"></a>6、安装过程基本都是默认即可。一路回车，安装完毕后./jmctl.sh start启动即可</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># 安装</span><br>./jmsctl.sh install<br><br><span class="hljs-section"># 启动</span><br>./jmsctl.sh start<br><br><span class="hljs-section"># 安装完成后配置文件 /opt/jumpserver/config/config.txt</span><br><br>cd /opt/jumpserver-installer-v2.27.0<br><br><span class="hljs-section"># 启动</span><br>./jmsctl.sh start<br><br><span class="hljs-section"># 停止</span><br>./jmsctl.sh down<br><br><span class="hljs-section"># 卸载</span><br>./jmsctl.sh uninstall<br><br><span class="hljs-section"># 帮助</span><br>./jmsctl.sh -h<br>COPY<br></code></pre></td></tr></table></figure>
+
+<h4 id="7、启动成功后的url：10-0-0-136"><a href="#7、启动成功后的url：10-0-0-136" class="headerlink" title="7、启动成功后的url：10.0.0.136"></a>7、启动成功后的url：10.0.0.136</h4><p>默认账户：admin 密码一致。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown">创建顺序：<br>创建登录jumpserver用户，创建组，将用户加进组里。<br>创建登录服务器的特权用户(root),普通用户，<br>添加资产--服务器，绑定特权用户和普通用户<br>测试连接，推送普通用户致服务器，在普通用户界面添加资产<br><br>资产授权：授权登录jumpserver的用户可远程访问哪几台服务器。<br><br>也可创建审计用户，查看普通用户在服务器的操作、录像、回放、强制踢人等操作。COPY<br></code></pre></td></tr></table></figure>
+
+<h4 id="8、先创建命令过滤器再创建里面的规则，不允许普通用户删除文件、远程其他服务器等操作"><a href="#8、先创建命令过滤器再创建里面的规则，不允许普通用户删除文件、远程其他服务器等操作" class="headerlink" title="8、先创建命令过滤器再创建里面的规则，不允许普通用户删除文件、远程其他服务器等操作"></a>8、先创建命令过滤器再创建里面的规则，不允许普通用户删除文件、远程其他服务器等操作</h4><h4 id="9、也支持使用特定格式导入导出资产列表"><a href="#9、也支持使用特定格式导入导出资产列表" class="headerlink" title="9、也支持使用特定格式导入导出资产列表"></a>9、也支持使用特定格式导入导出资产列表</h4><h4 id="10、详细过程"><a href="#10、详细过程" class="headerlink" title="10、详细过程"></a>10、详细过程</h4><p>1、<br><img src="jump1-1024x475.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>2、<br><img src="jump2-1024x480.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>3、<br><img src="jump3-1024x553.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="二、升级jumpserver"><a href="#二、升级jumpserver" class="headerlink" title="二、升级jumpserver"></a>二、升级jumpserver</h3><h4 id="1、查看jumpserver升级帮助"><a href="#1、查看jumpserver升级帮助" class="headerlink" title="1、查看jumpserver升级帮助"></a>1、查看jumpserver升级帮助</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section">#程序包内的执行程序帮助里讲的很清楚，执行命令即可</span><br><br>./jmsctl.sh -h<br><span class="hljs-section">#执行这条命令查看升级选项，这里发现check<span class="hljs-emphasis">_update为检查和升级选项，执行即可</span></span><br><span class="hljs-emphasis"><span class="hljs-section">JumpServer Deployment Management Script</span></span><br><span class="hljs-emphasis"><span class="hljs-section"></span></span><br><span class="hljs-emphasis"><span class="hljs-section">Usage: </span></span><br><span class="hljs-emphasis"><span class="hljs-section">  ./jmsctl.sh [COMMAND] [ARGS...]</span></span><br><span class="hljs-emphasis"><span class="hljs-section">  ./jmsctl.sh --help</span></span><br><span class="hljs-emphasis"><span class="hljs-section"></span></span><br><span class="hljs-emphasis"><span class="hljs-section">Installation Commands: </span></span><br><span class="hljs-emphasis"><span class="hljs-section">  install           Install JumpServer</span></span><br><span class="hljs-emphasis"><span class="hljs-section">  upgrade [version] Upgrade JumpServer</span></span><br><span class="hljs-emphasis"><span class="hljs-section">  check_</span>update      Check for updates JumpServer</span><br>  reconfig          Reconfiguration JumpServer<br><br>Management Commands: <br>  start             Start   JumpServer<br>  stop              Stop    JumpServer<br>  close             Close   JumpServer<br>  restart           Restart JumpServer<br>  status            Check   JumpServer<br>  down              Offline JumpServer<br>  uninstall         Uninstall JumpServer<br><br>More Commands: <br>  load<span class="hljs-emphasis">_image        Loading docker image</span><br><span class="hljs-emphasis">  backup_</span>db         Backup database<br>  restore<span class="hljs-emphasis">_db [file] Data recovery through database backup file</span><br><span class="hljs-emphasis">  raw               Execute the original docker-compose command</span><br><span class="hljs-emphasis">  tail [service]    View logCOPY</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="2、执行命令-jmsctl-sh-check-update-以下为具体过程"><a href="#2、执行命令-jmsctl-sh-check-update-以下为具体过程" class="headerlink" title="2、执行命令./jmsctl.sh check_update,以下为具体过程"></a>2、执行命令./jmsctl.sh check_update,以下为具体过程</h4><p>1、<br><img src="jm-up1-1024x472.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>2、<br><img src="jm-up2-1024x476.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>3、<br><img src="jm-up3-1024x479.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>4、<br><img src="jm-up4-1024x466.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>5、<br><img src="jm-up5-1024x445.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>6、<br><img src="jm-up6-1024x584.jpg" srcset="/img/loading.gif" lazyload alt="img"><br>7、<br><img src="jm-up7-1024x470.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="三、最终界面–升级成功"><a href="#三、最终界面–升级成功" class="headerlink" title="三、最终界面–升级成功"></a>三、最终界面–升级成功</h3><p><img src="jm-up8.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="注意：因为docker默认存的镜像位置是在-var-lib-docker中，要保证-var的磁盘空间够大，我这里第一次升级因为空间只有5G，连docker旧版和新版images都放不下。导致升级失败，还好我做了逻辑卷可以扩展。附扩展步骤："><a href="#注意：因为docker默认存的镜像位置是在-var-lib-docker中，要保证-var的磁盘空间够大，我这里第一次升级因为空间只有5G，连docker旧版和新版images都放不下。导致升级失败，还好我做了逻辑卷可以扩展。附扩展步骤：" class="headerlink" title="注意：因为docker默认存的镜像位置是在/var/lib/docker中，要保证/var的磁盘空间够大，我这里第一次升级因为空间只有5G，连docker旧版和新版images都放不下。导致升级失败，还好我做了逻辑卷可以扩展。附扩展步骤："></a>注意：因为docker默认存的镜像位置是在/var/lib/docker中，要保证/var的磁盘空间够大，我这里第一次升级因为空间只有5G，连docker旧版和新版images都放不下。导致升级失败，还好我做了逻辑卷可以扩展。附扩展步骤：</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section">#扩容前</span><br>[root@rocky ~]# df -h<br>Filesystem                 Size  Used Avail Use% Mounted on<br>devtmpfs                   1.8G     0  1.8G   0% /dev<br>tmpfs                      1.9G     0  1.9G   0% /dev/shm<br>tmpfs                      1.9G   18M  1.8G   1% /run<br>tmpfs                      1.9G     0  1.9G   0% /sys/fs/cgroup<br>/dev/mapper/rl<span class="hljs-emphasis">_rocky-root   10G  2.5G  7.6G  25% /</span><br><span class="hljs-emphasis">/dev/mapper/rl_</span>rocky-var   5.0G  4.9G  163M  97% /var<br>/dev/mapper/rl<span class="hljs-emphasis">_rocky-opt    20G  240M   20G   2% /opt</span><br><span class="hljs-emphasis">/dev/mapper/rl_</span>rocky-data   10G  334M  9.7G   4% /data<br>/dev/nvme0n1p1            1014M  216M  799M  22% /boot<br>tmpfs                      371M     0  371M   0% /run/user/0<br><br><span class="hljs-section">#虚拟机添加完硬盘开始扩容</span><br><span class="hljs-section">#创建物联卷</span><br>[root@rocky ~]# pvcreate /dev/nvme0n2<br>  Physical volume &quot;/dev/nvme0n2&quot; successfully created.<br><br><span class="hljs-section">#扩容卷组</span><br>[root@rocky ~]# vgextend rl<span class="hljs-emphasis">_rocky /dev/nvme0n2</span><br><span class="hljs-emphasis">  Volume group &quot;rl_</span>rocky&quot; successfully extended<br><br><span class="hljs-section">#逻辑卷扩容</span><br>[root@rocky ~]# lvextend -L +15G /dev/rl<span class="hljs-emphasis">_rocky/var </span><br><span class="hljs-emphasis">  Size of logical volume rl_</span>rocky/var changed from 5.00 GiB (1280 extents) to 20.00 GiB (5120 extents).<br>  Logical volume rl<span class="hljs-emphasis">_rocky/var successfully resized.</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">#结果，更新文件系统</span><br><span class="hljs-emphasis">[root@rocky ~]# xfs_</span>growfs /dev/rl<span class="hljs-emphasis">_rocky/var</span><br><span class="hljs-emphasis">meta-data=/dev/mapper/rl_</span>rocky-var isize=512    agcount=4, agsize=327680 blks<br><span class="hljs-code">         =                       sectsz=512   attr=2, projid32bit=1</span><br><span class="hljs-code">         =                       crc=1        finobt=1, sparse=1, rmapbt=0</span><br><span class="hljs-code">         =                       reflink=1</span><br><span class="hljs-code">data     =                       bsize=4096   blocks=1310720, imaxpct=25</span><br><span class="hljs-code">         =                       sunit=0      swidth=0 blks</span><br><span class="hljs-code">naming   =version 2              bsize=4096   ascii-ci=0, ftype=1</span><br><span class="hljs-code">log      =internal log           bsize=4096   blocks=2560, version=2</span><br><span class="hljs-code">         =                       sectsz=512   sunit=0 blks, lazy-count=1</span><br><span class="hljs-code">realtime =none                   extsz=4096   blocks=0, rtextents=0</span><br><span class="hljs-code">data blocks changed from 1310720 to 5242880</span><br><span class="hljs-code"></span><br><span class="hljs-section">#查看扩容结果</span><br>[root@rocky ~]# df -h<br>Filesystem                 Size  Used Avail Use% Mounted on<br>devtmpfs                   1.8G     0  1.8G   0% /dev<br>tmpfs                      1.9G     0  1.9G   0% /dev/shm<br>tmpfs                      1.9G   18M  1.8G   1% /run<br>tmpfs                      1.9G     0  1.9G   0% /sys/fs/cgroup<br>/dev/mapper/rl<span class="hljs-emphasis">_rocky-root   10G  2.5G  7.6G  25% /</span><br><span class="hljs-emphasis">/dev/mapper/rl_</span>rocky-var    20G  5.0G   16G  25% /var<br>/dev/mapper/rl<span class="hljs-emphasis">_rocky-opt    20G  240M   20G   2% /opt</span><br><span class="hljs-emphasis">/dev/mapper/rl_</span>rocky-data   10G  334M  9.7G   4% /data<br>/dev/nvme0n1p1            1014M  216M  799M  22% /boot<br>tmpfs                      371M     0  371M   0% /run/user/0<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3%E5%A4%A7%E5%85%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">网络端口大全</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%91%A8/">
+                        <span class="hidden-mobile">第十一周</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

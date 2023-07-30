@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.SUDO,PAM配置规范说明sudo机制root用户允许普通用户执行一些命令，或者直接代替&#x2F;root去执行所有命令 su catyer：切换用户 su：切换到root用户执行 sudo配置：一般是去到&#x2F;etc&#x2F;sudoers配置对应的用户，用户上配置对应的权限，或者是执行的命令 需要注意的是：生产过程中一般给不同的业务人员不同的权限，创建对应的系统用户，或者对不同的用户授予不同的命令权限 授权">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第五周">
+<meta property="og:url" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="1.SUDO,PAM配置规范说明sudo机制root用户允许普通用户执行一些命令，或者直接代替&#x2F;root去执行所有命令 su catyer：切换用户 su：切换到root用户执行 sudo配置：一般是去到&#x2F;etc&#x2F;sudoers配置对应的用户，用户上配置对应的权限，或者是执行的命令 需要注意的是：生产过程中一般给不同的业务人员不同的权限，创建对应的系统用户，或者对不同的用户授予不同的命令权限 授权">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180413947-560658352.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180414311-352890889.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180414598-901633887.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180414898-518406560.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180415241-1263453664.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180415569-1992049804.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180415976-354929362.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180416417-542984486.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180416781-261006889.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180417091-852671336.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180417401-1495155618.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180417761-1883192853.png">
+<meta property="article:published_time" content="2023-07-28T18:47:49.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.235Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%BA%94%E5%91%A8/2792175-20220912180413947-560658352.png">
+  
+  
+  <title>第五周 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第五周">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 18:47" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      21k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      173 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第五周</h1>
+            
+            <div class="markdown-body">
+              <h1 id="1-SUDO-PAM配置规范说明"><a href="#1-SUDO-PAM配置规范说明" class="headerlink" title="1.SUDO,PAM配置规范说明"></a>1.SUDO,PAM配置规范说明</h1><h2 id="sudo机制"><a href="#sudo机制" class="headerlink" title="sudo机制"></a>sudo机制</h2><p>root用户允许普通用户执行一些命令，或者直接代替/root去执行所有命令</p>
+<p>su catyer：切换用户</p>
+<p>su：切换到root用户执行</p>
+<p>sudo配置：一般是去到/etc/sudoers配置对应的用户，用户上配置对应的权限，或者是执行的命令</p>
+<p>需要注意的是：生产过程中一般给不同的业务人员不同的权限，创建对应的系统用户，或者对不同的用户授予不同的命令权限</p>
+<p>授权给catyer用户，代表可以代替root用户执行ls命令，但是在执行的时候需要加上sudo；但是除了ls命令（对root用户权限下）的操作外，其他的操作需要额外的授权，如果是ALL，则是全部命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></div></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##查看有哪些用户有登陆权限，授权给catyer用户执行ifconfig的权限</span><br>grep /bin/bash /etc/passwd<br>root:x:0:0:root:/root:/bin/bash<br>catyer:x:1000:1000:catyer:/home/catyer:/bin/bash<br><br>vim /etc/sudoers<br>[root@master etc]<span class="hljs-comment">#ll sudoers</span><br>-r--r----- 1 root root 4328 Sep 30  2020 sudoers<br><br><span class="hljs-comment">##需要修改sudoers文件的写权限</span><br>[root@master etc]<span class="hljs-comment">#chmod u+w sudoers</span><br>[root@master etc]<span class="hljs-comment">#ll sudoers</span><br>-rw-r----- 1 root root 4328 Sep 30  2020 sudoers<br><br><span class="hljs-comment">##修改sudoers文件</span><br>vim sudoers<br><br><span class="hljs-comment">##默认允许root用户执行所有的命令</span><br><span class="hljs-comment">## Allow root to run any commands anywhere </span><br>root    ALL=(ALL)       ALL<br><span class="hljs-comment">#root    ALL(在哪个主机)=(代表的用户，可以写root)       ALL(COMMAND指令)</span><br><span class="hljs-comment">#which +command：表示查找这个命令在哪里</span><br><span class="hljs-built_in">which</span> <span class="hljs-built_in">ls</span><br>catyer  ALL=(root)      /usr/bin/ls <span class="hljs-comment">#允许catyer代替root用户执行ls /root命令</span><br>catyer  ALL=(root)      /usr/bin/ls <span class="hljs-comment">#允许catyer代替root用户执行ls /root命令</span><br>catyer  ALL=(root)      /usr/bin/ls /root,/usr/bin/mount /dev/sdb /mnt/mount <span class="hljs-comment">#</span><br><br><span class="hljs-comment">##测试root权限，访问到ls /root用户，OK</span><br>sudo <span class="hljs-built_in">ls</span> /root/tmp<br>0.txt  2.txt  6.txt	 7.txt	     99944111.txt  99944113.txt  999442.txt  999444.txt<br>1.txt  3.txt  77777.txt  999000.txt  99944112.txt  999441.txt	 999443.txt  999.txt<br><br>但是想执行<span class="hljs-built_in">cd</span>命令就不行了，需要添加/bin/cd /root/tmp这个权限，权限颗粒度到这个级别了<br>sudo <span class="hljs-built_in">cd</span> /root/tmp<br>Sorry, user catyer is not allowed to execute <span class="hljs-string">&#x27;/bin/cd /root/tmp&#x27;</span> as root on master.<br></code></pre></td></tr></table></figure>
+
+<h2 id="pam机制"><a href="#pam机制" class="headerlink" title="pam机制"></a>pam机制</h2><p>PAM：属于一种验证性的模块，或者叫做验证性的接口，可以给到其他程序或者服务调用pam认证模块去实现认证功能，只关注如何验证用户的API</p>
+<p>PAM机制自己有统一规范的API接口，供各程序调用</p>
+<p>查看主配置文件目录：ls /etc/pam.d</p>
+<p><img src="2792175-20220912180413947-560658352.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>案例：查看某个服务是否支持PAM认证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##查看sshd服务支持pam库</span><br>ldd `<span class="hljs-built_in">which</span> sshd` | grep libpam<br>libpam.so.0 =&gt; /lib64/libpam.so.0 (0x00007f3627884000)<br></code></pre></td></tr></table></figure>
+
+<p>PAM认证流程</p>
+<p>1.某个命令或者程序执行，比如ssh 10.0.0.128</p>
+<p>2.找到sshd这个服务对应的libpam.so.d</p>
+<p>3.pam库调用对应的验证模块进行验证</p>
+<p>4.pam决定下一步该怎么走</p>
+<h1 id="2-chrony搭建私有ntp服务"><a href="#2-chrony搭建私有ntp服务" class="headerlink" title="2.chrony搭建私有ntp服务"></a>2.chrony搭建私有ntp服务</h1><p>搭建chrony NTP服务器，chrony：NTP同步时间服务</p>
+<p>客户端程序：chronyc</p>
+<p>服务端程序：chronyd</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##环境：chrony服务器1 10.0.0.128</span><br><span class="hljs-comment">##chrony客户端 10.0.0.132</span><br><span class="hljs-comment">##服务端配置</span><br>rpm -q chrony || yum -y install chrony<br>systemctl <span class="hljs-built_in">enable</span> --now chronyd<br><br>vim /etc/chrony.conf<br><br><span class="hljs-comment">##配置各大云厂商的NTP服务器</span><br>server time1.cloud.tencent.com iburst <br>server time2.cloud.tencent.com iburst<br><br><span class="hljs-comment">##配置允许10.0.0.0段的机器访问，其余默认</span><br>allow 10.0.0.0/16<br><br>systemctl restart chronyd<br><span class="hljs-comment">##关闭防火墙</span><br>systemctl <span class="hljs-built_in">disable</span> --now firewalld <br><br><span class="hljs-comment">##查看本地的时区</span><br>[root@master ~]<span class="hljs-comment">#timedatectl</span><br>      Local time: Tue 2022-08-30 23:19:04 CST<br>  Universal time: Tue 2022-08-30 15:19:04 UTC<br>        RTC time: Tue 2022-08-30 15:19:04<br>       Time zone: Asia/Shanghai (CST, +0800)<br>     NTP enabled: <span class="hljs-built_in">yes</span><br>NTP synchronized: <span class="hljs-built_in">yes</span><br> RTC <span class="hljs-keyword">in</span> <span class="hljs-built_in">local</span> TZ: no<br>      DST active: n/a<br><br><span class="hljs-comment">##查看有哪些时区可选</span><br>timedatectl list-timezones |  grep  <span class="hljs-string">&quot;Asia/Shanghai&quot;</span><br><span class="hljs-comment">##设置本地时区</span><br>timedatectl set-timezone Asia/Shanghai<br><br><span class="hljs-comment">##查看本地的时间时区</span><br><span class="hljs-built_in">date</span><br>Mon Sep  5 21:37:25 CST 2022<br></code></pre></td></tr></table></figure>
+
+<p>客户端chronyc配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/chorny.conf<br>server 10.0.0.128 iburst<br>systemctl restart chronyd<br><br><span class="hljs-comment">##查看本地的时区以及配置</span><br>[root@rocky ~]<span class="hljs-comment">#timedatectl</span><br>               Local time: 二 2022-08-30 15:28:35 UTC<br>           Universal time: 二 2022-08-30 15:28:35 UTC<br>                 RTC time: 二 2022-08-30 15:28:35<br>                Time zone: n/a (UTC, +0000)<br>System clock synchronized: no<br>              NTP service: active<br>          RTC <span class="hljs-keyword">in</span> <span class="hljs-built_in">local</span> TZ: no<br><br><span class="hljs-comment">##配置时区</span><br>[root@rocky ~]<span class="hljs-comment">#timedatectl set-timezone Asia/Shanghai</span><br>[root@rocky ~]<span class="hljs-comment">#timedatectl</span><br>               Local time: 二 2022-08-30 23:34:03 CST<br>           Universal time: 二 2022-08-30 15:34:03 UTC<br>                 RTC time: 二 2022-08-30 15:34:03<br>                Time zone: Asia/Shanghai (CST, +0800)<br>System clock synchronized: <span class="hljs-built_in">yes</span><br>              NTP service: active<br>          RTC <span class="hljs-keyword">in</span> <span class="hljs-built_in">local</span> TZ: no<br></code></pre></td></tr></table></figure>
+
+<p>chronyc客户端命令实例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##查看源服务器状态</span><br>chronyc sources -V<br>MS Name/IP address         Stratum Poll Reach LastRx Last sample               <br>===============================================================================<br>^* 10.0.0.128                    3   6   377     4    +84us[ +108us] +/-   16ms<br><br><span class="hljs-comment">##服务端查看已经连接的客户端</span><br>[root@master ~]<span class="hljs-comment">#chronyc clients</span><br>Hostname                      NTP   Drop Int IntL Last     Cmd   Drop Int  Last<br>===============================================================================<br>10.0.0.132                     43      0   6   -    42       0      0   -     -<br>10.0.0.129                     17      0   6   -    58       0      0   -     -<br><br><span class="hljs-comment">##显示当前时间源信息(客户端)</span><br>[root@rocky ~]<span class="hljs-comment">#chronyc sources</span><br>MS Name/IP address         Stratum Poll Reach LastRx Last sample               <br>===============================================================================<br>^* 10.0.0.128                    3   6   377     4    +84us[ +108us] +/-   16ms<br><br>[root@rocky ~]<span class="hljs-comment">#chronyc sources -v</span><br>  .-- Source mode  <span class="hljs-string">&#x27;^&#x27;</span> = server, <span class="hljs-string">&#x27;=&#x27;</span> = peer, <span class="hljs-string">&#x27;#&#x27;</span> = <span class="hljs-built_in">local</span> clock.<br> / .- Source state <span class="hljs-string">&#x27;*&#x27;</span> = current best, <span class="hljs-string">&#x27;+&#x27;</span> = combined, <span class="hljs-string">&#x27;-&#x27;</span> = not combined,<br>| /             <span class="hljs-string">&#x27;x&#x27;</span> = may be <span class="hljs-keyword">in</span> error, <span class="hljs-string">&#x27;~&#x27;</span> = too variable, <span class="hljs-string">&#x27;?&#x27;</span> = unusable.<br>||                                                 .- xxxx [ yyyy ] +/- zzzz<br>||      Reachability register (octal) -.           |  xxxx = adjusted offset,<br>||      Log2(Polling interval) --.      |          |  yyyy = measured offset,<br>||                                \     |          |  zzzz = estimated error.<br>||                                 |    |           \<br>MS Name/IP address         Stratum Poll Reach LastRx Last sample               <br>===============================================================================<br>^* 10.0.0.128                    3   6   377    55    +32us[  +53us] +/-   16ms<br></code></pre></td></tr></table></figure>
+
+<h1 id="3-说明CDN的原理"><a href="#3-说明CDN的原理" class="headerlink" title="3.说明CDN的原理"></a>3.说明CDN的原理</h1><p>关于CDN的原理：内容分发网络（Content Delivery Network，CDN）是建立并覆盖在承载网上，由不同区域的服务器组成的分布式网络。将源站资源缓存到全国各地的边缘服务器，供用户就近获取，降低源站压力。</p>
+<p>本地用户访问方向：</p>
+<p>1.在本地找网站/图片缓存，本地浏览器</p>
+<p>2.没有的话找到附近DNS服务器，通过全局的GSLB算法返回到客户端的最佳CDN节点</p>
+<p>3.CDN节点上没有找到对应要访问的内容(.jpg/png，.html，.pdf等)，回源站拉源站数据，回源站拉数据需要一定的时间</p>
+<p>4.从源站获取到数据，返回到客户端</p>
+<p>5.客户端建立缓存，CDN节点建立缓存，下次访问的时候直接读缓存</p>
+<h2 id="CDN使用方式"><a href="#CDN使用方式" class="headerlink" title="CDN使用方式"></a>CDN使用方式</h2><p>1.在源站搭建好相关的WEB服务，源站类型可以为服务器IP地址、OSS等</p>
+<p><img src="2792175-20220912180414311-352890889.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>2.配置CDN服务，创建CDN域名，配置CDN回源到对应的源站：如果是服务器，则配置公网IP地址；如果是OSS，则添加OSS对应的对外访问域名</p>
+<p><img src="2792175-20220912180414598-901633887.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>3.要启用CDN服务，需要公网DNS解析添加对应CDN加速域名的CNAME记录解析，访问到CNAME，访问到CDN加速域名的时候，即启用了CDN服务；同时如果CDN解析到源站是IP地址的话，将CDN的CNAME地址解析到对应的源站IP地址</p>
+<p>xxx.ctfmall.com—&gt;xxx.ctfmall.com.w.kunluncan.com</p>
+<p>xxx.ctfmall.com.w.kunluncan.com—&gt;IP地址</p>
+<p>4.确保CDN访问到源站，对应的服务要起来，对应的资源路径要正确</p>
+<p>5..访问到源站站点，访问正常，第一次如果是第一次配置访问，则会有点慢，因为需要回源站拉内容；第二次刷新访问正常，已经是读缓存内的内容了</p>
+<h1 id="4-搭建智能DNS"><a href="#4-搭建智能DNS" class="headerlink" title="4.搭建智能DNS"></a>4.搭建智能DNS</h1><p>架构：搭建DNS服务器，从内网实现访问到公网</p>
+<p>环境：主DNS服务器 10.0.0.128</p>
+<p>从DNS服务器+客户端 10.0.0.129</p>
+<h2 id="4-1-配置DNS主服务器，配置named-conf配置文件"><a href="#4-1-配置DNS主服务器，配置named-conf配置文件" class="headerlink" title="4.1 配置DNS主服务器，配置named.conf配置文件"></a>4.1 配置DNS主服务器，配置named.conf配置文件</h2><p>bind，bind-utils(dns测试工具，可以不装)</p>
+<p>bind的测试工具包括：dig(最全面的域名解析工具)，host(简易版DNS解析测试)，nslookup(windows风格的)，最常用的就是dig，显示内容最多</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">rpm -ql bin-utils：查看这个包中有哪些工具<br>yum -y install <span class="hljs-built_in">bind</span> bind-utils<br>启动DNS服务：systemctl <span class="hljs-built_in">enable</span> --now named<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220912180414898-518406560.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>修改默认dns配置文件，监听为指定网段10.0.0.0/24，vim /etc/named.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">options &#123;<br>        //监听哪些机器：本地所有的IP<br>        listen-on port 53 &#123; localhost; &#125;; //监听本地所有的IP 53端口<br>        listen-on-v6 port 53 &#123; ::1; &#125;;<br>        directory       <span class="hljs-string">&quot;/var/named&quot;</span>;<br>        dump-file       <span class="hljs-string">&quot;/var/named/data/cache_dump.db&quot;</span>;<br>        statistics-file <span class="hljs-string">&quot;/var/named/data/named_stats.txt&quot;</span>;<br>        memstatistics-file <span class="hljs-string">&quot;/var/named/data/named_mem_stats.txt&quot;</span>;<br>        recursing-file  <span class="hljs-string">&quot;/var/named/data/named.recursing&quot;</span>;<br>        secroots-file   <span class="hljs-string">&quot;/var/named/data/named.secroots&quot;</span>;<br>        //允许哪些机器通过这个DNS查询:any所有机器<br>        allow-query     &#123; 10.0.0.0/24; &#125;;<br>&#125;<br><br><span class="hljs-comment">##包含了这两项</span><br>include <span class="hljs-string">&quot;/etc/named.rfc1912.zones&quot;</span>;<br>include <span class="hljs-string">&quot;/etc/named.root.key&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>使用到的用户+用户组：root，named；group：named，安装了named服务后就会生成这个named的用户和用户组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">id</span> root<br>uid=0(root) gid=0(root) <span class="hljs-built_in">groups</span>=0(root)<br><br><span class="hljs-built_in">id</span> named---记得修改域配置文件所属组为named<br>uid=25(named) gid=25(named) <span class="hljs-built_in">groups</span>=25(named)<br></code></pre></td></tr></table></figure>
+
+<p>rndc命令：对于dns缓存，配置的使用，刷新Linux机器的DNS缓存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">rndc --<span class="hljs-built_in">help</span><br>rndc reload <span class="hljs-comment">##重新加载dns配置</span><br>rndc flush <span class="hljs-comment">##刷新缓存</span><br></code></pre></td></tr></table></figure>
+
+<p>各种资源记录(RR：resource record)，文件路径：/var/named/named.localhost，/var/named/catyer.cn.zone(自已命名)，后续可以在这里写域名解析的文件</p>
+<h2 id="4-2-写主DNS服务器配置-DNS记录"><a href="#4-2-写主DNS服务器配置-DNS记录" class="headerlink" title="4.2 写主DNS服务器配置(DNS记录)"></a>4.2 写主DNS服务器配置(DNS记录)</h2><p>SOA记录：一般写在首行，一条记录，作为起始的授权记录</p>
+<p>NS：解析，正向解析记录</p>
+<p>A记录：域名—IPV4地址</p>
+<p>AAAA记录：域名—IPV6地址</p>
+<p>TXT：文本记录</p>
+<p>CNAME：别名记录(CDN，WAF等)</p>
+<p>PTR：反向解析，指针</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs http">vim /var/named/catyer.cn.zone #文件标准格式：其实也是个文件，只需要记得写入zone配置文件就好了<br><br>$TTL 1D<br>@       IN SOA  master admin.catyer.cn ( ;SOA记录:起始授权记录   <br>                                        20220719        ; serial,序列号，数据库文件的序列号<br>                                        3H              ; refresh,DNS刷新记录,从节点拉取<br>                                        10M             ; retry,服务器网络有问题,重试时间<br>                                        1W              ; expire,DNS记录过期时间<br>                                        3H )<br>@       IN      NS      master. ;主DNS服务器解析<br>master  A       10.0.0.128<br>www     A       10.0.0.128<br>k8s     A       10.0.0.128<br>linux   A       10.0.0.200<br></code></pre></td></tr></table></figure>
+
+<p>主从DNS服务器的同步机制：主服务器一般是有新的更新就推送，从服务器一般是定时拉更新的数据</p>
+<p>主从DNS同步依赖条件：serial，类似MySQL主从的binlog文件版本号的变化，binlog_000003类似这样的文件名</p>
+<h2 id="PS：一定要记住修改catyer-cn-zone文件的所属组，不然这个文件是不生效的-本地域名解析"><a href="#PS：一定要记住修改catyer-cn-zone文件的所属组，不然这个文件是不生效的-本地域名解析" class="headerlink" title="PS：一定要记住修改catyer.cn.zone文件的所属组，不然这个文件是不生效的(本地域名解析)"></a>PS：一定要记住修改catyer.cn.zone文件的所属组，不然这个文件是不生效的(本地域名解析)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chgrp</span> named /var/named/catyer.cn.zone<br>ll /var/named/catyer.cn.zone<br>[root@master ~]<span class="hljs-comment">#ll /var/named/catyer.cn.zone</span><br>-rw-r----- 1 root named 435 Sep  5 22:45 /var/named/catyer.cn.zone<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-3-写主DNS域配置文件-etc-named-rfc1912-zones"><a href="#4-3-写主DNS域配置文件-etc-named-rfc1912-zones" class="headerlink" title="4.3 写主DNS域配置文件/etc/named.rfc1912.zones"></a>4.3 写主DNS域配置文件/etc/named.rfc1912.zones</h2><p>将zone的配置信息(catyer.cn)配置到统一的域配置文件内，这里面是/etc/named.frc1912.zones</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##写好主域的信息，type类型为master主域，file为catyer.cn.zone这个配置文件</span><br>vim /etc/named.rfc1912.zones<br>zone <span class="hljs-string">&quot;catyer.cn&quot;</span> IN &#123;<br>        <span class="hljs-built_in">type</span> master; <span class="hljs-comment">##DNS服务器类型是主服务器，主节点</span><br>        file <span class="hljs-string">&quot;catyer.cn.zone&quot;</span>; <span class="hljs-comment">##域配置文件：指向catyer</span><br>        allow-update &#123; none; &#125;;<br>&#125;;<br><br><span class="hljs-comment">##检查DNS配置文件以及域配置文件有无正确</span><br>named-checkconf<br>named-checkzone catyer.cn /var/named/catyer.cn.zone<br><br>rndc reload：重新加载dns配置文件zone<br>rndc flush：刷新本地DNS缓存<br><br><span class="hljs-comment">##本地网卡DNS解析指向自己</span><br>ONBOOT=<span class="hljs-string">&quot;yes&quot;</span><br>IPADDR=10.0.0.128<br>NETMASK=255.255.255.0<br>GATEWAY=10.0.0.2<br><span class="hljs-comment">#DNS1=114.114.114.114</span><br><span class="hljs-comment">#DNS2=8.8.8.8</span><br>DNS1=10.0.0.128<br>DNS2=10.0.0.129<br><br><span class="hljs-comment">##重启网络服务</span><br>systemctl restart network<br></code></pre></td></tr></table></figure>
+
+<p>分别都可以解析到IP，即本地的DNS服务器搭建成功，访问本地服务。访问到k8s.catyer.cn这个域名服务的，添加了DNS A记录后，不需要添加本地HOST文件就可以访问到解析的域名了</p>
+<p><img src="2792175-20220912180415241-1263453664.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="4-4-搭建从DNS服务器-DNS2"><a href="#4-4-搭建从DNS服务器-DNS2" class="headerlink" title="4.4 搭建从DNS服务器(DNS2)"></a>4.4 搭建从DNS服务器(DNS2)</h2><p>安装dns服务：yum -y install bind bind-utils</p>
+<p>注释掉named.conf配置文件内的监听限制，不然这个slave只会监听本地</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c">options &#123;<br><span class="hljs-comment">//        listen-on port 53 &#123; 127.0.0.1; &#125;;</span><br>        listen-on-v6 port <span class="hljs-number">53</span> &#123; ::<span class="hljs-number">1</span>; &#125;;<br>        directory       <span class="hljs-string">&quot;/var/named&quot;</span>;<br>        dump-file       <span class="hljs-string">&quot;/var/named/data/cache_dump.db&quot;</span>;<br>        statistics-file <span class="hljs-string">&quot;/var/named/data/named_stats.txt&quot;</span>;<br>        memstatistics-file <span class="hljs-string">&quot;/var/named/data/named_mem_stats.txt&quot;</span>;<br>        recursing-file  <span class="hljs-string">&quot;/var/named/data/named.recursing&quot;</span>;<br>        secroots-file   <span class="hljs-string">&quot;/var/named/data/named.secroots&quot;</span>;<br><span class="hljs-comment">//       allow-query     &#123; localhost; &#125;;</span><br></code></pre></td></tr></table></figure>
+
+<p>编辑域配置文件，写上是catyer.cn主DNS(主域)的从域，type为slave</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/named.rfc1912.zones<br>zone <span class="hljs-string">&quot;catyer.cn&quot;</span> &#123;<br>        <span class="hljs-built_in">type</span> slave;<br>        masters &#123;10.0.0.128;&#125;;<br>        file <span class="hljs-string">&quot;catyer.cn.zone.slave&quot;</span>;<br>&#125;;<br>systemctl restart named<br></code></pre></td></tr></table></figure>
+
+<p>编辑好后，重启named服务，配置网卡文件DNS2(DNS从服务器)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/sysconfig/network-scripts/ifcfg-ens33<br>DNS1=10.0.0.128<br>DNS2=10.0.0.129<br><br>systemctl restart named<br>systemctl restart network<br><br><span class="hljs-comment">##刷新本地缓存</span><br>rndc reload<br>rndc flush<br><br><span class="hljs-comment">##停止dns1的服务</span><br>systemctl stop named<br></code></pre></td></tr></table></figure>
+
+<p>尝试解析k8s.catyer.cn这个域名，发现承载的dns服务器是10.0.0.129，证明停止了DNS1，DNS2成功生效工作，k8s.catyer.cn是在10.0.0.128上面做的A记录，但是承载本地DNS解析的是129这台地址，k8s.catyer.cn这个地址本身的DNS解析就是10.0.0.128，从DNS搭建成功</p>
+<p>在slave1上测试：dig k8s.catyer.cn</p>
+<p><img src="2792175-20220912180415569-1992049804.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="4-5-从指定的DNS服务器-IP-上查询该解析-DNS服务器地址"><a href="#4-5-从指定的DNS服务器-IP-上查询该解析-DNS服务器地址" class="headerlink" title="4.5 从指定的DNS服务器(IP)上查询该解析+DNS服务器地址"></a>4.5 从指定的DNS服务器(IP)上查询该解析+DNS服务器地址</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##windows环境</span><br>nslookup api.ctfmall.com 100.100.2.136<br><br><span class="hljs-comment">##Linux环境，+@符号</span><br>dig k8s.catyer.cn @10.0.0.128<br>dig k8s.catyer.cn @10.0.0.129<br>host k8s.catyer.cn @10.0.0.8<br>dig k8s.catyer.cn<br></code></pre></td></tr></table></figure>
+
+<h1 id="5-解释DNS解析流程"><a href="#5-解释DNS解析流程" class="headerlink" title="5.解释DNS解析流程"></a>5.解释DNS解析流程</h1><p><img src="2792175-20220912180415976-354929362.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>DNS解析流程：</p>
+<p>想要访问<a target="_blank" rel="noopener" href="http://www.baidu.com这个域名,使用迭代查询的方式去查询这个域名的解析的ip地址/">www.baidu.com这个域名，使用迭代查询的方式去查询这个域名的解析的IP地址</a></p>
+<p>1.找本地地址(host文件)—&gt;本地配置的DNS服务器(DNS缓存(浏览器))，不用每次都去找根服务器；DNS服务器有缓存，本地也有缓存；</p>
+<p>windows服务器有DNS缓存，使用ipconfig /flushdns可以刷新本地缓存；Linux服务器的DNS客户端没有缓存</p>
+<p>2.DNS服务器找到根服务器(互联网的根服务器)，开始迭代查询，根服务器：.，其实完整的域名应该是<a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a>.</p>
+<p>3.找顶级域名，因为baidu.com是.com，所以找.com的顶级域名服务器里面找解析</p>
+<p>4.找一级域名baidu.com这个的DNS解析</p>
+<p>5.从baidu.com这个解析里面就有<a target="_blank" rel="noopener" href="http://www.baidu.com这个二级域名配置了记录集,传回到用户,实现www.baidu.com这个域名解析到百度后端的某个ip地址/">www.baidu.com这个二级域名配置了记录集，传回到用户，实现www.baidu.com这个域名解析到百度后端的某个IP地址</a></p>
+<p>递归查询：指的是请求到了，服务器无法反馈结果，会去找到结果并且最终反馈—处理到底；DNS服务器必须返回一个准确的结果给到客户端</p>
+<p>迭代查询：找别人查找，自己不处理—找别的DNS服务器查询解析，根域名—顶级域名—一级域名</p>
+<h2 id="DNS查询的工具"><a href="#DNS查询的工具" class="headerlink" title="DNS查询的工具"></a>DNS查询的工具</h2><p>windows：nslookup</p>
+<p>linux：安装bind-utils，工具包有dig，nslookup，host等工具，比较常用的就是dig，能够显示比较完整的信息，host比较简洁，解析出IP地址出来</p>
+<p>rpm -ql bind-utils</p>
+<p><img src="2792175-20220912180416417-542984486.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h1 id="6-iptables-5表5链解释"><a href="#6-iptables-5表5链解释" class="headerlink" title="6.iptables 5表5链解释"></a>6.iptables 5表5链解释</h1><p>iptables5表指的是：filter：过滤规则，允许/拒绝某些流量流入，比如INPUT，OUPUT等，NAT：地址转换表，包括SNAT和DNAT，mangle：修改数据规则表，raw：加快通过防火墙的速度</p>
+<p>security：强制安全规则，由SELINUX实现，/etc/config/selinux</p>
+<p>5表中最为常用的就是filter(过滤表)，和nat(地址转换表)</p>
+<p>5链（chain）：PREROUTING（总入口），INPUT（入方向的包），OUTPUT（出方向的包），FORWARD（经过内部转发，转发机制），POSTROUTING（总出口）</p>
+<p><img src="2792175-20220912180416781-261006889.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##查看防火墙规则</span><br>iptables -L<br>[root@master ~]<span class="hljs-comment">#iptables -L</span><br>Chain INPUT (policy ACCEPT)<br>target     prot opt <span class="hljs-built_in">source</span>               destination         <br>ACCEPT     udp  --  anywhere             anywhere             udp dpt:domain<br>ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:domain<br>ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootps<br>ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:bootps<br>ACCEPT     udp  --  anywhere             anywhere             udp dpt:domain<br>ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:domain<br>ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootps<br>ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:bootps<br>ACCEPT     tcp  --  172.16.0.128         10.0.0.0/24         <br></code></pre></td></tr></table></figure>
+
+<h1 id="7-iptables-firewalld-nftable-实现主机防火墙。5000-6000端口仅192-168-0-0-24网段内的主机访问"><a href="#7-iptables-firewalld-nftable-实现主机防火墙。5000-6000端口仅192-168-0-0-24网段内的主机访问" class="headerlink" title="7.iptables/firewalld/nftable 实现主机防火墙。5000-6000端口仅192.168.0.0/24网段内的主机访问"></a>7.iptables/firewalld/nftable 实现主机防火墙。5000-6000端口仅192.168.0.0/24网段内的主机访问</h1><p>环境：外网业务机器开放5000-6000业务端口，只允许公司内网192.168.0.0/24网段访问，目前先实现80业务端口访问</p>
+<p>防火墙过滤：iptables。使用SNAT做流量转发，仅允许内网网段访问，需要从POSTROUTING chain转发出去，一般使用动态IP地址转换，</p>
+<p>防火墙主机：10.0.0.128 网卡1：NAT模式（网关10.0.0.2） 172.16.0.10 网卡2：仅主机模式（网关172.16.0.2）</p>
+<p>内网访问客户端：10.0.0.129</p>
+<p>ubuntu外网机器：172.16.0.135 网卡2：仅主机模式（网关172.16.0.2）服务：nginx web服务器</p>
+<p>前提条件：开启IPV4转发</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@master ~]<span class="hljs-comment">#grep ipv4 /etc/sysctl.conf</span><br>net.ipv4.ip_forward=1<br>sysctl -p<br></code></pre></td></tr></table></figure>
+
+<p>配置基本的iptables snat转发</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##ubuntu主机安装nginx服务，ubuntu默认直接启动</span><br>apt -y install nginx<br><br><span class="hljs-comment">##iptables节点</span><br><span class="hljs-comment">##专线网络,to-source表示当前固定的公网IP</span><br>iptables -t nat -I POSTROUTING -s 10.0.0.0/24 ! -d 10.0.0.0/24 -j SNAT --to-source 100.9.6.4<br><br><span class="hljs-comment">##动态IP，查看NAT表的信息，除了公网的10.0.0.0/24网段，其他全部转发，从POSTROUTING出去;-I表示在NAT表前面插入，如果加 -A POSTROUTING表示在表的最后添加这条规则，-j MASQUERADE表示是转化到动态IP，而不是固定公网IP</span><br>iptables -t nat -I POSTROUTING -d 10.0.0.0/24<br>iptables -t nat -I POSTROUTING -s 10.0.0.0/24 ! -d 10.0.0.0/24 -j MASQUERADE<br>iptables -t nat -nL / iptables -t nat -nL --line-numbers <span class="hljs-comment">##显示行号</span><br><br>Chain POSTROUTING (policy ACCEPT)<br>target     prot opt <span class="hljs-built_in">source</span>               destination         <br>MASQUERADE  all  --  10.0.0.0/24         !10.0.0.0/24 <br><br><span class="hljs-comment">##删除NAT表的第一条规则</span><br>iptables -t nat -D POSTROUTING 1<br><br><span class="hljs-comment">##配置iptables机器的双网卡，要和ubuntu主机同一个网段；开启网卡2的仅主机模式，需要在VMware内配置</span><br><span class="hljs-built_in">cp</span> ifcfg-ens33 ifcfg-ens36<br>IPADDR=172.16.0.10<br>NETMASK=255.255.255.0<br>GATEWAY=172.16.0.2<br><br><span class="hljs-comment">##ubuntu nginx默认web目录，修改nginx目录</span><br>root@ubuntu:/etc/nginx/sites-available<span class="hljs-comment"># pwd</span><br>vim /etc/nginx/sites-available/default<br><br>server &#123;<br>        listen 80 default_server;<br>        listen [::]:80 default_server;<br><br>        root /data/nginx;<br><br>        <span class="hljs-comment"># Add index.php to the list if you are using PHP</span><br>        index index.html index.htm index.nginx-debian.html;<br><br>        server_name _;<br>&#125;<br><br>nginx -t：检查Nginx服务配置服务<br>nginx: the configuration file /etc/nginx/nginx.conf syntax is ok<br>nginx: configuration file /etc/nginx/nginx.conf <span class="hljs-built_in">test</span> is successful<br><br>systemctl restart nginx<br><br><span class="hljs-comment">##在ubuntu上tail日志查看访问IP，获取到源端IP了；去掉POSTROUTING规则就无法curl通了，slave1的gateway是10.0.0.128，出口网关，所以在nginx日志中获取的是出口网关的IP</span><br>curl 172.16.0.135/nginx.txt<br>curl 172.16.0.135---&gt;nginx服务<br><br><span class="hljs-built_in">tail</span> -f /var/log/nginx/access.log<br>172.16.0.10 - - [01/Aug/2022:13:56:24 +0000] <span class="hljs-string">&quot;GET / HTTP/1.1&quot;</span> 200 612 <span class="hljs-string">&quot;-&quot;</span> <span class="hljs-string">&quot;curl/7.29.0&quot;</span><br><br><br><span class="hljs-comment">##curl一个大一点的文件，查看ubuntu端的tcp连接状态(ESTABLISHED)，ss -nt，peer查看远端的地址，证明TCP链接已经建立了</span><br><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=/var/www/html/test2.txt bs=1M count=1024<br><br>State              Recv-Q           Send-Q           Local Address:Port          Peer   <br>ESTAB              0                1152608          172.16.0.135:80             172.16.0.10:53704<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220912180417091-852671336.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="2792175-20220912180417401-1495155618.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h1 id="8-mysql的各发行版有哪些-？"><a href="#8-mysql的各发行版有哪些-？" class="headerlink" title="8.mysql的各发行版有哪些 ？"></a>8.mysql的各发行版有哪些 ？</h1><p>MySQL：5.6 、5.7、8.0版本（linux 8.0 release），分为社区版和企业版</p>
+<p>mariaDB：5.6、5.5、10.3（linux 8.0 release），MariaDB是由MySQL初始创建者在MySQL被Oracle收购之后，又独立成立了一家公司，来开发的数据库。MariaDB并不能完全和MySQL官方版完全兼容，但大多数功能是兼容的。</p>
+<p>percona：Percona是由MySQL最初开发者组成的一个社区，Percona MySQL是基于官方社区版本二次开发的，在MySQL官方社区版的基础上增加了一些MySQL官方企业版才有的功能，同时对官方社区版进行了一些优化，从目前公布的数据来看，Percona MySQL 性能是要优于MySQL官方社区版的。</p>
+<p>percona还是免费的，对于percona出了一个专业级别的mysql备份工具xtrabackup，和MySQL商业版的备份工具功能类似，还不用钱</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>MySQL</strong></th>
+<th><strong>Percona MySQL-server</strong></th>
+<th><strong>MariaDB</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否开源</td>
+<td>开源</td>
+<td>开源</td>
+<td>开源</td>
+</tr>
+<tr>
+<td>事务型存储引擎</td>
+<td>InnoDB</td>
+<td>XtraDB</td>
+<td>XtraDB</td>
+</tr>
+<tr>
+<td>监控工具</td>
+<td>企业版监控工具，社区版不提供</td>
+<td>Percona Monitor工具</td>
+<td>Monyog</td>
+</tr>
+</tbody></table>
+<h1 id="9-mysql索引的作用"><a href="#9-mysql索引的作用" class="headerlink" title="9.mysql索引的作用"></a>9.mysql索引的作用</h1><p>MySQL索引一般是用于加速表的查询的，索引一般分为</p>
+<p>1.主键索引：基于主键做的索引，比如订单表的编号是自动增长的(auto_increment)，同时订单号又是主键，可以做基于订单号的索引</p>
+<p>2.聚簇索引：数据data和索引index放在一起，形成一个磁盘上的文件</p>
+<p>3.B+TREE索引：索引上只存放索引信息，基本分为一层根节点+一层分支节点，下面都是数据了，查询效率最高，一般的MySQL表都是BTREE索引，同时下面的数据都是加了链表的，数据都是有链接起来的，查询速度快，节省性能—&gt;一般来说都是b_tree索引</p>
+<p>查询某张表的索引情况</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs sql">[hellodb]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> index <span class="hljs-keyword">from</span> stu\G;<br><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span> <span class="hljs-number">1.</span> <span class="hljs-type">row</span> <span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><br><span class="hljs-keyword">Table</span>: stu<br>Non_unique: <span class="hljs-number">0</span><br>Key_name: <span class="hljs-keyword">PRIMARY</span><br>Seq_in_index: <span class="hljs-number">1</span><br>Column_name: StuID<br><span class="hljs-keyword">Collation</span>: A<br><span class="hljs-keyword">Cardinality</span>: <span class="hljs-number">25</span><br>Sub_part: <span class="hljs-keyword">NULL</span><br>Packed: <span class="hljs-keyword">NULL</span><br><span class="hljs-keyword">Null</span>: <br>Index_type: BTREE<br>Comment: <br>Index_comment: <br>Visible: YES<br>Expression: <span class="hljs-keyword">NULL</span><br></code></pre></td></tr></table></figure>
+
+<p>查询是否有使用index索引来进行查询，显示只遍历了一行，而不加索引字段进行查找，需要遍历整张表，需要遍历25行</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs sql">[hellodb]<span class="hljs-operator">&gt;</span>explain <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> hello.stu <span class="hljs-keyword">where</span> stuid<span class="hljs-operator">=</span><span class="hljs-number">10</span>;<br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="hljs-operator">|</span> id <span class="hljs-operator">|</span> select_type <span class="hljs-operator">|</span> <span class="hljs-keyword">table</span> <span class="hljs-operator">|</span> partitions <span class="hljs-operator">|</span> type  <span class="hljs-operator">|</span> possible_keys <span class="hljs-operator">|</span> key     <span class="hljs-operator">|</span> key_len <span class="hljs-operator">|</span> <span class="hljs-keyword">ref</span>   <span class="hljs-operator">|</span> <span class="hljs-keyword">rows</span> <span class="hljs-operator">|</span> filtered <span class="hljs-operator">|</span> Extra <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">1</span> <span class="hljs-operator">|</span> SIMPLE      <span class="hljs-operator">|</span> stu   <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>       <span class="hljs-operator">|</span> const <span class="hljs-operator">|</span> <span class="hljs-keyword">PRIMARY</span>       <span class="hljs-operator">|</span> <span class="hljs-keyword">PRIMARY</span> <span class="hljs-operator">|</span> <span class="hljs-number">4</span>       <span class="hljs-operator">|</span> const <span class="hljs-operator">|</span>    <span class="hljs-number">1</span> <span class="hljs-operator">|</span>   <span class="hljs-number">100.00</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>  <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="hljs-number">1</span> <span class="hljs-type">row</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span>, <span class="hljs-number">1</span> warning (<span class="hljs-number">0.00</span> sec)<br><br>explain <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> hellodb.students <span class="hljs-keyword">where</span> age<span class="hljs-operator">=</span><span class="hljs-number">22</span>;<br>[hellodb]<span class="hljs-operator">&gt;</span>explain <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> hellodb.stu <span class="hljs-keyword">where</span> age<span class="hljs-operator">=</span><span class="hljs-number">22</span>;<br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+</span><br><span class="hljs-operator">|</span> id <span class="hljs-operator">|</span> select_type <span class="hljs-operator">|</span> <span class="hljs-keyword">table</span> <span class="hljs-operator">|</span> partitions <span class="hljs-operator">|</span> type <span class="hljs-operator">|</span> possible_keys <span class="hljs-operator">|</span> key  <span class="hljs-operator">|</span> key_len <span class="hljs-operator">|</span> <span class="hljs-keyword">ref</span>  <span class="hljs-operator">|</span> <span class="hljs-keyword">rows</span> <span class="hljs-operator">|</span> filtered <span class="hljs-operator">|</span> Extra       <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">1</span> <span class="hljs-operator">|</span> SIMPLE      <span class="hljs-operator">|</span> stu   <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>       <span class="hljs-operator">|</span> <span class="hljs-keyword">ALL</span>  <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>          <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>    <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span> <span class="hljs-operator">|</span>   <span class="hljs-number">25</span> <span class="hljs-operator">|</span>    <span class="hljs-number">10.00</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">Using</span> <span class="hljs-keyword">where</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+</span><br><span class="hljs-number">1</span> <span class="hljs-type">row</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span>, <span class="hljs-number">1</span> warning (<span class="hljs-number">0.01</span> sec)<br><br><span class="hljs-keyword">show</span> profiles; <span class="hljs-comment">--可以查看sql语句的执行速度</span><br></code></pre></td></tr></table></figure>
+
+<p>索引的优势：加速表的查询，不用遍历整张表，对某个字段加了索引，加快查询</p>
+<p>索引的劣势：如果表数据经常更新（insert、update等），不建议用索引，因为需要时常更新索引，占用一定的库性能；而且索引的磁盘文件.idx也会占用一定的磁盘空间</p>
+<p>特殊查询：只能查询左前缀相同的，按照比如订单号都是2022开头的，按这个次序来排序</p>
+<h3 id="10万条记录表创建索引优化查询速度"><a href="#10万条记录表创建索引优化查询速度" class="headerlink" title="10万条记录表创建索引优化查询速度"></a>10万条记录表创建索引优化查询速度</h3><p>大表尽量避免做全表扫描，之前由存储过程生成的10w条记录的表testlog</p>
+<p>存储过程：自动化的插入、更新同一张表的数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs sql">##用现有的存储过程<br><span class="hljs-keyword">call</span> sp_testlog;<br><br>##普通查询，使用limit限制从第三行开始，显示<span class="hljs-number">5</span>行<br>[hellodb]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> testlog limit <span class="hljs-number">3</span>,<span class="hljs-number">5</span>;<br><span class="hljs-operator">+</span><span class="hljs-comment">----+-----------+--------+</span><br><span class="hljs-operator">|</span> id <span class="hljs-operator">|</span> name      <span class="hljs-operator">|</span> salary <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-----------+--------+</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">4</span> <span class="hljs-operator">|</span> wang65321 <span class="hljs-operator">|</span> <span class="hljs-number">323142</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">5</span> <span class="hljs-operator">|</span> wang65606 <span class="hljs-operator">|</span> <span class="hljs-number">310887</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">6</span> <span class="hljs-operator">|</span> wang58624 <span class="hljs-operator">|</span> <span class="hljs-number">998574</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">7</span> <span class="hljs-operator">|</span> wang23413 <span class="hljs-operator">|</span> <span class="hljs-number">174936</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">8</span> <span class="hljs-operator">|</span> wang17228 <span class="hljs-operator">|</span> <span class="hljs-number">336622</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-----------+--------+</span><br><span class="hljs-number">5</span> <span class="hljs-keyword">rows</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.03</span> sec)<br><br><br>##加入<span class="hljs-keyword">where</span>条件<br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> testlog <span class="hljs-keyword">where</span> salary<span class="hljs-operator">=</span><span class="hljs-number">489141</span>; <br>explain <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> testlog <span class="hljs-keyword">where</span> salary<span class="hljs-operator">=</span><span class="hljs-number">489141</span>;<br><br>##创建salary的索引<br><span class="hljs-keyword">create</span> index idx_salary <span class="hljs-keyword">on</span> testlog(salary);<br><br>##查看<span class="hljs-keyword">sql</span>语句的执行情况，可以看到以索引来查询比没有索引的速度快了将近<span class="hljs-number">20</span>倍<br><span class="hljs-keyword">set</span> profiling<span class="hljs-operator">=</span><span class="hljs-keyword">ON</span>;<br><span class="hljs-keyword">show</span> profiles;<br><span class="hljs-keyword">show</span> profiles <span class="hljs-keyword">for</span> query ID;<br><br>##<span class="hljs-keyword">show</span> profiles：查看<span class="hljs-keyword">sql</span>语句的执行速度<br>遍历<span class="hljs-number">100</span>万条记录查询出一个salary的值，使用索引是<span class="hljs-number">0.0003</span>s，不使用索引是<span class="hljs-number">0.01</span>s，速度有很大的差别了<br>(root<span class="hljs-variable">@localhost</span>) [hellodb]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> profiles;<br><span class="hljs-operator">+</span><span class="hljs-comment">----------+------------+-------------------------------------------+</span><br><span class="hljs-operator">|</span> Query_ID <span class="hljs-operator">|</span> Duration   <span class="hljs-operator">|</span> Query                                     <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----------+------------+-------------------------------------------+</span><br><span class="hljs-operator">|</span>        <span class="hljs-number">1</span> <span class="hljs-operator">|</span> <span class="hljs-number">0.00030300</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> testlog <span class="hljs-keyword">where</span> salary<span class="hljs-operator">=</span><span class="hljs-number">489141</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span>        <span class="hljs-number">2</span> <span class="hljs-operator">|</span> <span class="hljs-number">0.00007425</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">drop</span> index idx_salary <span class="hljs-keyword">from</span> testlog        <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span>        <span class="hljs-number">3</span> <span class="hljs-operator">|</span> <span class="hljs-number">0.00987600</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">drop</span> index idx_salary <span class="hljs-keyword">on</span> testlog          <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span>        <span class="hljs-number">4</span> <span class="hljs-operator">|</span> <span class="hljs-number">0.01724175</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> testlog <span class="hljs-keyword">where</span> salary<span class="hljs-operator">=</span><span class="hljs-number">489141</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----------+------------+-------------------------------------------+</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="10-mysql安全加固？"><a href="#10-mysql安全加固？" class="headerlink" title="10.mysql安全加固？"></a>10.mysql安全加固？</h1><p>在MySQL 8.0以前的版本，一般都会使用mysql_secure_installation这个脚本，这个脚本的执行方式在于MySQL客户端的执行命令</p>
+<p><img src="2792175-20220912180417761-1883192853.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs sql">mysql_secure_installation<br><br>##执行步骤<br><span class="hljs-number">1.</span>输入现有root用户的密码，可以到安装MySQL的日志里面找到temporary密码<br>grep temporary mysql.log<br><span class="hljs-number">2.</span>重置MySQL密码<br><span class="hljs-number">3.</span>删除匿名用户<br><span class="hljs-number">4.</span>删除test库(<span class="hljs-number">8.0</span>后没有test库了)<br><span class="hljs-number">5.</span>done<br></code></pre></td></tr></table></figure>
+
+<h2 id="mysql8-0的密码策略-密码验证组件"><a href="#mysql8-0的密码策略-密码验证组件" class="headerlink" title="mysql8.0的密码策略+密码验证组件"></a>mysql8.0的密码策略+密码验证组件</h2><p>可以查看user表的password plugin插件，以及MySQL自带的密码验证组件validate_password component，这个密码验证组件在安装MySQL的时候默认开启</p>
+<p>使用caching_sha2_password 这个密码插件的话，需要遵循MySQL8.0的新的密码特性，比较复杂</p>
+<p>show variables like ‘default_authentication_plugin%’;：默认的MySQL身份插件</p>
+<p>—&gt;在生产中可以考虑密码策略，需要更高的强度</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs sql">查看密码管理策略<br><br>[hellodb]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> variables <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%caching_sha2_password%&#x27;</span>;<br><span class="hljs-operator">+</span><span class="hljs-comment">----------------------------------------------+-----------------+</span><br><span class="hljs-operator">|</span> Variable_name                                <span class="hljs-operator">|</span> <span class="hljs-keyword">Value</span>           <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----------------------------------------------+-----------------+</span><br><span class="hljs-operator">|</span> caching_sha2_password_auto_generate_rsa_keys <span class="hljs-operator">|</span> <span class="hljs-keyword">ON</span>              <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> caching_sha2_password_digest_rounds          <span class="hljs-operator">|</span> <span class="hljs-number">5000</span>            <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> caching_sha2_password_private_key_path       <span class="hljs-operator">|</span> private_key.pem <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> caching_sha2_password_public_key_path        <span class="hljs-operator">|</span> public_key.pem  <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----------------------------------------------+-----------------+</span><br><span class="hljs-number">4</span> <span class="hljs-keyword">rows</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br><br>##查看密码插件<br>[hellodb]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">select</span> <span class="hljs-keyword">user</span>,host,plugin <span class="hljs-keyword">from</span> mysql.user;        <br><span class="hljs-operator">+</span><span class="hljs-comment">------------------+-----------+-----------------------+</span><br><span class="hljs-operator">|</span> <span class="hljs-keyword">user</span>             <span class="hljs-operator">|</span> host      <span class="hljs-operator">|</span> plugin                <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">------------------+-----------+-----------------------+</span><br><span class="hljs-operator">|</span> root             <span class="hljs-operator">|</span> <span class="hljs-operator">%</span>         <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> wp               <span class="hljs-operator">|</span> <span class="hljs-operator">%</span>         <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> catyer           <span class="hljs-operator">|</span> <span class="hljs-number">10.0</span><span class="hljs-number">.0</span>.<span class="hljs-operator">%</span>  <span class="hljs-operator">|</span> mysql_native_password <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> mysql.infoschema <span class="hljs-operator">|</span> localhost <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> mysql.session    <span class="hljs-operator">|</span> localhost <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> mysql.sys        <span class="hljs-operator">|</span> localhost <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> root             <span class="hljs-operator">|</span> localhost <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> wpuser           <span class="hljs-operator">|</span> localhost <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">------------------+-----------+-----------------------+</span><br><span class="hljs-number">8</span> <span class="hljs-keyword">rows</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br><br>[hellodb]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">alter</span> <span class="hljs-keyword">user</span> root@<span class="hljs-string">&#x27;%&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123&#x27;</span>;<br>ERROR <span class="hljs-number">1819</span> (HY000): Your password does <span class="hljs-keyword">not</span> satisfy the <span class="hljs-keyword">current</span> policy requirements<br><br><span class="hljs-operator">/</span><span class="hljs-operator">/</span>需要加上<span class="hljs-keyword">with</span> mysql_native_password<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">user</span> root@<span class="hljs-string">&#x27;%&#x27;</span> identified <span class="hljs-keyword">with</span> mysql_native_password <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123&#x27;</span>;<br><br>[hellodb]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> variables <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;default_authentication_plugin%&#x27;</span>;<br><span class="hljs-operator">+</span><span class="hljs-comment">-------------------------------+-----------------------+</span><br><span class="hljs-operator">|</span> Variable_name                 <span class="hljs-operator">|</span> <span class="hljs-keyword">Value</span>                 <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">-------------------------------+-----------------------+</span><br><span class="hljs-operator">|</span> default_authentication_plugin <span class="hljs-operator">|</span> caching_sha2_password <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">-------------------------------+-----------------------+</span><br><span class="hljs-number">1</span> <span class="hljs-type">row</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br></code></pre></td></tr></table></figure>
+
+<h2 id="MySQL密码验证组件：validate-password-component"><a href="#MySQL密码验证组件：validate-password-component" class="headerlink" title="MySQL密码验证组件：validate_password component"></a>MySQL密码验证组件：validate_password component</h2><p>指定复杂的密码策略：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zy_1995/article/details/102706728">https://blog.csdn.net/zy_1995/article/details/102706728</a></p>
+<p>如果不想要这个密码策略可以删除这个组件，卸载组件，参考官方文档可以删除</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs sql">[(<span class="hljs-keyword">none</span>)]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> variables <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;validate_password%&#x27;</span>;<br><span class="hljs-keyword">Empty</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br><span class="hljs-operator">+</span><span class="hljs-comment">--------------------------------------+--------+</span><br><span class="hljs-operator">|</span> Variable_name                        <span class="hljs-operator">|</span> <span class="hljs-keyword">Value</span>  <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">--------------------------------------+--------+</span><br><span class="hljs-operator">|</span> validate_password.check_user_name    <span class="hljs-operator">|</span> <span class="hljs-keyword">ON</span>     <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> validate_password.dictionary_file    <span class="hljs-operator">|</span>        <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> validate_password.length             <span class="hljs-operator">|</span> <span class="hljs-number">8</span>      <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> validate_password.mixed_case_count   <span class="hljs-operator">|</span> <span class="hljs-number">1</span>      <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> validate_password.number_count       <span class="hljs-operator">|</span> <span class="hljs-number">1</span>      <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> validate_password.policy             <span class="hljs-operator">|</span> MEDIUM <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> validate_password.special_char_count <span class="hljs-operator">|</span> <span class="hljs-number">1</span>      <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">--------------------------------------+--------+</span><br><span class="hljs-number">7</span> <span class="hljs-keyword">rows</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br><br>##删除组件<br>UNINSTALL COMPONENT <span class="hljs-string">&#x27;file://component_validate_password&#x27;</span>;<br>##安装组件<br>INSTALL COMPONENT <span class="hljs-string">&#x27;file://component_validate_password&#x27;</span>;<br><br>[(<span class="hljs-keyword">none</span>)]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> variables <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;validate_password%&#x27;</span>;<br><span class="hljs-keyword">Empty</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec<br>           <br>##可以使用简单密码策略了           <br>[(<span class="hljs-keyword">none</span>)]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">alter</span> <span class="hljs-keyword">user</span> root@<span class="hljs-string">&#x27;%&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123&#x27;</span>;<br>Query OK, <span class="hljs-number">0</span> <span class="hljs-keyword">rows</span> affected (<span class="hljs-number">0.01</span> sec)<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改MySQL的密码策略plugin"><a href="#修改MySQL的密码策略plugin" class="headerlink" title="修改MySQL的密码策略plugin"></a>修改MySQL的密码策略plugin</h2><p>1.可以在/etc/my.cnf内指定密码策略，重启mysqld服务生效</p>
+<p>2.在修改某个user@’host’的时候，加上with mysql_native_password</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql">vim <span class="hljs-operator">/</span>etc<span class="hljs-operator">/</span>my.cnf<br>default_authentication_plugin<span class="hljs-operator">=</span>mysql_native_password<br>systemctl restart mysqld<br><br>##成功完成<br>[(<span class="hljs-keyword">none</span>)]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> variables <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;default_authentication_plugin%&#x27;</span>;<br><span class="hljs-operator">+</span><span class="hljs-comment">-------------------------------+-----------------------+</span><br><span class="hljs-operator">|</span> Variable_name                 <span class="hljs-operator">|</span> <span class="hljs-keyword">Value</span>                 <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">-------------------------------+-----------------------+</span><br><span class="hljs-operator">|</span> default_authentication_plugin <span class="hljs-operator">|</span> mysql_native_password <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">-------------------------------+-----------------------+</span><br><span class="hljs-number">1</span> <span class="hljs-type">row</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.15</span> sec)<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%AC%AC%E5%85%AD%E5%91%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第六周</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/27/%E7%94%A8ChatGPT%E6%90%AD%E5%BB%BA%E4%BB%A3%E7%A0%81%E7%9F%A5%E8%AF%86%E5%BA%93/">
+                        <span class="hidden-mobile">用ChatGPT搭建代码知识库</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

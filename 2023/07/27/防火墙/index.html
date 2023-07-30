@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是防火墙？ 防火墙是一种监视网络流量并检测潜在威胁的安全设备或程序，作为一道保护屏障，它只允许非威胁性流量进入，阻止危险流量进入。 防火墙是client-server模型中网络安全的基础之一，但它们容易受到以下方面的攻击:  社会工程攻击（例如，有人窃取密码并进行欺诈）。 内部威胁（例如，内网中的某人故意更改防火墙设置）。 人为错误（例如，员工忘记打开防火墙或忽略更新通知）。    防火墙是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="防火墙">
+<meta property="og:url" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="什么是防火墙？ 防火墙是一种监视网络流量并检测潜在威胁的安全设备或程序，作为一道保护屏障，它只允许非威胁性流量进入，阻止危险流量进入。 防火墙是client-server模型中网络安全的基础之一，但它们容易受到以下方面的攻击:  社会工程攻击（例如，有人窃取密码并进行欺诈）。 内部威胁（例如，内网中的某人故意更改防火墙设置）。 人为错误（例如，员工忘记打开防火墙或忽略更新通知）。    防火墙是">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/%E9%98%B2%E7%81%AB%E5%A2%99/640.png">
+<meta property="og:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/640-1690455930828-9.png">
+<meta property="og:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/640-1690455925626-3.png">
+<meta property="og:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/640-1690455928616-6.png">
+<meta property="og:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/640-1690455948080-12.png">
+<meta property="og:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/640-1690455952565-15.png">
+<meta property="og:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/640-1690455954842-18.png">
+<meta property="article:published_time" content="2023-07-27T19:04:28.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.309Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/27/%E9%98%B2%E7%81%AB%E5%A2%99/%E9%98%B2%E7%81%AB%E5%A2%99/640.png">
+  
+  
+  <title>防火墙 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="防火墙">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-27 19:04" pubdate>
+        July 27, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      30 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">防火墙</h1>
+            
+            <div class="markdown-body">
+              <p><img src="%E9%98%B2%E7%81%AB%E5%A2%99/640.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>什么是防火墙？</strong></p>
+<p>防火墙是一种监视网络流量并检测潜在威胁的安全设备或程序，作为一道保护屏障，它只允许非威胁性流量进入，阻止危险流量进入。</p>
+<p>防火墙是client-server模型中网络安全的基础之一，但它们容易受到以下方面的攻击:</p>
+<ul>
+<li>社会工程攻击（例如，有人窃取密码并进行欺诈）。</li>
+<li>内部威胁（例如，内网中的某人故意更改防火墙设置）。</li>
+<li>人为错误（例如，员工忘记打开防火墙或忽略更新通知）。</li>
+</ul>
+<p><img src="640-1690455930828-9.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="640-1690455925626-3.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>防火墙是如何工作的？</strong></p>
+<p>企业在网络中设置内联防火墙，作为外部源和受保护系统之间的边界。管理员创建阻塞点，防火墙在阻塞点检查所有进出网络的数据包，包含:</p>
+<ul>
+<li><p>有效负载（实际内容）。</p>
+</li>
+<li><p>标头（有关数据的信息，例如谁发送了数据，发给了谁）。</p>
+</li>
+</ul>
+<p>防火墙根据预设规则分析数据包，以区分良性和恶意流量。这些规则集规定了防火墙如何检查以下内容：</p>
+<ul>
+<li>源IP和目的IP 地址。</li>
+<li>有效负载中的内容。</li>
+<li>数据包协议（例如，连接是否使用 TCP/IP 协议）。</li>
+<li>应用协议（HTTP、Telnet、FTP、DNS、SSH 等）。</li>
+<li>表明特定网络攻击的数据模式。</li>
+</ul>
+<p>防火墙阻止所有不符合规则的数据包，并将安全数据包路由到预期的接收者。当防火墙阻止流量进入网络时，有两种选择：</p>
+<ul>
+<li>默默地放弃请求。</li>
+<li>向发件人发送error信息。</li>
+</ul>
+<p>这两种选择都可以将危险流量排除在网络之外。通常，安全团队更喜欢默默放弃请求以限制信息，以防潜在的黑客测试防火墙的漏洞。</p>
+<p><img src="640-1690455928616-6.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>基于部署方式的防火墙类型</strong></p>
+<p>根据部署方式，可以将防火墙分为三种类型：硬件防火墙、软件防火墙和基于云的防火墙。</p>
+<p><img src="640-1690455948080-12.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>软件防火墙</strong></p>
+<p>软件防火墙（或主机防火墙）直接安装在主机设备上。这种类型的防火墙只保护一台机器（网络终端、台式机、笔记本电脑、服务器等），因此管理员必须在他们想要保护的每台设备上安装一个版本的软件。</p>
+<p>由于管理员将软件防火墙附加到特定设备上，因此这些防火墙不可避免地会占用一些系统 RAM 和 CPU，这在某些情况下是一个问题。</p>
+<p>软件防火墙的优点：</p>
+<ul>
+<li>为指定设备提供出色的保护。</li>
+<li>将各个网络端点彼此隔离。</li>
+<li>高精度的安全性，管理员可以完全控制允许的程序。</li>
+<li>随时可用。</li>
+</ul>
+<p>软件防火墙的缺点：</p>
+<ul>
+<li><p>消耗设备的 CPU、RAM 和存储空间。</p>
+</li>
+<li><p>需要为每个主机设备配置。</p>
+</li>
+<li><p>日常维护既困难又耗时。</p>
+</li>
+<li><p>并非所有设备都与每个防火墙兼容，因此可能必须在同一网络中使用不同的解决方案。</p>
+</li>
+</ul>
+<p><strong>硬件防火墙</strong></p>
+<p>硬件防火墙（或设备防火墙）是一个单独的硬件，用于过滤进出网络的流量。与软件防火墙不同，这些独立设备有自己的资源，不会占用主机设备的任何 CPU 或 RAM。</p>
+<p>硬件防火墙相对更适合大型企业，中小型企业可能更多地会选择在每台主机上安装软件防火墙的方式，硬件防火墙对于拥有多个包含大量计算机的子网的大型组织来说是一个极好的选择。</p>
+<p>硬件防火墙的优点：</p>
+<ul>
+<li>使用一种解决方案保护多台设备。</li>
+<li>顶级边界安全性，因为恶意流量永远不会到达主机设备。</li>
+<li>不消耗主机设备资源。</li>
+<li>管理员只需为整个网络管理一个防火墙。</li>
+</ul>
+<p>硬件防火墙的缺点：</p>
+<ul>
+<li><p>比软件防火墙更昂贵。</p>
+</li>
+<li><p>内部威胁是一个相当大的弱点。</p>
+</li>
+<li><p>与基于软件的防火墙相比，配置和管理需要更多的技能。</p>
+</li>
+</ul>
+<p><strong>基于云的防火墙</strong></p>
+<p>许多供应商提供基于云的防火墙，它们通过 Internet 按需提供。这些服务也称为防火墙即服务（FaaS），以IaaS 或 PaaS的形式运行。</p>
+<p>基于云的防火墙非常适用于：</p>
+<ul>
+<li>高度分散的业务。</li>
+<li>在安全资源方面存在缺口的团队。</li>
+<li>不具备必要的内部专业知识的公司。</li>
+</ul>
+<p>与基于硬件的解决方案一样，云防火墙在边界安全方面表现出色，同时也可以在每个主机的基础上设置这些系统。</p>
+<p>云防火墙的优点：</p>
+<ul>
+<li>服务提供商处理所有管理任务（安装、部署、修补、故障排除等）。</li>
+<li>用户可以自由扩展云资源以满足流量负载。</li>
+<li>无需任何内部硬件。</li>
+<li>高可用性。</li>
+</ul>
+<p>云防火墙的缺点：</p>
+<ul>
+<li>供应商究竟如何运行防火墙缺乏透明度。</li>
+<li>与其他基于云的服务一样，这些防火墙很难迁移到新的提供商。</li>
+<li>流量流经第三方可能会增加延迟和隐私问题。</li>
+<li>由于高昂的运营成本，从长远来看是比较贵的。</li>
+</ul>
+<p><img src="640-1690455952565-15.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>基于操作方法的防火墙类型</strong></p>
+<p>下面是基于功能和 OSI 模型的五种类型的防火墙。</p>
+<p><img src="640-1690455954842-18.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>包过滤防火墙</strong></p>
+<p>包过滤防火墙充当网络层的检查点，并将每个数据包的标头信息与一组预先建立的标准进行比较。这些防火墙检查以下基于标头的信息：</p>
+<ul>
+<li>目的地址和源 IP 地址。</li>
+<li>数据包类型。</li>
+<li>端口号。</li>
+<li>网络协议。</li>
+</ul>
+<p>这些类型的防火墙仅分析表面的细节，不会打开数据包来检查其有效负载。包过滤防火墙在不考虑现有流量的情况下真空检查每个数据包。 包过滤防火墙非常适合只需要基本安全功能来抵御既定威胁的小型组织。</p>
+<p>包过滤防火墙的优点：</p>
+<ul>
+<li>低成本。</li>
+<li>快速包过滤和处理。</li>
+<li>擅长筛选内部部门之间的流量。</li>
+<li>低资源消耗。</li>
+<li>对网络速度和最终用户体验的影响最小。</li>
+<li>多层防火墙策略中出色的第一道防线。</li>
+</ul>
+<p>包过滤防火墙的缺点：</p>
+<ul>
+<li><p>不检查数据包有效负载（实际数据）。</p>
+</li>
+<li><p>对于有经验的黑客来说很容易绕过。</p>
+</li>
+<li><p>无法在应用层进行过滤。</p>
+</li>
+<li><p>容易受到 IP 欺骗攻击，因为它单独处理每个数据包。</p>
+</li>
+<li><p>没有用户身份验证或日志记录功能。    </p>
+</li>
+<li><p>访问控制列表的设置和管理具有挑战性。</p>
+</li>
+</ul>
+<p><strong>电路级网关</strong></p>
+<p>电路级网关在 OSI 会话层运行，并监视本地和远程主机之间的TCP（传输控制协议）握手。其可以在不消耗大量资源的情况下快速批准或拒绝流量。但是，这些系统不检查数据包，因此如果 TCP 握手通过，即使是感染了恶意软件的请求也可以访问。</p>
+<p>电路级网关的优点：</p>
+<ul>
+<li>仅处理请求的事务，并拒绝所有其他流量。</li>
+<li>易于设置和管理。</li>
+<li>资源和成本效益。</li>
+<li>强大的地址暴露保护。</li>
+<li>对最终用户体验的影响最小。</li>
+</ul>
+<p>电路级网关的缺点：</p>
+<ul>
+<li><p>不是一个独立的解决方案，因为没有内容过滤。</p>
+</li>
+<li><p>通常需要对软件和网络协议进行调整。</p>
+</li>
+</ul>
+<p><strong>状态检测防火墙</strong></p>
+<p>状态检测防火墙（或动态包过滤防火墙）在网络层和传输层监控传入和传出的数据包。这类防火墙结合了数据包检测和 TCP 握手验证。</p>
+<p>状态检测防火墙维护一个表数据库，该数据库跟踪所有打开的连接使系统能够检查现有的流量流。该数据库存储所有与关键数据包相关的信息，包括：</p>
+<ul>
+<li>源IP。</li>
+<li>源端口。</li>
+<li>目的 IP。</li>
+<li>每个连接的目标端口。</li>
+</ul>
+<p>当一个新数据包到达时，防火墙检查有效连接表。检测过的数据包无需进一步分析即可通过，而防火墙会根据预设规则集评估不匹配的流量。</p>
+<p>状态检测防火墙的优点：</p>
+<ul>
+<li>过滤流量时会自动通过以前检查过的数据包。</li>
+<li>在阻止利用协议缺陷的攻击方面表现出色。</li>
+<li>无需打开大量端口来让流量进出，这可以缩小攻击面。</li>
+<li>详细的日志记录功能，有助于数字取证。</li>
+<li>减少对端口扫描器的暴露。</li>
+</ul>
+<p>状态检测防火墙的缺点：</p>
+<ul>
+<li><p>比包过滤防火墙更昂贵。</p>
+</li>
+<li><p>需要高水平的技能才能正确设置。</p>
+</li>
+<li><p>通常会影响性能并导致网络延迟。</p>
+</li>
+<li><p>不支持验证欺骗流量源的身份验证。</p>
+</li>
+<li><p>容易受到利用预先建立连接的 TCP Flood攻击。</p>
+</li>
+</ul>
+<p><strong>代理防火墙</strong></p>
+<p>代理防火墙（或应用级网关）充当内部和外部系统之间的中介。这类防火墙会在客户端请求发送到主机之前对其进行屏蔽，从而保护网络。</p>
+<p>代理防火墙在应用层运行，具有深度包检测 (DPI)功能，可以检查传入流量的有效负载和标头。</p>
+<p>当客户端发送访问网络的请求时，消息首先到达代理服务器。</p>
+<p>防火墙会检查以下内容：</p>
+<ul>
+<li>客户端和防火墙后面的设备之间的先前通信（如果有的话）。</li>
+<li>标头信息。</li>
+<li>内容本身。</li>
+</ul>
+<p>然后代理屏蔽该请求并将消息转发到Web 服务器。此过程隐藏了客户端的 ID。服务器响应并将请求的数据发送给代理，之后防火墙将信息传递给原始客户端。</p>
+<p>代理防火墙是企业保护 Web应用免受恶意用户攻击的首选。</p>
+<p>代理防火墙的优点：</p>
+<ul>
+<li>DPI检查数据包标头和有效负载 。</li>
+<li>在客户端和网络之间添加了一个额外的隔离层。</li>
+<li>对潜在威胁行为者隐藏内部 IP 地址。</li>
+<li>检测并阻止网络层不可见的攻击。</li>
+<li>对网络流量进行细粒度的安全控制。</li>
+<li>解除地理位置限制。</li>
+</ul>
+<p>代理防火墙的缺点：</p>
+<ul>
+<li><p>由于彻底的数据包检查和额外的通信步骤，会导致延迟增加。</p>
+</li>
+<li><p>由于处理开销高，不如其他类型的防火墙成本低。</p>
+</li>
+<li><p>设置和管理具有挑战性。</p>
+</li>
+<li><p>不兼容所有网络协议。</p>
+</li>
+</ul>
+<p><strong>下一代防火墙</strong></p>
+<p>下一代防火墙(NGFW)是将其他防火墙的多种功能集成在一起的安全设备或程序。这样的系统提供：</p>
+<ul>
+<li>分析流量内容的深度数据包检测（DPI）。</li>
+<li>TCP 握手检查。</li>
+<li>表层数据包检测。</li>
+</ul>
+<p>下一代防火墙还包括额外的网络安全措施，例如：</p>
+<ul>
+<li>IDS 和 IPS。</li>
+<li>恶意软件扫描和过滤。</li>
+<li>高级威胁情报（模式匹配、基于协议的检测、基于异常的检测等）</li>
+<li>防病毒程序。</li>
+<li>网络地址转换 (NAT)。</li>
+<li>服务质量 (QoS)功能。</li>
+<li>SSH检查。</li>
+</ul>
+<p>NGFW 是医疗保健或金融等受到严格监管的行业的常见选择。</p>
+<p>下一代防火墙的优点：</p>
+<ul>
+<li>将传统防火墙功能与高级网络安全功能相结合。</li>
+<li>检查从数据链路层到应用层的网络流量。</li>
+<li>日志记录功能。</li>
+</ul>
+<p>下一代防火墙的缺点：</p>
+<ul>
+<li>比其他防火墙更昂贵。</li>
+<li>存在单点故障。</li>
+<li>部署时间缓慢。</li>
+<li>需要高度的专业知识才能设置和运行。</li>
+<li>影响网络性能。</li>
+</ul>
+<p>任何一个保护层，无论多么强大，都不足以完全保护你的业务。企业往往会在同一个网络中设置多个防火墙，选择理想的防火墙首先要了解企业网络的架构和功能，确定这些不同类型的防火墙和防火墙策略哪个最适合自己。通常情况下，企业网络应该设置多层防火墙，既在外围保护又在网络上分隔不同的资产，从而使你的网络更难破解。 </p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/27/%E9%85%8D%E7%BD%AEiptables%E9%98%B2%E7%81%AB%E5%A2%99/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">配置iptables防火墙</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/">
+                        <span class="hidden-mobile">linux基础总结</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

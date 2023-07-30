@@ -1,0 +1,577 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="文档目录： 一、Liunx内置命令概述 二、LIunx常用内置命令实例 1、help查看内置命令帮助2、查看内置命令使用方法3、”:” 占位符4、 “.” 与source5、条件测试”[“和test6、命令别名alias和unalias7、后台任务相关bg&#x2F;fg&#x2F;jobs8、break跳出循环9、continue进入下一次循环10、eval将参数当作命令执行11、exit退出12、export查看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统常用内置命令">
+<meta property="og:url" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="文档目录： 一、Liunx内置命令概述 二、LIunx常用内置命令实例 1、help查看内置命令帮助2、查看内置命令使用方法3、”:” 占位符4、 “.” 与source5、条件测试”[“和test6、命令别名alias和unalias7、后台任务相关bg&#x2F;fg&#x2F;jobs8、break跳出循环9、continue进入下一次循环10、eval将参数当作命令执行11、exit退出12、export查看">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661822942-3.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661824933-6.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661827624-9.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661829301-12.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661830900-15.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661833260-18.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661835275-21.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661837304-24.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661838923-27.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661840816-30.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661843106-33.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661844654-36.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661848857-39.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661850700-42.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661852691-45.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661854142-48.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661855723-51.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661857570-54.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661859739-57.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661863961-60.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661868901-63.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661870966-66.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661873712-69.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661876759-72.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661879104-75.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661881295-78.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661883907-81.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661886517-84.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661888596-87.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661890798-90.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661892921-93.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661895575-96.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661897692-99.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661900079-102.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640-1689661903780-105.png">
+<meta property="article:published_time" content="2023-07-18T14:29:36.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.934Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/640.png">
+  
+  
+  <title>Linux系统常用内置命令 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux系统常用内置命令">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-18 14:29" pubdate>
+        July 18, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      18 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux系统常用内置命令</h1>
+            
+            <div class="markdown-body">
+              <p>文档目录：</p>
+<p>一、Liunx内置命令概述</p>
+<p>二、LIunx常用内置命令实例</p>
+<p>1、help查看内置命令帮助<br>2、查看内置命令使用方法<br>3、”:” 占位符<br>4、 “.” 与source<br>5、条件测试”[“和test<br>6、命令别名alias和unalias<br>7、后台任务相关bg/fg/jobs<br>8、break跳出循环<br>9、continue进入下一次循环<br>10、eval将参数当作命令执行<br>11、exit退出<br>12、export查看或设置全局变量<br>13、history查看命令历史记录<br>14、read交互式赋值变量<br>15、type判断命令类型<br>16、umlit修改系统资源使用限制<br>17、unset清空变量</p>
+<p><strong>一、Liunx内置命令概述</strong></p>
+<p>内置命令在BASH解释器中，天生与其他普通的命令不同，系统启动成功时就在内存中。</p>
+<p>执行效率远远高于普通命令。</p>
+<p>而特殊的命令如：echo、pwd、kill等，既有内置命令版本，也有普通命令版本，用法一样，我们能在磁盘上找到他们的程序文件/bin/echo、/bin/pwd、/bin/kill，一般情况下，优先使用内置命令，除非显示的执行/bin/echo这种全路径命令</p>
+<p><strong>二、LIunx常用内置命令实例</strong></p>
+<p><strong>1、help查看内置命令帮助</strong></p>
+<p><img src="640.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>2、查看内置命令使用方法</strong></p>
+<p>help help</p>
+<p><img src="640-1689661822942-3.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> help cd</p>
+<p><img src="640-1689661824933-6.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>3、”:” 占位符</strong></p>
+<p>shell脚本中使用：作为占位符，防止报错</p>
+<p><strong>4、 “.” 与source</strong></p>
+<p> “.” 与source常用于加载或执行shell脚本</p>
+<p>第一种执行方式：bash scrpt-name 或 sh scrpt-name执行方式：当没有可执行权限时经常使用的方法,此外，脚本没有解释器时也需要用到。</p>
+<p>第二种执行方式：source scrpt-name 或 . scrpt-name执行方式：读入或加载指定的shell脚本，然后，依次执行指定的shell脚本中的所有脚本，可传递值到父脚本shell</p>
+<p><strong>5、条件测试”[“和test</strong></p>
+<p>[]与test条件控制使用</p>
+<p>test -f file &amp;&amp; echo true || echo false #如果file文件存在并且是普通文件就是真，不存在输出false</p>
+<p>[ -f file ] &amp;&amp; echo 1 || echo 0 #文件存在，返回1</p>
+<p><img src="640-1689661827624-9.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>6、命令别名alias和unalias</strong></p>
+<p>alias #显示系统别名</p>
+<p><img src="640-1689661829301-12.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> alias ens33=’cat /etc/sysconfig/network-scripts/ifcfg-ens33’ #设置ens33别名</p>
+<p><img src="640-1689661830900-15.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> unalias ens33 #删除别名</p>
+<p><img src="640-1689661833260-18.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>7、后台任务相关bg/fg/jobs</strong></p>
+<p>bg：将前台执行任务转入后台，或者将后台暂停的任务运行起来；fg命令和bg命令相反，它是将后台任务调到前台来执行；jobs命令可以用于查看后台任务列表</p>
+<p>jobs #查看任务列表</p>
+<p>bg # bg 1将第一个任务启动</p>
+<p>fg #将后台任务调入前台</p>
+<p><img src="640-1689661835275-21.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>nc -l 12345 &amp; #直接使用&amp;将任务放入后台，并且任务状态是运行的</p>
+<p>kill %1 #快速杀除后台任务</p>
+<p><img src="640-1689661837304-24.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>8、break跳出循环</strong></p>
+<p><img src="640-1689661838923-27.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>9、continue进入下一次循环</strong></p>
+<p><img src="640-1689661840816-30.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>10、eval将参数当作命令执行</strong></p>
+<p>eval echo ‘<code>hostname -I</code>‘ #eval命令，单引号失效了，eval命令可以优先解析或执行单引号内的变量或命令</p>
+<p><img src="640-1689661843106-33.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>11、exit退出</strong></p>
+<p>exit #退出命令行，等价于logout，ctrl+d</p>
+<p><img src="640-1689661844654-36.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 退出脚本</p>
+<p><img src="640-1689661848857-39.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>12、export查看或设置全局变量</strong></p>
+<p><strong>export -p #-p打印所有环境变量<img src="640-1689661850700-42.png" srcset="/img/loading.gif" lazyload alt="图片"></strong></p>
+<p> export MYEVN=7 #设置全局变量</p>
+<p><img src="640-1689661852691-45.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>13、history查看命令历史记录</strong></p>
+<p>history | more #显示所有历史记录</p>
+<p><img src="640-1689661854142-48.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> history 10 #查看最近n条的历史记录</p>
+<p><img src="640-1689661855723-51.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> history -d 1019 #删除指定的历史记录</p>
+<p><img src="640-1689661857570-54.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> history -c #清除所有命令的历史记录</p>
+<p> <img src="640-1689661859739-57.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>14、read交互式赋值变量</strong></p>
+<p>read #等待输入</p>
+<p><img src="640-1689661863961-60.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> read one #存储到$one变量内</p>
+<p><img src="640-1689661868901-63.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> read one two #接多个变量，输入时空格分割</p>
+<p><img src="640-1689661870966-66.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> read -p “请输入你的年龄” age #-p可以定义显示在命令行的提示语句</p>
+<p><img src="640-1689661873712-69.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> read -t 3 -p “请输入你的年龄:” age #-t指定等待超时的秒</p>
+<p><img src="640-1689661876759-72.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> read -s -p “请输入你的银行卡密码:” pass #-s关闭回显</p>
+<p><img src="640-1689661879104-75.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> read -n 3 -p “max=3输入：” num #-n设置输入的最大长度</p>
+<p><img src="640-1689661881295-78.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>15、type判断命令类型</strong></p>
+<p>type ls #显示ls最主要的信息</p>
+<p><img src="640-1689661883907-81.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> type -t ls #精简显示命令类型为别名</p>
+<p><img src="640-1689661886517-84.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> type -a ls #显示所有相关信息</p>
+<p><img src="640-1689661888596-87.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> type cd #显示内置命令类型</p>
+<p><img src="640-1689661890798-90.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>16、umlit修改系统资源使用限制</strong></p>
+<p>ulimit -a #显示当前所有系统资源使用限制</p>
+<p><img src="640-1689661892921-93.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>在上面这些参数中，通常我们关注得比较多:</p>
+<p>open files: 一个进程可打开的最大文件数.</p>
+<p>max user processes: 系统允许创建的最大进程数量.</p>
+<p>通过 ps -efL|grep java |wc -l 查看目前java程序的进程数，如果超过限制需要修改</p>
+<p>ulimit -n #查看打开文件的最大数量</p>
+<p><img src="640-1689661895575-96.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> ulimit -n 65535 #调整，但之当前窗口生效</p>
+<p><img src="640-1689661897692-99.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> echo ‘* - nofile 65535’ &gt;&gt; /etc/security/limits.conf #修改配置永久生效（重新登录窗口）</p>
+<p><img src="640-1689661900079-102.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>17、unset清空变量</strong></p>
+<p>unset MRWHITE MRSLU #将变量值清空</p>
+<p><img src="640-1689661903780-105.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux进程管理命令</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/">
+                        <span class="hidden-mobile">N80第3周作业</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

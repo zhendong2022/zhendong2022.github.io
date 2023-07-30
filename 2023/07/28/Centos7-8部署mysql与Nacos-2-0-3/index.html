@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、Nacos 简介Nacos 致力于帮助您发现、配置和管理微服务。Nacos 提供了一组简单易用的特性集，帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理。Nacos 帮助您更敏捷和容易地构建、交付和管理微服务平台。 Nacos 是构建以“服务”为中心的现代应用架构 (例如微服务范式、云原生范式) 的服务基础设施。 nacos官网：https:&#x2F;&#x2F;nacos.io&#x2F;zh-cn&#x2F;docs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos7.8部署mysql与Nacos-2.0.3">
+<meta property="og:url" content="http://example.com/2023/07/28/Centos7-8%E9%83%A8%E7%BD%B2mysql%E4%B8%8ENacos-2-0-3/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="一、Nacos 简介Nacos 致力于帮助您发现、配置和管理微服务。Nacos 提供了一组简单易用的特性集，帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理。Nacos 帮助您更敏捷和容易地构建、交付和管理微服务平台。 Nacos 是构建以“服务”为中心的现代应用架构 (例如微服务范式、云原生范式) 的服务基础设施。 nacos官网：https:&#x2F;&#x2F;nacos.io&#x2F;zh-cn&#x2F;docs">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/Centos7-8%E9%83%A8%E7%BD%B2mysql%E4%B8%8ENacos-2-0-3/2023071514211223.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Centos7-8%E9%83%A8%E7%BD%B2mysql%E4%B8%8ENacos-2-0-3/2023071514221453.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Centos7-8%E9%83%A8%E7%BD%B2mysql%E4%B8%8ENacos-2-0-3/2023071514262086.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Centos7-8%E9%83%A8%E7%BD%B2mysql%E4%B8%8ENacos-2-0-3/2023071514264170.png">
+<meta property="article:published_time" content="2023-07-28T21:48:37.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.871Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/Centos7-8%E9%83%A8%E7%BD%B2mysql%E4%B8%8ENacos-2-0-3/2023071514211223.png">
+  
+  
+  <title>Centos7.8部署mysql与Nacos-2.0.3 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Centos7.8部署mysql与Nacos-2.0.3">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 21:48" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      68 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Centos7.8部署mysql与Nacos-2.0.3</h1>
+            
+            <div class="markdown-body">
+              <h2 id="一、Nacos-简介"><a href="#一、Nacos-简介" class="headerlink" title="一、Nacos 简介"></a>一、Nacos 简介</h2><p>Nacos 致力于帮助您发现、配置和管理微服务。Nacos 提供了一组简单易用的特性集，帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理。Nacos 帮助您更敏捷和容易地构建、交付和管理微服务平台。 Nacos 是构建以“服务”为中心的现代应用架构 (例如微服务范式、云原生范式) 的服务基础设施。</p>
+<p>nacos官网：<a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/what-is-nacos.html">https://nacos.io/zh-cn/docs/what-is-nacos.html</a></p>
+<h2 id="二、Nacos-安装"><a href="#二、Nacos-安装" class="headerlink" title="二、Nacos 安装"></a>二、Nacos 安装</h2><h3 id="2-1-Nacos-环境依赖"><a href="#2-1-Nacos-环境依赖" class="headerlink" title="2.1 Nacos 环境依赖"></a>2.1 Nacos 环境依赖</h3><p>Nacos 基于 java 开发的，运行依赖于64 bit JDK 1.8+环境。</p>
+<p>前往官网下载JDK: <a target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html">Java Downloads | Oracle</a></p>
+<h3 id="2-2-Nacos-服务端安装"><a href="#2-2-Nacos-服务端安装" class="headerlink" title="2.2 Nacos 服务端安装"></a>2.2 Nacos 服务端安装</h3><p>由于Nacos是开源的，可以从github下载源码编译后安装，也可以直接从github下载官方编译好的安装包进行安装，本文直接使用官方编译好的包进行安装，基于目前官方最新release2.0.3版本。请勿使用2.x以下的版本，之前爆出过漏洞。2.x版本相对于1.x版本，性能也提升了10倍。</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/alibaba/nacos/releases">https://github.com/alibaba/nacos/releases</a><br><img src="2023071514211223.png" srcset="/img/loading.gif" lazyload alt="Centos7.8部署mysql与Nacos-2.0.3 集群保姆级文档_https://www.tiejiang.org_Linux安全运维_第1张"></p>
+<h2 id="三、Nacos-部署"><a href="#三、Nacos-部署" class="headerlink" title="三、Nacos 部署"></a>三、Nacos 部署</h2><h3 id="3-1-集群部署"><a href="#3-1-集群部署" class="headerlink" title="3.1 集群部署"></a>3.1 集群部署</h3><h4 id="3-2-1-集群架构"><a href="#3-2-1-集群架构" class="headerlink" title="3.2.1 集群架构"></a>3.2.1 集群架构</h4><p><img src="2023071514221453.png" srcset="/img/loading.gif" lazyload alt="Centos7.8部署mysql与Nacos-2.0.3 集群保姆级文档_https://www.tiejiang.org_Linux安全运维_第2张"><br>● 高可用 Nginx 集群<br>● Nacos 集群（至少三个实例）<br>● 高可用数据库集群（取代 Nacos 内嵌数据库)</p>
+<h4 id="3-2-2-模拟部署"><a href="#3-2-2-模拟部署" class="headerlink" title="3.2.2 模拟部署"></a>3.2.2 模拟部署</h4><table>
+<thead>
+<tr>
+<th>系统版本</th>
+<th>机器IP</th>
+<th>部署应用版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>centos7.9</td>
+<td>192.168.1.1</td>
+<td>mysql 5.7</td>
+</tr>
+<tr>
+<td>centos7.9</td>
+<td>192.168.1.1</td>
+<td>nacos 2.0.3</td>
+</tr>
+<tr>
+<td>centos7.9</td>
+<td>192.168.1.1</td>
+<td>nacos 2.0.3</td>
+</tr>
+<tr>
+<td>centos7.9</td>
+<td>192.168.1.1</td>
+<td>nacos 2.0.3</td>
+</tr>
+</tbody></table>
+<h2 id="四、搭建步骤"><a href="#四、搭建步骤" class="headerlink" title="四、搭建步骤"></a>四、搭建步骤</h2><h3 id="1、mysql单点部署"><a href="#1、mysql单点部署" class="headerlink" title="1、mysql单点部署"></a>1、mysql单点部署</h3><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">[root@tiejiang.org ~] <span class="hljs-built_in">cd</span> /vdb/<br>[root@tiejiang.org vdb] <span class="hljs-built_in">mkdir</span> src<br>[root@tiejiang.org vdb] wget https://cdn.mysql.com/archives/mysql-5.7/mysql-5.7.37-linux-glibc2.12-x86_64.tar.gz<br>[root@tiejiang.org vdb] yum install libaio -y<br><br>-- 添加mysql用户<br>[root@tiejiang.org vdb] groupadd mysql<br>[root@tiejiang.org vdb] useradd -r -g mysql mysql<br>[root@tiejiang.org vdb] tar zxvf mysql-5.7.37-linux-glibc2.12-x86_64.tar.gz<br>[root@tiejiang.org vdb] <span class="hljs-built_in">mv</span> mysql-5.7.37-linux-glibc2.12-x86_64 /usr/local/mysql<br>[root@tiejiang.org vdb] <span class="hljs-built_in">cd</span> /usr/local/mysql/;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">mkdir</span> /vdb/mysql;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">mkdir</span> /vdb/mysql/data;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">mkdir</span> /vdb/mysql/binlog<br>[root@tiejiang.org mysql] <span class="hljs-built_in">mkdir</span> /vdb/mysql/relaylog;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">mkdir</span> /vdb/mysql/log<br>[root@tiejiang.org mysql] <span class="hljs-built_in">mkdir</span> /vdb/mysql/run<br>[root@tiejiang.org mysql] <span class="hljs-built_in">mkdir</span> /tmp/mysql;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">touch</span> /vdb/mysql/log/mysql.err<br>[root@tiejiang.org mysql] <span class="hljs-built_in">chown</span> -R mysql.mysql /vdb/mysql;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">chown</span> -R mysql.mysql /tmp/mysql;<br><br>[root@tiejiang.org mysql] <span class="hljs-built_in">rm</span> -rf /usr/local/mysql/data;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">ln</span> -s /vdb/mysql/data data;<br>[root@tiejiang.org mysql] <span class="hljs-built_in">cd</span> support-files/;<br>[root@tiejiang.org support-files] <span class="hljs-built_in">cp</span> mysql.server /etc/init.d/mysqld;<br>[root@tiejiang.org support-files] <span class="hljs-built_in">chmod</span> 755 /etc/init.d/mysqld;<br><br><span class="hljs-comment">## 去修改my.conf的配置文件，把下面的conf文件内容放进去。</span><br>[root@tiejiang.org support-files] vim /etc/my.conf<br>      [mysql]<br>      port = 3306<br>      default_character_set = utf8mb4<br>      socket = /vdb/mysql/run/mysql.socket<br><br>      [mysqld]<br>      log_slave_updates = 1<br>      lower_case_table_names=1<br>      <span class="hljs-comment"># disable auto start slave and need to start slave by mual</span><br>      skip_slave_start<br>      <span class="hljs-comment">#read_only = 1</span><br>      <span class="hljs-comment"># charset</span><br>      character_set_server = utf8mb4<br>      <span class="hljs-comment"># server</span><br>      max_connections = 1000<br>      max_connect_errors = 99999<br>      max_allowed_packet = 1000M<br>      net_buffer_length = 16K<br>      skip_name_resolve<br>      skip_external_locking<br>      back_log = 150<br>      query_cache_size = 0<br>      query_cache_type = 0<br>      basedir = /usr/local/mysql<br>      datadir = /vdb/mysql/data<br>      port = 3306<br>      server_id = 12855<br>      socket = /vdb/mysql/run/mysql.socket<br>      pid_file = /vdb/mysql/run/mysql.pid<br>      log_error = /vdb/mysql/log/mysql.err<br>      explicit_defaults_for_timestamp = 1<br><br>      <span class="hljs-comment"># binlog</span><br>      log_bin = mysql-bin<br>      binlog_row_image = full<br>      log_bin_index = /vdb/mysql/data/mysql-bin.index<br>      binlog_format = MIXED<br>      expire_logs_days = 1<br>      sync_binlog = 1000<br><br>      <span class="hljs-comment"># slowlog</span><br>      slow_query_log = 1<br>      slow_query_log_file = /vdb/mysql/log/slow.log<br>      long_query_time = 1<br>      binlog_rows_query_log_events = 1<br><br>      <span class="hljs-comment"># master &amp; relay record method</span><br>      master_info_repository = table<br>      relay_log_info_repository = table<br>      relay_log_recovery = 1<br>      slave_net_timeout = 20<br><br>      <span class="hljs-comment"># aviod to duplicate in the double master</span><br>      <span class="hljs-comment">#auto_increment_increment=2</span><br>      <span class="hljs-comment">#auto_increment_offset=2</span><br><br>      <span class="hljs-comment"># session conn</span><br>      binlog_cache_size = 32M<br>      thread_stack = 512K217<br>      join_buffer_size = 512K<br>      sort_buffer_size = 256K<br>      read_buffer_size = 512K<br>      read_rnd_buffer_size = 256K<br>      tmp_table_size = 64M<br>      max_heap_table_size = 64M<br>      bulk_insert_buffer_size = 1M<br><br>      <span class="hljs-comment"># Global share memory</span><br>      table_definition_cache = 400<br>      table_open_cache = 400<br>      thread_cache_size = 512<br><br>      <span class="hljs-comment"># event</span><br>      event_scheduler = 1<br><br>      <span class="hljs-comment"># innodb</span><br>      innodb_data_home_dir = /vdb/mysql/data<br>      innodb_data_file_path = ibdata1:1000M:autoextend<br>      innodb_file_per_table = 1<br>      innodb_log_group_home_dir = /vdb/mysql/data<br>      innodb_log_files_in_group = 3<br>      innodb_log_buffer_size = 16M<br>      innodb_log_file_size = 256M<br>      innodb_flush_log_at_trx_commit = 2<br>      innodb_file_format = Barracuda<br>      innodb_file_format_max = Barracuda<br>      innodb_buffer_pool_size = 20000M      //一般设置内存的一半<br>      <span class="hljs-comment">#innodb_buffer_pool_dump_at_shutdown = 1</span><br>      <span class="hljs-comment">#innodb_buffer_pool_dump_now = 1</span><br>      <span class="hljs-comment">#innodb_buffer_pool_load_at_startup = 1</span><br>      <span class="hljs-comment">#innodb_buffer_pool_load_now = 1</span><br>      innodb_buffer_pool_instances = 8<br>      innodb_flush_method = O_DIRECT<br>      innodb_io_capacity = 600<br>      innodb_lock_wait_timeout = 10<br>      open_files_limit = 400<br>      innodb_open_files = 400<br>      innodb_purge_threads = 1<br>      innodb_read_io_threads = 12<br>      innodb_write_io_threads = 12<br>      innodb_thread_concurrency = 24<br><br>      <span class="hljs-comment"># MyISAM</span><br>      key_buffer_size = 8M<br>      myisam_sort_buffer_size = 128K<br><br>      <span class="hljs-comment"># sql profiling</span><br>      sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES<br><br>[root@tiejiang.org support-files] mysqld --initialize --user=mysql   //初始化mysql数据库<br>[root@tiejiang.org support-files] service mysqld start      //启动mysql服务<br>[root@tiejiang.org support-files] <span class="hljs-built_in">cat</span> /vdb/mysql/log/mysql.err | grep password    //查看初始化后mysql的密码<br><br>//用初始化mysql后拿到的密码登录mysql，修改mysql的root密码<br>[root@tiejiang.org ~] mysql -uroot -palsgfasfa8s<br>  mysql&gt; ALTER USER <span class="hljs-string">&#x27;root&#x27;</span>@<span class="hljs-string">&#x27;localhost&#x27;</span> IDENTIFIED BY <span class="hljs-string">&#x27;Liu180854&#x27;</span>;<br>  mysql&gt; <span class="hljs-built_in">exit</span>;COPY<br></code></pre></td></tr></table></figure>
+
+<h3 id="2、nacos集群部署，3台机器都要操作"><a href="#2、nacos集群部署，3台机器都要操作" class="headerlink" title="2、nacos集群部署，3台机器都要操作"></a>2、nacos集群部署，3台机器都要操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装jdk环境</span><br>[root@tiejiang.org ~] yum -y remove java<br>[root@tiejiang.org ~] <span class="hljs-built_in">mkdir</span> /opt/src<br>[root@tiejiang.org ~] wget -P /opt/src http://10.205.210.70/jdk/jdk-8u181-linux-x64.tar.gz<br>[root@tiejiang.org ~] tar -xzvf /opt/src/jdk-8u181-linux-x64.tar.gz -C /opt<br>[root@tiejiang.org ~] <span class="hljs-built_in">rm</span> -rf /opt/java<br>[root@tiejiang.org ~] <span class="hljs-built_in">ln</span> -sf /opt/jdk1.8.0_181 /opt/java<br>[root@tiejiang.org ~] <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;export JAVA_HOME=/opt/java&#x27;</span>&gt;&gt;/etc/profile<br>[root@tiejiang.org ~] <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;export JAVA_BIN=$JAVA_HOME/bin&#x27;</span>&gt;&gt;/etc/profile<br>[root@tiejiang.org ~] <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;export JAVA_LIB=$JAVA_HOME/lib&#x27;</span>&gt;&gt;/etc/profile<br>[root@tiejiang.org ~] <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;export PATH=$JAVA_BIN:$PATH&#x27;</span>&gt;&gt;/etc/profile<br>[root@tiejiang.org ~] <span class="hljs-built_in">source</span> /etc/profile<br><br>[root@tiejiang.org ~] <span class="hljs-built_in">cd</span> /usr/local/src/<br>[root@tiejiang.org src] wget https://github.com/alibaba/nacos/releases/download/2.0.3/nacos-server-2.0.3.tar.gz<br>[root@tiejiang.org src] tar -zxvf nacos-server-2.0.3.tar.gz<br>[root@tiejiang.org src] <span class="hljs-built_in">mv</span> nacos /usr/local/nacos-2.0.3<br>[root@tiejiang.org src] PASSWORD=$(<span class="hljs-built_in">base64</span> &lt; /dev/urandom | <span class="hljs-built_in">head</span> -c8); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PASSWORD</span>&quot;</span>; <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$PASSWORD</span>&quot;</span> | <span class="hljs-built_in">sha256sum</span> | <span class="hljs-built_in">tr</span> -d <span class="hljs-string">&#x27;-&#x27;</span><br>  <span class="hljs-comment">#生成nacos需要用到的tocken</span><br>  <span class="hljs-comment">#生成的密码：f7me4Iel</span><br>  <span class="hljs-comment">#生成的秘钥，开nacos鉴权的时候配置文件需要：c7020a710bc550d27fbcdd2ed067cb27965f2de9aa7212f3e4fee8b272e09874</span><br><br><span class="hljs-comment"># 登陆mysql，创建nacos需要用到的nacos_config数据库和用户</span><br>[root@tiejiang.org src] mysql -uroot -palsgfasfa8s<br>    mysql&gt; create database nacos_config;   //创建数据库<br>    mysql&gt; use nacos_config；     //应用数据库<br>    mysql&gt; <span class="hljs-built_in">set</span> names utf8;       //设置字符集<br>    mysql&gt; CREATE USER <span class="hljs-string">&#x27;nacos&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> IDENTIFIED BY <span class="hljs-string">&#x27;Liu123456&#x27;</span>;      //创建一个nacos的用户，并将连接设置为远程<br>    mysql&gt; GRANT ALL PRIVILEGES ON nacos_config.* TO <span class="hljs-string">&#x27;nacos&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span>;        //授权新用户访问nacos_config数据库的权限<br>    mysql&gt; FLUSH PRIVILEGES;     //权限刷新<br>    mysql&gt; <span class="hljs-built_in">source</span> /usr/local/nacos-2.0.3/conf/nacos-mysql.sql;       //导入nacos的.sql文件 <br><br>[root@tiejiang.org src] vim /usr/loacl/nacos-2.0.3/conf/application.properties<br>        <span class="hljs-comment">#在#*************** Config Module Related Configurations ***************#  下面新增jdbc连接mysql参数</span><br>    spring.datasource.platform=mysql<br>    db.num=1<br>    db.url.0=jdbc:mysql://195.168.1.1:3306/nacos_config?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=<span class="hljs-literal">true</span>&amp;useUnicode=<span class="hljs-literal">true</span>&amp;useSSL=<span class="hljs-literal">false</span>&amp;serverTimezone=UTC<br>    db.user.0=nacos<br>    db.password.0=Liu123456<br><br>    <span class="hljs-comment">#nacos开启授权</span><br>    nacos.core.auth.system.type=nacos<br>    nacos.core.auth.enabled=<span class="hljs-literal">true</span><br><br>    <span class="hljs-comment">#自定义秘钥，用于tocken</span><br>    nacos.core.auth.default.token.secret.key=c7020a710bc550d27fbcdd2ed067cb27965f2de9aa7212f3e4fee8b272e09874  //上面命令生成的<span class="hljs-built_in">base64</span>秘钥<br><br>[root@tiejiang.org ~] vim /usr/loacl/nacos-2.0.3/conf/cluster.conf<br>    192.168.1.2:8848<br>    192.168.1.3:8848<br>    192.168.1.4:8848<br>[root@tiejiang.org ~] bash /usr/local/nacos-2.0.3/bin/startup.shCOPY<br></code></pre></td></tr></table></figure>
+
+<h3 id="3、登陆nacos后台配置"><a href="#3、登陆nacos后台配置" class="headerlink" title="3、登陆nacos后台配置"></a>3、登陆nacos后台配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">http://192.168.1.2:8848/nacos/index.html<br>http://192.168.1.3:8848/nacos/index.html<br>http://192.168.1.4:8848/nacos/index.htmlCOPY<br></code></pre></td></tr></table></figure>
+
+<p>去页面中创建一个nacos的用户，密码自定义。<br><img src="2023071514262086.png" srcset="/img/loading.gif" lazyload alt="Centos7.8部署mysql与Nacos-2.0.3 集群保姆级文档_https://www.tiejiang.org_Linux安全运维_第3张"><br><img src="2023071514264170.png" srcset="/img/loading.gif" lazyload alt="Centos7.8部署mysql与Nacos-2.0.3 集群保姆级文档_https://www.tiejiang.org_Linux安全运维_第4张"></p>
+<h3 id="4、测试"><a href="#4、测试" class="headerlink" title="4、测试"></a>4、测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">该命令的username和password是登录上面网页nacos后台创建的<br>[root@tiejiang.org ~] curl -X POST <span class="hljs-string">&#x27;192.168.1.2:8848/nacos/v1/auth/login&#x27;</span> -d <span class="hljs-string">&#x27;username=yunwei&amp;password=&#x27;</span>yunwei123<span class="hljs-string">&#x27;</span><br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/Linux%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E9%A2%98%E6%94%B6%E9%9B%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux高级运维工程师面试题收集</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/linux%E6%90%AD%E5%BB%BAYUM%E4%BA%91%E4%BB%93%E5%BA%93/">
+                        <span class="hidden-mobile">linux搭建YUM云仓库</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

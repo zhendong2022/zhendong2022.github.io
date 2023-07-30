@@ -1,0 +1,932 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="文档目录： 一、pwd:显示当前位置 二、cd：切换目录 三、tree：树形结构显示目录 四、mkdir 创建目录 五、touch：创建空文件或改变文件时间戳  六、ls：显示目录下内容相关属性信息 七、cp：复制文件或目录 八、mv：移动或冲命令 九、rm：删除文件或目录 十、rmdir：删除空目录 十一、ln：建立硬、软链接 十二、readlink：查看符号链接文件内容 十三、find：查找目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux文件与目录操作">
+<meta property="og:url" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="文档目录： 一、pwd:显示当前位置 二、cd：切换目录 三、tree：树形结构显示目录 四、mkdir 创建目录 五、touch：创建空文件或改变文件时间戳  六、ls：显示目录下内容相关属性信息 七、cp：复制文件或目录 八、mv：移动或冲命令 九、rm：删除文件或目录 十、rmdir：删除空目录 十一、ln：建立硬、软链接 十二、readlink：查看符号链接文件内容 十三、find：查找目">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664756761-3.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664759010-6.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664760618-9.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664762329-12.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664763910-15.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664765588-18.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664769560-21.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664771109-24.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664772919-27.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664774345-30.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664775990-33.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664777785-36.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664779617-39.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664781939-42.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664784011-45.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664786031-48.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664787944-51.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664789481-54.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664791187-57.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664794886-60.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664796735-63.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664798369-66.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664800383-69.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664801997-72.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664806712-75.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664809071-78.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664810455-81.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664812066-84.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664814089-87.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664815840-90.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664817419-93.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664819004-96.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664821172-99.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664823139-102.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664824785-105.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664827244-108.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664828953-111.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664830594-114.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664832346-117.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664834176-120.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664835959-123.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664838083-126.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664839415-129.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664841144-132.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664845331-135.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664847529-138.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664848924-141.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664850694-144.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664852365-147.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664853859-150.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664855666-153.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664857441-156.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664859661-159.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664861755-162.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664869295-165.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664871172-168.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664872772-171.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664874533-174.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664875921-177.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664878408-180.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664880022-183.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664881530-186.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664883579-189.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664885238-192.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664886903-195.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664894068-198.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664896057-201.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664898313-204.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664900292-207.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664902032-210.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664903652-213.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664905578-216.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664907728-219.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664909443-222.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664910913-225.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664912261-228.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664914215-231.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664915705-234.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664917960-237.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664920180-240.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664921633-243.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664923054-246.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664924608-249.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664926789-252.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664928500-255.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664929874-258.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664931408-261.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664932859-264.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664934355-267.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664936115-270.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664937795-273.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664939252-276.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664941031-279.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664942703-282.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664945507-285.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664947003-288.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664951745-291.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664953505-294.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664955237-297.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664956656-300.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664958121-303.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664961066-306.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664962775-309.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664964769-312.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664966461-315.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664968297-318.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664970363-321.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664972896-324.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664974801-327.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664976413-330.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664979473-333.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664981700-336.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664983966-339.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664986366-342.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664988235-345.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689664993283-348.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689665000204-351.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689665004662-354.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689665006894-357.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689665012672-360.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689665014797-363.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689665016867-366.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640-1689665019781-369.png">
+<meta property="article:published_time" content="2023-07-18T15:17:47.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.911Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/640.png">
+  
+  
+  <title>Linux文件与目录操作 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux文件与目录操作">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-18 15:17" pubdate>
+        July 18, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      56 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux文件与目录操作</h1>
+            
+            <div class="markdown-body">
+              <p>文档目录：</p>
+<p>一、pwd:显示当前位置</p>
+<p>二、cd：切换目录</p>
+<p>三、tree：树形结构显示目录</p>
+<p>四、mkdir 创建目录</p>
+<p>五、touch：创建空文件或改变文件时间戳</p>
+<p> 六、ls：显示目录下内容相关属性信息</p>
+<p>七、cp：复制文件或目录</p>
+<p>八、mv：移动或冲命令</p>
+<p>九、rm：删除文件或目录</p>
+<p>十、rmdir：删除空目录</p>
+<p>十一、ln：建立硬、软链接</p>
+<p>十二、readlink：查看符号链接文件内容</p>
+<p>十三、find：查找目录下文件</p>
+<p>十四、xargs：将标准输入转换成命令行参数</p>
+<p>十五、rename：重命名</p>
+<p>十六、basename：显示文件名或目录名</p>
+<p>十七、dirname：显示文件或目录路径</p>
+<p>十八、chattr：改为文件扩展属性</p>
+<p>十九、lsattr：查看文件属性</p>
+<p>二十、file：显示文件类型</p>
+<p>二十一、md5sum：计算与校验文件MD5值</p>
+<p>二十二、chown：改为文件或目录的用户和用户组</p>
+<p>二十三、chmod：改变文件或目录权限</p>
+<p>二十四、chgrp：更改文件用户组</p>
+<p>二十五、umask：显示或设置权限掩码</p>
+<p>1、pwd：print working directory</p>
+<p>2、 #显示逻辑路径</p>
+<p>pwd -L 同echo $pwd </p>
+<p> <img src="640.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>3、显示链接路径</p>
+<p><img src="640-1689664756761-3.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>二、cd：切换目录</p>
+<p>1、cd：change directory</p>
+<p>2、cd -P：切换到链接的路径</p>
+<p><img src="640-1689664759010-6.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>3、cd -L：切换逻辑目录</p>
+<p><img src="640-1689664760618-9.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>4、cd - :切换到用户上一家目录</p>
+<p><img src="640-1689664762329-12.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>5、cd ~：切换到用户HOME对于目录，同CD</p>
+<p>6、cd.. ：切换到上一级目录，同cd . 与 cd ../</p>
+<p><img src="640-1689664763910-15.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>三、tree：树形结构显示目录</p>
+<p>1、安装：yum -y install tree</p>
+<p><img src="640-1689664765588-18.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、tree当前目录的结构</p>
+<p><img src="640-1689664769560-21.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、tree -a：包含.开头的隐藏文件</p>
+<p><img src="640-1689664771109-24.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、tree -L 1：遍历1层级结构</p>
+<p><img src="640-1689664772919-27.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、tree -d . 只显示目录</p>
+<p><img src="640-1689664774345-30.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、tree -f(i)：显示完整的路径名称（不显示树枝）</p>
+<p><img src="640-1689664775990-33.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 7、tree - L 1 F :区分目录与文件</p>
+<p><img src="640-1689664777785-36.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 过滤目录</p>
+<p><img src="640-1689664779617-39.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 过滤斜线结尾（等于过滤目录）</p>
+<p><img src="640-1689664781939-42.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>四、mkdir 创建目录</p>
+<p>1、mkdir：make directory</p>
+<p>2、mkdir dir1 dir2 #创建多个目录</p>
+<p><img src="640-1689664784011-45.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、mkdir -p #递归创建目录,存在目录时不报错</p>
+<p><img src="640-1689664786031-48.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、mkdir -pv #显示创建过程</p>
+<p><img src="640-1689664787944-51.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、创建多目录1：mkdir -pv dir0/{dir1-1,dir1-2}/{dir2-1,dir2-2}</p>
+<p> <img src="640-1689664789481-54.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 创建多目录2：mkdir -pv test/dir{1..5} ok/{a..e}</p>
+<p> <img src="640-1689664791187-57.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、mkdir -m 333 dir2 #创建目录并设置权限</p>
+<p> <img src="640-1689664794886-60.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>7、简单介绍{}用法</p>
+<p>echo {b,c}</p>
+<p><img src="640-1689664796735-63.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>echo a{b,c}</p>
+<p><img src="640-1689664798369-66.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>echo a{,c}</p>
+<p> <img src="640-1689664800383-69.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> echo {1..8} 1{a..h} </p>
+<p><img src="640-1689664801997-72.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>8、克隆目录结构</p>
+<p>mkdir -pv test/dir{1..5} ok/{a..e}</p>
+<p>tree -fid –noreport test &gt;&gt; ~/.test.txt</p>
+<p>cd /tmp/</p>
+<p>mkdir -p <code>cat _/.test.txt</code>(反引号)</p>
+<p><img src="640-1689664806712-75.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>五、touch：创建空文件或改变文件时间戳</p>
+<p>1、touch a.txt b.txt #创建多个空文件</p>
+<p><img src="640-1689664809071-78.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>2、查看时间戳：stat a.txt</p>
+<p><img src="640-1689664810455-81.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、分别查询对应的时间戳</p>
+<p>ls -lu：access time</p>
+<p>ls -lt：modify time</p>
+<p>ls -lc：change time</p>
+<p><img src="640-1689664812066-84.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、touch -m a.txt  #更改最后修改时间</p>
+<p> <img src="640-1689664814089-87.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、touch -a a.txt  #更改最后访问时间</p>
+<p><img src="640-1689664815840-90.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、touch -d 20201001 a.txt  #指定创建/修改的时间（修改时间）</p>
+<p> <img src="640-1689664817419-93.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>7、修改b.txt时间属性与a.txt一致（修改时间）</p>
+<p>touch -r a.txt b.txt</p>
+<p><img src="640-1689664819004-96.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 8、设置文件为 201512312234.50的时间格式</p>
+<p>touch -t 201512312234.50 a.txt</p>
+<p><img src="640-1689664821172-99.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 六、ls：显示目录下内容相关属性信息</p>
+<p>1、ls=list directory contents 同dos下dir命令</p>
+<p>2、ls -a #含隐藏文件，其中.为当前目录 ..为上级目录</p>
+<p><img src="640-1689664823139-102.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>3、ls -l #详细信息含最后修改时间</p>
+<p><img src="640-1689664824785-105.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、ll –time-style=long-iso #显示完整时间格式</p>
+<p>等同于ll –full time</p>
+<p><img src="640-1689664827244-108.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>5、ll –time-style=long-iso –time=atime  #显示文件的访问时间</p>
+<p><img src="640-1689664828953-111.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 可使用cat进行验证</p>
+<p> 6、ls -F  #过滤文件及目录</p>
+<p>ls -F|grep /  #过滤目录</p>
+<p>ls -F|grep -v /  #过滤普通文件</p>
+<p><img src="640-1689664830594-114.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 7、ls -l mytest20201204/ #显示目录内内容</p>
+<p>ls -ld mytest20201204/  #显示目录本身</p>
+<p><img src="640-1689664832346-117.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 8、ls -R：递归查看目录</p>
+<p><img src="640-1689664834176-120.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>9、ls -lt  #按照时间顺序排序（最后显示最前的）</p>
+<p>ls -lrt #按照时间顺序倒排（最后显示最后的）</p>
+<p><img src="640-1689664835959-123.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 10、 ls -F  #链接展示为@</p>
+<p> <img src="640-1689664838083-126.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> ls -lF /etc/init.d/ # *代表可执行的普通文件</p>
+<p><img src="640-1689664839415-129.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 11、ls -lhi #-h参数为文件大小人类可读， -i显示文件的inode值，链接相关的</p>
+<p> <img src="640-1689664841144-132.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>七、cp：复制文件或目录</p>
+<p>1、cp=copy centos加了别名cp -i 覆盖需要确认</p>
+<p>2、cp -a 包含</p>
+<p>cp -p：复制时候保持文件的所有者，权限及时间属性</p>
+<p>cp -d：复制链接本身，且保留符号链接指向的文件或目录</p>
+<p>cp -r：递归渎职目录</p>
+<p><img src="640-1689664845331-135.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、cp覆盖直接文件不提示方案</p>
+<p>普通复制时候需要人工确认如下：</p>
+<p><img src="640-1689664847529-138.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 方法1：/usr/bin/cp file1.txt file2.txt  #使用绝对路径命令-直接覆盖</p>
+<p><img src="640-1689664848924-141.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 方法2： \cp file1.txt file2.txt</p>
+<p><img src="640-1689664850694-144.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 方法3：unalias cp file1.txt file2.txt  #临时取消别名</p>
+<p><img src="640-1689664852365-147.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 方法4：修改系统环境变量（不建议使用）</p>
+<p><img src="640-1689664853859-150.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、快速备份命令</p>
+<p>cp file1.txt{,_backup}</p>
+<p>cp -a mytest7{,_backup}</p>
+<p><img src="640-1689664855666-153.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <img src="640-1689664857441-156.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>八、mv：移动或冲命令</p>
+<p>1、mv=move+rename，默认别名mv -i，提示是否覆盖</p>
+<p>2、屏蔽mv别名：\mv file1.txt file2.txt</p>
+<p><img src="640-1689664859661-159.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <img src="640-1689664861755-162.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、移动多文件<em>匹配：mv dir</em> testdir/</p>
+<p><img src="640-1689664869295-165.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、mv -t testdir1/ dir*  #反转移动</p>
+<p><img src="640-1689664871172-168.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>九、rm：删除文件或目录</p>
+<p>1、rm=remove files or directories，默认带rm -i</p>
+<p>2、rm -rf testdir1/ #强行删除目录，不需要确认</p>
+<p><img src="640-1689664872772-171.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、rm删除时需要先备份，并且避免使用通配符</p>
+<p>十、rmdir：删除空目录</p>
+<p>1、rmdir=remove empty directories</p>
+<p>2、rmdir -p -v dir1/a/b #递归删除目录且显示删除过程，顺序为从子目录到父目录</p>
+<p><img src="640-1689664874533-174.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十一、ln：建立硬、软链接</p>
+<p>1、ln=link分hard link与symbolic link</p>
+<p>2、系统限制，暂无法创建硬链接</p>
+<p><img src="640-1689664875921-177.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、ln -s dir1/dir1.txt dir_softlink #软链接不能事先存在</p>
+<p><img src="640-1689664878408-180.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、文件链接测试</p>
+<p>删除源文件，软连接显示为红色</p>
+<p><img src="640-1689664880022-183.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 删除软链接，源文件不受影响</p>
+<p><img src="640-1689664881530-186.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十二、readlink：查看符号链接文件内容</p>
+<p>1、readlink dir1_softlink</p>
+<p><img src="640-1689664883579-189.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、readlink -f dir1_softlink  #显示最后一个非符号链接文件</p>
+<p><img src="640-1689664885238-192.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十三、find：查找目录下文件</p>
+<p>1、查找指定时间内修改过的文件</p>
+<p>find . -atime -2 #查找2天内受到访问的文件</p>
+<p><img src="640-1689664886903-195.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> find /tmp/ -mtime -5 #绝对路径下，5天内修改的文件</p>
+<p> <img src="640-1689664894068-198.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>find /tmp/ -mtime 2 #绝对路径下，2天前修改的文件</p>
+<p> <img src="640-1689664896057-201.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>2、用-name指定关键字查找</p>
+<p>find . -mtime +2 -name ‘*.txt’ #查找2天前以txt结尾的文件</p>
+<p><img src="640-1689664898313-204.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、利用！反向查找</p>
+<p>find . -type d #查找所有目录</p>
+<p>find . ! -type d #查找所有非目录</p>
+<p><img src="640-1689664900292-207.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、按目录或文件的权限查找</p>
+<p>find . -perm 755 #查找755权限的内容</p>
+<p><img src="640-1689664902032-210.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、按照大小查看</p>
+<p>find . -size +20c #查找文件大小&gt;20字节的文件</p>
+<p><img src="640-1689664903652-213.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、查找文件时忽略目录</p>
+<p>find /root/mytest20201204/mytest1/ -path ‘/root/mytest20201204/mytest1/dir1’ -prune -o -print #忽略单个目录</p>
+<p><img src="640-1689664905578-216.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> find /root/mytest20201204/mytest1/ ( -path /root/mytest20201204/mytest1/dir1 -o -path /root/mytest20201204/mytest1/dir2 ) -prune -o -print #忽略多个文件<img src="640-1689664907728-219.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 7、user与nouser的查找</p>
+<p>[root@localhost mytest1]# find . -user nobody #用户为nobody</p>
+<p><img src="640-1689664909443-222.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>[root@localhost mytest1]# find . -nouser #查找无任务用户文件</p>
+<p> <img src="640-1689664910913-225.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 8、group与nogroup选项（同上）</p>
+<p><img src="640-1689664912261-228.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 9、查找出比某个文件新或旧的文件</p>
+<p>find . -newer dir3 #查找比dir3新的文件</p>
+<p>find . -newer dir1 ! -newer dir2 #查找比dir1新 但比dir2旧的文件</p>
+<p><img src="640-1689664914215-231.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 10、逻辑操作符</p>
+<p>[root@localhost mytest1]# find . -maxdepth 1 -type d #遍历1层，类似tree -L 1</p>
+<p><img src="640-1689664915705-234.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 11、正则表达式</p>
+<p>[root@localhost mytest1]# find . -regex “dir” #完全匹配路径为dir，无结果</p>
+<p>[root@localhost mytest1]# find . -regex “.*dir” #匹配后缀</p>
+<p>[root@localhost mytest1]# find . -regex “.*/dir” #匹配/dir后缀</p>
+<p><img src="640-1689664917960-237.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>12、查找并打印</p>
+<p>[root@localhost mytest8]# find . -type f -exec ls -l {} ;</p>
+<p><img src="640-1689664920180-240.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>13、查找n天前文件并删除</p>
+<p>[root@localhost mytest8]# find . -type f -mtime +2 -exec rm {} ;</p>
+<p><img src="640-1689664921633-243.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 14、-exec选项安全模式-ok</p>
+<p>[root@localhost mytest8]# find . -type f -mtime +2 -ok rm {} ;</p>
+<p><img src="640-1689664923054-246.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 15、find+xargs过滤</p>
+<p>[root@localhost mytest8]# find . -type f | xargs ls -l #传递查找并显示</p>
+<p><img src="640-1689664924608-249.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>[root@localhost mytest8]# find . -name ‘*.txt’ | xargs -i mv {} testdir/ #查找传递并移动</p>
+<p> <img src="640-1689664926789-252.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> [root@localhost mytest8]# find . -name ‘<em>dir</em>‘ |xargs -p rm -f #需要确认y、n并删除</p>
+<p> <img src="640-1689664928500-255.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 16、案例，将目录下所有扩展名.txt文件内test001替换为test002</p>
+<p>方法（一）</p>
+<p>[root@localhost mytest8]# find . -name ‘*.txt’ -exec sed -i ‘s#test001#test002#g’ {} ;</p>
+<p> <img src="640-1689664929874-258.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>方法（二）</p>
+<p>[root@localhost mytest8]# find . -name ‘*.txt’|xargs sed -i ‘s#test001#test002#g’</p>
+<p> <img src="640-1689664931408-261.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>方法（三）：高效方法（反引号优先执行）</p>
+<p>[root@localhost mytest8]# sed -i ‘s#test001#test002#g’ <code>find . -name &#39;*.txt&#39;</code></p>
+<p><img src="640-1689664932859-264.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 17、删除所有文件但保留其中一个指定的文件</p>
+<p>方法（一）：</p>
+<p>[root@localhost mytest8]# find . -type f ! -name ‘dir5.txt’ | xargs rm -f</p>
+<p><img src="640-1689664934355-267.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>方法（二）：</p>
+<p>[root@localhost mytest8]# find . -type f ! -name ‘dir5.txt’ -exec rm -f {} ;</p>
+<p><img src="640-1689664936115-270.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十四、xargs：将标准输入转换成命令行参数</p>
+<p>预置数据：</p>
+<p><img src="640-1689664937795-273.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>1、[root@localhost mytest8]# xargs &lt; test001.txt #所有数字一行显示</p>
+<p><img src="640-1689664939252-276.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>2、[root@localhost mytest8]# xargs -n 3 &lt; test001.txt #每行输出3个</p>
+<p><img src="640-1689664941031-279.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、echo splitXsplitXsplitXsplitX</p>
+<p><img src="640-1689664942703-282.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>[root@localhost mytest8]# echo splitXsplitXsplitXsplitX|xargs -d X #以X作为分隔符</p>
+<p> <img src="640-1689664945507-285.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>[root@localhost mytest8]# echo splitXsplitXsplitXsplitX|xargs -d X -n2 #每行显示2 #以X作为分隔符，每行显示2</p>
+<p> <img src="640-1689664947003-288.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、xargs -i：指定一个符号替代前面的结果</p>
+<p>[root@localhost mytest8]# find . -name ‘test*’ | xargs -I [] cp [] dir/</p>
+<p><img src="640-1689664951745-291.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十五、rename：重命名</p>
+<p>预置：</p>
+<p><img src="640-1689664953505-294.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 1、[root@localhost mytest8]# rename ‘_finished’ ‘’ * #将所有文件_finished替换为空</p>
+<p><img src="640-1689664955237-297.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、[root@localhost mytest8]# rename .jpg .hello *.jpg #将所有.jpg替换为.hello</p>
+<p><img src="640-1689664956656-300.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十六、basename：显示文件名或目录名</p>
+<p>1、[root@localhost mytest8]# basename dir1/dir2/dir3/test001.txt #去除路径部分</p>
+<p><img src="640-1689664958121-303.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>[root@localhost mytest8]# basename dir1/dir2/dir3/test001.txt .txt #去除路径部分，并去除后缀</p>
+<p> <img src="640-1689664961066-306.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十七、dirname：显示文件或目录路径</p>
+<p>1、[root@localhost mytest8]# dirname dir1/dir2/dir3/test001.txt</p>
+<p><img src="640-1689664962775-309.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、[root@localhost mytest8]# dirname test001.txt #根据路径返回相对路径</p>
+<p><img src="640-1689664964769-312.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十八、chattr：改为文件扩展属性</p>
+<p>1、[root@localhost mytest8]# chattr +a test001.txt #只能添加数据，不能删除</p>
+<p><img src="640-1689664966461-315.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、[root@localhost mytest8]# chattr +i test001.txt #添加只读属性</p>
+<p><img src="640-1689664968297-318.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>十九、lsattr：查看文件属性</p>
+<p>1、[root@localhost mytest8]# lsattr test001.txt #查看文件</p>
+<p><img src="640-1689664970363-321.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>2、[root@localhost mytest8]# lsattr -d testdir/ #查看目录</p>
+<p><img src="640-1689664972896-324.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>二十、file：显示文件类型</p>
+<p><img src="640-1689664974801-327.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>二十一、md5sum：计算与校验文件MD5值</p>
+<p>1、生成一个文件的md5</p>
+<p>[root@localhost mytest8]# md5sum test001.txt</p>
+<p><img src="640-1689664976413-330.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、检测文件是否改变</p>
+<p>[root@localhost mytest8]# md5sum -c md5.log</p>
+<p><img src="640-1689664979473-333.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>二十二、chown：改为文件或目录的用户和用户组</p>
+<p>1、更改文件所属的用户组‘</p>
+<p>[root@localhost mytest8]# chown baikang test001.txt</p>
+<p><img src="640-1689664981700-336.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、更改文件所属的用户组的属性</p>
+<p>[root@localhost mytest8]# chown .baikang test001.txt</p>
+<p>[root@localhost mytest8]# chown :baikang test001.txt</p>
+<p><img src="640-1689664983966-339.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、同时更改文件所属的用户和组的属性</p>
+<p>[root@localhost mytest8]# chown baikang.root test001.txt</p>
+<p><img src="640-1689664986366-342.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、递归更改目录下的所有目录文件的用户和用户组属性</p>
+<p>[root@localhost ~]# chown -R baikang:baikang mytest20201204/</p>
+<p><img src="640-1689664988235-345.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>二十三、chmod：改变文件或目录权限</p>
+<p>1、设置权限为空</p>
+<p>[root@localhost mytest1]# chmod a= test.txt test.txt</p>
+<p><img src="640-1689664993283-348.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、设置usr文件属主执行权限</p>
+<p>[root@localhost mytest1]# chmod u+x test.txt</p>
+<p><img src="640-1689665000204-351.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、设置group文件用户组可写权限</p>
+<p>[root@localhost mytest1]# chmod g+u test.txt</p>
+<p><img src="640-1689665004662-354.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、设置other其他用户可读权限</p>
+<p>[root@localhost mytest1]# chmod o+r test.txt</p>
+<p><img src="640-1689665006894-357.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、设置多权限</p>
+<p>[root@localhost mytest1]# chmod a= test.txt<br>[root@localhost mytest1]# chmod ug+r,o+r test.txt</p>
+<p><img src="640-1689665012672-360.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、常用权限</p>
+<p>目录：755</p>
+<p>文件：644</p>
+<p>全量：777</p>
+<p>二十四、chgrp：更改文件用户组</p>
+<p>1、chgrp testuser test.txt  #更改文件</p>
+<p>2、chgrp -R root dir/ #递归更改目录下文件</p>
+<p>二十五、umask：显示或设置权限掩码</p>
+<p>1、文件权限=666-掩码</p>
+<p>2、目录权限=777-掩码</p>
+<p>3、root用户默认掩码：0022</p>
+<p><img src="640-1689665014797-363.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、普通用户默认掩码：0002</p>
+<p><img src="640-1689665016867-366.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、umask 044 #临时生效</p>
+<p><img src="640-1689665019781-369.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux文件备份与压缩</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux%E7%9A%84%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA/">
+                        <span class="hidden-mobile">Linux的标准输入和输出</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

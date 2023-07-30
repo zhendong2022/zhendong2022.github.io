@@ -1,0 +1,1299 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、进程1 进程和内存管理1.1 进程和线程的区别  线程是程序执行的最小单位，而进程是操作系统分配资源的最小单位 一个进程由一个或多个线程组成，线程是一个进程中代码的不同执行路线 进程之间相互独立，但同一进程下的各个线程之间共享程序的内存空间(包括代码段、数据集、堆等)及一些进程级的资源(如打开文件和信号)，某进程内的线程在其它进程不可见 调度和切换：线程上下文切换比进程上下文切换要快得多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux进阶技能">
+<meta property="og:url" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="一、进程1 进程和内存管理1.1 进程和线程的区别  线程是程序执行的最小单位，而进程是操作系统分配资源的最小单位 一个进程由一个或多个线程组成，线程是一个进程中代码的不同执行路线 进程之间相互独立，但同一进程下的各个线程之间共享程序的内存空间(包括代码段、数据集、堆等)及一些进程级的资源(如打开文件和信号)，某进程内的线程在其它进程不可见 调度和切换：线程上下文切换比进程上下文切换要快得多">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220815201817630-1536494753.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220815204505794-361781002.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220815205630220-370188802.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220815210009040-500560121.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220902224737097-1314413739.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220902230213674-718903061.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220903144156287-876239960.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220903141633809-1993558218.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220903144807560-580899557.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220903145023550-413858000.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220903004441174-1034827746.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220903145731828-976278310.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220903173329135-1799538779.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220924142611328-542291317.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20221009211500981-1978247543.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220928162542049-754609444.png">
+<meta property="article:published_time" content="2023-07-28T20:19:22.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.177Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/linux%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD/2927659-20220815201817630-1536494753.png">
+  
+  
+  <title>linux进阶技能 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="linux进阶技能">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 20:19" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      33k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      275 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">linux进阶技能</h1>
+            
+            <div class="markdown-body">
+              <h1 id="一、进程"><a href="#一、进程" class="headerlink" title="一、进程"></a>一、进程</h1><h2 id="1-进程和内存管理"><a href="#1-进程和内存管理" class="headerlink" title="1 进程和内存管理"></a>1 进程和内存管理</h2><h3 id="1-1-进程和线程的区别"><a href="#1-1-进程和线程的区别" class="headerlink" title="1.1 进程和线程的区别"></a>1.1 进程和线程的区别</h3><blockquote>
+<ul>
+<li>线程是程序执行的最小单位，而进程是操作系统分配资源的最小单位</li>
+<li>一个进程由一个或多个线程组成，线程是一个进程中代码的不同执行路线</li>
+<li>进程之间相互独立，但同一进程下的各个线程之间共享程序的内存空间(包括代码段、数据集、堆等)及一些进程级的资源(如打开文件和信号)，某进程内的线程在其它进程不可见</li>
+<li>调度和切换：线程上下文切换比进程上下文切换要快得多</li>
+</ul>
+</blockquote>
+<h3 id="1-2-查看进程中的线程"><a href="#1-2-查看进程中的线程" class="headerlink" title="1.2 查看进程中的线程"></a>1.2 查看进程中的线程</h3><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">grep -i threads /proc/PID/status<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-3-进程使用内存管理问题"><a href="#1-3-进程使用内存管理问题" class="headerlink" title="1.3 进程使用内存管理问题"></a>1.3 进程使用内存管理问题</h3><h4 id="1-3-1-内存泄漏：Memory-Leak"><a href="#1-3-1-内存泄漏：Memory-Leak" class="headerlink" title="1.3.1 内存泄漏：Memory Leak"></a>1.3.1 内存泄漏：Memory Leak</h4><p>指程序中用malloc或new申请了一块内存，但是没有用free或delete将内存释放，导致这块内存一直处于占用状态</p>
+<h4 id="1-3-2-内存溢出：Memory-Overflow"><a href="#1-3-2-内存溢出：Memory-Overflow" class="headerlink" title="1.3.2 内存溢出：Memory Overflow"></a>1.3.2 内存溢出：Memory Overflow</h4><p>指程序申请了10M的空间，但是在这个空间写入10M以上字节的数据，就是溢出</p>
+<h4 id="1-3-3-内存不足：OOM（Out-Of-Memory）"><a href="#1-3-3-内存不足：OOM（Out-Of-Memory）" class="headerlink" title="1.3.3 内存不足：OOM（Out Of Memory）"></a>1.3.3 内存不足：OOM（Out Of Memory）</h4><p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202208/2927659-20220815201817630-1536494753.png"><img src="2927659-20220815201817630-1536494753.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p>原因</p>
+<ul>
+<li>给应用分配内存太少：比如虚拟机本身可使用的内存（一般通过启动时的VM参数指定）太少</li>
+<li>应用用的太多，并且用完没释放，浪费了。此时就会造成内存泄露或者内存溢出</li>
+</ul>
+<p>使用的解决办法：</p>
+<ul>
+<li>限制java进程的max heap，并且降低java程序的worker数量，从而降低内存使用</li>
+<li>给系统增加swap空间</li>
+</ul>
+<h3 id="1-4-进程状态"><a href="#1-4-进程状态" class="headerlink" title="1.4 进程状态"></a>1.4 进程状态</h3><blockquote>
+<ul>
+<li>运行态：running</li>
+<li>就绪态：ready</li>
+<li>睡眠态：分为两种，可中断：interruptable，不可中断：uninterruptable</li>
+<li>停止态：stopped，暂停于内存，但不会被调度，除非手动启动</li>
+<li>僵死态：zombie，僵尸态，结束进程，父进程结束前，子进程不关闭，杀死父进程可以关闭僵死态的子进程</li>
+</ul>
+</blockquote>
+<h4 id="范例：僵尸态"><a href="#范例：僵尸态" class="headerlink" title="范例：僵尸态"></a>范例：僵尸态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#父进程和子进程的创建</span><br>[root@rocky01 ~]<span class="hljs-comment"># bash</span><br>[root@rocky01 ~]<span class="hljs-comment"># echo $BASHPID</span><br>2267<br>[root@rocky01 ~]<span class="hljs-comment"># echo $PPID</span><br>2209<br>[root@rocky01 ~]<span class="hljs-comment"># pstree -p |grep 2209</span><br>           |-sshd(948)-+-sshd(2195)---sshd(2208)---bash(2209)---bash(2267)-+-grep(2289)<br><br><span class="hljs-comment">#将父进程设为停止态</span><br>[root@rocky01 ~]<span class="hljs-comment"># kill -19 2209</span><br><span class="hljs-comment">#杀死子进程，进入僵尸态</span><br>[root@rocky01 ~]<span class="hljs-comment"># kill -9 2267</span><br><span class="hljs-comment">#可以看到子进程STAT为Z，表示为僵尸态</span><br>[root@rocky01 ~]<span class="hljs-comment"># ps aux</span><br>USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND<br>root        2267  0.0  0.0      0     0 pts/0    Z+   20:25   0:00 [bash] &lt;defunct&gt;<br>root        2295  0.0  0.1  58752  3972 pts/1    R+   20:27   0:00 ps aux<br><br><span class="hljs-comment">#解决方法</span><br><span class="hljs-comment">#方法一：恢复父进程</span><br>[root@rocky01 ~]<span class="hljs-comment"># kill -19 2209</span><br><span class="hljs-comment">#方法二：杀死父进程</span><br>[root@rocky01 ~]<span class="hljs-comment"># kill -9 2209</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：孤儿进程"><a href="#范例：孤儿进程" class="headerlink" title="范例：孤儿进程"></a>范例：孤儿进程</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># (sleep 100 &amp;)</span><br>[root@rocky01 ~]<span class="hljs-comment"># pstree -p |grep sleep</span><br>           |-<span class="hljs-built_in">sleep</span>(2342)<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-5-LRU算法"><a href="#1-5-LRU算法" class="headerlink" title="1.5 LRU算法"></a>1.5 LRU算法</h3><p>LRU：Least Recently Used 近期最少使用算法（喜新厌旧），释放内存</p>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202208/2927659-20220815204505794-361781002.png"><img src="2927659-20220815204505794-361781002.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="1-6-IPC进程间通信"><a href="#1-6-IPC进程间通信" class="headerlink" title="1.6 IPC进程间通信"></a>1.6 IPC进程间通信</h3><h4 id="范例：利用管道文件实现-IPC"><a href="#范例：利用管道文件实现-IPC" class="headerlink" title="范例：利用管道文件实现 IPC"></a>范例：利用管道文件实现 IPC</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># mkfifo test.fifo</span><br>[root@rocky01 ~]<span class="hljs-comment"># ll test.fifo</span><br>prw-r--r-- 1 root root 0 Aug 15 20:51 test.fifo<br>[root@rocky01 ~]<span class="hljs-comment"># echo Willoneday &gt; test.fifo</span><br><span class="hljs-comment">#此时为等待读入状态，读取数据后才会调到命令提示符</span><br><br><span class="hljs-comment">#在另一个终端可以从文件中读取数据</span><br>[root@rocky01 ~]<span class="hljs-comment"># cat test.fifo</span><br>Willoneday<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202208/2927659-20220815205630220-370188802.png"><img src="2927659-20220815205630220-370188802.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="1-7-进程优先级"><a href="#1-7-进程优先级" class="headerlink" title="1.7 进程优先级"></a>1.7 进程优先级</h3><blockquote>
+<ul>
+<li>系统优先级：0-139, 数字越小，优先级越高,各有140个运行队列和过期队列</li>
+<li>实时优先级: 99-0  值最大优先级最高</li>
+<li>nice值：-20到19，对应系统优先级100-139或</li>
+</ul>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202208/2927659-20220815210009040-500560121.png"><img src="2927659-20220815210009040-500560121.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<hr>
+<h2 id="2-进程管理和性能相关工具"><a href="#2-进程管理和性能相关工具" class="headerlink" title="2 进程管理和性能相关工具"></a>2 进程管理和性能相关工具</h2><blockquote>
+<p>Linux系统状态的查看及管理工具：</p>
+<p>pstree</p>
+<p>ps</p>
+<p>pidof</p>
+<p>pgrep</p>
+<p>top</p>
+<p>htop</p>
+<p>glance</p>
+<p>pmap</p>
+<p>vmstat</p>
+<p>dstat</p>
+<p>kill</p>
+<p>pkill</p>
+<p>job</p>
+<p>bg</p>
+<p>fg</p>
+<p>nohup</p>
+</blockquote>
+<h3 id="2-1-pstree-进程树"><a href="#2-1-pstree-进程树" class="headerlink" title="2.1 pstree 进程树"></a>2.1 pstree 进程树</h3><blockquote>
+<p>pstree 可以用来显示进程的父子关系，以树形结构显示</p>
+</blockquote>
+<p>格式：<code>pstree [ OPTION ] [ PID | USER ]</code></p>
+<blockquote>
+<p>常用选项：</p>
+<ul>
+<li>-p 显示PID</li>
+<li>-T 不显示线程thread,默认显示线程</li>
+<li>-u 显示用户切换</li>
+<li>-H pid 高亮显示指定进程及其前辈进程</li>
+</ul>
+</blockquote>
+<h3 id="2-2-ps-进程信息"><a href="#2-2-ps-进程信息" class="headerlink" title="2.2 ps 进程信息"></a>2.2 ps 进程信息</h3><blockquote>
+<p>ps 即 process state，显示有关活动进程信息，<strong>Linux系统各进程的相关信息均保存在/proc/PID目录下的各文件中</strong></p>
+<p>支持三种选项：</p>
+<ul>
+<li>UNIX选项 如: -A -e</li>
+<li>GNU选项 如: –help</li>
+<li>BSD选项 如: a</li>
+</ul>
+</blockquote>
+<p>格式：<code>ps [ OPTION ]...</code></p>
+<blockquote>
+<p>常用选项：</p>
+<ul>
+<li><strong>a　选项包括所有终端中的进程</strong></li>
+<li><strong>x　选项包括不链接终端的进程</strong></li>
+<li><strong>u　选项显示进程所有者的信息</strong></li>
+<li>f　选项显示进程树,相当于 –forest</li>
+<li>k sort 属性 对属性排序,属性前加 - 表示倒序</li>
+<li>o　属性… 选项显示定制的信息 pid、cmd、%cpu、%mem</li>
+<li>L 显示支持的属性列表</li>
+<li>-C cmdlist 指定命令，多个命令用，分隔</li>
+<li>-L 显示线程</li>
+<li><strong>-e 显示所有进程，相当于-A</strong></li>
+<li><strong>-f 显示完整格式程序信息</strong></li>
+<li>-F 显示更完整格式的进程信息</li>
+<li>-H 以进程层级格式显示进程相关信息</li>
+<li>-u userlist 指定有效的用户ID或名称</li>
+<li>-U userlist 指定真正的用户ID或名称</li>
+<li>-g gid或groupname 指定有效的gid或组名称</li>
+<li>-G gid或groupname 指定真正的gid或组名称</li>
+<li>-p pid 显示指pid的进程</li>
+<li>–ppid pid 显示属于pid的子进程</li>
+<li>-t ttylist 指定tty,相当于 t</li>
+<li>-M 显示SELinux信息，相当于Z</li>
+</ul>
+</blockquote>
+<h4 id="2-2-1-ps-输出信息"><a href="#2-2-1-ps-输出信息" class="headerlink" title="2.2.1 ps 输出信息"></a>2.2.1 ps 输出信息</h4><blockquote>
+<ul>
+<li>C :  ps -ef 显示列 C 表示cpu利用率</li>
+<li>VSZ: Virtual memory SiZe，虚拟内存集，线性内存</li>
+<li>RSS: ReSident Size, 常驻内存集</li>
+<li>STAT：进程状态</li>
+<li>R：running</li>
+<li>S: interruptable sleeping</li>
+<li>D: uninterruptable sleeping</li>
+<li>T: stopped</li>
+<li>Z: zombie</li>
+<li>+: 前台进程</li>
+<li>l: 多线程进程</li>
+<li>L：内存分页并带锁</li>
+<li>N：低优先级进程</li>
+<li>&lt;: 高优先级进程</li>
+<li>s: session leader，会话（子进程）发起者</li>
+<li>I（大写i）：Idle kernel thread，CentOS 8 新特性</li>
+<li>ni: nice值</li>
+<li>pri: priority 优先级</li>
+<li>rtprio: 实时优先级</li>
+<li>psr: processor CPU编号</li>
+</ul>
+</blockquote>
+<h4 id="范例：查看进程的特定属性"><a href="#范例：查看进程的特定属性" class="headerlink" title="范例：查看进程的特定属性"></a>范例：查看进程的特定属性</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># ps axo pid,cmd,%mem,%cpu</span><br>    PID CMD                         %MEM %CPU<br>      1 /usr/lib/systemd/systemd --  0.2  0.0<br>      2 [kthreadd]                   0.0  0.0<br>      3 [rcu_gp]                     0.0  0.0<br>      4 [rcu_par_gp]                 0.0  0.0<br>      6 [kworker/0:0H-events_highpr  0.0  0.0<br>      9 [mm_percpu_wq]               0.0  0.0<br>...省略...<br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：按CPU利用率倒序排序"><a href="#范例：按CPU利用率倒序排序" class="headerlink" title="范例：按CPU利用率倒序排序"></a>范例：按CPU利用率倒序排序</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># ps aux k -%cpu</span><br>USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND<br>root         927  0.2  0.8 568912 31904 ?        Ssl  Aug29  13:31 /usr/libexec/platform-python -Es /usr<br>root       22116  0.1  0.0      0     0 ?        I    19:16   0:08 [kworker/0:1-mm_percpu_wq]<br>root           1  0.0  0.2 172768 11204 ?        Ss   Aug29   0:09 /usr/lib/systemd/systemd --switched-r<br>root           2  0.0  0.0      0     0 ?        S    Aug29   0:00 [kthreadd]<br>...省略...<br></code></pre></td></tr></table></figure>
+
+<h4 id="面试题：找到未知进程的执行程序文件路径"><a href="#面试题：找到未知进程的执行程序文件路径" class="headerlink" title="面试题：找到未知进程的执行程序文件路径"></a>面试题：找到未知进程的执行程序文件路径</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># ll /proc/16642/exe</span><br>lrwxrwxrwx 1 root root 0 Aug 29 23:24 /proc/16642/exe -&gt; /data/httpd-2.4.54/bin/httpd<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-prtstat-查看进程信息"><a href="#2-3-prtstat-查看进程信息" class="headerlink" title="2.3 prtstat 查看进程信息"></a>2.3 prtstat 查看进程信息</h3><blockquote>
+<p>可以显示进程信息,来自于psmisc包</p>
+</blockquote>
+<p>格式：<code>prtstat [ options ] PID ..</code></p>
+<p>选项：<code>-r raw格式显示</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># prtstat -r 16642</span><br>         pid: 16642          	                  <span class="hljs-built_in">comm</span>: httpd<br>       state: S              	                  ppid: 1<br>        pgrp: 16642          	               session: 16642<br>      tty_nr: 0              	                 tpgid: -1<br>       flags: 404040         	                minflt: 307<br>     cminflt: 0              	                majflt: 0<br>     cmajflt: 0              	                 utime: 290<br>       stime: 331            	                cutime: 0<br>      cstime: 0              	              priority: 20<br>        <span class="hljs-built_in">nice</span>: 0              	           num_threads: 1<br> itrealvalue: 0              	             starttime: 21243019<br>       vsize: 119353344      	                   rss: 1365<br>      rsslim: 18446744073709551615	             startcode: 4194304<br>     endcode: 4967936        	            startstack: 140721176867168<br>     kstkesp: 0              	               kstkeip: 0<br>       wchan: 0              	                 nswap: 0<br>      cnswap: 0              	           exit_signal: 17<br>   processor: 1              	           rt_priority: 0<br>      policy: 0              	 delayaccr_blkio_ticks: 0<br>  guest_time: 0              	           cguest_time: 0<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-4-设置和调整进程优先级"><a href="#2-4-设置和调整进程优先级" class="headerlink" title="2.4 设置和调整进程优先级"></a>2.4 设置和调整进程优先级</h3><blockquote>
+<p>进程优先级调整</p>
+<ul>
+<li>静态优先级：100-139</li>
+<li>进程默认启动时的nice值为0，优先级为120</li>
+<li>只有根用户才能降低nice值（提高优先性）</li>
+</ul>
+</blockquote>
+<h4 id="2-4-1-nice-以指定的优先级来启动进程"><a href="#2-4-1-nice-以指定的优先级来启动进程" class="headerlink" title="2.4.1 nice 以指定的优先级来启动进程"></a>2.4.1 nice 以指定的优先级来启动进程</h4><h4 id="2-4-2-renice-可以调整正在执行中的进程的优先级"><a href="#2-4-2-renice-可以调整正在执行中的进程的优先级" class="headerlink" title="2.4.2 renice 可以调整正在执行中的进程的优先级"></a>2.4.2 renice 可以调整正在执行中的进程的优先级</h4><h4 id="范例：使用方法"><a href="#范例：使用方法" class="headerlink" title="范例：使用方法"></a>范例：使用方法</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#查看优先级ni</span><br>[root@rocky01 ~]<span class="hljs-comment"># ps axo pid,comm,ni</span><br><br><span class="hljs-comment">#nice</span><br>[root@rocky01 ~]<span class="hljs-comment"># nice -n -10 ping 127.0.0.1</span><br>[root@rocky01 ~]<span class="hljs-comment"># ps axo pid,cmd,nice |grep ping</span><br>  2118 ping 127.0.0.1              -10<br>  2120 grep --color=auto ping        0<br><br><span class="hljs-comment">#renice</span><br>[root@rocky01 ~]<span class="hljs-comment"># renice -n -20 2118</span><br>2106 (process ID) old priority -10, new priority -20<br>[root@rocky01 ~]<span class="hljs-comment"># ps axo pid,cmd,nice |grep ping</span><br>  2118 ping 127.0.0.1              -20<br>  2200 grep --color=auto ping        0<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-5-搜索进程"><a href="#2-5-搜索进程" class="headerlink" title="2.5 搜索进程"></a>2.5 搜索进程</h3><blockquote>
+<p>按条件搜索进程</p>
+<ol>
+<li>ps 选项　| grep “ “</li>
+<li>pgrep 按预定义的模式</li>
+<li>/sbin/pidof 按确切的程序名称查看pid</li>
+</ol>
+</blockquote>
+<h4 id="2-5-1-pgrep"><a href="#2-5-1-pgrep" class="headerlink" title="2.5.1 pgrep"></a>2.5.1 pgrep</h4><p> 格式：<code>pgrep [options] pattern</code></p>
+<blockquote>
+<p> 常用选项：</p>
+<ul>
+<li>-u uid: effective user，生效者</li>
+<li>-U uid: real user，真正发起运行命令者</li>
+<li>-t terminal: 与指定终端相关的进程</li>
+<li>-l: 显示进程名</li>
+<li>-a: 显示完整格式的进程名</li>
+<li>-P pid: 显示指定进程的子进程</li>
+</ul>
+</blockquote>
+<h4 id="范例：使用方法-1"><a href="#范例：使用方法-1" class="headerlink" title="范例：使用方法"></a>范例：使用方法</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># pgrep -lu root</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="2-5-2-pidof"><a href="#2-5-2-pidof" class="headerlink" title="2.5.2 pidof"></a>2.5.2 pidof</h4><p> 格式：<code>pidof [options] [program [...]]</code></p>
+<p> 选项：<code>-x 按脚本名称查找pid</code></p>
+<h4 id="范例：使用方法-2"><a href="#范例：使用方法-2" class="headerlink" title="范例：使用方法"></a>范例：使用方法</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># pidof httpd</span><br>16761 16645 16644 16643 16642<br><br>[root@rocky01 ~]<span class="hljs-comment"># cat ping.sh</span><br><span class="hljs-comment">#!/bin/bash</span><br>ping 127.0.0.1<br><br><span class="hljs-comment">#ping.sh必须有shebang机制,否则pidof -x 也无法查找到</span><br>[root@rocky01 ~]<span class="hljs-comment"># pidof -x ping.sh </span><br>19035<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-6-uptime-负载查询"><a href="#2-6-uptime-负载查询" class="headerlink" title="2.6 uptime 负载查询"></a>2.6 uptime 负载查询</h3><blockquote>
+<p> /proc/uptime 包括两个值，单位 s</p>
+<ul>
+<li>第一个值表示：系统启动时长</li>
+<li>第二个值表示：空闲进程的总时长（按总的CPU核数计算）</li>
+</ul>
+<p>uptime 和 w 显示以下内容</p>
+<ul>
+<li>当前时间</li>
+<li>系统已启动的时间</li>
+<li>当前上线人数</li>
+<li>系统平均负载（1、5、15分钟的平均负载，一般不会超过1，超过5时建议警报）</li>
+</ul>
+</blockquote>
+<h4 id="案例：系统平均负载"><a href="#案例：系统平均负载" class="headerlink" title="案例：系统平均负载"></a>案例：<strong>系统平均负载</strong></h4><p><strong>指在特定时间间隔内运行队列中的平均进程数,通常每个CPU内核的当前活动进程数不大于3，那么系统的性能良好。如果每个CPU内核的任务数大于5，那么此主机的性能有严重问题</strong></p>
+<p>如：linux主机是1个双核CPU，当Load Average 为6的时候说明机器已经被充分使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># uptime</span><br> 15:13:15 up  9:13,  1 user,  load average: 0.04, 0.02, 0.00<br> <br>[root@rocky01 ~]<span class="hljs-comment"># w</span><br> 15:14:30 up  9:14,  1 user,  load average: 0.06, 0.03, 0.00<br>...省略...<br><br>[root@rocky01 ~]<span class="hljs-comment"># top</span><br>top - 15:14:41 up  9:14,  1 user,  load average: 0.05, 0.03, 0.00<br>...省略...<br><br><span class="hljs-comment">#load average：系统负载平均在过去的1、5和15分钟内忙不忙</span><br><span class="hljs-comment">#值一般超过5就会使系统变慢</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-7-mpstat-显示CPU相关统计"><a href="#2-7-mpstat-显示CPU相关统计" class="headerlink" title="2.7 mpstat 显示CPU相关统计"></a>2.7 mpstat 显示CPU相关统计</h3><p>来自于sysstat包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#间隔2秒执行3此</span><br>[root@rocky01 ~]<span class="hljs-comment"># mpstat 2 3</span><br>Linux 4.18.0-372.9.1.el8.x86_64 (rocky01) 	09/02/2022 	_x86_64_	(2 CPU)<br><br>10:34:06 PM  CPU    %usr   %<span class="hljs-built_in">nice</span>    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle<br>10:34:08 PM  all    0.00    0.00    0.25    0.00    0.25    0.25    0.00    0.00    0.00   99.25<br>10:34:10 PM  all    0.00    0.00    0.00    0.00    0.25    0.00    0.00    0.00    0.00   99.75<br>10:34:12 PM  all    0.00    0.00    0.25    0.00    0.00    0.00    0.00    0.00    0.00   99.75<br>Average:     all    0.00    0.00    0.17    0.00    0.17    0.08    0.00    0.00    0.00   99.58<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-8-top、htop-查看进程实时状态"><a href="#2-8-top、htop-查看进程实时状态" class="headerlink" title="2.8 top、htop 查看进程实时状态"></a>2.8 top、htop 查看进程实时状态</h3><h4 id="2-8-1-top"><a href="#2-8-1-top" class="headerlink" title="2.8.1 top"></a>2.8.1 top</h4><p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220902224737097-1314413739.png"><img src="2927659-20220902224737097-1314413739.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<blockquote>
+<p>常见选项</p>
+<ul>
+<li>-d #指定刷新时间间隔，默认为3秒</li>
+<li>-b #全部显示所有进程</li>
+<li>-n #刷新多少次后退出</li>
+<li>-H #线程模式</li>
+</ul>
+<p>排序：</p>
+<ul>
+<li>P：以占据的CPU百分比,%CPU</li>
+<li>M：占据内存百分比,%MEM</li>
+<li>T：累积占据CPU时长,TIME+</li>
+</ul>
+<p>首部信息显示：</p>
+<ul>
+<li><p>uptime信息：l命令</p>
+</li>
+<li><p>tasks及cpu信息：t命令</p>
+</li>
+<li><p>cpu分别显示：1 (数字)</p>
+</li>
+<li><p>memory信息：m命令</p>
+</li>
+<li><p>退出命令：q</p>
+</li>
+<li><p>修改刷新时间间隔：s</p>
+</li>
+<li><p>终止指定进程：k</p>
+</li>
+<li><p>保存文件：W</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="2-8-2-htop"><a href="#2-8-2-htop" class="headerlink" title="2.8.2 htop"></a>2.8.2 htop</h4><p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220902230213674-718903061.png"><img src="2927659-20220902230213674-718903061.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-9-free-内存空间"><a href="#2-9-free-内存空间" class="headerlink" title="2.9 free 内存空间"></a>2.9 free 内存空间</h3><blockquote>
+<p>向/proc/sys/vm/drop_caches中写入相应的修改值，会清理缓存。建议先执行sync（sync 命令将所有未写的系统缓冲区写到磁盘中，包含已修改的 i-node、已延迟的块 I/O 和读写映射文件）。执行echo1、2、3 至 /proc/sys/vm/drop_caches, 达到不同的清理目的</p>
+<p>如果因为是应用有像内存泄露、溢出的问题时，从swap的使用情况是可以比较快速可以判断的，但通过执行free 反而比较难查看。但核心并不会因为内存泄露等问题并没有快速清空buffer或cache（默认值是0），生产也不应该随便去改变此值。</p>
+<p>一般情况下，应用在系统上稳定运行了，free值也会保持在一个稳定值的。当发生内存不足、应用获取不到可用内存、OOM错误等问题时，还是更应该去分析应用方面的原因，否则，清空buffer，强制腾出free的大小，可能只是把问题给暂时屏蔽了。</p>
+<p>排除内存不足的情况外，除非是在软件开发阶段，需要临时清掉buffer，以判断应用的内存使用情况；或应用已经不再提供支持，即使应用对内存的时候确实有问题，而且无法避免的情况下，才考虑定时清空buffer。</p>
+<p>常用选项</p>
+<ul>
+<li>-b 以字节为单位</li>
+<li>-m 以MB为单位</li>
+<li>-g 以GB为单位</li>
+<li>-h 易读格式</li>
+<li>-o 不显示-/+buffers/cache行</li>
+<li>-t  显示RAM + swap的总和</li>
+<li>-s n 刷新间隔为n秒</li>
+<li>-c n 刷新n次后即退出</li>
+</ul>
+</blockquote>
+<h4 id="范例：清理缓存"><a href="#范例：清理缓存" class="headerlink" title="范例：清理缓存"></a>范例：清理缓存</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># cat /proc/sys/vm/drop_caches</span><br>0<br>[root@rocky01 ~]<span class="hljs-comment"># free -h</span><br>              total        used        free      shared  buff/cache   available<br>Mem:          3.6Gi       238Mi       3.0Gi       8.0Mi       399Mi       3.2Gi<br>Swap:         3.9Gi          0B       3.9Gi<br>[root@rocky01 ~]<span class="hljs-comment"># echo 3 &gt; /proc/sys/vm/drop_caches</span><br>[root@rocky01 ~]<span class="hljs-comment"># free -h</span><br>              total        used        free      shared  buff/cache   available<br>Mem:          3.6Gi       221Mi       3.3Gi       8.0Mi       112Mi       3.2Gi<br>Swap:         3.9Gi          0B       3.9Gi<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-10-pmap-进程对应的内存映射"><a href="#2-10-pmap-进程对应的内存映射" class="headerlink" title="2.10 pmap 进程对应的内存映射"></a>2.10 pmap 进程对应的内存映射</h3><p>格式：<code>pmap [options] pid [...]</code></p>
+<p>选项：<code>-x: 显示详细格式的信息</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#使用方法1</span><br>[root@rocky01 ~]<span class="hljs-comment"># pmap -x PID</span><br><br><span class="hljs-comment">#使用方法2</span><br>[root@rocky01 ~]<span class="hljs-comment"># cat /proc/PID/maps</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-11-vmstat-虚拟内存信息"><a href="#2-11-vmstat-虚拟内存信息" class="headerlink" title="2.11 vmstat 虚拟内存信息"></a>2.11 vmstat 虚拟内存信息</h3><p>格式：<code>vmstat [options] [delay [count]]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># vmstat</span><br>procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----<br> r  b   swpd   free   buff  cache   si   so    bi    bo   <span class="hljs-keyword">in</span>   cs us sy <span class="hljs-built_in">id</span> wa st<br> 2  0    0    3415076   0   125060   0    0    45     9  112  181  0  1 99  0  0<br><br>procs<br>     r：可运行（正运行或等待运行）进程的个数，和核心数有关<br>     b：处于不可中断睡眠态的进程个数(被阻塞的队列的长度)<br>memory<br>     swpd: 交换内存的使用总量<br>     free：空闲物理内存总量<br>     buffer：用于buffer的内存总量<br>     cache：用于cache的内存总量<br>swap<br>     si：从磁盘交换进内存的数据速率(kb/s)<br>     so：从内存交换至磁盘的数据速率(kb/s)<br>io<br>     bi：从块设备读入数据到系统的速率(kb/s)<br>     bo: 保存数据至块设备的速率<br>system<br>     <span class="hljs-keyword">in</span>: interrupts 中断速率，包括时钟<br>     cs: context switch     进程切换速率<br>cpu<br>     us:Time spent running non-kernel code<br>     sy: Time spent running kernel code<br>     <span class="hljs-built_in">id</span>: Time spent idle. Linux 2.5.41前,包括IO-<span class="hljs-built_in">wait</span> time.<br>     wa: Time spent waiting <span class="hljs-keyword">for</span> IO.  2.5.41前，包括<span class="hljs-keyword">in</span> idle.<br>     st: Time stolen from a virtual machine.  2.6.11前, unknown.<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-12-iostat-统计CPU和设备IO信息"><a href="#2-12-iostat-统计CPU和设备IO信息" class="headerlink" title="2.12 iostat 统计CPU和设备IO信息"></a>2.12 iostat 统计CPU和设备IO信息</h3><p>iostat 可以提供更丰富的IO性能状态数据</p>
+<p>此工具由sysstat包提供</p>
+<blockquote>
+<p>常用选项:</p>
+<ul>
+<li>-c 只显示CPU行</li>
+<li>-d 显示设备〈磁盘)使用状态</li>
+<li>-k 以千字节为为单位显示输出</li>
+<li>-t 在输出中包括时间戳</li>
+<li>-x 在输出中包括扩展的磁盘指标</li>
+</ul>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># iostat</span><br>Linux 4.18.0-372.9.1.el8.x86_64 (rocky01) 	09/02/2022 	_x86_64_	(2 CPU)<br><br>avg-cpu:  %user   %<span class="hljs-built_in">nice</span> %system %iowait  %steal   %idle<br>           0.07    0.01    0.65    0.02    0.00   99.25<br><br>Device             tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn<br>sda               3.18        79.02        15.72     365404      72707<br>scd0              0.03         0.37         0.00       1693          0<br>dm-0              2.58        67.25        14.83     310990      68574<br>dm-1              0.02         0.48         0.00       2220          0<br>dm-2              0.20         0.59         0.44       2749       2048<br><br><br>----------------------------------------------------------------------------<br>tps：该设备每秒的传输次数（Indicate the number of transfers per second that were issued to the device.）。<br><span class="hljs-string">&quot;一次传输&quot;</span>意思是<span class="hljs-string">&quot;一次I/O请求&quot;</span>。多个逻辑请求可能会被合并为<span class="hljs-string">&quot;一次I/O请求&quot;</span>。<span class="hljs-string">&quot;一次传输&quot;</span>请求的大小是未知的。<br><br>kB_read/s：每秒从设备（drive expressed）读取的数据量；<br>kB_wrtn/s：每秒向设备（drive expressed）写入的数据量；<br>kB_read：读取的总数据量；<br>kB_wrtn：写入的总数量数据量；<br>这些单位都为Kilobytes。<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-13-iotop-监视磁盘I-O"><a href="#2-13-iotop-监视磁盘I-O" class="headerlink" title="2.13 iotop 监视磁盘I/O"></a>2.13 iotop 监视磁盘I/O</h3><p>iotop命令是一个用来监视磁盘I/O使用状况的top类工具iotop具有与top相似的UI，其中包括PID、用户、I/O、进程等相关信息，可查看每个进程是如何使用IO</p>
+<blockquote>
+<p>第一行：Read和Write速率总计</p>
+<p>第二行：实际的Read和Write速率</p>
+<p>第三行：参数如下：</p>
+<ul>
+<li>线程ID（按p切换为进程ID）</li>
+<li>优先级</li>
+<li>用户</li>
+<li>磁盘读速率</li>
+<li>磁盘写速率</li>
+<li>swap交换百分比</li>
+<li>IO等待所占的百分比</li>
+</ul>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220903144156287-876239960.png"><img src="2927659-20220903144156287-876239960.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-14-iftop-显示网络带宽使用情况"><a href="#2-14-iftop-显示网络带宽使用情况" class="headerlink" title="2.14 iftop 显示网络带宽使用情况"></a>2.14 iftop 显示网络带宽使用情况</h3><h3 id="2-15-nload-查看网络实时吞吐量"><a href="#2-15-nload-查看网络实时吞吐量" class="headerlink" title="2.15 nload 查看网络实时吞吐量"></a>2.15 nload 查看网络实时吞吐量</h3><p>nload 是一个实时监控网络流量和带宽使用情况，以数值和动态图展示进出的流量情况,通过EPEL源安装界面操作</p>
+<blockquote>
+<ul>
+<li>上下方向键、左右方向键、enter键或者tab键都就可以切换查看多个网卡的流量情况</li>
+<li>按 F2 显示选项窗口</li>
+<li>按 q 或者 Ctrl+C 退出 nload</li>
+</ul>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220903141633809-1993558218.png"><img src="2927659-20220903141633809-1993558218.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-16-nethogs-查看进程网络带宽的使用情况"><a href="#2-16-nethogs-查看进程网络带宽的使用情况" class="headerlink" title="2.16 nethogs 查看进程网络带宽的使用情况"></a>2.16 nethogs 查看进程网络带宽的使用情况</h3><p>NetHogs是一个开源的命令行工具（类似于Linux的top命令），用来按进程或程序实时统计网络带宽使用率。</p>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220903144807560-580899557.png"><img src="2927659-20220903144807560-580899557.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-17-iptraf-ng-网络监视工具"><a href="#2-17-iptraf-ng-网络监视工具" class="headerlink" title="2.17 iptraf-ng 网络监视工具"></a>2.17 iptraf-ng 网络监视工具</h3><p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220903145023550-413858000.png"><img src="2927659-20220903145023550-413858000.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-18-dstat-系统资源统计"><a href="#2-18-dstat-系统资源统计" class="headerlink" title="2.18 dstat 系统资源统计"></a>2.18 dstat 系统资源统计</h3><p>dstat由pcp-system-tools包提供，但安装dstat包即可, 可用于代替 vmstat,iostat功能</p>
+<p>格式：<code>dstat [-afv] [options..] [delay [count]]</code></p>
+<blockquote>
+<p>常用选项</p>
+<ul>
+<li>-c 显示cpu相关信息</li>
+<li>-C #,#,…,total</li>
+<li>-d 显示disk相关信息</li>
+<li>-D total,sda,sdb,…</li>
+<li>-g 显示page相关统计数据</li>
+<li>-m 显示memory相关统计数据</li>
+<li>-n 显示network相关统计数据</li>
+<li>-p 显示process相关统计数据</li>
+<li>-r 显示io请求相关的统计数据</li>
+<li>-s 显示swapped相关的统计数据</li>
+<li>–tcp</li>
+<li>–udp</li>
+<li>–unix</li>
+<li>–raw</li>
+<li>–socket</li>
+<li>–ipc</li>
+<li>–top-cpu：显示最占用CPU的进程</li>
+<li>–top-io: 显示最占用io的进程</li>
+<li>–top-mem: 显示最占用内存的进程</li>
+<li>–top-latency: 显示延迟最大的进程</li>
+</ul>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220903004441174-1034827746.png"><img src="2927659-20220903004441174-1034827746.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-19-glances-综合监控工具"><a href="#2-19-glances-综合监控工具" class="headerlink" title="2.19 glances 综合监控工具"></a>2.19 glances 综合监控工具</h3><p>此工具可以通过EPEL源安装,CentOS 8 目前已提供,但测试有问题</p>
+<blockquote>
+<p>常用选项：</p>
+<ul>
+<li>-b: 以Byte为单位显示网卡数据速率</li>
+<li>-d: 关闭磁盘I/O模块</li>
+<li>-f /path/to/somefile: 设定输入文件位置</li>
+<li>-o {HTML|CSV}：输出格式</li>
+<li>-m: 禁用mount模块</li>
+<li>-n: 禁用网络模块</li>
+<li>-t #: 延迟时间间隔</li>
+<li>-1：每个CPU的相关数据单独显示</li>
+</ul>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220903145731828-976278310.png"><img src="2927659-20220903145731828-976278310.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-20-lsof-查看进程打开文件"><a href="#2-20-lsof-查看进程打开文件" class="headerlink" title="2.20 lsof 查看进程打开文件"></a>2.20 lsof 查看进程打开文件</h3><blockquote>
+<p>选项</p>
+<ul>
+<li>-a：列出打开文件存在的进程</li>
+<li>-c&lt;进程名&gt;：列出指定进程所打开的文件</li>
+<li>-g：列出GID号进程详情</li>
+<li>-d&lt;文件号&gt;：列出占用该文件号的进程</li>
+<li>+d&lt;目录&gt;：列出目录下被打开的文件</li>
+<li>+D&lt;目录&gt;：递归列出目录下被打开的文件</li>
+<li>-n&lt;目录&gt;：列出使用NFS的文件</li>
+<li><strong>-i&lt;条件&gt;：列出符合条件的进程(4、6、协议、:端口、 @ip )</strong></li>
+<li>-p&lt;进程号&gt;：列出指定进程号所打开的文件</li>
+<li>-u：列出UID号进程详情</li>
+<li>-h：显示帮助信息</li>
+<li>-v：显示版本信息。</li>
+<li>-n: 不反向解析网络名字</li>
+</ul>
+</blockquote>
+<h4 id="范例：使用方法-3"><a href="#范例：使用方法-3" class="headerlink" title="范例：使用方法"></a>范例：使用方法</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#查看当前哪个进程正在使用此文件</span><br>[root@rocky01 ~]<span class="hljs-comment"># lsof /var/log/messages</span><br>COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME<br>rsyslogd 915 root   5w   REG    8,2  1419936 134802547 /var/log/messages<br><br><span class="hljs-comment">#指定进程号，可以查看该进程打开的文件</span><br>[root@rocky01 ~]<span class="hljs-comment"># lsof -p 9527</span><br><br><span class="hljs-comment">#查看指定程序打开的文件</span><br>[root@rocky01 ~]<span class="hljs-comment"># lsof -c httpd</span><br><br><span class="hljs-comment">#查看指定用户打开的文件</span><br>lsof -u root | more<br><br><span class="hljs-comment">#查看所有网络连接，通过参数-i查看网络连接的情况，包括连接的ip、端口等以及一些服务的连接情况</span><br><span class="hljs-comment">#例如：sshd等。也可以通过指定ip查看该ip的网络连接情况</span><br>lsof -i –n      <br>lsof -i@127.0.0.1<br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：恢复正在使用中的误删除的文件"><a href="#范例：恢复正在使用中的误删除的文件" class="headerlink" title="范例：恢复正在使用中的误删除的文件"></a>范例：恢复正在使用中的误删除的文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash">一、此文件必须要被打开<br>[root@rocky01 ~]<span class="hljs-comment"># cat Willoneday.txt</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;lsof test!&quot;</span><br>[root@rocky01 ~]<span class="hljs-comment"># tail -f Willoneday.txt &amp;</span><br>[1] 18189<br><br>二、删除此文件<br>[root@rocky01 ~]<span class="hljs-comment"># lsof Willoneday.txt</span><br>COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF      NODE NAME<br><span class="hljs-built_in">tail</span>    18189 root    3r   REG  253,0       18 201392493 Willoneday.txt<br>[root@rocky01 ~]<span class="hljs-comment"># rm -rf Willoneday.txt</span><br>[root@rocky01 ~]<span class="hljs-comment"># cat Willoneday.txt</span><br><span class="hljs-built_in">cat</span>: Willoneday.txt: No such file or directory<br><br>三、找到此文件PID，进入fd（打开文件描述符），找到对应文件标识，重定向即可<br>[root@rocky01 ~]<span class="hljs-comment"># lsof |grep delete</span><br><span class="hljs-built_in">tail</span>      18189                   root    3r      REG              253,0       18  201392493 /root/Willoneday.txt (deleted)<br>[root@rocky01 ~]<span class="hljs-comment"># ll /proc/18189/fd/</span><br>total 0<br>lrwx------ 1 root root 64 Sep  3 01:11 0 -&gt; /dev/pts/0<br>lrwx------ 1 root root 64 Sep  3 01:11 1 -&gt; /dev/pts/0<br>lrwx------ 1 root root 64 Sep  3 01:11 2 -&gt; /dev/pts/0<br>lr-x------ 1 root root 64 Sep  3 01:11 3 -&gt; <span class="hljs-string">&#x27;/root/Willoneday.txt (deleted)&#x27;</span><br>lr-x------ 1 root root 64 Sep  3 01:11 4 -&gt; anon_inode:inotify<br>[root@rocky01 ~]<span class="hljs-comment"># cat /proc/18189/fd/3 &gt; Willoneday.txt</span><br>[root@rocky01 ~]<span class="hljs-comment"># cat Willoneday.txt</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;lsof test!&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-21-信号发送"><a href="#2-21-信号发送" class="headerlink" title="2.21 信号发送"></a>2.21 信号发送</h3><h4 id="2-21-1-kill"><a href="#2-21-1-kill" class="headerlink" title="2.21.1 kill"></a>2.21.1 kill</h4><p>kill：内部命令，可用来向进程发送控制信号，以实现对进程管理,每个信号对应一个数字，信号名称以SIG开头（可省略），不区分大小写</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#显示当前系统可用信号：</span><br>[root@rocky01 ~]<span class="hljs-comment"># kill -L</span><br> 1) SIGHUP	 2) SIGINT	 3) SIGQUIT	 4) SIGILL	 5) SIGTRAP<br> 6) SIGABRT	 7) SIGBUS	 8) SIGFPE	 9) SIGKILL	10) SIGUSR1<br>11) SIGSEGV	12) SIGUSR2	13) SIGPIPE	14) SIGALRM	15) SIGTERM<br>16) SIGSTKFLT	17) SIGCHLD	18) SIGCONT	19) SIGSTOP	20) SIGTSTP<br>21) SIGTTIN	22) SIGTTOU	23) SIGURG	24) SIGXCPU	25) SIGXFSZ<br>26) SIGVTALRM	27) SIGPROF	28) SIGWINCH	29) SIGIO	30) SIGPWR<br>31) SIGSYS	34) SIGRTMIN	35) SIGRTMIN+1	36) SIGRTMIN+2	37) SIGRTMIN+3<br>38) SIGRTMIN+4	39) SIGRTMIN+5	40) SIGRTMIN+6	41) SIGRTMIN+7	42) SIGRTMIN+8<br>43) SIGRTMIN+9	44) SIGRTMIN+10	45) SIGRTMIN+11	46) SIGRTMIN+12	47) SIGRTMIN+13<br>48) SIGRTMIN+14	49) SIGRTMIN+15	50) SIGRTMAX-14	51) SIGRTMAX-13	52) SIGRTMAX-12<br>53) SIGRTMAX-11	54) SIGRTMAX-10	55) SIGRTMAX-9	56) SIGRTMAX-8	57) SIGRTMAX-7<br>58) SIGRTMAX-6	59) SIGRTMAX-5	60) SIGRTMAX-4	61) SIGRTMAX-3	62) SIGRTMAX-2<br>63) SIGRTMAX-1	64) SIGRTMAX <br><br>[root@rocky01 ~]<span class="hljs-comment"># trap -l</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>常用信号</p>
+<ul>
+<li><ol>
+<li>SIGHUP 无须关闭进程而让其重读配置文件</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>SIGINT 中止正在运行的进程；相当于Ctrl+c</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>SIGQUIT 相当于ctrl+\</li>
+</ol>
+</li>
+<li><ol start="9">
+<li>SIGKILL 强制杀死正在运行的进程,可能会导致数据丢失,慎用!</li>
+</ol>
+</li>
+<li><ol start="15">
+<li>SIGTERM 终止正在运行的进程，默认信号</li>
+</ol>
+</li>
+<li><ol start="18">
+<li>SIGCONT 继续运行</li>
+</ol>
+</li>
+<li><ol start="19">
+<li>SIGSTOP 后台休眠</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<h4 id="2-21-2-killall"><a href="#2-21-2-killall" class="headerlink" title="2.21.2 killall"></a>2.21.2 killall</h4><p>killall命令用于杀死指定名字的进程</p>
+<h4 id="2-21-3-pkill"><a href="#2-21-3-pkill" class="headerlink" title="2.21.3 pkill"></a>2.21.3 pkill</h4><p>pkill命令可按模式杀死进程</p>
+<h4 id="范例：利用-0-信号实现进程的健康性检查"><a href="#范例：利用-0-信号实现进程的健康性检查" class="headerlink" title="范例：利用 0 信号实现进程的健康性检查"></a>范例：利用 0 信号实现进程的健康性检查</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#如果信号为0，则不发送实际信号，但仍执行错误检查</span><br>[root@centos8 ~]<span class="hljs-comment">#man kill</span><br>If signal is 0, <span class="hljs-keyword">then</span> no actual signal is sent, but error checking is still performed.<br><br>[root@centos8 ~]<span class="hljs-comment">#killall -0 ping</span><br>[root@centos8 ~]<span class="hljs-comment">#echo $?</span><br>0<br>[root@centos8 ~]<span class="hljs-comment">#killall -0 ping</span><br>ping: no process found<br>[root@centos8 ~]<span class="hljs-comment">#echo $?</span><br>1<br><br><span class="hljs-comment">#此方式有局限性，即使进程处于停止或僵尸状态，此方式仍然认为是进程是健康的</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-22-cockpit-CentOS8新特性"><a href="#2-22-cockpit-CentOS8新特性" class="headerlink" title="2.22 cockpit CentOS8新特性"></a>2.22 cockpit CentOS8新特性</h3><p>由cockpit包提供,当前Ubuntu和CentOS7也支持此工具</p>
+<blockquote>
+<p>Cockpit 是CentOS 8 取入的新特性，是一个基于 Web 界面的应用，它提供了对系统的图形化管理</p>
+<ul>
+<li>监控系统活动（CPU、内存、磁盘 IO 和网络流量）</li>
+<li>查看系统日志条目</li>
+<li>查看磁盘分区的容量</li>
+<li>查看网络活动（发送和接收）</li>
+<li>查看用户帐户</li>
+<li>检查系统服务的状态</li>
+<li>提取已安装应用的信息</li>
+<li>查看和安装可用更新（如果以 root 身份登录）并在需要时重新启动系统</li>
+<li>打开并使用终端窗口</li>
+</ul>
+</blockquote>
+<h3 id="2-23-作业管理"><a href="#2-23-作业管理" class="headerlink" title="2.23 作业管理"></a>2.23 作业管理</h3><blockquote>
+<p>Linux的作业控制</p>
+<p>前台作业：通过终端启动，且启动后一直占据终端</p>
+<p>后台作业：可通过终端启动，但启动后即转入后台运行（释放终端）</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220903173329135-1799538779.png"><img src="2927659-20220903173329135-1799538779.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h4 id="2-23-1让作业运行于后台"><a href="#2-23-1让作业运行于后台" class="headerlink" title="2.23.1让作业运行于后台"></a>2.23.1让作业运行于后台</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">运行中的作业： Ctrl+z<br>尚未启动的作业： COMMAND &amp;<br></code></pre></td></tr></table></figure>
+
+<p>后台作业虽然被送往后台运行，但其依然与终端相关；</p>
+<p>退出终端，将关闭后台作业。如果希望送往后台后，剥离与终端的关系</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># nohup COMMAND &amp;&gt;/dev/null &amp; </span><br>[root@rocky01 ~]<span class="hljs-comment"># screen；COMMAND</span><br>[root@rocky01 ~]<span class="hljs-comment"># tmux；COMMAND</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="2-23-2-查看当前终端所有作业"><a href="#2-23-2-查看当前终端所有作业" class="headerlink" title="2.23.2 查看当前终端所有作业"></a>2.23.2 查看当前终端所有作业</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># jobs</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="2-23-3-作业控制"><a href="#2-23-3-作业控制" class="headerlink" title="2.23.3 作业控制"></a>2.23.3 作业控制</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">fg</span> [[%]JOB_NUM]：把指定的后台作业调回前台<br><span class="hljs-built_in">bg</span> [[%]JOB_NUM]：让送往后台的作业在后台继续运行<br><span class="hljs-built_in">kill</span> [%JOB_NUM]： 终止指定的作业<br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：nohup"><a href="#范例：nohup" class="headerlink" title="范例：nohup"></a>范例：nohup</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># nohup ping 127.0.0.1 &amp;&gt; /dev/null &amp;</span><br>[1] 20691<br>[root@rocky01 ~]<span class="hljs-comment"># pstree -p |grep ping</span><br>           |-sshd(942)-+-sshd(19392)---sshd(19394)---bash(19395)---ping(20691)<br><br><span class="hljs-comment">#关闭对应的终端,再观察进程的父进程</span><br>[root@rocky01 ~]<span class="hljs-comment"># pstree -p |grep ping</span><br>           |-ping(20691)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-24-并行运行"><a href="#2-24-并行运行" class="headerlink" title="2.24 并行运行"></a>2.24 并行运行</h3><p>利用后台执行，实现并行功能，即同时运行多个进程，提高效率</p>
+<p>后台执行的程序，要想退出，要个wait指令，否则，它什么时候退出，敲回车才能看出来</p>
+<h4 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># cat all.sh</span><br>/root/f1.sh&amp;<br>/root/f2.sh&amp;<br>/root/f3.sh&amp;<br><span class="hljs-built_in">wait</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">(/root/f1.sh&amp;);(/root/f2.sh&amp;);(/root/f3.sh&amp;)<br></code></pre></td></tr></table></figure>
+
+<h4 id="方法3"><a href="#方法3" class="headerlink" title="方法3"></a>方法3</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># /root/f1.sh&amp;/root/f2.sh&amp;/root/f3.sh&amp;wait</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：多组命令实现并行"><a href="#范例：多组命令实现并行" class="headerlink" title="范例：多组命令实现并行"></a>范例：多组命令实现并行</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># &#123; ping -c3 127.1; ping 127.2; &#125;&amp; &#123; ping -c3 127.3 ;ping 127.4; &#125;&amp;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：扫描主机"><a href="#范例：扫描主机" class="headerlink" title="范例：扫描主机"></a>范例：扫描主机</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@centos8 ~]<span class="hljs-comment">#cat scan_host.sh</span><br><span class="hljs-comment">#!/bin/bash</span><br><br><span class="hljs-comment">#******************************************************</span><br><span class="hljs-comment"># Author:          会不会有那么一天</span><br><span class="hljs-comment"># E-mail:          willoneday@qq.com</span><br><span class="hljs-comment"># Date:            2022-09-04</span><br><span class="hljs-comment"># FileName:        2.sh</span><br><span class="hljs-comment"># Version:         1.0.0</span><br><span class="hljs-comment"># Description:     The test script</span><br><span class="hljs-comment"># BLOG:            https://www.cnblogs.com/Willoneday</span><br><span class="hljs-comment">#******************************************************</span><br><br>net=10.0.0<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> &#123;1..254&#125;;<span class="hljs-keyword">do</span><br>   &#123; <br>    <span class="hljs-keyword">if</span> ping -c1 -W1 <span class="hljs-variable">$net</span>.<span class="hljs-variable">$i</span> &amp;&gt; /dev/null;<span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-variable">$net</span>.<span class="hljs-variable">$i</span> is up<br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-variable">$net</span>.<span class="hljs-variable">$i</span> is down<br>    <span class="hljs-keyword">fi</span><br>   &#125;&amp;<br><span class="hljs-keyword">done</span><br><span class="hljs-built_in">wait</span><br><br>[root@rocky01 ~]<span class="hljs-comment"># bash scanhost.sh</span><br>10.0.0.7 is up<br>10.0.0.1 is up<br>10.0.0.2 is up<br>10.0.0.6 is up<br>10.0.0.8 is up<br>10.0.0.3 is down<br>10.0.0.5 is down<br>10.0.0.29 is down<br>10.0.0.14 is down<br>10.0.0.15 is down<br>10.0.0.10 is down<br>10.0.0.23 is down<br>10.0.0.12 is down<br>......<br>10.0.0.245 is down<br>10.0.0.246 is down<br>10.0.0.240 is down<br>[root@rocky01 ~]<span class="hljs-comment">#</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-任务计划"><a href="#3-任务计划" class="headerlink" title="3 任务计划"></a>3 任务计划</h2><p><strong>通过任务计划，可以让系统自动的按时间或周期性任务执行任务</strong></p>
+<p>注意: 此功能需要实现邮件通知，必须安装并启动邮件服务</p>
+<p>范例: 环境准备</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># yum -y install postfix</span><br>[root@rocky01 ~]<span class="hljs-comment"># systemctl enable --now postfix</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>未来的某时间点执行一次任务</p>
+<ul>
+<li>at 指定时间点，执行一次性任务</li>
+<li>batch 系统自行选择空闲时间去执行此处指定的任务</li>
+</ul>
+<p>周期性运行某任务</p>
+<ul>
+<li>cron</li>
+</ul>
+</blockquote>
+<h3 id="3-1-一次性任务"><a href="#3-1-一次性任务" class="headerlink" title="3.1 一次性任务"></a>3.1 一次性任务</h3><h4 id="3-1-1-at-工具"><a href="#3-1-1-at-工具" class="headerlink" title="3.1.1 at 工具"></a>3.1.1 at 工具</h4><p>由包 at 提供</p>
+<blockquote>
+<ul>
+<li>依赖与atd服务,需要启动才能实现at任务</li>
+<li>at队列存放在/var/spool/at目录中,ubuntu存放在/var/spool/cron/atjobs目录下</li>
+<li>执行任务时PATH变量的值和当前定义任务的用户身份一致</li>
+</ul>
+</blockquote>
+<p>格式：<code>at [option] TIME</code></p>
+<p>常用选项：</p>
+<ul>
+<li>-V 显示版本信息</li>
+<li>-t time  时间格式 [[CC]YY]MMDDhhmm[.ss]</li>
+<li>-l 列出指定队列中等待运行的作业；相当于atq</li>
+<li>-d N 删除指定的N号作业；相当于atrm</li>
+<li>-c N 查看具体作业N号任务</li>
+<li>-f file 指定的文件中读取任务</li>
+<li>-m 当任务被完成之后，将给用户发送邮件，即使没有标准输出</li>
+</ul>
+<p>注意：</p>
+<p>作业执行命令的结果中的标准输出和错误以执行任务的用户身份发邮件通知给 root</p>
+<p>默认CentOS 8 最小化安装没有安装邮件服务,需要自行安装</p>
+<p>TIME：定义出什么时候进行 at 这项任务的时间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">HH:MM [YYYY-mm-dd]<br>noon, midnight, teatime（4pm）,tomorrow<br>now+<span class="hljs-comment">#&#123;minutes,hours,days, OR weeks&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="范例：at-时间格式"><a href="#范例：at-时间格式" class="headerlink" title="范例：at 时间格式"></a>范例：at 时间格式</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#规定在某年某月的某一天的特殊时刻进行该项任务</span><br>HH:MM YYYY-MM-DD   <br>02:00 1949-10-01   <br><br>HH:MM[am|pm] [Month] [Date]<br>06pm March 17<br>17:20 tomorrow<br><br><span class="hljs-comment">#在某个时间点再加几个时间后才进行该项任务</span><br>HH:MM[am|pm] + number [minutes|hours|days|weeks]<br>now + 5 min <br>02pm + 3 days<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>at 任务执行方式：</p>
+<ul>
+<li>交互式</li>
+<li>输入重定向</li>
+<li>at -f file</li>
+</ul>
+<p>/etc/at.{allow,deny} 控制用户是否能执行at任务</p>
+<ul>
+<li>白名单：/etc/at.allow 默认不存在，只有该文件中的用户才能执行at命令</li>
+<li>黑名单：/etc/at.deny 默认存在，拒绝该文件中用户执行at命令，而没有在at.deny 文件中的使用者则可执行</li>
+<li>如果两个文件都不存在，只有 root 可以执行 at 命令</li>
+</ul>
+</blockquote>
+<h3 id="3-2-cron-周期性任务计划"><a href="#3-2-cron-周期性任务计划" class="headerlink" title="3.2 cron 周期性任务计划"></a>3.2 cron 周期性任务计划</h3><p>周期性任务计划cron相关的程序包：</p>
+<ul>
+<li>cronie：主程序包，提供crond守护进程及相关辅助工具</li>
+<li>crontabs：包含CentOS提供系统维护任务</li>
+<li>cronie-anacron：cronie的补充程序，用于监控cronie任务执行状况，如:cronie中的任务在过去该运行的时间点未能正常运行，则anacron会随后启动一次此任务</li>
+</ul>
+<p>cron 依赖于crond服务，确保crond守护处于运行状态</p>
+<p>cron任务分为：</p>
+<ul>
+<li>系统cron任务：系统维护作业，/etc/crontab 主配置文件， /etc/cron.d/ 子配置文件</li>
+<li>用户cron任务：<ul>
+<li><strong>红帽系统保存在 /var/spool/cron/USERNAME</strong></li>
+<li>Ubuntu 系统存放在/var/spool/cron/crontabs/USERNAME，利用 crontab 命令管理</li>
+</ul>
+</li>
+</ul>
+<p>计划任务日志：/var/log/cron</p>
+<h4 id="3-2-1-系统cron计划任务"><a href="#3-2-1-系统cron计划任务" class="headerlink" title="3.2.1 系统cron计划任务"></a>3.2.1 系统cron计划任务</h4><p>/etc/crontab 格式说明，详情参见 man 5 crontab</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># cat /etc/crontab</span><br>SHELL=/bin/bash                      <span class="hljs-comment">#默认的SHELL类型</span><br>PATH=/sbin:/bin:/usr/sbin:/usr/bin   <span class="hljs-comment">#默认的PATH变量值,可修改为其它路径</span><br>MAILTO=root                          <span class="hljs-comment">#默认标准输出和错误发邮件给root,可以指向其它用户</span><br><br><span class="hljs-comment"># For details see man 4 crontabs</span><br><br><span class="hljs-comment"># Example of job definition:</span><br><span class="hljs-comment"># .---------------- minute (0 - 59)</span><br><span class="hljs-comment"># |  .------------- hour (0 - 23)</span><br><span class="hljs-comment"># |  |  .---------- day of month (1 - 31)</span><br><span class="hljs-comment"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...</span><br><span class="hljs-comment"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat</span><br><span class="hljs-comment"># |  |  |  |  |</span><br><span class="hljs-comment"># *  *  *  *  * user-name  command to be executed</span><br><span class="hljs-comment"># 分 时 天 月 周 用户 命令</span><br><br>                     <br></code></pre></td></tr></table></figure>
+
+<h5 id="范例：使用方法-4"><a href="#范例：使用方法-4" class="headerlink" title="范例：使用方法"></a>范例：使用方法</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#晚上9点10分运行echo命令,输出信息仍会发送到root 邮箱</span><br>10 21 * * * zhangsan /bin/echo <span class="hljs-string">&quot;Howdy!&quot;</span><br><br><span class="hljs-comment">#每3小时echo和wall命令</span><br>0 */3 * * * zhangsan /bin/echo “howdy”;wall “Willoneday!”<br></code></pre></td></tr></table></figure>
+
+<h5 id="crond任务相关文件"><a href="#crond任务相关文件" class="headerlink" title="crond任务相关文件"></a>crond任务相关文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/crontab 配置文件<br>/etc/cron.d/ 配置文件<br>/etc/cron.hourly/ 脚本<br>/etc/cron.daily/ 脚本<br>/etc/cron.weekly/ 脚本<br>/etc/cron.monthly/ 脚本<br></code></pre></td></tr></table></figure>
+
+<h4 id="3-2-2-用户计划任务"><a href="#3-2-2-用户计划任务" class="headerlink" title="3.2.2 用户计划任务"></a>3.2.2 用户计划任务</h4><p>crontab命令</p>
+<ul>
+<li>每个用户都有专用的cron任务文件：/var/spool/cron/USERNAME</li>
+<li>默认标准输出和错误会被发邮件给对应的用户,如：root创建的任务就发送至root的邮箱</li>
+<li>root能够修改其它用户的作业</li>
+<li><strong>用户的cron 中默认 PATH=/usr/bin:/bin,如果使用其它路径,在任务文件的第一行加PATH=/path或者加入到计划任务执行的脚本中</strong></li>
+<li>第六个字段指定要运行的命令。 该行的整个命令部分，直至换行符或“％”字符，指定的shell执行.除非使用反斜杠（\）进行转义，否则该命令中的“％”字符将变为换行符，并且第一个％之后的所有数据将作为标准输入发送到该命令。</li>
+</ul>
+<p> crontab命令格式：</p>
+<p> <code>crontab [-u user] [-l | -r | -e] [-i]</code></p>
+<p> 常用选项：</p>
+<ul>
+<li>-l 列出所有任务</li>
+<li>-e 编辑任务</li>
+<li>-r 移除所有任务</li>
+<li>-i 同-r一同使用，以交互式模式移除指定任务</li>
+<li>-u user 指定用户管理cron任务,仅root可运行</li>
+</ul>
+<p>控制用户执行计划任务：</p>
+<ul>
+<li>/etc/cron.{allow,deny}</li>
+</ul>
+<h5 id="范例：Ubuntu修改默认文本编辑器为vim"><a href="#范例：Ubuntu修改默认文本编辑器为vim" class="headerlink" title="范例：Ubuntu修改默认文本编辑器为vim"></a>范例：Ubuntu修改默认文本编辑器为vim</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@ubuntu01 ~]<span class="hljs-comment"># cat /etc/profile.d/env.sh</span><br><span class="hljs-built_in">export</span> EDITOR=vim<br>[root@ubuntu01 ~]<span class="hljs-comment"># source /etc/profile.d/env.sh</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="范例：PATH变量"><a href="#范例：PATH变量" class="headerlink" title="范例：PATH变量"></a>范例：PATH变量</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#方法1：在计划任务配置中指定PATH</span><br>[root@rocky01 ~]<span class="hljs-comment"># crontab -l</span><br>PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin<br>* * * * * useradd hehe;<span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span><br><br><span class="hljs-comment">#方法2：在脚本中指定PATH变量</span><br>[root@rocky01 ~]<span class="hljs-comment"># crontab -l</span><br>* * * * * /data/test.sh<br>[root@rocky01 ~]<span class="hljs-comment"># cat /data/test.sh</span><br><span class="hljs-comment">#!/bin/bash</span><br>PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin<br>useradd hehe<br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="面试题：11月每天的6-12点之间每隔2小时执行-app-bin-test-sh"><a href="#面试题：11月每天的6-12点之间每隔2小时执行-app-bin-test-sh" class="headerlink" title="面试题：11月每天的6-12点之间每隔2小时执行/app/bin/test.sh"></a>面试题：11月每天的6-12点之间每隔2小时执行/app/bin/test.sh</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># crontab -l</span><br>0 6-12/2 * 11 * /app/bin/test.sh<br></code></pre></td></tr></table></figure>
+
+<h5 id="注意：运行结果的标准输出和错误以邮件通知给相关用户"><a href="#注意：运行结果的标准输出和错误以邮件通知给相关用户" class="headerlink" title="注意：运行结果的标准输出和错误以邮件通知给相关用户"></a>注意：运行结果的标准输出和错误以邮件通知给相关用户</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">(1) COMMAND &gt; /dev/null <br>(2) COMMAND &amp;&gt; /dev/null<br></code></pre></td></tr></table></figure>
+
+<p>cron任务中不建议使用%，它有特殊用途，它表示换行的特殊意义，且第一个%后的所有字符串会被将成当作命令的标准输入,如果在命令中要使用%，则需要用 \ 转义</p>
+<p>注意：将%放置于单引号中是不支持的</p>
+<h5 id="范例：-在crontab中-的用法"><a href="#范例：-在crontab中-的用法" class="headerlink" title="范例： 在crontab中%的用法"></a>范例： 在crontab中%的用法</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">30 2 * * * /bin/cp -a /etc/ /data/etc`<span class="hljs-built_in">date</span> +\%F_\%T`<br>30 2 * * * /bin/cp -a /etc/ /data/etc`<span class="hljs-built_in">date</span> +‘%F_%T’` <span class="hljs-comment">#有问题</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="范例：秒级别运行任务"><a href="#范例：秒级别运行任务" class="headerlink" title="范例：秒级别运行任务"></a>范例：秒级别运行任务</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> min <span class="hljs-keyword">in</span> 0 1 2; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hi&quot;</span>; <span class="hljs-built_in">sleep</span> 20; <span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="二、系统启动和内核管理"><a href="#二、系统启动和内核管理" class="headerlink" title="二、系统启动和内核管理"></a>二、系统启动和内核管理</h1><h2 id="1-CentOS-6-的启动管理"><a href="#1-CentOS-6-的启动管理" class="headerlink" title="1 CentOS 6 的启动管理"></a>1 CentOS 6 的启动管理</h2><h3 id="1-1-CentOS-6-启动流程"><a href="#1-1-CentOS-6-启动流程" class="headerlink" title="1.1 CentOS 6 启动流程"></a>1.1 CentOS 6 启动流程</h3><p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220924142611328-542291317.png"><img src="2927659-20220924142611328-542291317.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<blockquote>
+<ol>
+<li>加载BIOS的硬件信息，获取第一个启动设备</li>
+<li>读取第一个启动设备MBR的引导加载程序(grub)的启动信息</li>
+<li>加载核心操作系统的核心信息，核心开始解压缩，并尝试驱动所有的硬件设备</li>
+<li>核心执行init程序，并获取默认的运行信息</li>
+<li>init程序执行/etc/rc.d/rc.sysinit文件，重新挂载根文件系统</li>
+<li>启动核心的外挂模块</li>
+<li>init执行运行的各个批处理文件(scripts)</li>
+<li>init执行/etc/rc.d/rc.local</li>
+<li>执行/bin/login程序，等待用户登录</li>
+<li>登录之后开始以Shell控制主机</li>
+</ol>
+</blockquote>
+<h4 id="（1）硬件启动-POST"><a href="#（1）硬件启动-POST" class="headerlink" title="（1）硬件启动 POST"></a>（1）硬件启动 POST</h4><blockquote>
+<p>POST：Power-On-Self-Test，加电自检，是BIOS功能的一个主要部分。负责完成对CPU、主板、内存、硬盘子系统、显示子系统、串并行接口、键盘等硬件情况的检测</p>
+<p>主板的ROM：BIOS，Basic Input and Output System，保存着有关计算机系统最重要的基本输入输出程序，系统信息设置、开机加电自检程序和系统启动自举程序等</p>
+<p>主板的RAM：CMOS互补金属氧化物半导体，保存各项参数的设定，按次序查找引导设备，第一个有引导程序的设备为本次启动设备</p>
+</blockquote>
+<h4 id="（2）启动加载器-bootloader"><a href="#（2）启动加载器-bootloader" class="headerlink" title="（2）启动加载器 bootloader"></a>（2）启动加载器 bootloader</h4><h5 id="（2-1）grub-功能和组成"><a href="#（2-1）grub-功能和组成" class="headerlink" title="（2.1）grub 功能和组成"></a>（2.1）grub 功能和组成</h5><blockquote>
+<p>bootloader: 引导加载器，引导程序</p>
+<ul>
+<li>Windows: ntloader，仅是启动OS</li>
+<li>Linux：功能丰富，提供菜单，允许用户选择要启动系统或不同的内核版本；把用户选定的内核装载到内存中的特定空间中，解压、展开，并把系统控制权移交给内核</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Linux的bootloader</p>
+<ul>
+<li>LILO：LInux LOader，早期的bootloader，功能单一</li>
+<li>GRUB: GRand Unified Bootloader, CentOS 5,6 GRUB 0.97: GRUB Legacy， CentOS 7 以后使用GRUB 2.02</li>
+</ul>
+<p><strong>GRUB 启动阶段</strong></p>
+<p><strong>primary boot loader :</strong></p>
+<ul>
+<li><strong>1st stage：MBR的前446个字节</strong></li>
+<li><strong>1.5 stage：MBR 之后的扇区，让stage1中的bootloader能识别stage2所在的分区上的文件系统</strong></li>
+</ul>
+<p><strong>secondary boot loader ：</strong></p>
+<ul>
+<li><strong>2nd stage，分区文件/boot/grub/</strong></li>
+</ul>
+</blockquote>
+<h5 id="（2-2）CentOS6-grub安装"><a href="#（2-2）CentOS6-grub安装" class="headerlink" title="（2.2）CentOS6 grub安装"></a>（2.2）CentOS6 grub安装</h5><p>安装 grub的两种方法：</p>
+<p><strong>（1）grub-install 安装grub stage1和stage1_5到/dev/DISK磁盘上，并复制GRUB相关文件到 DIR/boot目录下</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">grub-install  /dev/DISK<br></code></pre></td></tr></table></figure>
+
+<p>（2）grub命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#grub</span><br>grub&gt; root (hd<span class="hljs-comment">#,#)</span><br>grub&gt; setup (hd<span class="hljs-comment">#)</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="实战范例：grub的第1阶段故障无法启动-进行修复"><a href="#实战范例：grub的第1阶段故障无法启动-进行修复" class="headerlink" title="实战范例：grub的第1阶段故障无法启动,进行修复"></a>实战范例：grub的第1阶段故障无法启动,进行修复</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#模拟破坏grub第1阶段</span><br>[root@centos6 grub]<span class="hljs-comment">#dd if=/dev/zero of=/dev/sda bs=1 count=446</span><br><br><span class="hljs-comment">#光盘启动，进入rescue模式</span><br><span class="hljs-comment">#chroot /mnt/sysimage</span><br><span class="hljs-comment">#grub-install /dev/sda</span><br><span class="hljs-comment">#sync</span><br><span class="hljs-comment">#exit</span><br><span class="hljs-comment">#exit</span><br><span class="hljs-comment">#reboot</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="范例：centos6下的-boot-grub-grub-conf配置文件"><a href="#范例：centos6下的-boot-grub-grub-conf配置文件" class="headerlink" title="范例：centos6下的/boot/grub/grub.conf配置文件"></a>范例：centos6下的/boot/grub/grub.conf配置文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@centos6 ~]<span class="hljs-comment"># cat /boot/grub/grub.conf</span><br>default=0<br><span class="hljs-built_in">timeout</span>=5<br>title Willoneday<br>root (hd0,0)<br>kernel /vmlinuz-2.6.32-754.e16.x86_64 root=/dev/sda2<br>initrd /initramfs-2.6.32-754.e16.x86_64.img<br><br><span class="hljs-comment">###解读###</span><br><span class="hljs-comment">#default：设定默认启动的菜单项；落单项(title)编号从0开始</span><br><span class="hljs-comment">#timeout：指定菜单项等待选项选择的时长</span><br><span class="hljs-comment">#kernel XXX：设定本次启动的内核文件；额外还可添加许多内核支持使用的cmdline参数；例如：max_loop=100 selinux=0</span><br><span class="hljs-comment">#hd表示硬盘，第一个0表示第一个硬盘,第二个0代表第一个分区</span><br><span class="hljs-comment">#root=/dev/sda2 真正硬盘的根分区</span><br><span class="hljs-comment">#initrd XXX：设定为选定的内核提供额外文件的ramdisk</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="范例：-破解root口令"><a href="#范例：-破解root口令" class="headerlink" title="范例： 破解root口令"></a>范例： 破解root口令</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">(1) 编辑grub菜单(选定要编辑的title，而后使用a 或 e 命令)<br>(2) 在选定的kernel后附加1, s, S，single 都可以进入单用户模式<br>(3) 在kernel所在行，键入“b”命令<br></code></pre></td></tr></table></figure>
+
+<h4 id="（3）加载-kernel"><a href="#（3）加载-kernel" class="headerlink" title="（3）加载 kernel"></a>（3）加载 kernel</h4><h5 id="范例：误删除-boot-initramfs-2-6-32-754-el6-x86-64-img无法启动，故障恢复"><a href="#范例：误删除-boot-initramfs-2-6-32-754-el6-x86-64-img无法启动，故障恢复" class="headerlink" title="范例：误删除/boot/initramfs-2.6.32-754.el6.x86_64.img无法启动，故障恢复"></a>范例：误删除/boot/initramfs-2.6.32-754.el6.x86_64.img无法启动，故障恢复</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@centos6 ~]<span class="hljs-comment">#rm -f /boot/initramfs-2.6.32-754.el6.x86_64.img</span><br>[root@centos6 ~]<span class="hljs-comment">#reboot</span><br><span class="hljs-comment">#进入rescue模式</span><br><span class="hljs-comment">#chroot /mnt/sysimage</span><br><span class="hljs-comment">#mkinitrd /boot/initramfs-$(uname -r).img $(uname -r)</span><br><span class="hljs-comment">#sync</span><br><span class="hljs-comment">#exit</span><br><span class="hljs-comment">#exit</span><br><span class="hljs-comment">#reboot</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="（4）init初始化"><a href="#（4）init初始化" class="headerlink" title="（4）init初始化"></a>（4）init初始化</h4><h5 id="（4-1）运行级别"><a href="#（4-1）运行级别" class="headerlink" title="（4.1）运行级别"></a>（4.1）运行级别</h5><p>运行级别：为系统运行或维护等目的而设定；0-6：7个级别，一般使用3, 5做为默认级别</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">0：关机<br>1：单用户模式(root自动登录), single, 维护模式<br>2：多用户模式，启动网络功能，但不会启动NFS；维护模式<br>3：多用户模式，正常模式；文本界面<br>4：预留级别；可同3级别<br>5：多用户模式，正常模式；图形界面<br>6：重启<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#切换级别：</span><br>init <span class="hljs-comment">#</span><br><br><span class="hljs-comment">#查看级别：</span><br>runlevel <br><span class="hljs-built_in">who</span> -r<br></code></pre></td></tr></table></figure>
+
+<h5 id="（4-2）初始化脚本-sysinit"><a href="#（4-2）初始化脚本-sysinit" class="headerlink" title="（4.2）初始化脚本 sysinit"></a>（4.2）初始化脚本 sysinit</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/rc.d/rc.sysinit<br>系统初始化脚本功能<br>(1) 设置主机名<br>(2) 设置欢迎信息<br>(3) 激活udev和selinux <br>(4) 挂载/etc/fstab文件中定义的文件系统<br>(5) 检测根文件系统，并以读写方式重新挂载根文件系统<br>(6) 设置系统时钟<br>(7) 激活swap设备<br>(8) 根据/etc/sysctl.conf文件设置内核参数<br>(9) 激活lvm及software raid设备<br>(10)加载额外设备的驱动程序<br>(11)清理操作<br></code></pre></td></tr></table></figure>
+
+<h4 id="（5）Centos6服务管理"><a href="#（5）Centos6服务管理" class="headerlink" title="（5）Centos6服务管理"></a>（5）Centos6服务管理</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#查看服务在所有级别的启动或关闭设定情形：</span><br>chkconfig [--list] [name]<br></code></pre></td></tr></table></figure>
+
+<h5 id="范例：自定义服务脚本"><a href="#范例：自定义服务脚本" class="headerlink" title="范例：自定义服务脚本"></a>范例：自定义服务脚本</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@centos6 ~]<span class="hljs-comment"># cat /etc/init.d/testsrv </span><br><span class="hljs-comment">#!/bin/bash</span><br><span class="hljs-comment"># chkconfig: - 96 3</span><br><span class="hljs-comment"># description: This is test service script</span><br>. /etc/init.d/functions <br><span class="hljs-function"><span class="hljs-title">start</span></span>()&#123;<br>   [ -e /var/lock/subsys/testsrv ] &amp;&amp; <span class="hljs-built_in">exit</span> || <span class="hljs-built_in">touch</span> /var/lock/subsys/testsrv<br>   action <span class="hljs-string">&quot;Starting testsrv&quot;</span><br>    <span class="hljs-built_in">sleep</span> 2 &#125;<br><span class="hljs-function"><span class="hljs-title">stop</span></span>()&#123;<br>   [ -e   /var/lock/subsys/testsrv ] &amp;&amp; <span class="hljs-built_in">rm</span> /var/lock/subsys/testsrv || <span class="hljs-built_in">exit</span><br>   action <span class="hljs-string">&quot;Stopping testsrv&quot;</span><br>&#125;<br><span class="hljs-function"><span class="hljs-title">status</span></span>()&#123;<br>   [ -e /var/lock/subsys/testsrv ] &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;testsrv is running...&quot;</span> || <span class="hljs-built_in">echo</span><br><span class="hljs-string">&quot;testsrv is stopped&quot;</span><br>&#125;<br><span class="hljs-keyword">case</span> <span class="hljs-variable">$1</span> <span class="hljs-keyword">in</span><br>start)<br>    start<br>   ;;<br>stop)<br>    stop<br>   ;;<br>restart)<br>    stop<br>    start<br>   ;;<br>status)<br>   status<br>   ;;<br>*)<br>    <span class="hljs-built_in">echo</span> $<span class="hljs-string">&quot;Usage: <span class="hljs-variable">$0</span> &#123;start|stop|status|restart&#125;&quot;</span><br>    <span class="hljs-built_in">exit</span> 2<br><span class="hljs-keyword">esac</span><br>[root@centos6 ~]<span class="hljs-comment"># chkconfig --add testsrv</span><br>[root@centos6 ~]<span class="hljs-comment"># chkconfig --list testsrv</span><br>testsrv       0:off 1:off 2:off 3:off 4:off 5:off 6:off<br>[root@centos6 ~]<span class="hljs-comment"># chmod +x /etc/init.d/testsrv</span><br>[root@centos6 ~]<span class="hljs-comment"># service testsrv start</span><br>/sbin:/usr/sbin:/bin:/usr/bin<br>Starting testsrv                                           [ OK ]<br>[root@centos6 ~]<span class="hljs-comment"># chkconfig --del testsrv</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="（6）非独立服务"><a href="#（6）非独立服务" class="headerlink" title="（6）非独立服务"></a>（6）非独立服务</h4><blockquote>
+<p>服务分为独立服务和非独立服务</p>
+<p>瞬态（Transient）服务被超级守护进程 xinetd 进程所管理，也称为非独立服务</p>
+<p>进入的请求首先被xinetd代理</p>
+<p>配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/xinetd.conf<br>/etc/xinetd.d/&lt;service&gt;<br></code></pre></td></tr></table></figure>
+</blockquote>
+<h5 id="范例：Centos6-开启-telnet服务"><a href="#范例：Centos6-开启-telnet服务" class="headerlink" title="范例：Centos6 开启 telnet服务"></a>范例：Centos6 开启 telnet服务</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@centos6 ~]<span class="hljs-comment"># yum -y install telnet-server</span><br><span class="hljs-comment">#设为开机启动</span><br>[root@centos6 ~]<span class="hljs-comment"># chkconfig telnet on   </span><br>[root@centos6 ~]<span class="hljs-comment"># service xinetd start</span><br><br><span class="hljs-comment">#注：由xinetd控制telnet的启动</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="（7）开机启动文件-rc-local"><a href="#（7）开机启动文件-rc-local" class="headerlink" title="（7）开机启动文件 rc.local"></a>（7）开机启动文件 rc.local</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/rc.local<br>/etc/rc.d/rc.local<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：正常级别下，最后启动一个服务S99local没有链接至/etc/rc.d/init.d一个服务脚本，而是指向了/etc/rc.d/rc.local脚本</p>
+<p>不便或不需写为服务脚本放置于/etc/rc.d/init.d/目录，且又想开机时自动运行的命令，可直接放置于/etc/rc.d/rc.local文件中</p>
+<p>/etc/rc.d/rc.local在指定运行级别脚本后运行</p>
+<p><strong>注意</strong><strong>:</strong> <strong>默认****Ubuntu</strong> <strong>无</strong> <strong>/etc/rc.local</strong> <strong>文件</strong><strong>,<strong><strong>可以创建此脚本文件并添加执行权限</strong></strong>,rc.local****的首行必须有</strong> <strong>shebang****机制</strong></p>
+</blockquote>
+<h4 id="（8）Centos6-启动过程总结"><a href="#（8）Centos6-启动过程总结" class="headerlink" title="（8）Centos6 启动过程总结"></a>（8）Centos6 启动过程总结</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">POST--<br>GRUB1阶段MBR446--<br>GRUB1.5MBR之后的空间（提供grub2文件所有分区的文件系统）--<br>GRUB2阶段（grub.conf）<br>--kernel(initramfs.img)--根分区--<br>/sbin/init--/etc/inittab--/etc/rc.sysinit（系统初始化脚本）--<br>/etc/rc.d/rc--/etc/rcN.d/K,S(/etc/init.d/)--/etc/rc.local--login登录<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-systemd和启动流程"><a href="#2-systemd和启动流程" class="headerlink" title="2 systemd和启动流程"></a>2 systemd和启动流程</h2><h3 id="2-1-systemd-特性"><a href="#2-1-systemd-特性" class="headerlink" title="2.1 systemd 特性"></a>2.1 systemd 特性</h3><p>Systemd：从 CentOS 7 版本之后开始用 systemd 实现init进程，系统启动和服务器守护进程管理器，负责在系统启动或运行时，激活系统资源，服务器进程和其它进程</p>
+<blockquote>
+<p>systemd 核心概念：unit</p>
+<p>unit表示不同类型的systemd对象，通过配置文件进行标识和配置；文件中主要包含了系统服务、监听socket、保存的系统快照以及其它与init相关的信息</p>
+<p>Unit类型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#查看unit类型</span><br>[root@rocky01 ~]<span class="hljs-comment"># systemctl -t help</span><br>Available unit types:<br>service<br>socket<br>target<br>device<br>mount<br>automount<br>swap<br>timer<br>path<br>slice<br>scope<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>service unit: 文件扩展名为.service, 用于定义系统服务</li>
+<li>Socket unit: .socket, 定义进程间通信用的socket文件，也可在系统启动时，延迟启动服务，实现按需启动</li>
+<li>Target unit: 文件扩展名为.target，用于模拟实现运行级别</li>
+<li>Device unit: .device, 用于定义内核识别的设备</li>
+<li>Mount unit: .mount, 定义文件系统挂载点</li>
+<li>Snapshot unit: .snapshot, 管理系统快照</li>
+<li>Swap unit: .swap, 用于标识swap设备</li>
+<li>Automount unit: .automount，文件系统的自动挂载点</li>
+<li>Path unit: .path，用于定义文件系统中的一个文件或目录使用,常用于当文件系统变化时，延迟激活服务，如：spool 目录</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>unit的配置文件</p>
+<p>/usr/lib/systemd/system #每个服务最主要的启动脚本设置，类似于之前的/etc/init.d/</p>
+<p>/lib/systemd/system #ubutun的对应目录,兼容于CentOS7,8和Ubuntu</p>
+<p>/run/systemd/system #系统执行过程中所产生的服务脚本，比上面目录优先运行</p>
+<p>/etc/systemd/system #管理员建立的执行脚本，类似于/etc/rcN.d/Sxx的功能，比上面目录优先运行</p>
+</blockquote>
+<h3 id="2-2-systemctl管理系统服务service-unit"><a href="#2-2-systemctl管理系统服务service-unit" class="headerlink" title="2.2 systemctl管理系统服务service unit"></a>2.2 systemctl管理系统服务service unit</h3><p>命令：<code>systemctl COMMAND name.service</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#启动：相当于service name start </span><br>systemctl start name.service   <br><br><span class="hljs-comment">#停止：相当于service name stop</span><br>systemctl stop name.service<br><br><span class="hljs-comment">#重启：相当于service name restart </span><br>systemctl restart name.service <br><br><span class="hljs-comment">#查看状态：相当于service name status</span><br>systemctl status name.service<br><br><span class="hljs-comment">#重新加载配置</span><br>systemctl reload sshd.service<br><br><span class="hljs-comment">#禁止自动和手动启动：</span><br>systemctl mask name.service<br><br><span class="hljs-comment">#取消禁止</span><br>systemctl unmask name.service<br><br><span class="hljs-comment">#查看某服务当前激活与否的状态：</span><br>systemctl is-active name.service<br><br><span class="hljs-comment">#查看service文件内容</span><br>systemctl <span class="hljs-built_in">cat</span> sshd<br><br><span class="hljs-comment">#查看所有已经激活的服务：</span><br>systemctl list-units --<span class="hljs-built_in">type</span> service 或<br>systemctl list-units -t service<br><br><span class="hljs-comment">#查看所有服务：</span><br>systemctl list-units --<span class="hljs-built_in">type</span> service --all 或<br>systemctl list-units --<span class="hljs-built_in">type</span> service -a<br><br><span class="hljs-comment">#设定某服务开机自启，相当于chkconfig name on</span><br>systemctl <span class="hljs-built_in">enable</span> name.service <br><br><span class="hljs-comment">#设定某服务开机禁止启动：相当于chkconfig name off</span><br>systemctl <span class="hljs-built_in">disable</span> name.service<br><br><span class="hljs-comment">#查看所有服务的开机自启状态，相当于chkconfig --list</span><br>systemctl list-unit-files --<span class="hljs-built_in">type</span> service<br><br><span class="hljs-comment">#用来列出该服务在哪些运行级别下启用和禁用：chkconfig –list name</span><br><span class="hljs-built_in">ls</span> /etc/systemd/system/*.wants/name.service<br><br><span class="hljs-comment">#查看服务是否开机自启：</span><br>systemctl is-enabled name.service<br><br><span class="hljs-comment">#列出失败的服务</span><br>systemctl --failed --<span class="hljs-built_in">type</span>=service<br> <br><span class="hljs-comment">#开机并立即启动或停止</span><br>systemctl <span class="hljs-built_in">enable</span> --now postfix <br>systemctl <span class="hljs-built_in">disable</span>  --now postfix<br><br><span class="hljs-comment">#查看服务的依赖关系：</span><br>systemctl list-dependencies name.service<br><br><span class="hljs-comment">#杀掉进程：</span><br>systemctl <span class="hljs-built_in">kill</span> unitname<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-service-unit文件格式"><a href="#2-3-service-unit文件格式" class="headerlink" title="2.3 service unit文件格式"></a>2.3 service unit文件格式</h3><p>/etc/systemd/system：系统管理员和用户使用</p>
+<p>/usr/lib/systemd/system：发行版打包者使用</p>
+<blockquote>
+<p>unit 格式说明：</p>
+<ul>
+<li>以 “#” 开头的行后面的内容会被认为是注释</li>
+<li>相关布尔值，1、yes、on、true 都是开启，0、no、off、false 都是关闭</li>
+<li>时间单位默认是秒，所以要用毫秒（ms）分钟（m）等须显式说明</li>
+</ul>
+<p>service unit file文件通常由三部分组成：</p>
+<ul>
+<li>Type：定义影响ExecStart及相关参数的功能的unit进程启动类型<ul>
+<li>simple：默认值，这个daemon主要由ExecStart接的指令串来启动，启动后常驻于内存中</li>
+<li>forking：由ExecStart启动的程序透过spawns延伸出其他子程序来作为此daemon的主要服务。原生父程序在启动结束后就会终止</li>
+<li>oneshot：与simple类似，不过这个程序在工作完毕后就结束了，不会常驻在内存中</li>
+<li>dbus：与simple类似，但这个daemon必须要在取得一个D-Bus的名称后，才会继续运作.因此通常也要同时设定BusNname= 才行</li>
+<li>notify：在启动完成后会发送一个通知消息。还需要配合 NotifyAccess 来让 Systemd 接收消息</li>
+<li>idle：与simple类似，要执行这个daemon必须要所有的工作都顺利执行完毕后才会执行。这类的daemon通常是开机到最后才执行即可的服务</li>
+</ul>
+</li>
+<li>[Unit]：定义与Unit类型无关的通用选项；用于提供unit的描述信息、unit行为及依赖关系等</li>
+<li>[Service]：与特定类型相关的专用选项；此处为Service类型</li>
+<li>[Install]：定义由“systemctl enable”以及”systemctl disable“命令在实现服务启用或禁用时用到的一些选项</li>
+</ul>
+<p>Unit段的常用选项：</p>
+<ul>
+<li>Description：描述信息</li>
+<li>After：定义unit的启动次序，表示当前unit应该晚于哪些unit启动，其功能与Before相反</li>
+<li>Requires：依赖到的其它units，强依赖，被依赖的units无法激活时，当前unit也无法激活</li>
+<li>Wants：依赖到的其它units，弱依赖</li>
+<li>Conflicts：定义units间的冲突关系</li>
+</ul>
+<p>Service段的常用选项：</p>
+<ul>
+<li>EnvironmentFile：环境配置文件</li>
+<li>ExecStart：指明启动unit要运行命令或脚本的绝对路径</li>
+<li>ExecStartPre： ExecStart前运行</li>
+<li>ExecStartPost： ExecStart后运行</li>
+<li>ExecStop：指明停止unit要运行的命令或脚本</li>
+<li>Restart：当设定Restart=1 时，则当次daemon服务意外终止后，会再次自动启动此服务</li>
+</ul>
+<p>Install段的常用选项：</p>
+<ul>
+<li>Alias：别名，可使用systemctl command Alias.service</li>
+<li>RequiredBy：被哪些units所依赖，强依赖</li>
+<li>WantedBy：被哪些units所依赖，弱依赖</li>
+<li>Also：安装本服务的时候还要安装别的相关服务</li>
+</ul>
+</blockquote>
+<p><strong>注意：对于新创建的unit文件，或者修改了的unit文件，要通知systemd重载此配置文件,而后可以选择重启</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># systemctl daemon-reload</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># systemctl cat sshd.service</span><br><span class="hljs-comment"># /usr/lib/systemd/system/sshd.service</span><br>[Unit]<br>Description=OpenSSH server daemon<br>Documentation=man:sshd(8) man:sshd_config(5)<br>After=network.target sshd-keygen.target<br>Wants=sshd-keygen.target<br><br>[Service]<br>Type=notify<br>EnvironmentFile=-/etc/crypto-policies/back-ends/opensshserver.config<br>EnvironmentFile=-/etc/sysconfig/sshd<br>ExecStart=/usr/sbin/sshd -D <span class="hljs-variable">$OPTIONS</span> <span class="hljs-variable">$CRYPTO_POLICY</span><br>ExecReload=/bin/kill -HUP <span class="hljs-variable">$MAINPID</span><br>KillMode=process<br>Restart=on-failure<br>RestartSec=42s<br><br>[Install]<br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：自定义service的unit文件"><a href="#范例：自定义service的unit文件" class="headerlink" title="范例：自定义service的unit文件"></a>范例：自定义service的unit文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># cat /lib/systemd/system/hello.service</span><br>[Unit]<br>Description=Hello World<br>[Service]<br>TimeoutStartSec=0<br>ExecStart=/bin/sh -c <span class="hljs-string">&quot;while true; do echo Hello World; sleep 1; done&quot;</span><br>ExecStop=/bin/kill sh<br>[Install]<br>WantedBy=multi-user.target<br>[root@rocky01 ~]<span class="hljs-comment">#</span><br>[root@rocky01 ~]<span class="hljs-comment"># systemctl start hello</span><br>[root@rocky01 ~]<span class="hljs-comment"># systemctl status hello</span><br>● hello.service - Hello World<br>   Loaded: loaded (/usr/lib/systemd/system/hello.service; disabled; vendor preset: disabled)<br>   Active: active (running) since Fri 2022-10-07 22:07:03 CST; 3s ago<br> Main PID: 2174 (sh)<br>    Tasks: 2 (<span class="hljs-built_in">limit</span>: 23457)<br>   Memory: 600.0K<br>   CGroup: /system.slice/hello.service<br>           ├─2174 /bin/sh -c <span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> Hello World; <span class="hljs-built_in">sleep</span> 1; <span class="hljs-keyword">done</span><br>           └─2178 <span class="hljs-built_in">sleep</span> 1<br><br>Oct 07 22:07:03 rocky01 systemd[1]: Started Hello World.<br>Oct 07 22:07:03 rocky01 sh[2174]: Hello World<br>Oct 07 22:07:04 rocky01 sh[2174]: Hello World<br>Oct 07 22:07:05 rocky01 sh[2174]: Hello World<br>Oct 07 22:07:06 rocky01 sh[2174]: Hello World<br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：服务unit文件解读"><a href="#范例：服务unit文件解读" class="headerlink" title="范例：服务unit文件解读"></a>范例：服务unit文件解读</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">[Unit]<br>Description=The Nginx HTTP Server daemon <span class="hljs-comment"># 描述信息</span><br>After=network.target remote-fs.target nss-lookup.target <span class="hljs-comment"># 指定启动nginx之前需要其他的其他服务，如network.target等</span><br><br>[Service]<br><span class="hljs-comment"># Type为服务类型，仅启动一个主进程的服务为simple，需要启动若干子进程的服务为forking</span><br>Type=forking <br><span class="hljs-comment"># 设置执行systemctl start nginx后需要启动的具体命令</span><br>ExecStart=/usr/local/nginx/sbin/nginx<br><span class="hljs-comment"># 设置执行systemctl reload nginx后需要执行的具体命令</span><br>ExecReload=/usr/local/nginx/sbin/nginx -s reload<br><span class="hljs-comment"># 设置执行systemctl stop nginx后需要执行的具体命令</span><br>ExecStop=/bin/kill -s QUIT <span class="hljs-variable">$&#123;MAINPID&#125;</span><br><br>[Install]<br><span class="hljs-comment"># 设置在什么模式下被安装，设置开机启动的时候需要</span><br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：Ubuntu实现开机自动运行程序"><a href="#范例：Ubuntu实现开机自动运行程序" class="headerlink" title="范例：Ubuntu实现开机自动运行程序"></a>范例：Ubuntu实现开机自动运行程序</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@ubuntu1804 ~]<span class="hljs-comment"># cat /etc/rc.local</span><br><span class="hljs-comment">#!/bin/bash</span><br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&#x27;\E[31;1mstarting test service\E[0m&#x27;</span><br><span class="hljs-built_in">sleep</span> 10<br>[root@ubuntu1804 ~]<span class="hljs-comment"># chmod +x /etc/rc.local</span><br>[root@ubuntu1804 ~]<span class="hljs-comment"># reboot</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-4-运行级别"><a href="#2-4-运行级别" class="headerlink" title="2.4 运行级别"></a>2.4 运行级别</h3><blockquote>
+<p>target units：相当于CentOS 6之前的runlevel ,unit配置文件：.target</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ls</span> /usr/lib/systemd/system/*.target<br>systemctl list-unit-files --<span class="hljs-built_in">type</span> target  --all<br></code></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>和运行级别对应关系</p>
+<p>0  ==&gt; runlevel0.target, poweroff.target</p>
+<p>1  ==&gt; runlevel1.target, rescue.target</p>
+<p>2  ==&gt; runlevel2.target, multi-user.target</p>
+<p>3  ==&gt; runlevel3.target, <strong>multi-user.target</strong></p>
+<p>4  ==&gt; runlevel4.target, multi-user.target</p>
+<p>5  ==&gt; runlevel5.target, graphical.target</p>
+<p>6  ==&gt; runlevel6.target, reboot.target</p>
+</blockquote>
+<h4 id="获取默认运行级别"><a href="#获取默认运行级别" class="headerlink" title="获取默认运行级别"></a>获取默认运行级别</h4><p>相当于查看 /etc/inittab</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># systemctl get-default</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="修改默认级别"><a href="#修改默认级别" class="headerlink" title="修改默认级别"></a>修改默认级别</h4><p>相当于修改 /etc/inittab</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># systemctl set-default name.target</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：禁用ctrl-alt-delete-重启快捷键"><a href="#范例：禁用ctrl-alt-delete-重启快捷键" class="headerlink" title="范例：禁用ctrl+alt+delete 重启快捷键"></a>范例：禁用ctrl+alt+delete 重启快捷键</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># systemctl mask -f ctrl-alt-del.target</span><br>Removed /etc/systemd/system/ctrl-alt-del.target.<br>Created symlink /etc/systemd/system/ctrl-alt-del.target → /dev/null.<br><br><span class="hljs-comment">#下面两个功能相同：重新加载配置</span><br>[root@rocky01 ~]<span class="hljs-comment"># init q </span><br>[root@rocky01 ~]<span class="hljs-comment"># systemctl daemon-reload</span><br><br><span class="hljs-comment">#注：不加-f参数可能会失败</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-5-设置内核参数"><a href="#2-5-设置内核参数" class="headerlink" title="2.5 设置内核参数"></a>2.5 设置内核参数</h3><p>设置内核参数，只影响当次启动</p>
+<p>启动时，到启动菜单，按e键，找到在linux 开头的行后添加systemd.unit=desired.target</p>
+<p>比如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#进入runlevel 3</span><br>systemd.unit=multi-user.target<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-6-CentOS-7之后版本引导顺序"><a href="#2-6-CentOS-7之后版本引导顺序" class="headerlink" title="2.6 CentOS 7之后版本引导顺序"></a>2.6 CentOS 7之后版本引导顺序</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">1. UEFi或BIOS初始化，运行POST开机自检<br>2. 选择启动设备<br>3. 引导装载程序, centos7是grub2,加载装载程序的配置文件：<br>  /etc/grub.d/<br>  /etc/default/grub <br>  /boot/grub2/grub.cfg<br>4. 加载initramfs驱动模块<br>5. 加载内核选项<br>6. 内核初始化，centos7使用systemd代替init <br>7. 执行initrd.target所有单元，包括挂载/etc/fstab<br>8. 从initramfs根文件系统切换到磁盘根目录<br>9. systemd执行默认target配置，配置文件/etc/systemd/system/default.target<br>10. systemd执行sysinit.target初始化系统及basic.target准备操作系统<br>11. systemd启动multi-user.target下的本机与服务器服务<br>12. systemd执行multi-user.target下的/etc/rc.d/rc.local<br>13. Systemd执行multi-user.target下的getty.target及登录服务<br>14. systemd执行graphical需要的服务<br></code></pre></td></tr></table></figure>
+
+<h4 id="范例：启动详细过程网页版"><a href="#范例：启动详细过程网页版" class="headerlink" title="范例：启动详细过程网页版"></a>范例：启动详细过程网页版</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky01 ~]<span class="hljs-comment"># systemd-analyze plot &gt; boot.html</span><br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202210/2927659-20221009211500981-1978247543.png"><img src="2927659-20221009211500981-1978247543.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h3 id="2-7-破解-CentOS-7和8的-root-密码"><a href="#2-7-破解-CentOS-7和8的-root-密码" class="headerlink" title="2.7 破解 CentOS 7和8的 root 密码"></a>2.7 破解 CentOS 7和8的 root 密码</h3><h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">启动时任意键暂停启动<br>按e键进入编辑模式<br>将光标移动linux 开始的行，添加内核参数 rd.break<br>按ctrl-x启动<br>mount –o remount,rw /sysroot<br><span class="hljs-built_in">chroot</span> /sysroot<br>passwd root<br><span class="hljs-comment">#如果SELinux是启用的,才需要执行下面操作,如查没有启动,不需要执行</span><br><span class="hljs-built_in">touch</span> /.autorelabel<br><span class="hljs-built_in">exit</span><br>reboot<br></code></pre></td></tr></table></figure>
+
+<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#此方式也适用于ubuntu18.04</span><br>启动时任意键暂停启动<br>按e键进入编辑模式<br>将光标移动linux 开始的行，改为 rw init=/sysroot/bin/sh<br>按ctrl-x启动<br><span class="hljs-built_in">chroot</span> /sysroot<br>passwd root<br><span class="hljs-comment">#如果SELinux是启用的,才需要执行下面操作,如查没有启动,不需要执行</span><br><span class="hljs-built_in">touch</span> /.autorelabel<br><span class="hljs-built_in">exit</span><br>reboot<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-8-实现-GRUB2-安全"><a href="#2-8-实现-GRUB2-安全" class="headerlink" title="2.8 实现 GRUB2 安全"></a>2.8 实现 GRUB2 安全</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#添加grub密码</span><br>[root@rocky01 ~]<span class="hljs-comment"># grub2-setpassword </span><br>Enter password: <br>Confirm password: <br>[root@rocky01 ~]<span class="hljs-comment"># cat /boot/grub2/user.cfg</span><br>GRUB2_PASSWORD=grub.pbkdf2.sha512.10000.60AAA29A65F4DC77E8861EF25BDE2034C9B30CE1<br>E07EE688D7F30460E7E87E7356B0893A6DFFB250B27D2EB9D3ED3E9207199C494D7882E2E8C772C8<br>2E2DDB7A.5E42FD69FA04293DECD68F077E83875A8E4572A7FBB89BA9F161B15EAFE54FBA963FE5D<br>52E16764944823396231803E5118DA1D9CAF3EB73C175A7D7A3682A90<br><br><span class="hljs-comment">#清空grub密码</span><br>[root@centos8 ~]<span class="hljs-comment">#cat /dev/null &gt; /boot/grub2/user.cfg </span><br><span class="hljs-comment">#或者</span><br>[root@centos8 ~]<span class="hljs-comment">#rm -f /boot/grub2/user.cfg</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-9-故障排错实战案例"><a href="#2-9-故障排错实战案例" class="headerlink" title="2.9 故障排错实战案例"></a>2.9 故障排错实战案例</h3><h3 id="实战案例1：CentOS-7-8-破坏MBR后进行恢复"><a href="#实战案例1：CentOS-7-8-破坏MBR后进行恢复" class="headerlink" title="实战案例1：CentOS 7,8 破坏MBR后进行恢复"></a>实战案例1：CentOS 7,8 破坏MBR后进行恢复</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=/dev/sda bs=1 count=446<br>光盘进入救援模式<br>grub2-install --root-directory=/mnt/sysimage /dev/sda<br></code></pre></td></tr></table></figure>
+
+<h3 id="实战案例2：CentOS-7-8-删除-boot-grub2-所有内容进行恢复"><a href="#实战案例2：CentOS-7-8-删除-boot-grub2-所有内容进行恢复" class="headerlink" title="实战案例2：CentOS 7,8 删除 /boot/grub2/ 所有内容进行恢复"></a>实战案例2：CentOS 7,8 删除 /boot/grub2/ 所有内容进行恢复</h3><p> <a target="_blank" rel="noopener" href="https://img2022.cnblogs.com/blog/2927659/202209/2927659-20220928162542049-754609444.png"><img src="2927659-20220928162542049-754609444.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#光盘进入救援模式</span><br><span class="hljs-built_in">chroot</span> /mnt/sysimage<br>grub2-install /dev/sda<br>grub2-mkconfig -o /boot/grub2/grub.cfg<br></code></pre></td></tr></table></figure>
+
+<h3 id="实战案例3：CentOS-7-8-删除-boot-下所有文件后进行恢复"><a href="#实战案例3：CentOS-7-8-删除-boot-下所有文件后进行恢复" class="headerlink" title="实战案例3：CentOS 7,8 删除 /boot/ 下所有文件后进行恢复"></a>实战案例3：CentOS 7,8 删除 /boot/ 下所有文件后进行恢复</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#模拟删除/boot/下所有文件</span><br>[root@rocky01 ~]<span class="hljs-comment">#rm -rf /boot/*</span><br><br><span class="hljs-comment">#1.光盘救援模式下安装grub2</span><br><span class="hljs-comment">#特别说明：Centos8 必须先修复grub，再安装kernel,否则安装kernel-core时会提示grub出错</span><br><span class="hljs-comment">#centos8</span><br><span class="hljs-built_in">chroot</span> /mnt/sysroot<br><span class="hljs-comment">#centos7</span><br><span class="hljs-built_in">chroot</span> /mnt/sysimage<br><span class="hljs-comment">#安装grub</span><br>grub2-install /dev/sda  <span class="hljs-comment">#BIOS环境</span><br>grub2-install            <span class="hljs-comment">#UEFI环境</span><br><br><span class="hljs-comment">#2.安装Kernel</span><br><span class="hljs-comment">#CentOS 7 </span><br>mount /dev/sr0 /mnt<br>rpm –ivh /mnt/Packages/kernel-3.10.0-1062.el7.x86_64.rpm --force<br><span class="hljs-comment">#CentOS 8 </span><br>mount /dev/sr0 /mnt<br>rpm -ivh /mnt/BaseOS/Packages/kernel-core-4.18.0-147.el8.x86_64.rpm --force<br><br><span class="hljs-comment">#3.修复grub配置文件</span><br><span class="hljs-comment">#生成grub.cfg文件</span><br>grub2-mkconfig –o /boot/grub2/grub.cfg<br><br><span class="hljs-comment">#4.退出重启</span><br><span class="hljs-built_in">sync</span><br><span class="hljs-built_in">sync</span><br><span class="hljs-built_in">exit</span><br><span class="hljs-built_in">exit</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-proc-目录和内核参数管理"><a href="#3-proc-目录和内核参数管理" class="headerlink" title="3 /proc 目录和内核参数管理"></a>3 /proc 目录和内核参数管理</h2><blockquote>
+<p>/proc目录：内核把自己内部状态信息及统计信息，以及可配置参数通过proc伪文件系统加以输出</p>
+<p><strong>sysctl是一个允许改变正在运行中的Linux系统的接口，修改的是针对整个系统的内核参数。sysctl的修改是立即且临时的（重启后失效）。也可以通过修改sysctl.conf配置文件，达到永久生效。</strong></p>
+<p><strong>常用内核参数：</strong></p>
+<ul>
+<li><p><strong>net.ipv4.ip_forward</strong></p>
+</li>
+<li><p>net.ipv4.icmp_echo_ignore_all #禁止ping通本主机</p>
+</li>
+<li><p>net.ipv4.ip_nonlocal_bind  #允许应用程序可以监听本地不存在的IP</p>
+</li>
+<li><p>fs.file-max = 1020000      #全局打开文件的最大数</p>
+</li>
+<li><p>vm.overcommit_memory = 0  </p>
+<ul>
+<li>#0表示内核将检查是否有足够可用内存供应用进程使用；如果有足够的可用内存，内存申请允许；否则内存申请失败，并把错误返回给应用进程。</li>
+<li>#1表示内核允许分配所有的物理内存，而不管当前的内存状态如何。</li>
+<li>#2表示内核允许分配超过所有物理内存和交换空间总和的内存。</li>
+</ul>
+</li>
+</ul>
+<p>vm.swappiness = 10      #设置内存还剩余10%空闲空间时,就会使用swap空间,默认值为30，值越大表示越倾向于使用swap</p>
+<p>#禁用IPv6</p>
+<ul>
+<li>net.ipv6.conf.all.disable_ipv6 = 1</li>
+<li>net.ipv6.conf.default.disable_ipv6 = 1</li>
+</ul>
+</blockquote>
+<h3 id="3-1-sysctl-将值写入变量"><a href="#3-1-sysctl-将值写入变量" class="headerlink" title="3.1 sysctl 将值写入变量"></a>3.1 sysctl 将值写入变量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sysctl -w path.to.parameter=VALUE<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-默认配置文件"><a href="#3-2-默认配置文件" class="headerlink" title="3.2 默认配置文件"></a>3.2 默认配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/sysctl.conf<br></code></pre></td></tr></table></figure>
+
+<h3 id="范例：临时设置某参数"><a href="#范例：临时设置某参数" class="headerlink" title="范例：临时设置某参数"></a>范例：临时设置某参数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sysctl -w parameter=VALUE<br></code></pre></td></tr></table></figure>
+
+<h3 id="范例：读取配置文件设置参数"><a href="#范例：读取配置文件设置参数" class="headerlink" title="范例：读取配置文件设置参数"></a>范例：读取配置文件设置参数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sysctl -p [/path/to/conf_file]<br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/MYSQL%E5%AE%9E%E6%88%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MYSQL实战</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/linux%E5%AE%89%E5%85%A8/">
+                        <span class="hidden-mobile">linux安全</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

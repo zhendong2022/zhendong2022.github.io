@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="日志服务众多服务器，API接口等：可以转储到数据库中进行存储日志，例如存储到MongoDB中取查看 日志服务的转储和切割，很有意义 定义日志的记录级别 日志的分类：应用日志+内核日志，app log+kernal log rsyslog服务：Cent OS7往后的服务，日志可以统一记录到MySQL内，可以通过rsyslog统一推送到不同的服务内 1234567[root@rocky postgre">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux日志服务">
+<meta property="og:url" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="日志服务众多服务器，API接口等：可以转储到数据库中进行存储日志，例如存储到MongoDB中取查看 日志服务的转储和切割，很有意义 定义日志的记录级别 日志的分类：应用日志+内核日志，app log+kernal log rsyslog服务：Cent OS7往后的服务，日志可以统一记录到MySQL内，可以通过rsyslog统一推送到不同的服务内 1234567[root@rocky postgre">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232736233-1293869953.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232736887-807180008.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232737523-579915610.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232738175-928450839.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232738504-614833154.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232738859-1838997068.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232739713-1384965478.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232739213-1576500148.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232740130-872923460.png">
+<meta property="og:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232740637-467955986.png">
+<meta property="article:published_time" content="2023-07-28T19:41:46.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.171Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/2792175-20221028232736233-1293869953.png">
+  
+  
+  <title>linux日志服务 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="linux日志服务">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 19:41" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      12k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      97 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">linux日志服务</h1>
+            
+            <div class="markdown-body">
+              <h1 id="日志服务"><a href="#日志服务" class="headerlink" title="日志服务"></a>日志服务</h1><p>众多服务器，API接口等：可以转储到数据库中进行存储日志，例如存储到MongoDB中取查看</p>
+<p>日志服务的转储和切割，很有意义</p>
+<p>定义日志的记录级别</p>
+<p>日志的分类：应用日志+内核日志，app log+kernal log</p>
+<p>rsyslog服务：Cent OS7往后的服务，日志可以统一记录到MySQL内，可以通过rsyslog统一推送到不同的服务内</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><pre><code class="hljs none">[root@rocky postgresql]#rpm -qa rsyslog<br>rsyslog-8.2102.0-7.el8.x86_64<br><br>rpm -ql rsyslog<br><br><br>systemctl status rsyslog<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232736233-1293869953.png" srcset="/img/loading.gif" lazyload alt="image-20220930215657438"></p>
+<p>可将例如系统的内核日志，或者tcp/udp的服务日志，推送到例如ES，文件（典型），hdfs大数据平台，mail（邮箱），mongodb文档数据库，MySQL数据库等</p>
+<p>rsyslog就是类似一个管道，负责推送服务日志到指定的地方，例如docker的容器日志（容器也要映射端口出来），或者是service对外也是30000随机端口，证明也是TCP协议的服务，可以通过rsyslog来推送</p>
+<p><img src="2792175-20221028232736887-807180008.png" srcset="/img/loading.gif" lazyload alt="image-20220930215939514"></p>
+<h1 id="ELK服务：elastic-search-logstash-kibanna"><a href="#ELK服务：elastic-search-logstash-kibanna" class="headerlink" title="ELK服务：elastic search+logstash+kibanna"></a>ELK服务：elastic search+logstash+kibanna</h1><p>其实ES就是一个数据库来的，一个索引=MySQL内的一个库</p>
+<p>ES：开源的搜索引擎，负责收集源端的业务服务日志源，例如nginx，tomcat等</p>
+<p>logstash：日志存储引擎，对日志进行收集、分析、过滤filter等</p>
+<p>kibana：提供一个有好的界面</p>
+<h1 id="rsyslog管理"><a href="#rsyslog管理" class="headerlink" title="rsyslog管理"></a>rsyslog管理</h1><p>1.facility设施：将应用程序日志进行分类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs none">#内置分类<br>auth认证，cron定时任务，daemon守护进程，ftp文件服务，mail邮件服务，security安全<br><br>#自定义分类<br>local0-local7<br></code></pre></td></tr></table></figure>
+
+<p>2.priority优先级，日志记录优先级，告警的优先级，比如说达到warning或者error才记录到对应的日志引擎中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">debug调试，info通知(notice)，warning警告，error报错，critical重要(阿里云打电话通知)，alert等<br></code></pre></td></tr></table></figure>
+
+<p>3.查看rsyslog的配置文件，主配置文件.conf，默认配置</p>
+<p>rules规则内，mail.*表示只要是mail的事件，不关心优先级priority，直接写入到日志内，异步写入</p>
+<p>*.info;mail.none;authpriv.none;cron.none</p>
+<p>/var/log/messages —&gt;系统日志general日志，所有事件的写入，排除mail，auth，cron，因为下面都有</p>
+<p>只记录所有的info级别的日志，都会写入到里面，info、warning及以上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash">rpm -ql rsyslog<br>rpm -qc rsyslog<br>[root@rocky ~]<span class="hljs-comment">#rpm -qc rsyslog</span><br>/etc/logrotate.d/syslog<br>/etc/rsyslog.conf<br>/etc/sysconfig/rsyslog<br><br><br><span class="hljs-comment">##查看rules的规则，有不同的分类</span><br>*.info;mail.none;authpriv.none;cron.none                /var/log/messages ---&gt;系统日志general日志<br><br><span class="hljs-comment"># The authpriv file has restricted access.</span><br>authpriv.*                                              /var/log/secure<br><br><span class="hljs-comment"># Log all the mail messages in one place.</span><br>mail.*                                                  -/var/log/maillog<br><br><br><span class="hljs-comment"># Log cron stuff</span><br>cron.*                                                  /var/log/cron<br><br><span class="hljs-comment"># Everybody gets emergency messages</span><br>*.emerg                                                 :omusrmsg:* ---&gt;非常重要的错误，崩溃日志<br><br><span class="hljs-comment"># Save news errors of level crit and higher in a special file.</span><br>uucp,news.crit                                          /var/log/spooler<br><br><span class="hljs-comment"># Save boot messages also to boot.log</span><br>local7.*                                                /var/log/boot.log<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-var-log-messages"><a href="#1-var-log-messages" class="headerlink" title="1./var/log/messages"></a>1./var/log/messages</h2><p>系统日志，专门记录系统内所有的日志，操作，包括机器的启动，开机关机，守护进程的启动，启动顺序等，一般都是systemd下面的事件</p>
+<p>比如我需要更新一下yum源，会记录安装的过程服务等</p>
+<p>systemctl enable –now postfix</p>
+<p><img src="2792175-20221028232737523-579915610.png" srcset="/img/loading.gif" lazyload alt="image-20221001080701933"></p>
+<p>比如说我修改错一个.conf文件的语法，日志内会指出是45行出现了语法错误</p>
+<p>vim +45 /etc/httpd/conf/httpd.conf</p>
+<p><img src="2792175-20221028232738175-928450839.png" srcset="/img/loading.gif" lazyload alt="image-20221001081020567"></p>
+<h2 id="2-基于各种服务的日志"><a href="#2-基于各种服务的日志" class="headerlink" title="2.基于各种服务的日志"></a>2.基于各种服务的日志</h2><p>ssh服务的日志，日志记录级别是authpriv，在rsyslog里面有记录规则，是写到secure里面，主要和认证授权有关系，安全，任何关于安全的信息，都会记录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#SyslogFacility AUTH</span><br>SyslogFacility AUTHPRIV<br><span class="hljs-comment">#LogLevel INFO</span><br><br><span class="hljs-built_in">tail</span> -f /var/log/secure ---&gt;基本都是一些认证之类的日志，这里有从VMNET链接过来的SSH登录信息<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232738504-614833154.png" srcset="/img/loading.gif" lazyload alt="image-20221001081638619"></p>
+<h2 id="例子：修改SSHD服务的日志"><a href="#例子：修改SSHD服务的日志" class="headerlink" title="例子：修改SSHD服务的日志"></a>例子：修改SSHD服务的日志</h2><p>先看sshd_config，可以修改他的默认级别，默认是authpriv，可以写local0-6的级别，local7为启动日志boot.log</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Save boot messages also to boot.log</span><br>local7.*  <br><br>vim sshd_config<br>---&gt;修改默认的监听级别<br><span class="hljs-comment">#SyslogFacility AUTH</span><br>SyslogFacility LOCAL6<br><span class="hljs-comment">#SyslogFacility AUTHPRIV</span><br><br>vim /etc/rsyslog.conf<br><span class="hljs-comment">#可以修改他的子配置文件</span><br><span class="hljs-comment"># Include all config files in /etc/rsyslog.d/，默认的</span><br>include(file=<span class="hljs-string">&quot;/etc/rsyslog.d/*.conf&quot;</span> mode=<span class="hljs-string">&quot;optional&quot;</span>)<br><br>vim /etc/rsyslog.d/sshd.conf<br>local6.*    /var/log/sshd.log<br><span class="hljs-built_in">ls</span> /var/log/sshd.log<br><br><span class="hljs-comment">##重启服务</span><br>systemctl restart sshd rsyslog<br><br>[root@rocky ~]<span class="hljs-comment">#ls /var/log/sshd.log</span><br>/var/log/sshd.log<br>[root@rocky ~]<span class="hljs-comment">#cat /var/log/sshd.log</span><br>Oct  1 08:31:05 rocky sshd[5346]: Received signal 15; terminating.<br>Oct  1 08:31:05 rocky sshd[5545]: Server listening on 0.0.0.0 port 22.<br>Oct  1 08:31:05 rocky sshd[5545]: Server listening on :: port 22.<br></code></pre></td></tr></table></figure>
+
+<h1 id="远程推送日志：TCP-UDP514端口"><a href="#远程推送日志：TCP-UDP514端口" class="headerlink" title="远程推送日志：TCP/UDP514端口"></a>远程推送日志：TCP/UDP514端口</h1><p>环境：日志服务器/日志服务10.0.0.132</p>
+<p>客户端主机：推送服务，10.0.0.128</p>
+<p>可以开启TCP协议推送日志，port：514端口，服务模块：imtcp和imudp，都是安装rsyslog的时候安装好的，可以通过UDP：514来传输这个日志，也可以使用TCP端口514，比较靠谱</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Provides UDP syslog reception</span><br><span class="hljs-comment"># for parameters see http://www.rsyslog.com/doc/imudp.html</span><br>module(load=<span class="hljs-string">&quot;imudp&quot;</span>) <span class="hljs-comment"># needs to be done just once</span><br>input(<span class="hljs-built_in">type</span>=<span class="hljs-string">&quot;imudp&quot;</span> port=<span class="hljs-string">&quot;514&quot;</span>)<br><br><span class="hljs-comment"># Provides TCP syslog reception</span><br><span class="hljs-comment"># for parameters see http://www.rsyslog.com/doc/imtcp.html</span><br>module(load=<span class="hljs-string">&quot;imtcp&quot;</span>) <span class="hljs-comment"># needs to be done just once</span><br>input(<span class="hljs-built_in">type</span>=<span class="hljs-string">&quot;imtcp&quot;</span> port=<span class="hljs-string">&quot;514&quot;</span>)<br><br>---修改rsyslog.conf，使得local6的日志记录到/var/log/sshd.log下面，重启rsyslog服务，远程过来的local6级别的日志也记录到sshd.log文件中<br><span class="hljs-comment"># Save boot messages also to boot.log</span><br>local7.*                                                /var/log/boot.log<br><br>local6.*                                                /var/log/sshd.log<br><br>systemctl restart rsyslog sshd<br><br>ss -ntlu | grep 514<br>[root@rocky ~]<span class="hljs-comment">#ss -ntlu | grep 514</span><br>udp   UNCONN 0      0             0.0.0.0:514        0.0.0.0:*          <br>udp   UNCONN 0      0                [::]:514           [::]:* <br></code></pre></td></tr></table></figure>
+
+<p>将另外一台主机的SSH记录到10.0.0.132上面，默认开启的是514 UDP端口，也可以开启TCP协议，还可以一起使用都传输，写法如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/sshd/sshd_config<br><span class="hljs-comment">#SyslogFacility AUTH</span><br>SyslogFacility LOCAL6<br><span class="hljs-comment">#SyslogFacility AUTHPRIV</span><br><br>vim /etc/rsyslog.d/sshd.conf<br>写子配置文件<br>local6.*                                @10.0.0.132:514 <span class="hljs-comment">##UDP协议</span><br>local6.*                                @@10.0.0.132:514 <span class="hljs-comment">##TCP协议</span><br><br><span class="hljs-comment">#重启服务</span><br>systemctl restart rsyslog sshd<br><br>这里可以发现主机名为rocky和master都记录下来了<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232738859-1838997068.png" srcset="/img/loading.gif" lazyload alt="image-20221001085721763"></p>
+<p>同理，也可以写例如/var/log/messages记录到远程主机，直接写例如，推送到远程主机上面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/rsyslog.conf<br>*.info;mail.none;authpriv.none;cron.none                /var/log/messages<br>*.info;mail.none;authpriv.none;cron.none                @10.0.0.132:514  @@10.0.0.132:514 <span class="hljs-comment">##TCP协议</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="常用日志"><a href="#常用日志" class="headerlink" title="常用日志"></a>常用日志</h1><p>lastb：查看错误登录的日志信息，这个貌似是每天都会清理的</p>
+<p>/var/log/messages：系统通用日志</p>
+<p>自定义local级别，自定义服务的日志设施facility到指定目录，重启服务</p>
+<p>mysqld.log，MySQL通用日志</p>
+<p>nginx，access.log：访问日志</p>
+<p>errer.log：错误日志等等，基本如果是Yum安装的话，都会默认记录在/var/log/下面</p>
+<p>journalctl：显示日志信息的语句，查看语句</p>
+<h1 id="案例：使用MySQL进行日志的转储"><a href="#案例：使用MySQL进行日志的转储" class="headerlink" title="案例：使用MySQL进行日志的转储"></a>案例：使用MySQL进行日志的转储</h1><h2 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1.环境配置"></a>1.环境配置</h2><p>10.0.0.132 MySQL</p>
+<p>10.0.0.128 rsyslog日志服务器</p>
+<p>10.0.0.129 客户端，推送服务日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs bash">128配置rsyslog服务<br>vim /etc/rsyslog.conf<br><span class="hljs-comment">#centos 7开启 tcp 514端口</span><br><span class="hljs-comment"># Provides TCP syslog reception</span><br><span class="hljs-variable">$ModLoad</span> imtcp<br><span class="hljs-variable">$InputTCPServerRun</span> 514<br><br>vim /etc/rsyslog.d/sshd.conf ---&gt;接收所有来自local6级别的日志，存储到client.log上面<br>local6.*                                /var/log/client.log<br><br>systemctl restart rsyslog<br>ss -ntl | grep 514<br>[root@master ~]<span class="hljs-comment">#ll /var/log/ | grep cli</span><br>-rw-------   1 root   root          141 Oct  1 11:44 client.log<br>[root@master ~]<span class="hljs-comment">#ss -ntl | grep 514</span><br>LISTEN     0      25           *:514                      *:*                  <br>LISTEN     0      25        [::]:514                   [::]:*  <br><br><span class="hljs-built_in">cat</span>查看<br>[root@master ~]<span class="hljs-comment">#cat /var/log/client.log </span><br>Oct  1 03:44:26 slave1 sshd[16300]: Server listening on 0.0.0.0 port 22.<br>Oct  1 03:44:26 slave1 sshd[16300]: Server listening on :: port 22.<br><br><br>129配置推送<br>---&gt;sshd_config更改<br><span class="hljs-comment">#SyslogFacility AUTH</span><br>SyslogFacility LOCAL6<br><span class="hljs-comment">#SyslogFacility AUTHPRIV</span><br><br>---&gt;建立推送机制<br>[03:46:33 root@slave1 ~]<span class="hljs-comment">#vim /etc/rsyslog.d/gerneral.conf</span><br>local6.*                                @@10.0.0.128:514<br><br>systemctl restart rsyslog sshd<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-安装rsyslog-mysql服务，推送日志"><a href="#2-安装rsyslog-mysql服务，推送日志" class="headerlink" title="2.安装rsyslog-mysql服务，推送日志"></a>2.安装rsyslog-mysql服务，推送日志</h2><p>安装rsyslog-mysql</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sql">yum <span class="hljs-operator">-</span>y install rsyslog<span class="hljs-operator">-</span>mysql<br><br>[root<span class="hljs-variable">@rocky</span> <span class="hljs-operator">~</span>]#rpm <span class="hljs-operator">-</span>ql rsyslog<span class="hljs-operator">-</span>mysql<br><span class="hljs-operator">/</span>usr<span class="hljs-operator">/</span>lib<span class="hljs-operator">/</span>.build<span class="hljs-operator">-</span>id<br><span class="hljs-operator">/</span>usr<span class="hljs-operator">/</span>lib<span class="hljs-operator">/</span>.build<span class="hljs-operator">-</span>id<span class="hljs-operator">/</span>e6<br><span class="hljs-operator">/</span>usr<span class="hljs-operator">/</span>lib<span class="hljs-operator">/</span>.build<span class="hljs-operator">-</span>id<span class="hljs-operator">/</span>e6<span class="hljs-operator">/</span>aa0e40c19a2e0524d72780eee3b1698684cbe7<br><span class="hljs-operator">/</span>usr<span class="hljs-operator">/</span>lib64<span class="hljs-operator">/</span>rsyslog<span class="hljs-operator">/</span>ommysql.so<br><span class="hljs-operator">/</span>usr<span class="hljs-operator">/</span>share<span class="hljs-operator">/</span>doc<span class="hljs-operator">/</span>rsyslog<span class="hljs-operator">/</span>mysql<span class="hljs-operator">-</span>createDB.sql<br><br>将初始化脚本复制到MySQL，创建账号，授权<br>scp <span class="hljs-operator">/</span>usr<span class="hljs-operator">/</span>share<span class="hljs-operator">/</span>doc<span class="hljs-operator">/</span>rsyslog<span class="hljs-operator">/</span>mysql<span class="hljs-operator">-</span>createDB.sql <span class="hljs-number">10.0</span><span class="hljs-number">.0</span><span class="hljs-number">.132</span>:<span class="hljs-operator">/</span>root<br></code></pre></td></tr></table></figure>
+
+<p>查看mysql-create脚本，其实就是创建一个syslog日志库，需要创建一个日志同步账号，给这个库授权</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs sql">[root<span class="hljs-variable">@rocky</span> <span class="hljs-operator">~</span>]#cat mysql<span class="hljs-operator">-</span>createDB.sql <br><span class="hljs-keyword">CREATE</span> DATABASE Syslog;<br>USE Syslog;<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> SystemEvents<br>(<br>        ID <span class="hljs-type">int</span> unsigned <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment <span class="hljs-keyword">primary</span> key,<br>        CustomerID <span class="hljs-type">bigint</span>,<br>        ReceivedAt datetime <span class="hljs-keyword">NULL</span>,<br>        DeviceReportedTime datetime <span class="hljs-keyword">NULL</span>,<br>        Facility <span class="hljs-type">smallint</span> <span class="hljs-keyword">NULL</span>,<br>        Priority <span class="hljs-type">smallint</span> <span class="hljs-keyword">NULL</span>,<br>        FromHost <span class="hljs-type">varchar</span>(<span class="hljs-number">60</span>) <span class="hljs-keyword">NULL</span>,<br>        Message text,<br>        NTSeverity <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        Importance <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        EventSource <span class="hljs-type">varchar</span>(<span class="hljs-number">60</span>),<br>        EventUser <span class="hljs-type">varchar</span>(<span class="hljs-number">60</span>) <span class="hljs-keyword">NULL</span>,<br>        EventCategory <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        EventID <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        EventBinaryData text <span class="hljs-keyword">NULL</span>,<br>        MaxAvailable <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        CurrUsage <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        MinUsage <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        MaxUsage <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span>,<br>        InfoUnitID <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span> ,<br>        SysLogTag <span class="hljs-type">varchar</span>(<span class="hljs-number">60</span>),<br>        EventLogType <span class="hljs-type">varchar</span>(<span class="hljs-number">60</span>),<br>        GenericFileName <span class="hljs-type">VarChar</span>(<span class="hljs-number">60</span>),<br>        SystemID <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> SystemEventsProperties<br>(<br>        ID <span class="hljs-type">int</span> unsigned <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment <span class="hljs-keyword">primary</span> key,<br>        SystemEventID <span class="hljs-type">int</span> <span class="hljs-keyword">NULL</span> ,<br>        ParamName <span class="hljs-type">varchar</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NULL</span> ,<br>        ParamValue text <span class="hljs-keyword">NULL</span><br>);<br><br>##执行授权，查看表<br>source <span class="hljs-operator">/</span>root<span class="hljs-operator">/</span>mysql<span class="hljs-operator">-</span>createDB.sql<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> rsyslog@<span class="hljs-string">&#x27;%&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123&#x27;</span>;<br><span class="hljs-keyword">grant</span> <span class="hljs-keyword">all</span> <span class="hljs-keyword">on</span> Syslog.<span class="hljs-operator">*</span> <span class="hljs-keyword">to</span> rsyslog@<span class="hljs-string">&#x27;%&#x27;</span>;<br>flush privileges;<br><br>[Syslog]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">show</span> tables;<br><span class="hljs-operator">+</span><span class="hljs-comment">------------------------+</span><br><span class="hljs-operator">|</span> Tables_in_Syslog       <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">------------------------+</span><br><span class="hljs-operator">|</span> SystemEvents           <span class="hljs-operator">|</span><br><span class="hljs-operator">|</span> SystemEventsProperties <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">------------------------+</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-调用-usr-lib64-rsyslog-ommysql-so这个模块进行推送"><a href="#3-调用-usr-lib64-rsyslog-ommysql-so这个模块进行推送" class="headerlink" title="3.调用/usr/lib64/rsyslog/ommysql.so这个模块进行推送"></a>3.调用/usr/lib64/rsyslog/ommysql.so这个模块进行推送</h2><p>编辑/etc/rsyslog.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##类似这个写法</span><br><span class="hljs-variable">$ModLoad</span> imtcp<br><span class="hljs-variable">$InputTCPServerRun</span> 514<br><br><span class="hljs-variable">$ModLoad</span> ommysql<br><br><span class="hljs-comment">##将所有的日志包括本地的通用日志推送到MySQL</span><br>*.info;mail.none;authpriv.none;cron.none                /var/log/messages<br>*.info;mail.none;authpriv.none;cron.none                :ommysql:10.0.0.132,Syslog,rsyslog,123 ---&gt;对应的库，远程连接的user，密码<br><br><span class="hljs-comment">##128重启服务，两张表已经有内容了</span><br>systemctl restart rsyslog<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232739713-1384965478.png" srcset="/img/loading.gif" lazyload alt="image-20221001121152698"></p>
+<p>systemevents推送记录了系统日志</p>
+<p><img src="2792175-20221028232739213-1576500148.png" srcset="/img/loading.gif" lazyload alt="image-20221001121454134"></p>
+<p>成功记录了slave1机器的日志</p>
+<p>slave1的messages也推送到MySQL内</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-operator">*</span>.info;mail.none;authpriv.none;cron.none                <span class="hljs-operator">/</span>var<span class="hljs-operator">/</span>log<span class="hljs-operator">/</span>messages<br><span class="hljs-operator">*</span>.info;mail.none;authpriv.none;cron.none                @<span class="hljs-variable">@10</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span><span class="hljs-number">.128</span><br><br>[Syslog]<span class="hljs-operator">&gt;</span><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> SystemEvents <span class="hljs-keyword">where</span> message <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%am%&#x27;</span>\G;<br><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span> <span class="hljs-number">1.</span> <span class="hljs-type">row</span> <span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><span class="hljs-operator">*</span><br>                ID: <span class="hljs-number">22</span><br>        CustomerID: <span class="hljs-keyword">NULL</span><br>        ReceivedAt: <span class="hljs-number">2022</span><span class="hljs-number">-10</span><span class="hljs-number">-01</span> <span class="hljs-number">12</span>:<span class="hljs-number">19</span>:<span class="hljs-number">29</span><br>DeviceReportedTime: <span class="hljs-number">2022</span><span class="hljs-number">-10</span><span class="hljs-number">-01</span> <span class="hljs-number">04</span>:<span class="hljs-number">19</span>:<span class="hljs-number">29</span><br>          Facility: <span class="hljs-number">1</span><br>          Priority: <span class="hljs-number">5</span><br>          FromHost: slave1<br>           Message:  i am slave1<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232740130-872923460.png" srcset="/img/loading.gif" lazyload alt="image-20221001141638531"></p>
+<h1 id="日志转储logrotate"><a href="#日志转储logrotate" class="headerlink" title="日志转储logrotate"></a>日志转储logrotate</h1><p>切分日志，可以按照创建时间/日志文件大小来切分日志格式，比如可以一天创建一份日志，或者是达到100M自动生成一个新日志，类似mysql-binlog日志或者docker日志的max-size选项</p>
+<p>还可以定义自动删除掉N天前的日志文件，保留最新的7天日志</p>
+<p>包：logrotate</p>
+<p>默认：一天执行一次拆分</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@master tmp]<span class="hljs-comment">#rpm -ql logrotate</span><br>/etc/cron.daily/logrotate<br>/etc/logrotate.conf<br>/etc/logrotate.d<br>/etc/rwtab.d/logrotate<br>/usr/sbin/logrotate<br><br><span class="hljs-comment">##调用这个logrotate的配置文件，如果状态码不等于0，则退出，警告logrotate执行失败</span><br>vim /etc/cron.daily/logrotate<br><span class="hljs-comment">#!/bin/sh</span><br><br>/usr/sbin/logrotate -s /var/lib/logrotate/logrotate.status /etc/logrotate.conf<br>EXITVALUE=$?<br><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$EXITVALUE</span> != 0 ]; <span class="hljs-keyword">then</span><br>    /usr/bin/logger -t logrotate <span class="hljs-string">&quot;ALERT exited abnormally with [<span class="hljs-variable">$EXITVALUE</span>]&quot;</span><br><span class="hljs-keyword">fi</span><br><span class="hljs-built_in">exit</span> 0<br></code></pre></td></tr></table></figure>
+
+<h2 id="logrotate配置文件"><a href="#logrotate配置文件" class="headerlink" title="logrotate配置文件"></a>logrotate配置文件</h2><p>vim /etc/logrotate.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># see &quot;man logrotate&quot; for details</span><br><span class="hljs-comment"># rotate log files weekly ---&gt;其实是一周进行一次日志的切分</span><br>weekly<br><br><span class="hljs-comment"># keep 4 weeks worth of backlogs ---&gt;保留4周</span><br>rotate 4<br><br><span class="hljs-comment"># create new (empty) log files after rotating old ones ---&gt;创建一份新的日志，如果到期后</span><br>create<br><br><span class="hljs-comment"># use date as a suffix of the rotated file ---&gt;日志命名</span><br>dateext<br><br><span class="hljs-comment"># uncomment this if you want your log files compressed</span><br><span class="hljs-comment">#compress</span><br><br><span class="hljs-comment"># RPM packages drop log rotation information into this directory</span><br>include /etc/logrotate.d  ---&gt;读取子配置文件<br><br><span class="hljs-comment"># system-specific logs may be also be configured here.</span><br></code></pre></td></tr></table></figure>
+
+<p>日志针对服务的转储策略，证明在/var/log下已经有这么多服务需要日志来记录了</p>
+<p>ls /etc/logrotate.d</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@rocky ~]<span class="hljs-comment">#ls /etc/logrotate.d</span><br>bootlog  chrony  dnf        httpd        kvm_stat  libvirtd.qemu  php-fpm  samba  syslog          wtmp<br>btmp     cups    firewalld  iscsiuiolog  libvirtd  numad          psacct   sssd   wpa_supplicant<br><br><span class="hljs-comment">##不同的服务，配置的日志保存规则，时间等都不一样</span><br><br><span class="hljs-comment">##cron定时任务日志</span><br><br><br><span class="hljs-built_in">cat</span> httpd<br>/var/log/httpd/*<span class="hljs-built_in">log</span> &#123; <span class="hljs-comment">##指定日志路径，为服务/程序默认的日志存放路径，这个</span><br>    missingok <span class="hljs-comment">##丢失了也OK</span><br>    notifempty <span class="hljs-comment">##如果当天的日志为空，则不切分</span><br>    sharedscripts<br>    delaycompress <span class="hljs-comment">##生成日志后延迟压缩</span><br>    postrotate<br>        /bin/systemctl reload httpd.service &gt; /dev/null 2&gt;/dev/null || <span class="hljs-literal">true</span><br>    endscript<br>&#125;<br><br><span class="hljs-built_in">cat</span> nginx<br>/apps/nginx/logs/*.<span class="hljs-built_in">log</span> &#123; <span class="hljs-comment">##指定日志路径，为服务/程序默认的日志存放路径，nginx默认有access.log或者error.log</span><br>	daily <span class="hljs-comment">##每天切分日志，每天生成</span><br>	rotate 5 <span class="hljs-comment">##保留最新的5分日志文件</span><br>    missingok <span class="hljs-comment">##丢失了也OK</span><br>    notifempty <span class="hljs-comment">##如果当天的日志为空，则不切分</span><br>    size 10M <span class="hljs-comment">##规则：超过10M的日志文件也进行转储</span><br>    compress <span class="hljs-comment">##压缩</span><br>    delaycompress <span class="hljs-comment">##生成日志后延迟压缩</span><br>    create 644 nginx nginx <span class="hljs-comment">##生成日志的属性，权限为644(rw-r--r--)，属组为nginx</span><br>    postrotate<br>        <span class="hljs-keyword">if</span> [ -f /apps/nginx/logs/nginx.pid ];<span class="hljs-keyword">then</span><br>        	<span class="hljs-built_in">kill</span> -USR1 `<span class="hljs-built_in">cat</span> /apps/nginx/logs/nginx.pid` ---&gt;nginx的特性，发现日志的名字修改后，重新生成日志文件<br>        <span class="hljs-keyword">fi</span><br>    endscript<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221028232740637-467955986.png" srcset="/img/loading.gif" lazyload alt="image-20221001232133445"></p>
+<p>基于针对nginx服务做的日志切割，相关语法</p>
+<h2 id="日志转储测试"><a href="#日志转储测试" class="headerlink" title="日志转储测试"></a>日志转储测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##生成2M的日志文件，模拟每天的记录</span><br><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=/var/log/test1.<span class="hljs-built_in">log</span> bs=2M count=1<br><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=/var/log/test2.<span class="hljs-built_in">log</span> bs=2M count=1<br><br>ll /var/log/test*<br>-rw-r--r--. 1 root root 2 10月  1 23:57 /var/log/test1.<span class="hljs-built_in">log</span><br>-rw-r--r--. 1 root root 2 10月  1 23:57 /var/log/test2.<span class="hljs-built_in">log</span><br><br><span class="hljs-comment">##配置日志转储规则，在这个目录下编辑好配置文件，默认是每天都生成一个日志的规则，daily，只要前一天的写完了，或者大小达到1M了，就需要切分了，切分规则按照主配置文件logrotate.conf来命名</span><br>vim /etc/logrotate.d/test1<br>/var/log/test1.<span class="hljs-built_in">log</span> &#123;<br>	daily<br>	rotate 3<br>	compress <span class="hljs-comment">##自动压缩成gz文件，直接压缩了，可以的，匹配符合条件直接压缩，生成新的日志文件后，旧的日志文件直接压缩</span><br>	missingok<br>	size 1M <span class="hljs-comment">##触发大于1M的规则，转储</span><br>	notifempty <br>	create 644 root root<br>	<span class="hljs-built_in">echo</span> `<span class="hljs-built_in">date</span> +%F_%T` &gt;&gt; /root/test1.<span class="hljs-built_in">log</span><br>	endscript<br>&#125;<br><br>----主配置文件<br><span class="hljs-comment"># see &quot;man logrotate&quot; for details</span><br><span class="hljs-comment"># rotate log files weekly</span><br>weekly<br><br><span class="hljs-comment"># keep 4 weeks worth of backlogs</span><br>rotate 4<br><br><span class="hljs-comment"># create new (empty) log files after rotating old ones</span><br>create<br><br><span class="hljs-comment"># use date as a suffix of the rotated file</span><br>dateext ---&gt;按照日期命名<br><br><span class="hljs-comment"># uncomment this if you want your log files compressed</span><br><span class="hljs-comment">#compress</span><br><br><span class="hljs-comment"># RPM packages drop log rotation information into this directory</span><br>include /etc/logrotate.d<br><br><span class="hljs-comment"># system-specific logs may be also be configured here.</span><br><br><span class="hljs-comment">##直接调用，一般来说是cron.daily，每天执行一次的，得到一份压缩后的日志文件</span><br>[root@rocky cron.daily]<span class="hljs-comment">#pwd</span><br>/etc/cron.daily<br>logrotate<br><br>logrotate /etc/logrotate.d/test1<br>[root@rocky logrotate.d]<span class="hljs-comment">#ll /var/log/test*</span><br>-rw-r--r--. 1 root root       0 10月  2 00:04 /var/log/test1.<span class="hljs-built_in">log</span><br>-rw-r--r--. 1 root root    2067 10月  2 00:03 /var/log/test1.log.1.gz<br><br>[root@rocky logrotate.d]<span class="hljs-comment">#logrotate /etc/logrotate.d/test1</span><br>[root@rocky logrotate.d]<span class="hljs-comment">#ll /var/log/test*</span><br>-rw-r--r--. 1 root root       0 10月  2 00:16 /var/log/test1.<span class="hljs-built_in">log</span><br>-rw-r--r--. 1 root root 2097152 10月  2 00:16 /var/log/test1.log.1<br>-rw-r--r--. 1 root root    2067 10月  2 00:03 /var/log/test1.log.1.gz<br>-rw-r--r--. 1 root root 2097152 10月  2 00:03 /var/log/test2.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/linux-MySQL/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux MySQL</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/">
+                        <span class="hidden-mobile">Linux防火墙技术</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

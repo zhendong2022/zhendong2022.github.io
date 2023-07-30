@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、nginx实现全栈SSL。要求http rewrite到https协议 Nginx 实现全栈 SSL，需要满足以下几个条件：  安装 Nginx 时需要添加 –with-http_ssl_module 参数。 准备 SSL 证书和私钥，证书可以从证书颁发机构购买，私钥可以使用 openssl 工具生成。 在 Nginx 配置文件中启用 SSL 模块，配置 SSL 证书和私钥的路径。 在 Ngi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第九周">
+<meta property="og:url" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="一、nginx实现全栈SSL。要求http rewrite到https协议 Nginx 实现全栈 SSL，需要满足以下几个条件：  安装 Nginx 时需要添加 –with-http_ssl_module 参数。 准备 SSL 证书和私钥，证书可以从证书颁发机构购买，私钥可以使用 openssl 工具生成。 在 Nginx 配置文件中启用 SSL 模块，配置 SSL 证书和私钥的路径。 在 Ngi">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221216195946294-1152838826.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221216200025327-777781800.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221226233241638-584434508.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221226234415663-672090096.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221227001352871-295076515.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221227001406897-1845489867.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221227001419884-605029264.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221227000932307-568219458.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221227001302986-1671579476.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221228191241127-1097389404.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221228172647093-490970275.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221228172641019-1801670515.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221228185207217-2003315772.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221228185508157-635635773.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221228185501522-1289819615.png">
+<meta property="article:published_time" content="2023-07-28T20:01:40.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.209Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B9%9D%E5%91%A8/2927659-20221216195946294-1152838826.png">
+  
+  
+  <title>第九周 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第九周">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 20:01" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      24k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      197 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第九周</h1>
+            
+            <div class="markdown-body">
+              <h2 id="一、nginx实现全栈SSL。要求http-rewrite到https协议"><a href="#一、nginx实现全栈SSL。要求http-rewrite到https协议" class="headerlink" title="一、nginx实现全栈SSL。要求http rewrite到https协议"></a>一、nginx实现全栈SSL。要求http rewrite到https协议</h2><blockquote>
+<p>Nginx 实现全栈 SSL，需要满足以下几个条件：</p>
+<ol>
+<li><strong>安装 Nginx 时需要添加 –with-http_ssl_module 参数</strong>。</li>
+<li>准备 SSL 证书和私钥，证书可以从证书颁发机构购买，私钥可以使用 openssl 工具生成。</li>
+<li>在 Nginx 配置文件中启用 SSL 模块，配置 SSL 证书和私钥的路径。</li>
+<li>在 Nginx 配置文件中配置 HTTPS 服务器，并将 HTTP 请求重定向到 HTTPS 服务器。</li>
+</ol>
+</blockquote>
+<h3 id="（1）编译安装nginx"><a href="#（1）编译安装nginx" class="headerlink" title="（1）编译安装nginx"></a>（1）编译安装nginx</h3><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#安装 Nginx 时，需要加上 --with-http_ssl_module 参数：</span><br>./configure --with-http_ssl_module<br>make<br>make install<br></code></pre></td></tr></table></figure>
+
+<h3 id="（2）配置文件"><a href="#（2）配置文件" class="headerlink" title="（2）配置文件"></a>（2）配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@Rocky04 ~]<span class="hljs-comment"># vim /apps/nginx/conf.d/pc.conf</span><br>server &#123;<br>    listen 80;<br>    root /data/nginx/html/pc;<br>    server_name www.willoneday.org;<br>    location / &#123;<br>        rewrite ^(.*)$ https://<span class="hljs-variable">$host</span>/<span class="hljs-variable">$1</span> redirect;<br>    &#125;<br>&#125;<br>server &#123;<br>    listen 443 ssl;<br>    ssl certificate /apps/nginx/ssl/www.willoneday.org.crt;<br>    ssl certificate_key /apps/nginx/ssl/www.willoneday.org.key;<br>    ssl_session_cache shared:sscache:20m;<br>    ssl_session_timeout 10m;<br>    server name www.willoneday.org<br>    root /data/nginx/html/pc;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><hr>
+<h2 id="二、nginx实现动静分离"><a href="#二、nginx实现动静分离" class="headerlink" title="二、nginx实现动静分离"></a>二、nginx实现动静分离</h2><h3 id="（1）范例一"><a href="#（1）范例一" class="headerlink" title="（1）范例一"></a>（1）范例一</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">location ^~ /images &#123;<br>    root /data/nginx/;<br>    index index.html;<br>&#125;<br><br>location /api &#123;<br>    <span class="hljs-built_in">alias</span> /data/nginx/api;<br>    index index.html;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="（2）范例二"><a href="#（2）范例二" class="headerlink" title="（2）范例二"></a>（2）范例二</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">location ~ \.php$ &#123;<br>    root /scripts;<br>    fastcgi_pass 127.0.0.1:9000;<br>    fastcgi_index index.php;<br>    fastcgi_param SCRIPT_FILENAME $document_root<span class="hljs-variable">$fastcgi_script_name</span>; <span class="hljs-comment">#默认脚本路径</span><br>    <span class="hljs-comment">#fastcgi_param SCRIPT_FILENAME /scripts$fastcgi_script_name;      #此行写法不再需要上面的 root 指令</span><br>    include fastcgi_params;                                           <span class="hljs-comment">#此文件默认系统已提供,存放的相对路径为prefix/conf</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><hr>
+<h2 id="三、nginx实现防盗链功能"><a href="#三、nginx实现防盗链功能" class="headerlink" title="三、nginx实现防盗链功能"></a>三、nginx实现防盗链功能</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#语法格式：</span><br>location /images &#123;<br>    root /data/nginx/html/pc;<br>    index index.html;<br>    valid_referers none blocked server_names<br>    *.example.com example.* www.example.org/galleries/ ~\.google\.;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$invalid_referer</span>) &#123;<br>        <span class="hljs-built_in">return</span> 403;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#范例</span><br>[root@centos8 ~]<span class="hljs-comment"># vim /apps/nginx/conf/conf.d/pc.conf</span><br>server &#123;<br>    index index.html;<br>    valid_referers none blocked server_names *.magedu.com *.magedu.org ~\.google\. ~\.baidu\. ~\.bing\. ~\.so\. ; <span class="hljs-comment">#定义有效的referer</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$invalid_referer</span>) &#123;            <span class="hljs-comment">#假如是使用其他的无效的referer访问</span><br>        <span class="hljs-built_in">return</span> 403 <span class="hljs-string">&quot;Forbidden Access&quot;</span>; <span class="hljs-comment">#返回状态码403</span><br>    &#125;<br>    ......<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="-2"><a href="#-2" class="headerlink" title=""></a></h2><hr>
+<h2 id="四、解析nginx常见的负载均衡算法"><a href="#四、解析nginx常见的负载均衡算法" class="headerlink" title="四、解析nginx常见的负载均衡算法"></a>四、解析nginx常见的负载均衡算法</h2><h3 id="（1）http-反向代理负载均衡"><a href="#（1）http-反向代理负载均衡" class="headerlink" title="（1）http 反向代理负载均衡"></a><strong>（1）http 反向代理负载均衡</strong></h3><blockquote>
+<p>Nginx 可以基于ngx_http_upstream_module模块<strong>提供服务器分组转发、权重分配、状态监测、调度算法等高级功能</strong></p>
+<p><strong><a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html">官方文档</a></strong></p>
+</blockquote>
+<h3 id="（2）-http-upstream配置参数"><a href="#（2）-http-upstream配置参数" class="headerlink" title="（2） http upstream配置参数"></a>（2） http upstream配置参数</h3><blockquote>
+<ul>
+<li><strong>server address [parameters];</strong></li>
+</ul>
+<p>  #配置一个后端web服务器，配置在upstream内，至少要有一个server服务器配置。</p>
+<ul>
+<li><p><strong>#server支持的parameters如下：</strong></p>
+</li>
+<li><ul>
+<li><strong>weight=number</strong><br><strong>#设置权重，默认为1,实现类似于LVS中的WRR,WLC等</strong></li>
+</ul>
+</li>
+<li><ul>
+<li><strong>max_conns=number</strong><br>#给当前后端server设置最大活动链接数，默认为0表示没有限制</li>
+<li><strong>max_fails=number</strong><br><strong>#后端服务器的下线条件,当客户端访问时,对本次调度选中的后端服务器连续进行检测多少次,</strong><br><strong>#如果都失败就标记为不可用,默认为1次,</strong><br><strong>#当客户端访问时,才会利用TCP触发对探测后端服务器健康性检查,而非周期性的探测</strong></li>
+</ul>
+</li>
+<li><ul>
+<li><strong>fail_timeout=time</strong></li>
+</ul>
+</li>
+</ul>
+<p>      #后端服务器的上线条件,对已经检测到处于不可用的后端服务器,每隔此时间间隔再次进行检测是否恢复可用，如果发现可用,则将后端服务器参与调度,默认为10秒</p>
+<ul>
+<li><ul>
+<li><strong>backup</strong></li>
+</ul>
+</li>
+</ul>
+<p>      <strong>#设置为备份服务器，当所有后端服务器不可用时,才会启用此备用服务器</strong></p>
+<ul>
+<li><ul>
+<li><strong>down</strong></li>
+</ul>
+</li>
+</ul>
+<p>      <strong>#标记为down状态,可以平滑下线后端服务器,新用户不再调度到此主机,旧用户不受影响</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>调度算法：三种大的类</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">hash</span> KEY [consistent];<br><span class="hljs-comment">#基于指定请求报文中首部字段或者URI等key做hash计算，使用consistent参数，将使用ketama一致性hash算法，</span><br><span class="hljs-comment">#适用于后端是Cache服务器（如varnish）时使用，consistent定义使用一致性hash运算，一致性hash基于取模运算</span><br><br><span class="hljs-comment">#示例</span><br><span class="hljs-built_in">hash</span> <span class="hljs-variable">$request_uri</span> consistent; <span class="hljs-comment">#基于用户请求的uri做hash</span><br><span class="hljs-built_in">hash</span> <span class="hljs-variable">$cookie_sessionid</span>        <span class="hljs-comment">#基于cookie中的sessionid这个key进行hash调度,实现会话绑定</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ip_hash;<br><span class="hljs-comment">#源地址hash调度方法，基于的客户端的remote_addr(源地址IPv4的前24位或整个IPv6地址)做hash计算，以实现会话保持</span><br><span class="hljs-comment">#hash $remote_addr 则是对全部32bit的IPv4进行hash计算</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">least_conn;<br><span class="hljs-comment">#最少连接调度算法，优先将客户端请求调度到当前连接最少的后端服务器,相当于LVS中的WLC</span><br></code></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#自定义一组服务器，配置在http块内</span><br>upstream name &#123;<br>    server .....<br>    ......<br>&#125;<br><br><span class="hljs-comment">#示例</span><br>[root@Rocky04 ~]<span class="hljs-comment"># vim /apps/nginx/conf/conf.d/pc.conf</span><br>upstream webserver &#123;<br>    <span class="hljs-comment">#hash $request_uri consistent;</span><br>    <span class="hljs-comment">#hash $cookie_sessionid</span><br>    <span class="hljs-comment">#ip_hash;</span><br>    <span class="hljs-comment">#least_conn;</span><br>    server 10.0.0.18 weight=3;<br>    server 10.0.0.28;<br>    server 10.0.0.38 down;<br>&#125;<br>server &#123;<br>    listen 80;<br>    root /data/nginx/html/pc;<br>    server_name www.willoneday.org;<br>    location / &#123;<br>        proxy_pass http://webserver;    <span class="hljs-comment">#upstream定义的名字</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="-3"><a href="#-3" class="headerlink" title=""></a></h2><hr>
+<h2 id="五、基于LNMP完成搭建任意一种应用"><a href="#五、基于LNMP完成搭建任意一种应用" class="headerlink" title="五、基于LNMP完成搭建任意一种应用"></a>五、基于LNMP完成搭建任意一种应用</h2><h3 id="LNMP实现可道云私有云"><a href="#LNMP实现可道云私有云" class="headerlink" title="LNMP实现可道云私有云"></a>LNMP实现可道云私有云</h3><blockquote>
+<p><strong><a target="_blank" rel="noopener" href="http://kodcloud.com/">可道云官网</a></strong></p>
+<p><strong><a target="_blank" rel="noopener" href="http://pecl.php.net/package/redis">php-redis扩展模块官网</a></strong></p>
+<p><strong>部署规划：</strong></p>
+<ul>
+<li>10.0.0.20：Rocky02，Nginx，php-fpm，kodbox</li>
+<li>10.0.0.30：Rocky03，MySQL8.0，Redis5.0</li>
+</ul>
+</blockquote>
+<h4 id="（1）准备-MySQL-数据库"><a href="#（1）准备-MySQL-数据库" class="headerlink" title="（1）准备 MySQL 数据库"></a>（1）准备 MySQL 数据库</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@Rocky03 ~]<span class="hljs-comment"># yum -y install mysql-server</span><br>[root@Rocky03 ~]<span class="hljs-comment"># systemctl enable --now mysqld</span><br>[root@Rocky03 ~]<span class="hljs-comment"># mysql</span><br>mysql&gt; create user <span class="hljs-string">&#x27;kodbox&#x27;</span>@<span class="hljs-string">&#x27;10.0.0.%&#x27;</span> identified by <span class="hljs-string">&#x27;123456&#x27;</span>;<br>mysql&gt; create database kodbox;<br>mysql&gt; grant all on kodbox.* to <span class="hljs-string">&#x27;kodbox&#x27;</span>@<span class="hljs-string">&#x27;10.0.0.%&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="（2）准备-Redis-服务"><a href="#（2）准备-Redis-服务" class="headerlink" title="（2）准备 Redis 服务"></a>（2）准备 Redis 服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@Rocky03 ~]<span class="hljs-comment"># yum install -y redis</span><br>[root@Rocky03 ~]<span class="hljs-comment"># vim /etc/redis.conf</span><br><span class="hljs-built_in">bind</span> 0.0.0.0 <span class="hljs-comment">#修改此行</span><br>[root@Rocky03 ~]<span class="hljs-comment"># systemctl enable --now redis</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="（3）准备-Nginx-服务"><a href="#（3）准备-Nginx-服务" class="headerlink" title="（3）准备 Nginx 服务"></a>（3）准备 Nginx 服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@Rocky02 ~]<span class="hljs-comment"># yum -y install nginx</span><br>[root@Rocky02 ~]<span class="hljs-comment"># mkdir -pv /data/html</span><br>[root@Rocky02 ~]<span class="hljs-comment"># vim /etc/nginx/conf.d/kod.conf</span><br>server &#123;<br>    listen 80;<br>    server_name kod.willoneday.org;<br>    root /data/html;<br>    location / &#123;<br>        index index.php index.html;<br>    &#125;<br>    location ~ \.php$ &#123;<br>        root           /data/html;<br>        fastcgi_pass   127.0.0.1:9000;<br>        fastcgi_index  index.php;<br>        fastcgi_param  SCRIPT_FILENAME  $document_root<span class="hljs-variable">$fastcgi_script_name</span>;<br>        include        fastcgi_params;<br>    &#125;<br>&#125;<br><br>[root@Rocky02 ~]<span class="hljs-comment"># systemctl enable --now nginx</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="（4）安装和配置-php-支持-redis"><a href="#（4）安装和配置-php-支持-redis" class="headerlink" title="（4）安装和配置 php 支持 redis"></a>（4）安装和配置 php 支持 redis</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#安装php相关包</span><br>[root@Rocky02 ~]<span class="hljs-comment"># yum install -y php-fpm wget php-json php-mbstring php-xml php-gd php-mysqlnd</span><br><br><span class="hljs-comment">#修改fpm配置文件</span><br>[root@Rocky02 ~]<span class="hljs-comment"># vim /etc/php-fpm.d/www.conf</span><br>user = nginx<br>group = nginx<br>;listen = /run/php-fpm/www.sock <span class="hljs-comment">#注释此行改成下面</span><br>listen = 127.0.0.1:9000<br><br><span class="hljs-comment">#安装编译相关包</span><br><span class="hljs-comment">#执行下面phpize命令会提示需安装相关php的两个软件包</span><br>[root@Rocky02 ~]<span class="hljs-comment"># yum install -y php-cli php-devel make</span><br><br><span class="hljs-comment">#编译redis模块</span><br>[root@Rocky02 ~]<span class="hljs-comment"># wget http://pecl.php.net/get/redis-5.3.7.tgz</span><br>[root@Rocky02 ~]<span class="hljs-comment"># tar xf redis-5.3.7.tgz</span><br>[root@Rocky02 ~]<span class="hljs-comment"># cd redis-5.3.7/</span><br>[root@Rocky02 redis-5.3.7]<span class="hljs-comment"># cat INSTALL.markdown</span><br>[root@Rocky02 redis-5.3.7]<span class="hljs-comment"># phpize</span><br>[root@Rocky02 redis-5.3.7]<span class="hljs-comment"># ./configure</span><br>[root@Rocky02 redis-5.3.7]<span class="hljs-comment"># make -j 2 &amp;&amp; make install</span><br>...省略...<br>Installing shared extensions:     /usr/lib64/php/modules/<br><br><span class="hljs-comment">#出现上面表示编译成功</span><br>[root@Rocky02 redis-5.3.7]<span class="hljs-comment"># ll /usr/lib64/php/modules/redis.so</span><br>-rwxr-xr-x 1 root root 3530824 Dec 16 17:54 /usr/lib64/php/modules/redis.so<br><br><span class="hljs-comment">#根据其他扩展模块得知需要创建此文件</span><br>[root@Rocky02 ~]<span class="hljs-comment"># vim /etc/php.d/31-redis.ini</span><br>extension=redis<br><br>[root@Rocky02 ~]<span class="hljs-comment"># systemctl enable --now php-fpm</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="（5）准备可道云程序"><a href="#（5）准备可道云程序" class="headerlink" title="（5）准备可道云程序"></a>（5）准备可道云程序</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@Rocky02 ~]<span class="hljs-comment"># yum install -y unzip</span><br>[root@Rocky02 ~]<span class="hljs-comment"># wget https://static.kodcloud.com/update/download/kodbox.1.36.zip</span><br>[root@Rocky02 ~]<span class="hljs-comment"># unzip kodbox.1.36.zip -d /data/html</span><br>[root@Rocky02 ~]<span class="hljs-comment"># chown -R nginx.nginx /data/html</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="（6）初始化和登录可道云"><a href="#（6）初始化和登录可道云" class="headerlink" title="（6）初始化和登录可道云"></a>（6）初始化和登录可道云</h4><p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221216195946294-1152838826.png"><img src="2927659-20221216195946294-1152838826.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221216200025327-777781800.png"><img src="2927659-20221216200025327-777781800.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h2 id="-4"><a href="#-4" class="headerlink" title=""></a></h2><hr>
+<h2 id="六、jumpserver-总结安装部署，添加用户授权，行为审计"><a href="#六、jumpserver-总结安装部署，添加用户授权，行为审计" class="headerlink" title="六、jumpserver 总结安装部署，添加用户授权，行为审计"></a>六、jumpserver 总结安装部署，添加用户授权，行为审计</h2><h3 id="1-基于容器部署"><a href="#1-基于容器部署" class="headerlink" title="1 基于容器部署"></a>1 基于容器部署</h3><blockquote>
+<p><strong>基于容器</strong>**,**<strong>安装完毕后可以通过以下方式访问</strong></p>
+<ul>
+<li>浏览器访问：http://&lt;容器所在服务器IP&gt;</li>
+<li>默认管理员账户 admin 密码 admin</li>
+<li>SSH 访问：ssh -p 2222 &lt;容器所在服务器IP&gt;</li>
+<li>XShell 等工具请添加 connection 连接, 默认 ssh 端口 2222</li>
+</ul>
+</blockquote>
+<h4 id="（1）安装-Docker-环境"><a href="#（1）安装-Docker-环境" class="headerlink" title="（1）安装 Docker 环境"></a>（1）安装 Docker 环境</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><br>DOCKER_VERSION=<span class="hljs-string">&quot;20.10.10&quot;</span><br>UBUNTU_DOCKER_VERSION=<span class="hljs-string">&quot;5:<span class="hljs-variable">$&#123;DOCKER_VERSION&#125;</span>~3-0~`lsb_release -si`-`lsb_release -cs`&quot;</span><br><span class="hljs-comment">#UBUNTU_DOCKER_VERSION=&quot;5:20.10.9~3-0~`lsb_release -si`-`lsb_release -cs`&quot;</span><br><span class="hljs-comment">#UBUNTU_DOCKER_VERSION=&quot;5:19.03.14~3-0~lsb_release -si-`lsb_release -cs`&quot;</span><br><br>COLOR_SUCCESS=<span class="hljs-string">&quot;echo -e \\033[1;32m&quot;</span><br>COLOR_FAILURE=<span class="hljs-string">&quot;echo -e \\033[1;31m&quot;</span><br>END=<span class="hljs-string">&quot;\033[m&quot;</span><br><br>. /etc/os-release<br><br><span class="hljs-function"><span class="hljs-title">color</span></span> () &#123;<br>    RES_COL=60<br>    MOVE_TO_COL=<span class="hljs-string">&quot;echo -en \\033[<span class="hljs-variable">$&#123;RES_COL&#125;</span>G&quot;</span><br>    SETCOLOR_SUCCESS=<span class="hljs-string">&quot;echo -en \\033[1;32m&quot;</span><br>    SETCOLOR_FAILURE=<span class="hljs-string">&quot;echo -en \\033[1;31m&quot;</span><br>    SETCOLOR_WARNING=<span class="hljs-string">&quot;echo -en \\033[1;33m&quot;</span><br>    SETCOLOR_NORMAL=<span class="hljs-string">&quot;echo -en \E[0m&quot;</span><br>    <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> &amp;&amp; <span class="hljs-variable">$MOVE_TO_COL</span><br>    <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;[&quot;</span><br>    <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$2</span> = <span class="hljs-string">&quot;success&quot;</span> -o <span class="hljs-variable">$2</span> = <span class="hljs-string">&quot;0&quot;</span> ] ;<span class="hljs-keyword">then</span><br>        <span class="hljs-variable">$&#123;SETCOLOR_SUCCESS&#125;</span><br>        <span class="hljs-built_in">echo</span> -n $<span class="hljs-string">&quot;  OK  &quot;</span>    <br>    <span class="hljs-keyword">elif</span> [ <span class="hljs-variable">$2</span> = <span class="hljs-string">&quot;failure&quot;</span> -o <span class="hljs-variable">$2</span> = <span class="hljs-string">&quot;1&quot;</span>  ] ;<span class="hljs-keyword">then</span> <br>        <span class="hljs-variable">$&#123;SETCOLOR_FAILURE&#125;</span><br>        <span class="hljs-built_in">echo</span> -n $<span class="hljs-string">&quot;FAILED&quot;</span><br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-variable">$&#123;SETCOLOR_WARNING&#125;</span><br>        <span class="hljs-built_in">echo</span> -n $<span class="hljs-string">&quot;WARNING&quot;</span><br>    <span class="hljs-keyword">fi</span><br>    <span class="hljs-variable">$&#123;SETCOLOR_NORMAL&#125;</span><br>    <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;]&quot;</span><br>    <span class="hljs-built_in">echo</span> <br>&#125;<br><br><br><span class="hljs-function"><span class="hljs-title">install_docker</span></span>()&#123;<br>    <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$ID</span> = <span class="hljs-string">&quot;centos&quot;</span> -o <span class="hljs-variable">$ID</span> = <span class="hljs-string">&quot;rocky&quot;</span> ];<span class="hljs-keyword">then</span><br>        <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$VERSION_ID</span> = <span class="hljs-string">&quot;7&quot;</span> ];<span class="hljs-keyword">then</span><br>            <span class="hljs-built_in">cat</span> &gt;  /etc/yum.repos.d/docker.repo  &lt;&lt;<span class="hljs-string">EOF</span><br><span class="hljs-string">[docker]</span><br><span class="hljs-string">name=docker</span><br><span class="hljs-string">gpgcheck=0</span><br><span class="hljs-string">#baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/7/x86_64/stable/</span><br><span class="hljs-string">baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/7/x86_64/stable/</span><br><span class="hljs-string">EOF</span><br>        <span class="hljs-keyword">else</span>     <br>            <span class="hljs-built_in">cat</span> &gt;  /etc/yum.repos.d/docker.repo  &lt;&lt;<span class="hljs-string">EOF</span><br><span class="hljs-string">[docker]</span><br><span class="hljs-string">name=docker</span><br><span class="hljs-string">gpgcheck=0</span><br><span class="hljs-string">#baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/8/x86_64/stable/</span><br><span class="hljs-string">baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/8/x86_64/stable/</span><br><span class="hljs-string">EOF</span><br>        <span class="hljs-keyword">fi</span><br>	    yum clean all <br>        <span class="hljs-variable">$&#123;COLOR_FAILURE&#125;</span> <span class="hljs-string">&quot;Docker有以下版本&quot;</span><span class="hljs-variable">$&#123;END&#125;</span><br>        yum list docker-ce --showduplicates<br>        <span class="hljs-variable">$&#123;COLOR_FAILURE&#125;</span><span class="hljs-string">&quot;5秒后即将安装: docker-&quot;</span><span class="hljs-variable">$&#123;DOCKER_VERSION&#125;</span><span class="hljs-string">&quot; 版本.....&quot;</span><span class="hljs-variable">$&#123;END&#125;</span><br>        <span class="hljs-variable">$&#123;COLOR_FAILURE&#125;</span><span class="hljs-string">&quot;如果想安装其它Docker版本，请按ctrl+c键退出，修改版本再执行&quot;</span><span class="hljs-variable">$&#123;END&#125;</span><br>        <span class="hljs-built_in">sleep</span> 5<br>        yum -y install docker-ce-<span class="hljs-variable">$DOCKER_VERSION</span> docker-ce-cli-<span class="hljs-variable">$DOCKER_VERSION</span>  \<br>            || &#123; color <span class="hljs-string">&quot;Base,Extras的yum源失败,请检查yum源配置&quot;</span> 1;<span class="hljs-built_in">exit</span>; &#125;<br>    <span class="hljs-keyword">else</span><br>	    dpkg -s docker-ce &amp;&gt; /dev/null &amp;&amp; <span class="hljs-variable">$COLOR</span><span class="hljs-string">&quot;Docker已安装，退出&quot;</span> 1 &amp;&amp; <span class="hljs-built_in">exit</span><br>        apt update || &#123; color <span class="hljs-string">&quot;更新包索引失败&quot;</span> 1 ; <span class="hljs-built_in">exit</span> 1; &#125;  <br>        apt  -y install apt-transport-https ca-certificates curl software-properties-common || \<br>            &#123; color <span class="hljs-string">&quot;安装相关包失败&quot;</span> 1 ; <span class="hljs-built_in">exit</span> 2;  &#125;  <br>        curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add -<br>        add-apt-repository <span class="hljs-string">&quot;deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu <span class="hljs-subst">$(lsb_release -cs)</span> stable&quot;</span><br>        apt update<br>        <span class="hljs-variable">$&#123;COLOR_FAILURE&#125;</span> <span class="hljs-string">&quot;Docker有以下版本&quot;</span><span class="hljs-variable">$&#123;END&#125;</span><br>        apt-cache madison docker-ce<br>        <span class="hljs-variable">$&#123;COLOR_FAILURE&#125;</span><span class="hljs-string">&quot;5秒后即将安装: docker-&quot;</span><span class="hljs-variable">$&#123;UBUNTU_DOCKER_VERSION&#125;</span><span class="hljs-string">&quot; 版本.....&quot;</span><span class="hljs-variable">$&#123;END&#125;</span><br>        <span class="hljs-variable">$&#123;COLOR_FAILURE&#125;</span><span class="hljs-string">&quot;如果想安装其它Docker版本，请按ctrl+c键退出，修改版本再执行&quot;</span><span class="hljs-variable">$&#123;END&#125;</span><br>        <span class="hljs-built_in">sleep</span> 5<br>        apt -y  install docker-ce=<span class="hljs-variable">$&#123;UBUNTU_DOCKER_VERSION&#125;</span> docker-ce-cli=<span class="hljs-variable">$&#123;UBUNTU_DOCKER_VERSION&#125;</span><br>    <span class="hljs-keyword">fi</span><br>    <span class="hljs-keyword">if</span> [ $? -eq 0 ];<span class="hljs-keyword">then</span><br>        color <span class="hljs-string">&quot;安装软件包成功&quot;</span>  0<br>    <span class="hljs-keyword">else</span><br>        color <span class="hljs-string">&quot;安装软件包失败，请检查网络配置&quot;</span> 1<br>        <span class="hljs-built_in">exit</span><br>    <span class="hljs-keyword">fi</span><br>        <br>&#125;<br><br><span class="hljs-function"><span class="hljs-title">config_docker</span></span> ()&#123;<br>    <span class="hljs-built_in">mkdir</span> -p /etc/docker<br>    <span class="hljs-built_in">tee</span> /etc/docker/daemon.json &lt;&lt;-<span class="hljs-string">&#x27;EOF&#x27;</span><br>&#123;<br>	  <span class="hljs-string">&quot;registry-mirrors&quot;</span>: [<span class="hljs-string">&quot;https://si7y70hh.mirror.aliyuncs.com&quot;</span>],<br>	  <span class="hljs-string">&quot;insecure-registries&quot;</span>:[<span class="hljs-string">&quot;harbor.magedu.org:80&quot;</span>]<br>&#125;<br>EOF<br>    systemctl daemon-reload<br>    systemctl <span class="hljs-built_in">enable</span> docker<br>    systemctl restart docker<br>    docker version &amp;&amp; color <span class="hljs-string">&quot;Docker 安装成功&quot;</span> 0 ||  color <span class="hljs-string">&quot;Docker 安装失败&quot;</span> 1<br>&#125;<br><br><br><span class="hljs-function"><span class="hljs-title">set_alias</span></span> ()&#123;<br>	<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;alias rmi=&quot;docker images -qa|xargs docker rmi -f&quot;&#x27;</span> &gt;&gt; ~/.bashrc<br>	<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;alias rmc=&quot;docker ps -qa|xargs docker rm -f&quot;&#x27;</span> &gt;&gt; ~/.bashrc<br>&#125;<br><br><br>install_docker<br>config_docker <br>set_alias<br></code></pre></td></tr></table></figure>
+
+<h4 id="（2）安装-Mysql-环境"><a href="#（2）安装-Mysql-环境" class="headerlink" title="（2）安装 Mysql 环境"></a>（2）安装 Mysql 环境</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /etc/mysql/mysql.conf.d/<br><span class="hljs-built_in">mkdir</span> -p /etc/mysql/conf.d/<br><br><span class="hljs-comment">#生成服务器配置文件,指定字符集</span><br><span class="hljs-built_in">tee</span> /etc/mysql/mysql.conf.d/mysqld.cnf &lt;&lt;<span class="hljs-string">EOF</span><br><span class="hljs-string">[mysqld]</span><br><span class="hljs-string">pid-file= /var/run/mysqld/mysqld.pid</span><br><span class="hljs-string">socket= /var/run/mysqld/mysqld.sock</span><br><span class="hljs-string">datadir= /var/lib/mysql</span><br><span class="hljs-string">symbolic-links=0</span><br><span class="hljs-string">character-set-server=utf8</span><br><span class="hljs-string">EOF</span><br><br><span class="hljs-comment">#生成客户端配置文件,指定字符集</span><br><span class="hljs-built_in">tee</span> /etc/mysql/conf.d/mysql.cnf &lt;&lt;<span class="hljs-string">EOF</span><br><span class="hljs-string">[mysql]</span><br><span class="hljs-string">default-character-set=utf8</span><br><span class="hljs-string">EOF</span><br><br><br>docker run -d -p 3306:3306 --name mysql --restart always \<br>-e MYSQL_ROOT_PASSWORD=123456 \<br>-e MYSQL_DATABASE=jumpserver  \<br>-e MYSQL_USER=jumpserver      \<br>-e MYSQL_PASSWORD=123456       \<br>-v /data/mysql:/var/lib/mysql   \<br>-v /etc/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf  \<br>-v /etc/mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf   mysql:5.7.30<br></code></pre></td></tr></table></figure>
+
+<h4 id="（3）安装-Redis-环境"><a href="#（3）安装-Redis-环境" class="headerlink" title="（3）安装 Redis 环境"></a>（3）安装 Redis 环境</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d -p 6379:6379 --name redis --restart always  redis<br></code></pre></td></tr></table></figure>
+
+<h4 id="（4）生成-key-和-token"><a href="#（4）生成-key-和-token" class="headerlink" title="（4）生成 key 和 token"></a>（4）生成 key 和 token</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#此脚本由官方提供，而后做了一些修改</span><br>[root@JumpServer ~]<span class="hljs-comment"># cat key.sh</span><br><span class="hljs-comment">#!/bin/bash</span><br><br><span class="hljs-keyword">if</span> [ ! <span class="hljs-string">&quot;<span class="hljs-variable">$SECRET_KEY</span>&quot;</span> ]; <span class="hljs-keyword">then</span><br>  SECRET_KEY=`<span class="hljs-built_in">cat</span> /dev/urandom | <span class="hljs-built_in">tr</span> -dc A-Za-z0-9 | <span class="hljs-built_in">head</span> -c 50`;<br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;SECRET_KEY=<span class="hljs-variable">$SECRET_KEY</span>&quot;</span> &gt;&gt; ~/.bashrc;<br>  <span class="hljs-built_in">echo</span> SECRET_KEY=<span class="hljs-variable">$SECRET_KEY</span>;<br><span class="hljs-keyword">else</span><br>  <span class="hljs-built_in">echo</span> SECRET_KEY=<span class="hljs-variable">$SECRET_KEY</span>;<br><span class="hljs-keyword">fi</span><br><span class="hljs-keyword">if</span> [ ! <span class="hljs-string">&quot;<span class="hljs-variable">$BOOTSTRAP_TOKEN</span>&quot;</span> ]; <span class="hljs-keyword">then</span><br>  BOOTSTRAP_TOKEN=`<span class="hljs-built_in">cat</span> /dev/urandom | <span class="hljs-built_in">tr</span> -dc A-Za-z0-9 | <span class="hljs-built_in">head</span> -c 16`;<br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;BOOTSTRAP_TOKEN=<span class="hljs-variable">$BOOTSTRAP_TOKEN</span>&quot;</span> &gt;&gt; ~/.bashrc;<br>  <span class="hljs-built_in">echo</span> BOOTSTRAP_TOKEN=<span class="hljs-variable">$BOOTSTRAP_TOKEN</span>;<br><span class="hljs-keyword">else</span><br>  <span class="hljs-built_in">echo</span> BOOTSTRAP_TOKEN=<span class="hljs-variable">$BOOTSTRAP_TOKEN</span>;<br><span class="hljs-keyword">fi</span><br><br>[root@JumpServer ~]<span class="hljs-comment"># tail -n2 .bashrc</span><br>SECRET_KEY=UF9v8atjcC6ljiotDYljdGr2FR7stCaEWBLrX5bmdrYQbf6CJP<br>BOOTSTRAP_TOKEN=d4MgiDYZXCflicO4<br></code></pre></td></tr></table></figure>
+
+<h4 id="（5）运行Jumpserver"><a href="#（5）运行Jumpserver" class="headerlink" title="（5）运行Jumpserver"></a>（5）运行Jumpserver</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#修改SECRET_KEY和BOOTSTRAP_TOKEN</span><br><span class="hljs-comment">#修改DB_HOST和REDIS_HOST，写127.0.0.1会失败！</span><br>docker run --name jms_all -d \<br>  -v /opt/jumpserver/core/data:/opt/jumpserver/data \<br>  -v /opt/jumpserver/koko/data:/opt/koko/data \<br>  -v /opt/jumpserver/lion/data:/opt/lion/data \<br>  -p 80:80 \<br>  -p 2222:2222 \<br>  -e SECRET_KEY=UF9v8atjcC6ljiotDYljdGr2FR7stCaEWBLrX5bmdrYQbf6CJP \<br>  -e BOOTSTRAP_TOKEN=d4MgiDYZXCflicO4 \<br>  -e LOG_LEVEL=ERROR \<br>  -e DB_HOST=10.0.0.40 \<br>  -e DB_PORT=3306 \<br>  -e DB_USER=jumpserver \<br>  -e DB_PASSWORD=123456 \<br>  -e DB_NAME=jumpserver \<br>  -e REDIS_HOST=10.0.0.40 \<br>  -e REDIS_PORT=6379 \<br>  -e REDIS_PASSWORD=<span class="hljs-string">&#x27;&#x27;</span> \<br>  --privileged=<span class="hljs-literal">true</span> \<br>  jumpserver/jms_all<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@JumpServer ~]<span class="hljs-comment"># ss -ntl</span><br>State      Recv-Q     Send-Q         Local Address:Port         Peer Address:Port    Process<br>LISTEN     0          128                  0.0.0.0:3306              0.0.0.0:*<br>LISTEN     0          128                  0.0.0.0:6379              0.0.0.0:*<br>LISTEN     0          128                  0.0.0.0:2222              0.0.0.0:*<br>LISTEN     0          128                  0.0.0.0:80                0.0.0.0:*<br>LISTEN     0          128                  0.0.0.0:22                0.0.0.0:*<br>LISTEN     0          128                     [::]:3306                 [::]:*<br>LISTEN     0          128                     [::]:6379                 [::]:*<br>LISTEN     0          128                     [::]:2222                 [::]:*<br>LISTEN     0          128                     [::]:80                   [::]:*<br>LISTEN     0          128                     [::]:22                   [::]:*<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-添加用户授权，行为审计"><a href="#2-添加用户授权，行为审计" class="headerlink" title="2 添加用户授权，行为审计"></a>2 添加用户授权，行为审计</h3><h4 id="（1）登录"><a href="#（1）登录" class="headerlink" title="（1）登录"></a>（1）登录</h4><p> <a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221226233241638-584434508.png"><img src="2927659-20221226233241638-584434508.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h4 id="（2）创建用户组和用户"><a href="#（2）创建用户组和用户" class="headerlink" title="（2）创建用户组和用户"></a>（2）创建用户组和用户</h4><p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221226234415663-672090096.png"><img src="2927659-20221226234415663-672090096.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h4 id="（3）创建普通用户和特权用户"><a href="#（3）创建普通用户和特权用户" class="headerlink" title="（3）创建普通用户和特权用户"></a>（3）创建普通用户和特权用户</h4><blockquote>
+<p>普通用户选择自动推送或手动进Linux创建此账号</p>
+<p>特权用户是后端真实root的账号密码</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221227001352871-295076515.png"><img src="2927659-20221227001352871-295076515.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h4 id="（4）创建资产"><a href="#（4）创建资产" class="headerlink" title="（4）创建资产"></a>（4）创建资产</h4><blockquote>
+<p>需要选择刚才创建的特权用户</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221227001406897-1845489867.png"><img src="2927659-20221227001406897-1845489867.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h4 id="（5）资产授权"><a href="#（5）资产授权" class="headerlink" title="（5）资产授权"></a>（5）资产授权</h4><p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221227001419884-605029264.png"><img src="2927659-20221227001419884-605029264.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h4 id="（6）用户登录"><a href="#（6）用户登录" class="headerlink" title="（6）用户登录"></a>（6）用户登录</h4><p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221227000932307-568219458.png"><img src="2927659-20221227000932307-568219458.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h4 id="（7）审计用户登录"><a href="#（7）审计用户登录" class="headerlink" title="（7）审计用户登录"></a>（7）审计用户登录</h4><p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221227001302986-1671579476.png"><img src="2927659-20221227001302986-1671579476.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h2 id="-5"><a href="#-5" class="headerlink" title=""></a></h2><hr>
+<h2 id="七、JVM垃圾回收原理，JVM调优"><a href="#七、JVM垃圾回收原理，JVM调优" class="headerlink" title="七、JVM垃圾回收原理，JVM调优"></a>七、JVM垃圾回收原理，JVM调优</h2><h3 id="（1）JVM垃圾回收原理"><a href="#（1）JVM垃圾回收原理" class="headerlink" title="（1）JVM垃圾回收原理"></a>（1）JVM垃圾回收原理</h3><blockquote>
+<p>Java虚拟机（JVM）的垃圾回收（GC）是一种自动内存管理机制，它的目的是回收不再使用的内存，以便重新利用这些内存来分配新的对象。这样可以减少内存泄漏和内存溢出的风险，并保证程序的正常运行。</p>
+</blockquote>
+<blockquote>
+<p>JVM垃圾回收过程分为两个阶段：标记和清除。在标记阶段，JVM扫描内存中的所有对象，并标记出那些可以被回收的对象。在清除阶段，JVM清除所有被标记的对象，并释放它们占用的内存。</p>
+</blockquote>
+<blockquote>
+<p>JVM使用多种算法来执行垃圾回收，其中包括标记-清除算法、复制算法和分代回收算法。</p>
+<p>标记-清除算法是最常见的垃圾回收算法。它的工作流程如下：</p>
+<ol>
+<li>标记：扫描内存中的所有对象，并标记出那些可以被回收的对象。</li>
+<li>清除：清除所有被标记的对象，并释放它们占用的内存。</li>
+<li>整理：整理内存空间，使空闲内存形成连续的块。</li>
+</ol>
+<p>复制算法是一种改进的垃圾回收算法，它的工作流程如下：</p>
+<ol>
+<li>将内存分成两块，每次只使用其中一块。</li>
+<li>将所有存活的对象复制到另一块内存中。</li>
+<li>释放原来使用的内存块。</li>
+</ol>
+<p>复制算法的优点是，因为每次只需要处理存活的对象，所以效率较高，且不需要进行内存整理。但是，它的缺点是需要额外的内存空间来存储复制后的对象，因此可用内存空间会减半。</p>
+<p>分代回收算法是一种改进的垃圾回收算法，它将内存分为新生代和老年代。新生代内存中存储的是新创建的对象，老年代内存中存储的是存活时间较长的对象。</p>
+<p>分代回收算法的工作流程如下：</p>
+<ol>
+<li>对新生代进行复制算法回收，回收那些已死亡的对象。</li>
+<li>将存活的对象复制到老年代。</li>
+<li>对老年代进行标记-清除或其他算法回收，回收那些已死亡的对象。</li>
+</ol>
+<p>分代回收算法的优点是可以更高效地回收内存，因为新生代中的对象死亡率较高，所以使用复制算法效率较高。而老年代中的对象死亡率较低，所以使用标记-清除或其他算法效率较高。</p>
+</blockquote>
+<blockquote>
+<p>总的来说，JVM垃圾回收是一种非常重要的机制，它可以帮助我们自动管理内存，减少内存泄漏和内存溢出的风险，并保证程序的正常运行。但是，垃圾回收也有一定的开销，因此我们在编写代码时也要注意避免不必要的内存分配。</p>
+</blockquote>
+<h3 id="（2）JVM调优"><a href="#（2）JVM调优" class="headerlink" title="（2）JVM调优"></a>（2）JVM调优</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">1、java -<span class="hljs-built_in">cp</span> . -Xms512m -Xmx1g jpress <span class="hljs-comment">#指定java允许的初始内存和总内存都为512M允许jpress程序</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">2、JAVA_OPTS=<span class="hljs-string">&quot;-server -Xms4g -Xmx4g -XX:NewSize= -XX:MaxNewSize= &quot;</span><br>-server：服务器模式<br>-Xms：堆内存初始化大小<br>-Xmx：堆内存空间上限<br>-XX:NewSize=：新生代空间初始化大小<br>-XX:MaxNewSize=：新生代空间最大值<br>例：tomcat的catalina.sh里添加一行 JAVA_OPTS=<span class="hljs-string">&quot;-server -Xms128m -Xmx512m -XX:NewSize=48m -XX:MaxNewSize=200m&quot;</span><br><br><span class="hljs-comment">#运行在server模式初始内存128M,最大内存512M,设置初始新生代大小为48M,设置最大新生代内存空间200M。</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">3、线程池调整<br><br><span class="hljs-comment">#vim /usr/local/tomcat/conf/server.xml</span><br>......<br>&lt;Connector port=<span class="hljs-string">&quot;8080&quot;</span> protocol=<span class="hljs-string">&quot;HTTP/1.1&quot;</span> connectionTimeout=<span class="hljs-string">&quot;20000&quot;</span> redirectPort=<span class="hljs-string">&quot;8443&quot;</span> maxThreads=<span class="hljs-string">&quot;2000&quot;</span>/&gt;<br><br>connectionTimeout ：连接超时时长,单位ms<br>maxThreads：最大线程数，默认200,也就是我们常说的并发连接数<br>minSpareThreads：最小空闲线程数<br>maxSpareThreads：最大空闲线程数<br>acceptCount：当启动线程满了之后，等待队列的最大长度，默认100<br>URIEncoding：URI 地址编码格式，建议使用 UTF-8<br>enableLookups：是否启用客户端主机名的DNS反向解析，缺省禁用，建议禁用，就使用客户端IP就行<br>compression：是否启用传输压缩机制，建议 <span class="hljs-string">&quot;on&quot;</span>，CPU和流量的平衡<br>compressionMinSize：启用压缩传输的数据流最小值，单位是字节<br>compressableMimeType：定义启用压缩功能的MIME类型text/html, text/xml, text/css,text/javascript<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">4、指定垃圾回收器--适合响应时间短、交互式的网站，提高用户体验<br><br><span class="hljs-comment">#将参数加入到bin/catalina.sh中，重启观察Tomcat status。老年代已经使用CMS</span><br>[root@tomcat ~]<span class="hljs-comment">#vim /usr/local/tomcat/bin/catalina.sh</span><br>......<br><span class="hljs-comment"># OS specific support. $var _must_ be set to either true or false.</span><br>JAVA_OPTS=<span class="hljs-string">&quot;-server -Xmx512m -Xms128m -XX:NewSize=48m -XX:MaxNewSize=200m -XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=5&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="-6"><a href="#-6" class="headerlink" title=""></a></h2><hr>
+<h2 id="八、tomcat实现java应用发布"><a href="#八、tomcat实现java应用发布" class="headerlink" title="八、tomcat实现java应用发布"></a>八、tomcat实现java应用发布</h2><h3 id="（1）安装java"><a href="#（1）安装java" class="headerlink" title="（1）安装java"></a>（1）安装java</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@blog ~]<span class="hljs-comment"># yum install -y java</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（2）安装tomcat"><a href="#（2）安装tomcat" class="headerlink" title="（2）安装tomcat"></a>（2）安装tomcat</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@blog ~]<span class="hljs-comment"># yum install -y tomcat</span><br>[root@blog ~]<span class="hljs-comment"># systemctl enable --now tomcat</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（3）jpress"><a href="#（3）jpress" class="headerlink" title="（3）jpress"></a>（3）jpress</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#注：war名叫什么，访问的网站名就叫什么</span><br><span class="hljs-comment">#war包放到webapps下会自动解压</span><br>[root@blog ~]<span class="hljs-comment"># mv jpress-v4.0.7.war blog.war</span><br>[root@blog ~]<span class="hljs-comment"># mv blog.war /usr/share/tomcat/webapps</span><br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221228191241127-1097389404.png"><img src="2927659-20221228191241127-1097389404.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h2 id="-7"><a href="#-7" class="headerlink" title=""></a></h2><hr>
+<h2 id="九、实现tomcat-session粘性，并验证过程"><a href="#九、实现tomcat-session粘性，并验证过程" class="headerlink" title="九、实现tomcat session粘性，并验证过程"></a>九、实现tomcat session粘性，并验证过程</h2><blockquote>
+<p><strong>环境：</strong></p>
+<p>dns：10.0.0.20</p>
+<p>nginx：10.0.0.30</p>
+<p>tomcat1：10.0.0.40</p>
+<p>tomcat2：10.0.0.50</p>
+</blockquote>
+<h3 id="（1）dns配置"><a href="#（1）dns配置" class="headerlink" title="（1）dns配置"></a>（1）dns配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#增加下面一段</span><br>[root@dns ~]<span class="hljs-comment"># cat /etc/named.rfc1912.zones</span><br>zone <span class="hljs-string">&quot;willoneday.org&quot;</span> IN &#123;<br>    <span class="hljs-built_in">type</span> master;<br>    file  <span class="hljs-string">&quot;willoneday.org.zone&quot;</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#www指向nginx服务器ip地址</span><br>[root@dns ~]<span class="hljs-comment"># vim /var/named/willoneday.org.zone</span><br><span class="hljs-variable">$TTL</span> 1D<br>@	IN SOA	master admin (<br>					1	; serial<br>					1D	; refresh<br>					1H	; retry<br>					1W	; expire<br>					3H )	; minimum<br>	        NS	 master<br>master      A    10.0.0.20<br>www         A    10.0.0.30<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@dns ~]<span class="hljs-comment"># rndc reload</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（2）nginx配置"><a href="#（2）nginx配置" class="headerlink" title="（2）nginx配置"></a>（2）nginx配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@nginx ~]<span class="hljs-comment"># vim /apps/nginx/conf/nginx.conf</span><br>http &#123;<br>    ...省略...<br>    upstream tomcat-server &#123;<br>        <span class="hljs-comment">#ip_hash;                #启动源地址hash</span><br>        <span class="hljs-built_in">hash</span> <span class="hljs-variable">$cookie_JSESSIONID</span>; <span class="hljs-comment">#启动基于cookie的hash</span><br>        server 10.0.0.40:8080;   <span class="hljs-comment">#可加weight（权重）等</span><br>        server 10.0.0.50:8080;<br>    &#125;<br><br>    server &#123;<br>        listen       80;<br>        server_name  localhost;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>        location / &#123;<br>            root   html;<br>            index  index.html index.htm;<br>            proxy_pass http://tomcat-server;<br>            proxy_set_header Host <span class="hljs-variable">$http_host</span>;<br>        &#125;<br>    ...省略...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@nginx ~]<span class="hljs-comment"># nginx -s reload</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（3）tomcat1配置"><a href="#（3）tomcat1配置" class="headerlink" title="（3）tomcat1配置"></a>（3）tomcat1配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#增加一个Host</span><br>[root@tomcat1 ~]<span class="hljs-comment"># vim /usr/local/tomcat/conf/server.xml</span><br>    &lt;Host name=<span class="hljs-string">&quot;www.willoneday.org&quot;</span>  appBase=<span class="hljs-string">&quot;/data/tomcat/node1&quot;</span><br>            unpackWARs=<span class="hljs-string">&quot;true&quot;</span> autoDeploy=<span class="hljs-string">&quot;true&quot;</span>&gt;<br>    &lt;/Host&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#创建携带session的测试页面</span><br>[root@tomcat1 ~]<span class="hljs-comment"># mkdir -p /data/tomcat/node1/ROOT/</span><br>[root@tomcat1 ~]<span class="hljs-comment"># vim /data/tomcat/node1/ROOT/index.jsp</span><br>&lt;%@ page import=<span class="hljs-string">&quot;java.util.*&quot;</span> %&gt;<br>&lt;!DOCTYPE html&gt;<br>&lt;html lang=<span class="hljs-string">&quot;en&quot;</span>&gt;<br>&lt;<span class="hljs-built_in">head</span>&gt;<br>    &lt;meta charset=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;<br>    &lt;title&gt;tomcat <span class="hljs-built_in">test</span>&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1&gt; Tomcat Website1 &lt;/h1&gt;<br>&lt;div&gt;On  &lt;%=request.getServerName() %&gt;&lt;/div&gt;<br>&lt;div&gt;&lt;%=request.getLocalAddr() + <span class="hljs-string">&quot;:&quot;</span> + request.getLocalPort() %&gt;&lt;/div&gt;<br>&lt;div&gt;SessionID = &lt;span style=<span class="hljs-string">&quot;color:blue&quot;</span>&gt;&lt;%=session.getId() %&gt;&lt;/span&gt;&lt;/div&gt;<br>&lt;%=new Date()%&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#重启生效</span><br>[root@tomcat1 ~]<span class="hljs-comment"># systemctl restart tomcat</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（4）tomcat2配置"><a href="#（4）tomcat2配置" class="headerlink" title="（4）tomcat2配置"></a>（4）tomcat2配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#增加一个Host</span><br>[root@tomcat2 ~]<span class="hljs-comment"># vim /usr/local/tomcat/conf/server.xml</span><br>    &lt;Host name=<span class="hljs-string">&quot;www.willoneday.org&quot;</span>  appBase=<span class="hljs-string">&quot;/data/tomcat/node2&quot;</span><br>            unpackWARs=<span class="hljs-string">&quot;true&quot;</span> autoDeploy=<span class="hljs-string">&quot;true&quot;</span>&gt;<br>    &lt;/Host&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#创建携带session的测试页面</span><br>[root@tomcat2 ~]<span class="hljs-comment"># mkdir -p /data/tomcat/node2/ROOT/</span><br>[root@tomcat2 ~]<span class="hljs-comment"># vim /data/tomcat/node2/ROOT/index.jsp</span><br>&lt;%@ page import=<span class="hljs-string">&quot;java.util.*&quot;</span> %&gt;<br>&lt;!DOCTYPE html&gt;<br>&lt;html lang=<span class="hljs-string">&quot;en&quot;</span>&gt;<br>&lt;<span class="hljs-built_in">head</span>&gt;<br>    &lt;meta charset=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;<br>    &lt;title&gt;tomcat <span class="hljs-built_in">test</span>&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1&gt; Tomcat Website2 &lt;/h1&gt;<br>&lt;div&gt;On  &lt;%=request.getServerName() %&gt;&lt;/div&gt;<br>&lt;div&gt;&lt;%=request.getLocalAddr() + <span class="hljs-string">&quot;:&quot;</span> + request.getLocalPort() %&gt;&lt;/div&gt;<br>&lt;div&gt;SessionID = &lt;span style=<span class="hljs-string">&quot;color:blue&quot;</span>&gt;&lt;%=session.getId() %&gt;&lt;/span&gt;&lt;/div&gt;<br>&lt;%=new Date()%&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#重启生效</span><br>[root@tomcat2 ~]<span class="hljs-comment"># systemctl restart tomcat</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（5）验证"><a href="#（5）验证" class="headerlink" title="（5）验证"></a>（5）验证</h3><p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221228172647093-490970275.png"><img src="2927659-20221228172647093-490970275.png" srcset="/img/loading.gif" lazyload alt="img"></a><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221228172641019-1801670515.png"><img src="2927659-20221228172641019-1801670515.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h2 id="-8"><a href="#-8" class="headerlink" title=""></a></h2><hr>
+<h2 id="十、实现tomcat会话复制集群"><a href="#十、实现tomcat会话复制集群" class="headerlink" title="十、实现tomcat会话复制集群"></a>十、实现tomcat会话复制集群</h2><blockquote>
+<p><strong>环境：</strong></p>
+<p>dns：10.0.0.20</p>
+<p>nginx：10.0.0.30</p>
+<p>tomcat1：10.0.0.40</p>
+<p>tomcat2：10.0.0.50</p>
+<p>dns配置同上（第九题）</p>
+<p><strong>官方集群会话复制配置网址（根据自身tomcat版本参考）：<a target="_blank" rel="noopener" href="https://tomcat.apache.org/tomcat-9.0-doc/cluster-howto.html">https://tomcat.apache.org/tomcat-9.0-doc/cluster-howto.html</a></strong></p>
+<p><strong>注意：官方tomcat7版本配置末尾少/</strong></p>
+<p><strong><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221228185207217-2003315772.png"><img src="2927659-20221228185207217-2003315772.png" srcset="/img/loading.gif" lazyload alt="img"></a></strong></p>
+</blockquote>
+<h3 id="（1）nginx配置"><a href="#（1）nginx配置" class="headerlink" title="（1）nginx配置"></a>（1）nginx配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@nginx ~]<span class="hljs-comment"># vim /apps/nginx/conf/nginx.conf</span><br>http &#123;<br>    ...省略...<br>    upstream tomcat-server &#123;<br>        server 10.0.0.40:8080;   <span class="hljs-comment">#可加weight（权重）等</span><br>        server 10.0.0.50:8080;<br>    &#125;<br><br>    server &#123;<br>        listen       80;<br>        server_name  localhost;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>        location / &#123;<br>            root   html;<br>            index  index.html index.htm;<br>            proxy_pass http://tomcat-server;<br>            proxy_set_header Host <span class="hljs-variable">$http_host</span>;<br>        &#125;<br>    ...省略...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@nginx ~]<span class="hljs-comment"># nginx -s reload</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（2）tomcat1配置"><a href="#（2）tomcat1配置" class="headerlink" title="（2）tomcat1配置"></a>（2）tomcat1配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#在新增的Host里面增加集群配置</span><br><span class="hljs-comment">#只需要修改address=&quot;auto&quot;为本机的ip地址</span><br>[root@tomcat1 ~]<span class="hljs-comment"># vim /usr/local/tomcat/conf/server.xml</span><br>    &lt;Host name=<span class="hljs-string">&quot;www.willoneday.org&quot;</span>  appBase=<span class="hljs-string">&quot;/data/tomcat/node1&quot;</span><br>            unpackWARs=<span class="hljs-string">&quot;true&quot;</span> autoDeploy=<span class="hljs-string">&quot;true&quot;</span>&gt;<br>        &lt;Cluster className=<span class="hljs-string">&quot;org.apache.catalina.ha.tcp.SimpleTcpCluster&quot;</span><br>                 channelSendOptions=<span class="hljs-string">&quot;8&quot;</span>&gt;<br><br>          &lt;Manager className=<span class="hljs-string">&quot;org.apache.catalina.ha.session.DeltaManager&quot;</span><br>                   expireSessionsOnShutdown=<span class="hljs-string">&quot;false&quot;</span><br>                   notifyListenersOnReplication=<span class="hljs-string">&quot;true&quot;</span>/&gt;<br><br>          &lt;Channel className=<span class="hljs-string">&quot;org.apache.catalina.tribes.group.GroupChannel&quot;</span>&gt;<br>            &lt;Membership className=<span class="hljs-string">&quot;org.apache.catalina.tribes.membership.McastService&quot;</span><br>                        address=<span class="hljs-string">&quot;228.0.0.4&quot;</span>      <span class="hljs-comment">#指定的多播地址；D类：224-239</span><br>                        port=<span class="hljs-string">&quot;45564&quot;</span>             <span class="hljs-comment">#45564/UDP</span><br>                        frequency=<span class="hljs-string">&quot;500&quot;</span>          <span class="hljs-comment">#间隔500ms发送</span><br>                        dropTime=<span class="hljs-string">&quot;3000&quot;</span>/&gt;        <span class="hljs-comment">#故障阈值3s</span><br>            &lt;Receiver className=<span class="hljs-string">&quot;org.apache.catalina.tribes.transport.nio.NioReceiver&quot;</span><br>                      address=<span class="hljs-string">&quot;10.0.0.40&quot;</span>        <span class="hljs-comment">#监听地址,此项建议修改为当前主机的IP</span><br>                      port=<span class="hljs-string">&quot;4000&quot;</span>                <span class="hljs-comment">#监听端口</span><br>                      autoBind=<span class="hljs-string">&quot;100&quot;</span>             <span class="hljs-comment">#如果端口冲突,自动绑定其它端口,范围是4000-4100</span><br>                      selectorTimeout=<span class="hljs-string">&quot;5000&quot;</span>     <span class="hljs-comment">#自动绑定超时时长5s</span><br>                      maxThreads=<span class="hljs-string">&quot;6&quot;</span>/&gt;<br><br>            &lt;Sender className=<span class="hljs-string">&quot;org.apache.catalina.tribes.transport.ReplicationTransmitter&quot;</span>&gt;<br>              &lt;Transport className=<span class="hljs-string">&quot;org.apache.catalina.tribes.transport.nio.PooledParallelSender&quot;</span>/&gt;<br>            &lt;/Sender&gt;<br>            &lt;Interceptor className=<span class="hljs-string">&quot;org.apache.catalina.tribes.group.interceptors.TcpFailureDetector&quot;</span>/&gt;<br>            &lt;Interceptor className=<span class="hljs-string">&quot;org.apache.catalina.tribes.group.interceptors.MessageDispatchInterceptor&quot;</span>/&gt;<br>          &lt;/Channel&gt;<br><br>          &lt;Valve className=<span class="hljs-string">&quot;org.apache.catalina.ha.tcp.ReplicationValve&quot;</span><br>                 filter=<span class="hljs-string">&quot;&quot;</span>/&gt;<br>          &lt;Valve className=<span class="hljs-string">&quot;org.apache.catalina.ha.session.JvmRouteBinderValve&quot;</span>/&gt;<br><br>          &lt;Deployer className=<span class="hljs-string">&quot;org.apache.catalina.ha.deploy.FarmWarDeployer&quot;</span><br>                    tempDir=<span class="hljs-string">&quot;/tmp/war-temp/&quot;</span><br>                    deployDir=<span class="hljs-string">&quot;/tmp/war-deploy/&quot;</span><br>                    watchDir=<span class="hljs-string">&quot;/tmp/war-listen/&quot;</span><br>                    watchEnabled=<span class="hljs-string">&quot;false&quot;</span>/&gt;<br><br>          &lt;ClusterListener className=<span class="hljs-string">&quot;org.apache.catalina.ha.session.ClusterSessionListener&quot;</span>/&gt;<br>        &lt;/Cluster&gt;<br>    &lt;/Host&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#注意：WEB-INF目录必须给tomcat权限</span><br>[root@tomcat1 ~]<span class="hljs-comment"># cp -a /usr/local/tomcat/webapps/ROOT/WEB-INF /data/tomcat/node1/ROOT/</span><br>[root@tomcat1 ~]<span class="hljs-comment"># ll /data/tomcat/node1/ROOT/</span><br>total 4<br>-rw-r--r-- 1 root   root   399 Dec 28 16:21 index.jsp<br>drwxr-x--- 2 tomcat tomcat  21 Dec 28 18:05 WEB-INF<br><br>[root@tomcat1 ~]<span class="hljs-comment"># vim /data/tomcat/node1/ROOT/WEB-INF/web.xml</span><br>  &lt;/description&gt;<br>  &lt;distributable/&gt;     <span class="hljs-comment">#在文件末尾倒数第二行增加此行</span><br>&lt;/web-app&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@tomcat1 ~]<span class="hljs-comment"># systemctl restart tomcat</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（3）tomcat2配置"><a href="#（3）tomcat2配置" class="headerlink" title="（3）tomcat2配置"></a>（3）tomcat2配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#在新增的Host里面增加集群配置</span><br><span class="hljs-comment">#只需要修改address=&quot;auto&quot;为本机的ip地址</span><br>[root@tomcat2 ~]<span class="hljs-comment"># vim /usr/local/tomcat/conf/server.xml</span><br>    &lt;Host name=<span class="hljs-string">&quot;www.willoneday.org&quot;</span>  appBase=<span class="hljs-string">&quot;/data/tomcat/node2&quot;</span><br>            unpackWARs=<span class="hljs-string">&quot;true&quot;</span> autoDeploy=<span class="hljs-string">&quot;true&quot;</span>&gt;<br>        &lt;Cluster className=<span class="hljs-string">&quot;org.apache.catalina.ha.tcp.SimpleTcpCluster&quot;</span><br>                 channelSendOptions=<span class="hljs-string">&quot;8&quot;</span>&gt;<br><br>          &lt;Manager className=<span class="hljs-string">&quot;org.apache.catalina.ha.session.DeltaManager&quot;</span><br>                   expireSessionsOnShutdown=<span class="hljs-string">&quot;false&quot;</span><br>                   notifyListenersOnReplication=<span class="hljs-string">&quot;true&quot;</span>/&gt;<br><br>          &lt;Channel className=<span class="hljs-string">&quot;org.apache.catalina.tribes.group.GroupChannel&quot;</span>&gt;<br>            &lt;Membership className=<span class="hljs-string">&quot;org.apache.catalina.tribes.membership.McastService&quot;</span><br>                        address=<span class="hljs-string">&quot;228.0.0.4&quot;</span><br>                        port=<span class="hljs-string">&quot;45564&quot;</span><br>                        frequency=<span class="hljs-string">&quot;500&quot;</span><br>                        dropTime=<span class="hljs-string">&quot;3000&quot;</span>/&gt;<br>            &lt;Receiver className=<span class="hljs-string">&quot;org.apache.catalina.tribes.transport.nio.NioReceiver&quot;</span><br>                      address=<span class="hljs-string">&quot;10.0.0.50&quot;</span><br>                      port=<span class="hljs-string">&quot;4000&quot;</span><br>                      autoBind=<span class="hljs-string">&quot;100&quot;</span><br>                      selectorTimeout=<span class="hljs-string">&quot;5000&quot;</span><br>                      maxThreads=<span class="hljs-string">&quot;6&quot;</span>/&gt;<br><br>            &lt;Sender className=<span class="hljs-string">&quot;org.apache.catalina.tribes.transport.ReplicationTransmitter&quot;</span>&gt;<br>              &lt;Transport className=<span class="hljs-string">&quot;org.apache.catalina.tribes.transport.nio.PooledParallelSender&quot;</span>/&gt;<br>            &lt;/Sender&gt;<br>            &lt;Interceptor className=<span class="hljs-string">&quot;org.apache.catalina.tribes.group.interceptors.TcpFailureDetector&quot;</span>/&gt;<br>            &lt;Interceptor className=<span class="hljs-string">&quot;org.apache.catalina.tribes.group.interceptors.MessageDispatchInterceptor&quot;</span>/&gt;<br>          &lt;/Channel&gt;<br><br>          &lt;Valve className=<span class="hljs-string">&quot;org.apache.catalina.ha.tcp.ReplicationValve&quot;</span><br>                 filter=<span class="hljs-string">&quot;&quot;</span>/&gt;<br>          &lt;Valve className=<span class="hljs-string">&quot;org.apache.catalina.ha.session.JvmRouteBinderValve&quot;</span>/&gt;<br><br>          &lt;Deployer className=<span class="hljs-string">&quot;org.apache.catalina.ha.deploy.FarmWarDeployer&quot;</span><br>                    tempDir=<span class="hljs-string">&quot;/tmp/war-temp/&quot;</span><br>                    deployDir=<span class="hljs-string">&quot;/tmp/war-deploy/&quot;</span><br>                    watchDir=<span class="hljs-string">&quot;/tmp/war-listen/&quot;</span><br>                    watchEnabled=<span class="hljs-string">&quot;false&quot;</span>/&gt;<br><br>          &lt;ClusterListener className=<span class="hljs-string">&quot;org.apache.catalina.ha.session.ClusterSessionListener&quot;</span>/&gt;<br>        &lt;/Cluster&gt;<br>    &lt;/Host&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#注意：WEB-INF目录必须给tomcat权限</span><br>[root@tomcat2 ~]<span class="hljs-comment"># cp -a /usr/local/tomcat/webapps/ROOT/WEB-INF /data/tomcat/node2/ROOT/</span><br><br>[root@tomcat2 ~]<span class="hljs-comment"># vim /data/tomcat/node2/ROOT/WEB-INF/web.xml</span><br>  &lt;/description&gt;<br>  &lt;distributable/&gt;     <span class="hljs-comment">#在文件末尾倒数第二行增加此行</span><br>&lt;/web-app&gt;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@tomcat2 ~]<span class="hljs-comment"># systemctl restart tomcat</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="（4）验证"><a href="#（4）验证" class="headerlink" title="（4）验证"></a>（4）验证</h3><blockquote>
+<p>现在同一个网站调度到了不同的机器上，但是sessionid并没有改变。<strong>但是这种复制并不适合大型网站，众所周知tomcat占内存高，如果后端tomcat过多，sessionid复制就会占很大内存。只适合于小网站。</strong></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221228185508157-635635773.png"><img src="2927659-20221228185508157-635635773.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/2927659/202212/2927659-20221228185501522-1289819615.png"><img src="2927659-20221228185501522-1289819615.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/linux%E5%AE%89%E5%85%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux安全</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/linux%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%ABNAS-rsync/">
+                        <span class="hidden-mobile">linux文件共享NAS+rsync</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

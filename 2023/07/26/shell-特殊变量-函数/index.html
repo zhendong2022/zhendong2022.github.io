@@ -1,0 +1,534 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、特殊变量介绍： 1、$* ：代表所有参数，其间隔为IFS内参数的第一个字元 2、$@ ：与*星号类同，不同之处在于不参照IFS 3、$# ：代表参数数量 4、$：代表上一个指令的返回值 5、$- ：最近执行的foreground pipeline的选项参数 6、$$ ：本身的process ID 7、$ ：执行上一个背景指令的PID 8、$_：显示最后一个执行的命令 9、$N：shell的第一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell 特殊变量 函数">
+<meta property="og:url" content="http://example.com/2023/07/26/shell-%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F-%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="一、特殊变量介绍： 1、$* ：代表所有参数，其间隔为IFS内参数的第一个字元 2、$@ ：与*星号类同，不同之处在于不参照IFS 3、$# ：代表参数数量 4、$：代表上一个指令的返回值 5、$- ：最近执行的foreground pipeline的选项参数 6、$$ ：本身的process ID 7、$ ：执行上一个背景指令的PID 8、$_：显示最后一个执行的命令 9、$N：shell的第一">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-26T22:04:14.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.194Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>shell 特殊变量 函数 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="shell 特殊变量 函数">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-26 22:04" pubdate>
+        July 26, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      38 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">shell 特殊变量 函数</h1>
+            
+            <div class="markdown-body">
+              <p><strong>一、特殊变量介绍：</strong></p>
+<p><strong>1、$* ：代表所有参数，其间隔为IFS内参数的第一个字元</strong></p>
+<p><strong>2、$@ ：与*星号类同，不同之处在于不参照IFS</strong></p>
+<p><strong>3、$# ：代表参数数量</strong></p>
+<p><strong>4、$：代表上一个指令的返回值</strong></p>
+<p><strong>5、$- ：最近执行的foreground pipeline的选项参数</strong></p>
+<p><strong>6、$$ ：本身的process ID</strong></p>
+<p><strong>7、$ ：执行上一个背景指令的PID</strong></p>
+<p><strong>8、$_：显示最后一个执行的命令</strong></p>
+<p><strong>9、$N：shell的第一个外传参数</strong></p>
+<p><strong>二、举例说明：</strong></p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs vim">[root@localhost test20210730]# <span class="hljs-keyword">vim</span> specila_variable.sh#!/usr/bin/bashecho <span class="hljs-string">&quot;脚本的名字是\$0:&quot;</span> <span class="hljs-string">&quot;$0&quot;</span><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;脚本的参数是\$*:&quot;</span> <span class="hljs-string">&quot;$*&quot;</span><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;参数的数量是\$#:&quot;</span> <span class="hljs-string">&quot;$#&quot;</span><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;脚本执行进程\$$:&quot;</span> <span class="hljs-string">&quot;$$&quot;</span><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;最后执行命令是\$_:&quot;</span> <span class="hljs-string">&quot;$_&quot;</span><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;第2个参数是\$2:&quot;</span> <span class="hljs-string">&quot;$2&quot;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>查看运行结果：</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams">[root@localhost test20210730]# sh specila_variable.sh aa bb cc dd脚本的名字是<span class="hljs-symbol">$</span><span class="hljs-number">0</span>: specila_variable.sh脚本的参数是<span class="hljs-symbol">$</span>*: aa bb cc dd参数的数量是<span class="hljs-symbol">$</span>#: <span class="hljs-number">4</span>　　脚本执行进程<span class="hljs-symbol">$</span><span class="hljs-symbol">$</span>: <span class="hljs-number">1368</span>最后执行命令是<span class="hljs-symbol">$</span>_: <span class="hljs-number">1368</span>第<span class="hljs-number">2</span>个参数是<span class="hljs-symbol">$</span><span class="hljs-number">2</span>: bb<br></code></pre></td></tr></table></figure>
+
+<p><strong>一、函数介绍</strong></p>
+<p>将相同功能的代码模块化，使得代码逻辑上比较简单，代码量少，排错容易</p>
+<p>函数的优点：</p>
+<p><strong>1、代码模块化，调用方便，节省内存</strong></p>
+<p><strong>2、代码模块化，代码量少，排错简单</strong></p>
+<p><strong>3、代码模块化，可以改变代码的执行顺序</strong></p>
+<p>二、函数语法</p>
+<p><strong>1、语法一</strong></p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs kotlin">函数名 () &#123;    代码块    <span class="hljs-keyword">return</span> N&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>2、语法二</strong></p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ada"><span class="hljs-keyword">function</span> <span class="hljs-title">函数名</span> &#123;    代码块    <span class="hljs-keyword">return</span> <span class="hljs-type">N&#125;</span><br><br></code></pre></td></tr></table></figure>
+
+<p> <strong>三、函数应用</strong></p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs clean">#!/usr/bin/bash################################## Author: Mr.white ## Create_Date: <span class="hljs-number">2021</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">22</span>:<span class="hljs-number">55</span>:<span class="hljs-number">15</span> ## Version: <span class="hljs-number">1.0</span> ##################################<br>#定义函数start () &#123;    echo <span class="hljs-string">&quot;Apache start......          [OK]&quot;</span>    #return <span class="hljs-number">0</span>&#125;<br>function stop &#123;    echo <span class="hljs-string">&quot;Apache stop ......           [FAIL]&quot;</span>&#125;<br>#调用函数startstop<br></code></pre></td></tr></table></figure>
+
+<p>查询运行结果：</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-attr">[root@localhost test20210730]</span># sh fun1<span class="hljs-selector-class">.shApache</span> start...... <span class="hljs-selector-attr">[OK]</span>Apache stop ...... <span class="hljs-selector-attr">[FAIL]</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>四、实战：编写nginx启动管理脚本</strong></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><code class="hljs clean">#!/usr/bin/bash<br>#################################<br># Author: Mr.white #<br># Create_Date: <span class="hljs-number">2021</span><span class="hljs-number">-07</span><span class="hljs-number">-31</span> <span class="hljs-number">01</span>:<span class="hljs-number">16</span>:<span class="hljs-number">59</span> #<br># Version: <span class="hljs-number">1.0</span> #<br>#################################<br>#nginx seivice manage script<br><br>#varibles<br>nginx_install_doc=/usr/local/nginx<br>nginxd=$nginx_install_doc/sbin/nginx<br>pid_file=$nginx_install_doc/logs/nginx.pid<br><br>#参考/etc/init.d/network中以下函数库<br># Source function library.<br><span class="hljs-keyword">if</span> [ -f /etc/init.d/functions ];then<br>  . /etc/init.d/functions<br>else<br>  echo <span class="hljs-string">&quot;not found file /etc/init.d/functions&quot;</span><br>  exit<br>fi<br><br><span class="hljs-keyword">if</span> [ -f $pid_file ];then<br>  nginx_process_id=`cat $pid_file`<br>  nginx_process_num=`ps aux |grep $nginx_process_id | grep -v grep|wc -l`<br>fi<br>#function<br><br>start () &#123;<br>#判断nginx没有启动直接启动，否则报错已经启动<br>  <span class="hljs-keyword">if</span> [ -f $pid_file ]&amp;&amp;[ $nginx_process_num -ge <span class="hljs-number">1</span> ];then<br>    echo <span class="hljs-string">&quot;nginx running...&quot;</span><br>  else<br>    <span class="hljs-keyword">if</span> [ -f $pid_file ]&amp;&amp;[ $nginx_process_num -lt <span class="hljs-number">1</span> ];then<br>      rm -f $pid_file<br>      echo <span class="hljs-string">&quot; nginx start `daemon $nginxd` &quot;</span> <br>    fi<br>    echo <span class="hljs-string">&quot; nginx start `daemon $nginxd` &quot;</span> <br>  fi<br>&#125;<br><br>stop () &#123;<br>  <span class="hljs-keyword">if</span> [ -f $pid_file ]&amp;&amp;[ $nginx_process_num -ge <span class="hljs-number">1</span> ];then<br>    action <span class="hljs-string">&quot;nginx stop&quot;</span> killall -s QUIT $nginxd<br>      #rm -f $pid_file<br>  else<br>    action <span class="hljs-string">&quot;nginx stop&quot;</span> killall -s QUIT $nginxd <span class="hljs-number">2</span>&gt;/dev/null<br>  fi<br>&#125;<br><br>restart () &#123;<br>  stop<br>  sleep <span class="hljs-number">1</span><br>  start<br>&#125;<br><br>reload () &#123;<br>  <span class="hljs-keyword">if</span> [ -f $pid_file ]&amp;&amp;[ $nginx_process_num -ge <span class="hljs-number">1</span> ];then<br>    action <span class="hljs-string">&quot;nginx reload&quot;</span> killall -s HUP nginx<br>  else<br>    action <span class="hljs-string">&quot;nginx reload&quot;</span> killall -s HUP nginx <span class="hljs-number">2</span>&gt;/dev/null<br>  fi<br>&#125;<br><br>status () &#123;<br>  <span class="hljs-keyword">if</span> [ -f $pid_file ]&amp;&amp;[ $nginx_process_num -ge <span class="hljs-number">1</span> ];then<br>    echo <span class="hljs-string">&quot;nginx running...&quot;</span><br>  else<br>    echo <span class="hljs-string">&quot;nginx stop&quot;</span><br>  fi<br>&#125;<br><br><br>#callable<br><span class="hljs-keyword">case</span> $<span class="hljs-number">1</span> <span class="hljs-keyword">in</span><br>start) start;;<br>stop) stop;;<br>restart) restart;;<br>reload) reload;;<br>status) status;;<br>*) echo <span class="hljs-string">&quot;USAGE: $0 start|stop|restart|reload|status&quot;</span>;;<br>esac<br></code></pre></td></tr></table></figure>
+
+<p>查看运行结果：</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs gherkin">[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># ps aux | grep nginx | grep -v grep</span><br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh #使用帮忙</span><br>USAGE: nginxd.sh start|<span class="hljs-string">stop</span>|<span class="hljs-string">restart</span>|<span class="hljs-string">reload</span>|status<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh start #开启进程</span><br> nginx start                                               [  OK  ]<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh status #查看状态为开启状态</span><br>nginx running...<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh start #提示已开启</span><br>nginx running...<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh reload #重载进程</span><br>nginx reload                                               [  OK  ]<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh restart #重启进程</span><br>nginx stop                                                 [  OK  ]<br> nginx start                                               [  OK  ]<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh stop #关闭进程</span><br>nginx stop                                                 [  OK  ]<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh status #查看状态为关闭状态</span><br>nginx stop<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh stop #提示已经关闭无法再关闭</span><br>nginx stop                                                 [FAILED]<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh reload #提示已经关闭无法重载</span><br>nginx reload                                               [FAILED]<br>[root<span class="hljs-meta">@localhost</span> test20210731]<span class="hljs-comment"># sh nginxd.sh restart  #提示已经关闭无法重启</span><br>nginx stop                                                 [FAILED]<br> nginx start                                               [  OK  ]<br></code></pre></td></tr></table></figure>
+
+<p> 添加到系统服务启动管理</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs autoit">[root<span class="hljs-symbol">@localhost</span> test20210731]<span class="hljs-meta"># cp -r nginxd.sh /etc/init.d/nginxd</span><br>[root<span class="hljs-symbol">@localhost</span> test20210731]<span class="hljs-meta"># chmod 755 /etc/init.d/nginxd</span><br>[root<span class="hljs-symbol">@localhost</span> test20210731]<span class="hljs-meta"># service nginxd status</span><br>nginx running...<br>[root<span class="hljs-symbol">@localhost</span> test20210731]<span class="hljs-meta"># service nginxd stop</span><br>Stopping nginxd (via systemctl):  Warning: nginxd.service changed on disk. <span class="hljs-built_in">Run</span> <span class="hljs-string">&#x27;systemctl daemon-reload&#x27;</span> <span class="hljs-keyword">to</span> reload units.<br>                                                           [  确定  ]<br>[root<span class="hljs-symbol">@localhost</span> test20210731]<span class="hljs-meta"># service nginxd status</span><br>nginx stop<br>[root<span class="hljs-symbol">@localhost</span> test20210731]<span class="hljs-meta"># service nginxd start</span><br>Starting nginxd (via systemctl):                           [  确定  ]<br>[root<span class="hljs-symbol">@localhost</span> test20210731]<span class="hljs-meta"># service nginxd status</span><br>nginx running...<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux文件的定期备份，异常备份，删除备份</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/26/linux-shell%E4%BB%8B%E7%BB%8D/">
+                        <span class="hidden-mobile">linux shell介绍</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

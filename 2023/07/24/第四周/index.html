@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.定时任务12345678910111213141516171819202122232425262728##启用定时任务服务systemctl status crondsystemctl enable --now crond##crontab -e * * * * 7 &#x2F;bin&#x2F;bash &#x2F;script&#x2F;mysqlbk.sh ##每周日执行MySQL的hellodb全备，并且记录日志  * *">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第四周">
+<meta property="og:url" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="1.定时任务12345678910111213141516171819202122232425262728##启用定时任务服务systemctl status crondsystemctl enable --now crond##crontab -e * * * * 7 &#x2F;bin&#x2F;bash &#x2F;script&#x2F;mysqlbk.sh ##每周日执行MySQL的hellodb全备，并且记录日志  * *">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180456539-1523009683.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180457168-1515232121.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180457478-1239181084.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180457781-1555452207.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180458282-582645441.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180458658-691027719.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180458925-456387921.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180459254-642610396.png">
+<meta property="og:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180459593-435590638.png">
+<meta property="article:published_time" content="2023-07-24T14:59:53.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.297Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/2792175-20220828180456539-1523009683.png">
+  
+  
+  <title>第四周 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第四周">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-24 14:59" pubdate>
+        July 24, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      65 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第四周</h1>
+            
+            <div class="markdown-body">
+              <h1 id="1-定时任务"><a href="#1-定时任务" class="headerlink" title="1.定时任务"></a>1.定时任务</h1><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></div></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##启用定时任务服务</span><br>systemctl status crond<br>systemctl <span class="hljs-built_in">enable</span> --now crond<br><br><span class="hljs-comment">##crontab -e </span><br>* * * * 7 /bin/bash /script/mysqlbk.sh <span class="hljs-comment">##每周日执行MySQL的hellodb全备，并且记录日志 </span><br> * * * * 1 /bin/bash /script/mysqlbk/mysqltar.sh <span class="hljs-comment">##每周1定时打包1周mysql.sql文件到指定备份目录</span><br>30 23 * * * <span class="hljs-comment">##每天23点30分备份当天的nginx的access.log目录</span><br>30 23 * * * /usr/sbin shutdown -h now <span class="hljs-comment">##每天23点30分定时关机测试机</span><br>30 1 * * 1-5 /bin/bash /script/nginxbk.sh <span class="hljs-comment">##工作日周一到周五1点30备份nginx日志到指定目录</span><br> * */2 * * * /bin/bash /srcipt/memrecord.sh <span class="hljs-comment">##每隔2小时输出/proc/meminfo Mem内存信息到指定文件</span><br>/20 * * * * /bin/bash /srcipt/disk_check.sh <span class="hljs-comment">##每隔20min检查所有/dev/分区的磁盘，如果超过了80，则报警发送邮件到指定邮箱</span><br> * * * * *  <span class="hljs-built_in">sleep</span> 30; /scripts/script.sh <span class="hljs-comment">##每隔30s执行一次命令，先sleep 30s先</span><br>@reboot /scripts/script.sh <span class="hljs-comment">##系统重启后自动执行该脚本</span><br><span class="hljs-built_in">date</span>使用<br>1、获取今天日期<br>$ <span class="hljs-built_in">date</span> -d now +%Y-%m-%d   或者<br>$ <span class="hljs-built_in">date</span> +%F<br>2、获取明天日期<br>$ <span class="hljs-built_in">date</span> -d next-day +%Y-%m-%d<br>$ <span class="hljs-built_in">date</span> -d tomorrow +%Y-%m-%d<br>3、获取昨天日期<br>$ <span class="hljs-built_in">date</span> -d yesterday +%Y-%m-%d  或者<br>$ <span class="hljs-built_in">date</span> -d last-day +%Y-%m-%d  或者<br>$ <span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;1 days ago&quot;</span> +%Y-%m-%d<br><span class="hljs-comment">##&quot;n days ago&quot;  表示n天前的那一天</span><br>4、获取取30天前的日期<br>$ <span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;30 days ago&quot;</span> +%Y-%m-%d<br></code></pre></td></tr></table></figure>
+
+<h2 id="对应shell脚本"><a href="#对应shell脚本" class="headerlink" title="对应shell脚本"></a>对应shell脚本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##mysqlbk.sh，数据库备份脚本</span><br><span class="hljs-comment">#备份mysql库</span><br><span class="hljs-comment">##每次需要用户手动输入用户名+密码</span><br>user=<span class="hljs-variable">$1</span><br>passwd=<span class="hljs-variable">$2</span><br>dbname=<span class="hljs-string">&quot;hellodb&quot;</span><br><span class="hljs-built_in">date</span>=$(<span class="hljs-built_in">date</span> +%Y-%m-%d_%H-%M-%S)<br>path=/backup/mysql<br><br><span class="hljs-keyword">if</span> [ -d /backup/mysql ];<span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;dir created&quot;</span><br><span class="hljs-keyword">else</span><br>        <span class="hljs-built_in">mkdir</span> -p /backup/mysql<br><span class="hljs-keyword">fi</span><br><br>mysqldump -u<span class="hljs-variable">$&#123;user&#125;</span> -p<span class="hljs-variable">$&#123;passwd&#125;</span> <span class="hljs-variable">$&#123;dbname&#125;</span> &gt; <span class="hljs-variable">$path</span>/<span class="hljs-string">&quot;<span class="hljs-variable">$dbname</span>&quot;</span>.<span class="hljs-variable">$&#123;date&#125;</span>.sql<br><br><span class="hljs-comment">#cd $path</span><br><span class="hljs-comment">#tar -czf log-$&#123;dbname&#125;-$date.tar.gz &quot;$dbname&quot;-$&#123;date&#125;.sql</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;date&#125;</span>-<span class="hljs-variable">$&#123;dbname&#125;</span>.sql backup successfully&quot;</span> &gt;&gt; <span class="hljs-variable">$path</span>/backup.log<br><br><br><span class="hljs-comment">##定时备份脚本：nginxbk.sh</span><br><span class="hljs-built_in">date</span>=`<span class="hljs-built_in">date</span> -d yesterday +%Y-%m-%d<span class="hljs-string">&#x27; &#x27;</span>%H-%M-%S`<br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$date</span><br><br><span class="hljs-keyword">if</span> [ -d /test/backup ];<span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;dir exist&quot;</span><br><span class="hljs-keyword">else</span>    <br>        <span class="hljs-built_in">mkdir</span> -p /test/backup<br><span class="hljs-keyword">fi</span>      <br><br>tar -czf nginx-<span class="hljs-variable">$&#123;date&#125;</span>.tar.gz /var/log/nginx/access.log<br><span class="hljs-built_in">mv</span> nginx-<span class="hljs-variable">$&#123;date&#125;</span>.tar.gz /backup/<br><br><br><span class="hljs-comment">##输出内存信息到这里:memrecord.sh</span><br><span class="hljs-comment">#!/bin/bash</span><br><span class="hljs-built_in">date</span>=`<span class="hljs-built_in">date</span> -d now +%Y-%m-%d<span class="hljs-string">&#x27; &#x27;</span>%H`<br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$date</span> &gt;&gt; /test/week4/meminfo.txt<br><span class="hljs-built_in">echo</span> `<span class="hljs-built_in">cat</span> /proc/meminfo | grep <span class="hljs-string">&quot;^Mem&quot;</span>` &gt;&gt; /test/week4/meminfo.txt<br><br><br><span class="hljs-comment">##磁盘检查disk_check.sh</span><br><span class="hljs-comment">##date:date实现</span><br><span class="hljs-built_in">date</span>=`<span class="hljs-built_in">date</span> +%Y-%m-%d<span class="hljs-string">&#x27; &#x27;</span>%H-%M-%S`<br><span class="hljs-comment">#disk_id=`df -h | grep &#x27;^/dev/&#x27; | awk &#x27;&#123;print $1&#125;&#x27;`</span><br>disk=`<span class="hljs-built_in">df</span> -h | grep <span class="hljs-string">&#x27;^/dev/&#x27;</span> | awk <span class="hljs-string">&#x27;&#123;print $5&#125;&#x27;</span> | <span class="hljs-built_in">tr</span> -d %`<br><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$disk</span> -ge 80 ];<span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;时间:<span class="hljs-variable">$&#123;date&#125;</span>,磁盘<span class="hljs-variable">$&#123;disk_id&#125;</span>使用率超过80，告警&quot;</span> | mail -s <span class="hljs-string">&quot;disk safe&quot;</span>root@qq.com<br><span class="hljs-keyword">else</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;时间:<span class="hljs-variable">$&#123;date&#125;</span>,磁盘<span class="hljs-variable">$&#123;disk_id&#125;</span>使用率未超过80，安全&quot;</span> | mail -s <span class="hljs-string">&quot;warning&quot;</span> root@qq.com<br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="2-图文并茂说明Linux进程和内存概念"><a href="#2-图文并茂说明Linux进程和内存概念" class="headerlink" title="2.图文并茂说明Linux进程和内存概念"></a>2.图文并茂说明Linux进程和内存概念</h1><h2 id="Linux进程"><a href="#Linux进程" class="headerlink" title="Linux进程"></a>Linux进程</h2><p>其实是Linux系统运行时的一份副本，一个进程（process）其实就是Linux系统内的一个目录，目录位于/proc下<br>每个进程都有一个ID号，称为PID，每个PID都有一个目录<br>每个服务程序在运行的时候，都会产生一个进程，进程会加载到内存里，作为程序运行的临时空间；如果从内存中杀死进程，则这个程序的运行就终止了</p>
+<p><img src="2792175-20220828180456539-1523009683.png" srcset="/img/loading.gif" lazyload alt="image-20220826225753842"></p>
+<p>一个进程会单独占用一块内存空间（估计不大）<br>进程内又会有线程，表示这个进程在系统内的多个线程（员工），用于生产<br>一个进程里，至少有一个线程，线程就是工作的实体</p>
+<p><img src="2792175-20220828180457168-1515232121.png" srcset="/img/loading.gif" lazyload alt="image-20220826225805026"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">常见进程管理命令：<br>pstree -p <span class="hljs-comment">##列出所有父进程以及子进程，看是否是多线程工作</span><br>ps -A <span class="hljs-comment">##列出所有的进程</span><br>ps -aux <span class="hljs-comment">##显示所有包含其他使用者的进程,显示较详细的资讯，比ps -ef要多一些</span><br>ps -ef <span class="hljs-comment">##所有用户+所有进程的列表</span><br><br>ps aux | grep mysqld<br>ps aux | grep docker<br></code></pre></td></tr></table></figure>
+
+<h2 id="线程是程序执行的最小单位，一个进程由多个线程组成"><a href="#线程是程序执行的最小单位，一个进程由多个线程组成" class="headerlink" title="线程是程序执行的最小单位，一个进程由多个线程组成"></a>线程是程序执行的最小单位，一个进程由多个线程组成</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs none">pstree -p查看mysqld服务的线程：5639的Pid为整个mysqld服务的父进程，下面都是线程<br>mysqld(5639)上一级是systemd，证明systemd是所有服务、程序的父进程，系统启动的时候第一个启动systemd进程<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828180457478-1239181084.png" srcset="/img/loading.gif" lazyload alt="image-20220826225824233"></p>
+<h2 id="进程使用内存问题"><a href="#进程使用内存问题" class="headerlink" title="进程使用内存问题"></a>进程使用内存问题</h2><p>内存泄漏，内存超限（溢出），内存不足（OOM）</p>
+<p>内存使用空间分为：用户态和内核态，用户空间+内核空间<br>一部分空间给到内核使用（例如4G的内存，1/4给到内核使用），一部分给到用户的应用程序使用</p>
+<p><img src="2792175-20220828180457781-1555452207.png" srcset="/img/loading.gif" lazyload alt="image-20220826225835543"></p>
+<p>内存泄漏：malloc分配了一定空间的内容，比如10M，但是没去占用，又不释放<br>内存溢出：分配了10M的空间，但是你的进程占用超过了10M，则会占用其他人的内容空间<br>内存不足：OOM，out of memory<br>java程序：占用程序内存过多</p>
+<p>磁盘内的文件需要被访问：一定要加载到内存中才能被访问<br>比如说我这个执行命令/usr/sbin/php-fpm，当我执行的时候，就在进程内看到了</p>
+<p><img src="2792175-20220828180458282-582645441.png" srcset="/img/loading.gif" lazyload alt="image-20220826230001535"></p>
+<p>父进程654，就是所有php以及其子进程都是依赖systemd（1）-php-fpm（654）</p>
+<p><img src="2792175-20220828180458658-691027719.png" srcset="/img/loading.gif" lazyload alt="image-20220826230006053"></p>
+<p>相当于这个就是存在磁盘内的文件，现在被加载到内容中运行了，PID为654</p>
+<p><img src="2792175-20220828180458925-456387921.png" srcset="/img/loading.gif" lazyload alt="image-20220826230010926"></p>
+<h2 id="Linux内存"><a href="#Linux内存" class="headerlink" title="Linux内存"></a>Linux内存</h2><p>内存是服务器内的重要的一个硬件指标，一般来说，一个程序或者服务在运行的时候，会生成一个或者多个进程，而进程就是运行在内存中的。<br>内存的特点是读写速度快，缺点是不会持久化保存，也是和磁盘等持久化存储的一个很大的差别<br>还有内存的购买费用较高，企业内部一些运行的服务（丽日数据库）非常消耗内存，所以在上新系统系统/观察老系统运行情况时，内存都是一个非常重要的指标<br>查看内存的读写情况：vmstat，包括物理内存的使用量，swap交换分区的使用量，buffers(写缓存)和cache(读缓存)的使用量；写和读缓存主要是加速磁盘内容的读写<br>磁盘内的文件需要读的时候，一定要加载到内存内进行读写的操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@master week4]<span class="hljs-comment">#vmstat</span><br>procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----<br> r  b   swpd   free   buff  cache   si   so    bi    bo   <span class="hljs-keyword">in</span>   cs us sy <span class="hljs-built_in">id</span> wa st<br> 1  0      0 2094996   2256 597756    0    0    92    15  102  164  0  0 98  2  0<br><br>[root@master week4]<span class="hljs-comment">#free -h</span><br>              total        used        free      shared  buff/cache   available<br>Mem:           3.7G        1.1G        2.0G         12M        585M        2.3G<br>Swap:            0B          0B          0B<br></code></pre></td></tr></table></figure>
+
+<h1 id="3-图文并茂说明Linux启动流程"><a href="#3-图文并茂说明Linux启动流程" class="headerlink" title="3.图文并茂说明Linux启动流程"></a>3.图文并茂说明Linux启动流程</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">Cent OS 6启动流程<br>1.POST加电自检，加载BIOS信息，获取第一个启动设备，post加电自检<br>2.读取一个启动设备的MBR分区信息<br>grub1：加载MBR分区前446个字节<br>grub1.5：扇区，找到MBR分区的文件系统，因为grub2的/boot/grub2这个目录是在文件系统上的，所以要找到加载文件系统，文件系统加载驱动<br>grub2：进入到/boot/grub2里面，找到grub.cfg，从grub.cfg的配置信息内，而找到内核文件（根据配置文件）<br>3.加载内核文件，加载根分区，系统初始化<br>4.运行init进程，确认init级别，可以随时切换init进程的运行级别（/sbin/init读取）---/etc/inittab，确定是init 3模式的启动方式，init执行对应级别的脚本，init执行/etc/rc.d/rc.local自启动文件/脚本，不同的init级别存放的脚本不同<br>5.启动各自的脚本<br>6.建立访问终端<span class="hljs-built_in">tty</span>，比如root登录就是tty0<br>7.用户登录<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828180459254-642610396.png" srcset="/img/loading.gif" lazyload alt="image-20220826230021539"></p>
+<p>BootLoader：操作系统引导的，引导启动到哪个OS<br>BootLoader分类：分为windows和Linux的BootLoader</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">Cent OS 7<br>1.POST自检，选择启动的设备<br>2.引导系统启动BootLoader---&gt;grub2，Cent OS 7后使用grub2版本<br>grub 1：前446字节<br>grub 1.5：找到扇区，加载文件系统驱动，能读取文件系统上的文件grub.cfg<br>grub 2：进入到/boot/grub2内找到grub.cfg，从而找到内核文件，启动<br>3.加载驱动，加载内核<br>4.内核初始化，使用systemd代替之前的init，systemd的pid为1<br>5.执行.target的所有单元unit，加载单元unit<br>6.执行默认target级别，默认是multi-user级别(level3)<br>7.启动multi-user下的所有服务，执行/etc/rc.local(需要+x执行权限)<br>8.登录到终端<br><br><span class="hljs-comment">##生成系统启动的文件boot.html</span><br>systemd-analyze plot &gt; boot.html<br>systemd特点：并行启动服务，不需要启动依赖再启动，启动花了25s<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828180459593-435590638.png" srcset="/img/loading.gif" lazyload alt="image-20220826230042425"></p>
+<h1 id="4-自定义systemd服务，检查-tmp文件个数"><a href="#4-自定义systemd服务，检查-tmp文件个数" class="headerlink" title="4.自定义systemd服务，检查/tmp文件个数"></a>4.自定义systemd服务，检查/tmp文件个数</h1><p>自定义一个systemd服务定时去其他服务器上检查/tmp/下文件的个数，如果发现数量有变化就记录变化情况到文件中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemd服务基本格式<br><br>[Unit]<br>Description=hello <span class="hljs-built_in">test</span><br><br>[Service]<br>TimeoutStartSec=0<br>ExecStart=/bin/sh /script/dir_check.sh<br><span class="hljs-comment">#ExecStop=/bin/kill sh</span><br>KillSignal=SIGQUIT<br>TimeoutStopSec=5<br>KillMode=process<br>PrivateTmp=<span class="hljs-literal">true</span><br><br><br>[Install]<br>WantedBy=multi-user.target<br><span class="hljs-comment">##采用同一个目录下间隔时间作为比较，比较文件的数量</span><br>path1=/tmp<br>diff1=`<span class="hljs-built_in">ls</span> -l <span class="hljs-variable">$path1</span> | grep <span class="hljs-string">&quot;^-&quot;</span> | <span class="hljs-built_in">wc</span> -l`<br><span class="hljs-built_in">sleep</span> 30<br>path2=/tmp<br>diff2=`<span class="hljs-built_in">ls</span> -l <span class="hljs-variable">$path2</span> | grep <span class="hljs-string">&quot;^-&quot;</span> | <span class="hljs-built_in">wc</span> -l`<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;1:<span class="hljs-variable">$diff1</span>,2:<span class="hljs-variable">$diff2</span>&quot;</span><br>diff3=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$diff1</span>-<span class="hljs-variable">$diff2</span> | bc`<br><span class="hljs-built_in">date</span>=`<span class="hljs-built_in">date</span> +%H-%M-%S`<br><br><span class="hljs-comment">##取绝对值</span><br>num=`<span class="hljs-built_in">expr</span> 0 - <span class="hljs-variable">$diff3</span>`<br><br><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$diff2</span> -lt <span class="hljs-variable">$diff1</span> ];<span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;路径<span class="hljs-variable">$&#123;path1&#125;</span>减少了文件，数量为<span class="hljs-variable">$num</span>，时间:<span class="hljs-variable">$date</span>&quot;</span> &gt;&gt; /tmp/record.log<br><span class="hljs-keyword">elif</span> [ <span class="hljs-variable">$diff2</span> -gt <span class="hljs-variable">$diff1</span> ];<span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;路径<span class="hljs-variable">$&#123;path1&#125;</span>增加了文件，数量为<span class="hljs-variable">$num</span>，时间:<span class="hljs-variable">$date</span>&quot;</span> &gt;&gt; /tmp/record.log<br><span class="hljs-keyword">else</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;无变化，时间：<span class="hljs-variable">$date</span>&quot;</span><br><span class="hljs-keyword">fi</span><br>find week4 -<span class="hljs-built_in">printf</span> <span class="hljs-string">&quot;%P\n&quot;</span> | <span class="hljs-built_in">sort</span> &gt; file1<br>find week3 -<span class="hljs-built_in">printf</span> <span class="hljs-string">&quot;%P\n&quot;</span> | <span class="hljs-built_in">sort</span> | diff file1 &gt;diff.txt<br></code></pre></td></tr></table></figure>
+
+<h1 id="5-写Linux内核编译安装博客"><a href="#5-写Linux内核编译安装博客" class="headerlink" title="5.写Linux内核编译安装博客"></a>5.写Linux内核编译安装博客</h1><p>Linux机器在某个发行版上编译安装指定的版本用途：为了适配不同应用的需求，需要应对使用更高的内核版本需要执行操作<br>1.下载内核文件(stable版本)，自选内核版本，目前使用centos 7.9的内核版本：uname -r<br>3.10.0-1160.15.2.el7.x86_64<br>2.安装编译内核文件必要的依赖库<br>3.配置内核编译参数<br>4.编译内核<br>5.安装内核<br>6.修改默认启动的内核，centos7：/boot/grub2/grub.cfg<br>7.重启机器，验证版本变更：uname -r</p>
+<h1 id="6-总结5个自我觉得比较有用的awk的使用场景-持续更新"><a href="#6-总结5个自我觉得比较有用的awk的使用场景-持续更新" class="headerlink" title="6.总结5个自我觉得比较有用的awk的使用场景(持续更新)"></a>6.总结5个自我觉得比较有用的awk的使用场景(持续更新)</h1><p>比如在什么情况下用awk处理文本效率最高，发散题，至少写1个。<br>awk常见格式：NR表示行，NF表示最后一列，$NF代表最后一列，$(NF-1)代表倒数第二列</p>
+<p>awk处理文本能力很强，常用的场景<br>1.有指定分隔符的场景，可以使用awk直接分割，awk -F’=’，直接输出域; awk分隔符还可以分隔空格之类的，awk ‘[ .]’<br>2.没有指定分隔符的场景，默认一些场景是空格，awk直接默认压缩了，不需要使用tr在进行一次压缩<br>3.awk支持正则表达式筛选，可以直接套用输出，awk ‘/netmask/{print $1}’</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##常见案例</span><br>1.awk处理nginx服务日志，列出访问最多的5个IP源IP地址，查看访问量<br>awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span> /var/log/nginx/access.log | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-built_in">sort</span> -nr | hrad -n 5 <br>nginx日志取访问的IP地址+访问时间：<span class="hljs-built_in">cat</span> /var/log/nginx/access.log | awk -F <span class="hljs-string">&quot;[[ ]&quot;</span> <span class="hljs-string">&#x27;&#123;print $1,$5&#125;&#x27;</span> | <span class="hljs-built_in">head</span> -n 5<br><br>2.awk利用数组统计所有TCP连接的状态，并且排序(包括LISTEN，ESTABLISHED等)<br>netstat -ant | awk <span class="hljs-string">&#x27;&#123;state[$NF]++&#125; END &#123;for (i in state) print i,state[i]&#125;&#x27;</span> <br><br>3.awk处理系统用户和登录bash<br>awk -F<span class="hljs-string">&#x27;:&#x27;</span> <span class="hljs-string">&#x27;/\/bin\/bash/&#123;print $1 &quot;,&quot; $7&#125;&#x27;</span> /etc/passwd<br><br>4.docker删除在运行的容器，或者是跑容器<br>docker <span class="hljs-built_in">rm</span> -f `docker ps | grep nginx | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br>docker run --name matomo --<span class="hljs-built_in">link</span> mysql:mysql -p 8003:80 -v /test/matomo:/var/www/html -d `docker images | grep matomo | awk <span class="hljs-string">&#x27;&#123;print $3&#125;&#x27;</span>`<br><br>5.查看目录下所有.sh文件的大小，其他类型的文件类似<br><span class="hljs-built_in">ls</span> -al *.jpg | awk <span class="hljs-string">&#x27;&#123;sum+=$5&#125; END &#123;print sum&#125;&#x27;</span><br><br>6.取IP地址<br>ifconfig eth0 | awk <span class="hljs-string">&#x27;/netmask/&#123;print $2&#125;&#x27;</span><br><br>7.取磁盘固定分区的使用率<br><span class="hljs-built_in">df</span> -h | grep <span class="hljs-string">&quot;^/dev&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print $5&#125;&#x27;</span> | <span class="hljs-built_in">tr</span> -d %<br><span class="hljs-built_in">df</span> -h | awk <span class="hljs-string">&#x27;/\/dev\//&#123;print $5&#125;&#x27;</span> | <span class="hljs-built_in">tr</span> -d %<br><br>8.awk正则表达式：去除掉空行(^$)或者是注释的行(^<span class="hljs-comment">#)，非空行或者是注释行</span><br>awk <span class="hljs-string">&#x27;!/^#|^$/&#x27;</span> /etc/fstab<br>只取注释行<br>awk <span class="hljs-string">&#x27;/^#/&#x27;</span> /etc/fstab<br><br>9.awk实现<span class="hljs-keyword">while</span>循环，bash命令行完成<br>awk <span class="hljs-string">&#x27;BEGIN&#123;i=1;sum=0;while(i&lt;=100)&#123;sum+=i;i++&#125;;&#123;print sum&#125;&#125;&#x27;</span> ---&gt;5050<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/26/linux-shell%E4%BB%8B%E7%BB%8D/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux shell介绍</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/">
+                        <span class="hidden-mobile">Linux文件备份与压缩</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,947 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.背景1.总会出现环境上的数据丢失，在没有备份的情况下会非常的被动，不管是由于病毒还是人为的原因造成的程序、数据被删除，有时候后悔已经来不及，不如提前做到数据的备份，而异地备份也更加的保险一点。2.数据备份的意义就在于，当受到网络攻击、入侵、电源故障或者操作失误等事故的发生后，可以完整、快速、简捷、可靠地恢复原有系统，在一定的范围内保障系统的正常运行。 二.依赖功能介绍1.expect作用：ex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux文件的定期备份，异常备份，删除备份">
+<meta property="og:url" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="一.背景1.总会出现环境上的数据丢失，在没有备份的情况下会非常的被动，不管是由于病毒还是人为的原因造成的程序、数据被删除，有时候后悔已经来不及，不如提前做到数据的备份，而异地备份也更加的保险一点。2.数据备份的意义就在于，当受到网络攻击、入侵、电源故障或者操作失误等事故的发生后，可以完整、快速、简捷、可靠地恢复原有系统，在一定的范围内保障系统的正常运行。 二.依赖功能介绍1.expect作用：ex">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382166396-3.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382168731-6.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382170489-9.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382172977-12.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382178337-15.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382181337-18.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382187314-21.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382207528-24.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382213157-27.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382215546-30.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382217489-33.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382223787-36.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382226232-39.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382227820-42.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382229816-45.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382231715-48.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382233711-51.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382236136-54.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382238662-57.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382240954-60.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382242980-63.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382245671-66.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382247791-69.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382250031-72.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382252038-75.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382255010-78.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382257520-81.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382259464-84.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382262189-87.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382265005-90.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382267091-93.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382270217-96.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382272314-99.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382275774-102.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382277699-105.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382280549-108.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382282866-111.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382285105-114.png">
+<meta property="og:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640-1690382287658-117.png">
+<meta property="article:published_time" content="2023-07-26T22:08:21.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.168Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/26/linux%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E6%9C%9F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%BC%82%E5%B8%B8%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%88%A0%E9%99%A4%E5%A4%87%E4%BB%BD/640.png">
+  
+  
+  <title>linux文件的定期备份，异常备份，删除备份 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="linux文件的定期备份，异常备份，删除备份">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-26 22:08" pubdate>
+        July 26, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      14k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      114 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">linux文件的定期备份，异常备份，删除备份</h1>
+            
+            <div class="markdown-body">
+              <p><strong>一.背景</strong><br>1.总会出现环境上的数据丢失，在没有备份的情况下会非常的被动，不管是由于病毒还是人为的原因造成的程序、数据被删除，有时候后悔已经来不及，不如提前做到数据的备份，而异地备份也更加的保险一点。<br>2.数据备份的意义就在于，当受到网络攻击、入侵、电源故障或者操作失误等事故的发生后，可以完整、快速、简捷、可靠地恢复原有系统，在一定的范围内保障系统的正常运行。</p>
+<p><strong>二.依赖功能介绍</strong><br><strong>1.expect</strong><br>作用：expect工具是一个根据脚本与其他交互式程序进行交互<br>安装语句:yum install expect<br>下面是安装教程：</p>
+<p><strong>一、expect安装介绍</strong><br><strong>1.expect命令安装：</strong><br>安装语句:yum install expect<br><strong>2.expect命令含义：</strong></p>
+<p> expect是一种脚本语言，它能够代替人工实现与终端的交互，主要应用于执行命令和程序时，系统以交互形式要求输入指定字符串，实现交互通信。</p>
+<p><strong>3.expect使用场景：</strong></p>
+<p>（1）并根据预定标准回答其问题，回答“是”、“否”或将控制权交还给您</p>
+<p>（2）远程连接设备并执行自动化操作</p>
+<p>（3）主要是一些需要人机交互的地方，如果提前知道应该输入什么指令都可以使用expect 工具</p>
+<p><strong>二、expect使用原理</strong></p>
+<p><strong>1.原理介绍：</strong></p>
+<p><code>spawn</code>启动指定进程—<code>expect</code>获取指定关键字—<code>send</code>向指定程序发送指定字符—执行完成退出</p>
+<p><strong>2、spawn命令介绍：</strong></p>
+<p>spawm命令就是用来启动新的进程的。spawn后的send和expect命令都是和spawn打开的进程进行交互的、</p>
+<p><strong>3、send命令介绍：</strong></p>
+<p>send命令接收一个字符串参数，并将该参数发送到进程，这个过程类似模拟人类输入密码</p>
+<p><strong>4、interact命令介绍：</strong></p>
+<p>结合spawn、expect、send自动化的完成很多任务，interact命令可以在适当的时候进行任务的干预，比如下载完ftp文件时，仍然可以停留在ftp命令行状态，以便手动的执行后续命令</p>
+<p> <strong>三、expect使用语法</strong></p>
+<p><strong>1. expect 启用选项：</strong></p>
+<p>-c 执行脚本前先执行的命令，可多次使用<br>-d debug模式，可以在运行时输出一些诊断信息，与在脚本开始处使用exp_internal 1相似。<br>-D 启用交换调式器,可设一整数参数。<br>-f 从文件读取命令，仅用于使用#!时。如果文件名为”-“，则从stdin读取(使用”./-“从文件名为-的文件读取)。<br>-i 交互式输入命令，使用”exit”或”EOF”退出输入状态<br>– 标示选项结束(如果你需要传递与expect选项相似的参数给脚本时)，可放到#!行:#!/usr/bin/expect –<br>-v 显示expect版本信息<br><strong>2.expect命令参数：</strong></p>
+<p>spawn 交互程序开始，执行后面的命令或程序。需要进入到expect环境才可以执行，不能直接在shell环境下直接执行<br>set timeout n 设置超时时间，表示该脚本代码需在n秒钟内完成，如果超过，则退出。用来防止ssh远程主机网络不可达时卡住及在远程主机执行命令宕住。如果设置为-1表示不会超时<br>set 定义变量<br>$argv expect脚本可以接受bash的外部传参，可以使用[ lindex $argv n ]n为0表示第一个传参，为1表示第二个传参，以此类推<br>expect 从交互程序进程中指定接收信息, 如果匹配成功, 就执行send的指令交互；否则等待timeout秒后自动退出expect语句<br>send 如果匹配到expect接受到的信息，就将send中的指令交互传递，执行交互动作。结尾处加上\r表示如果出现异常等待的状态可以进行核查<br>exp_continue 表示循环式匹配，通常匹配之后都会退出语句，但如果有exp_continue则可以不断循环匹配，输入多条命令，简化写法。<br>exit 退出expect脚本<br>expect eof spawn进程结束后会向expect发送eof，接收到eof代表该进程结束<br>interact 执行完代码后保持交互状态，将控制权交给用户。没有该命令执行完后自动退出而不是留在远程终端上<br>puts 输出变量</p>
+<p><strong>四、expect使用举例</strong></p>
+<p> **1.expect脚本实现ssh自动登录远程服务<br>**</p>
+<figure class="highlight d"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs d"><span class="hljs-meta">#!/usr/bin/expect</span><br>spawn ssh mrswhite@<span class="hljs-number">192.168</span><span class="hljs-number">.37</span><span class="hljs-number">.9</span><br>expect <span class="hljs-string">&quot;*password:&quot;</span><br>send <span class="hljs-string">&quot;test20221007\r&quot;</span><br>expect <span class="hljs-string">&quot;*#&quot;</span><br>interact<br></code></pre></td></tr></table></figure>
+
+<p>expect expect_demo1.sh 执行查看运行结果:</p>
+<p><img src="640.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>**2.expect脚本实现ssh自动登录远程服务器（通用脚本，手动输入**参数**）<br>**</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs tcl"><span class="hljs-comment">#!/usr/bin/expect</span><br><span class="hljs-keyword">if</span> &#123;<span class="hljs-variable">$argc</span> &lt; <span class="hljs-number">3</span>&#125; &#123;    <br><span class="hljs-keyword">puts</span> <span class="hljs-string">&quot;Usage:cmd &lt;host&gt; &lt;username&gt; &lt;password&gt;&quot;</span><br><span class="hljs-keyword">exit</span> <span class="hljs-number">1</span><br><br>&#125;<br><span class="hljs-keyword">set</span> timeout <span class="hljs-number">-1</span><br><span class="hljs-keyword">set</span> host [ <span class="hljs-keyword">lindex</span> <span class="hljs-variable">$argv</span> <span class="hljs-number">0</span> ]<br><span class="hljs-keyword">set</span> username [ <span class="hljs-keyword">lindex</span> <span class="hljs-variable">$argv</span> <span class="hljs-number">1</span> ]<br><span class="hljs-keyword">set</span> password [ <span class="hljs-keyword">lindex</span> <span class="hljs-variable">$argv</span> <span class="hljs-number">2</span> ]<br><br>spawn ssh  <span class="hljs-variable">$username</span>@<span class="hljs-variable">$host</span><br>expect <span class="hljs-string">&quot;*password*&quot;</span> &#123;send <span class="hljs-string">&quot;$password\r&quot;</span>&#125;<br>interact<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li></li>
+</ul>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">./expect_demo2.sh <span class="hljs-number">192.168.37.9</span> mrswhite  test<span class="hljs-number">20221007</span><br></code></pre></td></tr></table></figure>
+
+<p> 执行查看运行结果:</p>
+<p><img src="640-1690382166396-3.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>3.在shell 中嵌套expect</strong></p>
+<p> 通过expect嵌套shell使用语句在shell内直接执行，任何这样可以实现更多的功能</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs kotlin">#!/bin/bash<br>user=<span class="hljs-string">&quot;mrswhite&quot;</span><br>host=<span class="hljs-string">&quot;192.168.37.9&quot;</span><br>password=<span class="hljs-string">&quot;test20221007&quot;</span><br>/usr/bin/<span class="hljs-keyword">expect</span> &lt;&lt; EOF<br><span class="hljs-keyword">set</span> time <span class="hljs-number">20</span><br>spawn ssh $<span class="hljs-symbol">user@</span>$host<br><span class="hljs-keyword">expect</span> &#123;<br><span class="hljs-string">&quot;*yes/no&quot;</span> &#123; send <span class="hljs-string">&quot;yes\r&quot;</span>; exp_continue &#125;<br><span class="hljs-string">&quot;*password:&quot;</span> &#123; send <span class="hljs-string">&quot;<span class="hljs-variable">$password</span>\r&quot;</span> &#125;<br>&#125;<br><span class="hljs-keyword">expect</span> <span class="hljs-string">&quot;*#&quot;</span><br>send <span class="hljs-string">&quot;pwd\r&quot;</span><br><span class="hljs-keyword">expect</span> <span class="hljs-string">&quot;*#&quot;</span><br>send <span class="hljs-string">&quot;df -h\r&quot;</span><br><span class="hljs-keyword">expect</span> <span class="hljs-string">&quot;*#&quot;</span><br>send <span class="hljs-string">&quot;exit\r&quot;</span><br>interact<br><span class="hljs-keyword">expect</span> eof<br>EOF<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="640-1690382168731-6.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>五、expect相关错误处理</strong></p>
+<p><strong>1.invalid command name “/usr/bin/expect”</strong></p>
+<p><img src="640-1690382170489-9.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>解决方案：此时是使用bash脚本嵌套了expect代码，所以执行采用以下两种方式都可以</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gcode">./expect_dem<span class="hljs-meta">o3</span>.shsh expect_dem<span class="hljs-meta">o3</span>.sh<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382172977-12.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>2.invalid command name “:” 转义问题</strong></p>
+<p><img src="640-1690382178337-15.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 解决方案：send里面的内容中的括号[]有问题，不能使用[],将其去除或者添加转义字符</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-keyword">send</span> <span class="hljs-string">&quot;cat 20221007.txt | awk -F : &#x27;&#123;print $2&#125;&#x27;&quot;</span><br><span class="hljs-keyword">send</span> <span class="hljs-string">&quot;cat 20221007.txt | awk -F \[:\] &#x27;&#123;print $2&#125;&#x27;\r&quot;</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382181337-18.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>2.cron</strong><br>作用：可以根据配置文件约定的时间来执行特定的任务<br>参考下面：<br>Linux Crontab 定时任务：</p>
+<p><strong>一.cron介绍</strong><br>linux内置的cron进程能帮我们实现这些需求，cron搭配shell脚本，非常复杂的指令也没有问题。<br><strong>1. var/spool/cron/</strong></p>
+<p>目录下存放的是每个用户包括root的crontab任务，每个任务以创建者的名字命名<br><strong>2. _/etc/crontab</strong></p>
+<p>这个文件负责调度各种管理和维护任务。<br><strong>3. /etc/cron.d/</strong></p>
+<p>这个目录用来存放任何要执行的crontab文件或脚本。<br>我们还可以把脚本放在/etc/cron.hourly、/etc/cron.daily、/etc/cron.weekly、/etc/cron.monthly目录中，让它每小时/天/星期、月执行一次。</p>
+<p><strong>二.crontab的使用</strong><br>我们常用的命令如下：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs scss">crontab <span class="hljs-selector-attr">[-u username]</span>　　　　<span class="hljs-comment">//省略用户表表示操作当前用户的crontab</span><br><span class="hljs-number">1</span>. -e      (编辑工作表)<br><span class="hljs-number">2</span>. -l      (列出工作表里的命令)<br><span class="hljs-number">3</span>. -r      (删除工作作)<br></code></pre></td></tr></table></figure>
+
+
+<p>我们用crontab -e进入当前用户的工作表编辑，是常见的vim界面。每行是一条命令。</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">crontab的命令构成为 时间+动作，其时间有分、时、日、月、周五种，操作符有<br><span class="hljs-bullet">* </span>取值范围内的所有数字<br>/ 每过多少个数字<br><span class="hljs-bullet">- </span>从X到Z<br>，散列数字<br></code></pre></td></tr></table></figure>
+
+<p><strong>三.常见定时任务设置</strong><br>实例1：每1分钟执行一次myCommand</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">*</span> <span class="hljs-emphasis">* *</span> <span class="hljs-emphasis">* *</span> myCommand<br></code></pre></td></tr></table></figure>
+
+<p>实例2：每小时的第3和第15分钟执行</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">3,15 <span class="hljs-emphasis">* *</span> <span class="hljs-emphasis">* *</span> myCommand<br></code></pre></td></tr></table></figure>
+
+<p>实例3：在上午8点到11点的第3和第15分钟执行</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">3</span>,<span class="hljs-number">15</span> <span class="hljs-number">8</span>-<span class="hljs-number">11</span> * * * myCommand<br></code></pre></td></tr></table></figure>
+
+<p>实例4：每隔两天的上午8点到11点的第3和第15分钟执行</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">3</span>,<span class="hljs-number">15</span> <span class="hljs-number">8</span>-<span class="hljs-number">11</span> */<span class="hljs-number">2</span> * * myCommand<br></code></pre></td></tr></table></figure>
+
+<p>实例5：每周一上午8点到11点的第3和第15分钟执行</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">3</span>,<span class="hljs-number">15</span> <span class="hljs-number">8</span>-<span class="hljs-number">11</span> * * <span class="hljs-number">1</span> myCommand<br></code></pre></td></tr></table></figure>
+
+<p>实例6：每晚的21:30重启smb</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">30 </span><span class="hljs-number">21</span> * * * /etc/init.d/smb restart<br></code></pre></td></tr></table></figure>
+
+<p>实例7：每月1、10、22日的4 : 45重启smb</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">45 </span><span class="hljs-number">4</span> <span class="hljs-number">1</span>,<span class="hljs-number">10</span>,<span class="hljs-number">22</span> * * /etc/init.d/smb restart<br></code></pre></td></tr></table></figure>
+
+<p>实例8：每周六、周日的1 : 10重启smb</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">10 </span><span class="hljs-number">1</span> * * <span class="hljs-number">6</span>,<span class="hljs-number">0</span> /etc/init.d/smb restart<br></code></pre></td></tr></table></figure>
+
+<p>实例9：每天18 : 00至23 : 00之间每隔30分钟重启smb</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0</span>,<span class="hljs-number">30</span> <span class="hljs-number">18</span>-<span class="hljs-number">23</span> * * * /etc/init.d/smb restart<br></code></pre></td></tr></table></figure>
+
+<p>实例10：每星期六的晚上11 : 00 pm重启smb</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">0 </span><span class="hljs-number">23</span> * * <span class="hljs-number">6</span> /etc/init.d/smb restart<br></code></pre></td></tr></table></figure>
+
+<p>实例11：每一小时重启smb</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">0 </span>*/<span class="hljs-number">1</span> * * * /etc/init.d/smb restart<br></code></pre></td></tr></table></figure>
+
+<p>实例12：晚上11点到早上7点之间，每隔一小时重启smb</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">0 </span><span class="hljs-number">23</span>-<span class="hljs-number">7</span>/<span class="hljs-number">1</span> * * * /etc/init.d/smb restart<br></code></pre></td></tr></table></figure>
+
+<p><strong>四.实例操作</strong></p>
+<p><strong>1.文件实时写入:</strong></p>
+<p><strong>1) 查看定时任务状态</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs awk">[root@localhost ~]<span class="hljs-comment">#service crond status</span><br>Redirecting to <span class="hljs-regexp">/bin/</span>systemctl status crond.service<br>● crond.service - Command Scheduler  <br>      Loaded: loaded (<span class="hljs-regexp">/usr/</span>lib<span class="hljs-regexp">/systemd/</span>system/crond.service; enabled; vendor preset: enabled)  <br>       Active: active (running) since Mon <span class="hljs-number">2021</span>-<span class="hljs-number">09</span>-<span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">22</span>:<span class="hljs-number">18</span> CST; <span class="hljs-number">24</span>s ago Main PID: <span class="hljs-number">17516</span> (crond)  <br>       CGroup: <span class="hljs-regexp">/system.slice/</span>crond.service           <br>            └─<span class="hljs-number">17516</span> <span class="hljs-regexp">/usr/</span>sbin/crond -n<br></code></pre></td></tr></table></figure>
+
+<p><strong>2) 关闭/开启定时任务</strong></p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs autoit">[root<span class="hljs-symbol">@localhost</span> ~]<span class="hljs-meta"># service crond stop</span><br>Redirecting <span class="hljs-keyword">to</span> /bin/systemctl stop crond.service<br>[root<span class="hljs-symbol">@localhost</span> ~]<span class="hljs-meta"># service crond start</span><br>Redirecting <span class="hljs-keyword">to</span> /bin/systemctl start crond.service<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>3) 编辑定时任务</strong></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-punctuation">[</span>root<span class="hljs-operator">@</span>localhost <span class="hljs-operator">~</span><span class="hljs-punctuation">]</span><span class="hljs-comment"># crontab -e</span><br><span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> echo `date &#x27;+\%Y-\%m-\%d \%H:\%M:\%S&#x27;` <span class="hljs-operator">&gt;</span><span class="hljs-operator">&gt;</span> <span class="hljs-number">123.</span>txt <span class="hljs-comment">#每分钟执行一次</span><br><br></code></pre></td></tr></table></figure>
+
+<p><strong>4) 查看已存在的定时任务</strong></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-punctuation">[</span>root<span class="hljs-operator">@</span>localhost <span class="hljs-operator">~</span><span class="hljs-punctuation">]</span><span class="hljs-comment"># crontab -l</span><br><span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> echo `date &#x27;+\%Y-\%m-\%d \%H:\%M:\%S&#x27;` <span class="hljs-operator">&gt;</span><span class="hljs-operator">&gt;</span> <span class="hljs-number">123.</span>txt<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>5) 验证校验生成</strong></p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs subunit">[root@localhost ~]# cat 123.txt <br>2021<span class="hljs-string">-09</span><span class="hljs-string">-20</span> 01:13:01<br>2021<span class="hljs-string">-09</span><span class="hljs-string">-20</span> 01:14:01<br>2021<span class="hljs-string">-09</span><span class="hljs-string">-20</span> 01:15:01<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>2. 定期清理对应目录下的文件</strong></p>
+<p>*<em>1) 预制数据:</em></p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gcode">[root@localhost test<span class="hljs-number">20210920</span>]<span class="hljs-attr"># echo abcdefg | tee -a file&#123;1</span>.<span class="hljs-number">.5</span>&#125;.logabcdefg[root@localhost test<span class="hljs-number">20210920</span>]<span class="hljs-attr"># du -sh *4</span><span class="hljs-number">.0</span>K    file<span class="hljs-number">1.</span>lo<span class="hljs-name">g4.0</span>K    file<span class="hljs-number">2.</span>lo<span class="hljs-name">g4.0</span>K    file<span class="hljs-number">3.</span>lo<span class="hljs-name">g4.0</span>K    file<span class="hljs-number">4.</span>lo<span class="hljs-name">g4.0</span>K    file<span class="hljs-number">5.</span>log<br></code></pre></td></tr></table></figure>
+
+<p><strong>2) 添加定时任务</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@localhost ~]<span class="hljs-comment"># crontab -e</span><br>* * * * * find  /root/test20210920  -<span class="hljs-built_in">type</span> f -name <span class="hljs-string">&#x27;*.log&#x27;</span> -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">cp</span> /dev/null &#123;&#125; \;<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>3) 检查定时任务执行,1分钟左右</strong></p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs autoit">[root<span class="hljs-symbol">@localhost</span> test20210920]<span class="hljs-meta"># du -sh *</span><br><span class="hljs-number">0</span>    file1.<span class="hljs-built_in">log</span><br><span class="hljs-number">0</span>    file2.<span class="hljs-built_in">log</span><br><span class="hljs-number">0</span>    file3.<span class="hljs-built_in">log</span><br><span class="hljs-number">0</span>    file4.<span class="hljs-built_in">log</span><br><span class="hljs-number">0</span>    file5.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>4) 查看定时任务执行情况:</strong></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gradle">[root@localhost test20210920]# tail -<span class="hljs-number">5</span> <span class="hljs-regexp">/var/</span>log/cron<br>Sep <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">56</span>:<span class="hljs-number">33</span> localhost crontab[<span class="hljs-number">17797</span>]: (root) END EDIT (root)<br>Sep <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">56</span>:<span class="hljs-number">51</span> localhost crontab[<span class="hljs-number">17802</span>]: (root) BEGIN EDIT (root)<br>Sep <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">56</span>:<span class="hljs-number">54</span> localhost crontab[<span class="hljs-number">17802</span>]: (root) END EDIT (root)<br>Sep <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">57</span>:<span class="hljs-number">01</span> localhost CROND[<span class="hljs-number">17809</span>]: (root) CMD (<span class="hljs-keyword">find</span>  <span class="hljs-regexp">/root/</span>test20210920  -type f -name <span class="hljs-string">&#x27;*.log&#x27;</span> -exec cp <span class="hljs-regexp">/dev/</span><span class="hljs-keyword">null</span> &#123;&#125; \;)<br>Sep <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">58</span>:<span class="hljs-number">01</span> localhost CROND[<span class="hljs-number">17819</span>]: (root) CMD (<span class="hljs-keyword">find</span>  <span class="hljs-regexp">/root/</span>test20210920  -type f -name <span class="hljs-string">&#x27;*.log&#x27;</span> -exec cp <span class="hljs-regexp">/dev/</span><span class="hljs-keyword">null</span> &#123;&#125; \;)<br></code></pre></td></tr></table></figure>
+
+<p><strong>五.常见错误</strong></p>
+<p><strong>1.errors in crontab file, can’t install</strong></p>
+<p><img src="640-1690382187314-21.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>解决方式:</strong></p>
+<p>因为你的crontab格式错误，即没有按照规则写</p>
+<p>查看原命令并修正:</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">echo</span> `<span class="hljs-built_in">date</span> +&quot;<span class="hljs-variable">%Y-%</span>m-%d <span class="hljs-variable">%H:%</span>M&quot;` &gt;&gt; <span class="hljs-number">123</span>.txt<br><br></code></pre></td></tr></table></figure>
+
+<p>修改后正常保存:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">*</span> <span class="hljs-emphasis">* *</span> <span class="hljs-emphasis">* *</span> echo <span class="hljs-code">`date +&quot;%Y-%m-%d %H:%M&quot;`</span> &gt;&gt; 123.txt<br><br></code></pre></td></tr></table></figure>
+
+<p> <strong>2.接以上错误:</strong></p>
+<p>邮件内报错:cat /var/spool/mail/root</p>
+<p><img src="640-1690382207528-24.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>解决方式:</strong> </p>
+<p>crontab内%需要转义,修复定时任务正常</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> <span class="hljs-operator">*</span> echo `date &#x27;+\%Y-\%m-\%d \%H:\%M:\%S&#x27;` <span class="hljs-operator">&gt;</span><span class="hljs-operator">&gt;</span> <span class="hljs-number">123.</span>txt<br></code></pre></td></tr></table></figure>
+
+
+
+<p>cron表达式：</p>
+<p><strong>一.cron</strong></p>
+<p>计划任务，是任务在约定的时间执行已经计划好的工作，这是表面的意思。在Linux中，我们经常用到 cron 服务器来完成这项工作。cron服务器可以根据配置文件约定的时间来执行特定的任务</p>
+<p> <strong>二.cron表达式</strong></p>
+<p>Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：</p>
+<p>Seconds Minutes Hours DayofMonth Month DayofWeek Year或</p>
+<p>Seconds Minutes Hours DayofMonth Month DayofWeek</p>
+<p> <strong>三.每个域的取值范围</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>域名</strong></th>
+<th><strong>可取值</strong></th>
+<th><strong>可取符号（仅列部分常用）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>秒域</td>
+<td>0~59的整数</td>
+<td>*  -  ,  /</td>
+</tr>
+<tr>
+<td>分域</td>
+<td>0~59的整数</td>
+<td>*  -  ,  /</td>
+</tr>
+<tr>
+<td>时域</td>
+<td>0~23的整数</td>
+<td>*  -  ,  /</td>
+</tr>
+<tr>
+<td>日域</td>
+<td>1~31的整数</td>
+<td>*  -  ,  /  ?  L</td>
+</tr>
+<tr>
+<td>月域</td>
+<td>1<del>12的整数或JAN</del>DEC</td>
+<td>*  -  ,  /</td>
+</tr>
+<tr>
+<td>周域</td>
+<td>1<del>7的整数或SUN</del>SAT</td>
+<td>*  -  ,  /  ?  L  #</td>
+</tr>
+<tr>
+<td>年域</td>
+<td>1970~2099的整数</td>
+<td>*  -  ,  /</td>
+</tr>
+</tbody></table>
+<p> <strong>四.符号的意义</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> <span class="hljs-emphasis">* 表示可以匹配该域的所有值；</span><br><span class="hljs-emphasis">例如，&quot;0 0 13 *</span> <span class="hljs-emphasis">* ?&quot;表示每天的13点执行一次。</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">2. ? 在cron表达式中必须出现且只能出现1次，用在日域或周域上，表示不确定值、不限制值；</span><br><span class="hljs-emphasis">它与*</span>的区别是，并不能匹配到该域上的所有值，例如指定了3月份每个周五，那么3月份的周五可能只有4个值；<br>例如，&quot;0 0 5 6 <span class="hljs-emphasis">* ?&quot;表示每个月6日5点钟执行而无论周几，&quot;0 0 5 ? *</span> 3&quot;表示每个周三5点钟执行而无论是几号。<br><br><span class="hljs-bullet">3.</span> - 表示匹配该域上的一个范围；<br>例如，&quot;0 30 9-15 ? <span class="hljs-emphasis">* *</span>&quot;表示每天的9:30-15:30每小时执行一次，&quot;0 1-5 <span class="hljs-emphasis">* ? *</span> 1&quot;表示每周日每个小时的1-5分钟每分钟执行一次。<br><span class="hljs-bullet">4.</span> , 表示枚举值；<br>例如，&quot;0 0 8,16,23 ? <span class="hljs-emphasis">* 1,7&quot;表示每个周六日的8点、16点、23点各执行一次。</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">5. / 表示起始时间和间隔时间；</span><br><span class="hljs-emphasis">例如，&quot;0 0 3/5 *</span> <span class="hljs-emphasis">* ?&quot;表示每天3点开始执行，每隔5个小时执行一次，即3点、8点、13点、18点、23点各执行一次，</span><br><span class="hljs-emphasis">&quot;*</span>/5 <span class="hljs-emphasis">* *</span> <span class="hljs-emphasis">* *</span> ?&quot;表示每隔5秒钟执行一次，&quot;0 <span class="hljs-emphasis">*/1 *</span> <span class="hljs-emphasis">* *</span> ?&quot;表示每隔1分钟执行一次。<br><br><span class="hljs-bullet">6.</span> # 只能用于周域上，#后面的数字表示第几周，如果不存在这个周的值，则不执行；<br>例如，&quot;0 0 0 ? <span class="hljs-emphasis">* 5#2&quot;表示每个月第2个周四零点执行，&quot;15 30 6 ? *</span> 7#5&quot;表示每个月第5个周六6:30:15执行，如果某个月不存在第5个周六，则不执行。<br><br><span class="hljs-bullet">7.</span> L 只能用于日域或周域，用于日域时表示当月最后一天，用于周域如果前面不加数字表示周六，加数字表示最后一个周值；<br>例如，&quot;0 0 23 L <span class="hljs-emphasis">* ?&quot;表示每月最后一天的23点执行，&quot;0 0 23 ? *</span> L&quot;表示每周六的23点执行，&quot;0 0 23 ? <span class="hljs-emphasis">* 3L&quot;表示每月最后一个周二的23点执行。</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p><strong>五.常用表达式例子</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>意义</strong></th>
+<th><strong>表达式</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>每隔5秒钟执行一次</td>
+<td>*/5 * * * * ?</td>
+</tr>
+<tr>
+<td>每隔1分钟执行一次</td>
+<td>0 */1 * * * ?</td>
+</tr>
+<tr>
+<td>每天1点执行一次</td>
+<td>0 0 1 * * ?</td>
+</tr>
+<tr>
+<td>每天23点55分执行一次</td>
+<td>0 55 23 * * ？</td>
+</tr>
+<tr>
+<td>每月最后一天23点执行一次</td>
+<td>0 0 23 L * ？</td>
+</tr>
+<tr>
+<td>每周六8点执行一次</td>
+<td>0 0 8 ? * L</td>
+</tr>
+<tr>
+<td>每月最后一个周五，每隔2小时执行一次</td>
+<td>0 0 */2 ? * 6L</td>
+</tr>
+<tr>
+<td>每月的第三个星期五上午10:15执行一次</td>
+<td>0 15 10 ? * 5#3</td>
+</tr>
+<tr>
+<td>在每天下午2点到下午2:05期间的每1分钟执行</td>
+<td>0 0-5 14 * * ?</td>
+</tr>
+<tr>
+<td>表示周一到周五每天上午10:15执行</td>
+<td>0 15 10 ? * 2-6</td>
+</tr>
+<tr>
+<td>每个月的最后一个星期五上午10:15执行</td>
+<td>0 15 10 ? * 6L</td>
+</tr>
+<tr>
+<td>每天上午10点，下午2点，4点执行一次</td>
+<td>0 0 10,14,16 * * ?</td>
+</tr>
+<tr>
+<td>朝九晚五工作时间内每半小时执行一次</td>
+<td>0 0/30 9-17 * * ?</td>
+</tr>
+<tr>
+<td>每个星期三中午12点执行一次</td>
+<td>0 0 12 ? * 4</td>
+</tr>
+<tr>
+<td>每年三月的星期三的下午2:10和2:44各执行一次</td>
+<td>0 10,44 14 ? 3 4</td>
+</tr>
+<tr>
+<td>每月的第三个星期五上午10:15执行一次</td>
+<td>0 15 10 ? * 6#3</td>
+</tr>
+<tr>
+<td>每月一日凌晨2点30执行一次</td>
+<td>0 30 2 1 * ?</td>
+</tr>
+<tr>
+<td>每分钟的第10秒与第20秒都会执行</td>
+<td>10,20 * * * * ?</td>
+</tr>
+<tr>
+<td>每月的第2个星期的周5，凌晨执行</td>
+<td>0 0 0 ? * 6#2</td>
+</tr>
+</tbody></table>
+<p> <strong>六.注意事项:</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">1</span>. 有些子表达式能包含一些范围或列表例如：子表达式（天（星期））可以为 <span class="hljs-string">&quot;MON-FRI&quot;</span>，<span class="hljs-string">&quot;MON，WED，FRI&quot;</span>，<span class="hljs-string">&quot;MON-WED,SAT&quot;</span><br><span class="hljs-attribute">2</span>. <span class="hljs-string">&quot;*&quot;</span>字符代表所有可能的值因此，<span class="hljs-string">&quot;*&quot;</span>在子表达式（月）里表示每个月的含义，<span class="hljs-string">&quot;*&quot;</span>在子表达式（天（星期））表示星期的每一天<br><span class="hljs-attribute">3</span>. <span class="hljs-string">&quot;/&quot;</span>字符用来指定数值的增量 例如：在子表达式（分钟）里的<span class="hljs-string">&quot;0/15&quot;</span>表示从第<span class="hljs-number">0</span>分钟开始，每<span class="hljs-number">15</span>分钟 在子表达式（分钟）里的<span class="hljs-string">&quot;3/20&quot;</span>表示从第<span class="hljs-number">3</span>分钟开始，每<span class="hljs-number">20</span>分钟（它和<span class="hljs-string">&quot;3，23，43&quot;</span>）的含义一样<br><span class="hljs-attribute">4</span>. <span class="hljs-string">&quot;?&quot;</span>字符仅被用于天（月）和天（星期）两个子表达式，表示不指定值 当<span class="hljs-number">2</span>个子表达式其中之一被指定了值以后，为了避免冲突，需要将另一个子表达式的值设为<span class="hljs-string">&quot;?&quot;</span><br><span class="hljs-attribute">5</span>. <span class="hljs-string">&quot;L&quot;</span> 字符仅被用于天（月）和天（星期）两个子表达式，它是单词<span class="hljs-string">&quot;last&quot;</span>的缩写 但是它在两个子表达式里的含义是不同的。 在天（月）子表达式中，<span class="hljs-string">&quot;L&quot;</span>表示一个月的最后一天 在天（星期）自表达式中，<span class="hljs-string">&quot;L&quot;</span>表示一个星期的最后一天，也就是SAT如果在<span class="hljs-string">&quot;L&quot;</span>前有具体的内容，它就具有其他的含义了例如：<span class="hljs-string">&quot;6L&quot;</span>表示这个月的倒数第６天，<span class="hljs-string">&quot;FRIL&quot;</span>表示这个月的最一个星期五 注意：在使用<span class="hljs-string">&quot;L&quot;</span>参数时，不要指定列表或范围，因为这会导致问题<br></code></pre></td></tr></table></figure>
+
+<p><strong>3.liunx的三个时间atime,mtime,ctime</strong><br>作用:定期删除备份时一般备份文件的mtime来进行删除<br>参考下面：</p>
+<p><strong>一、文件与文件夹三个时间：atime,mtime,ctime的含义</strong><br><strong>1.含义</strong></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">atime（<span class="hljs-keyword">Access</span> <span class="hljs-type">Time</span>）：文件最近被访问时间<br>mtime（Modify <span class="hljs-type">Time</span>）：文件最近内容修改时间<br>ctime（Change <span class="hljs-type">Time</span>）：文件最近权限和属性修改时间<br></code></pre></td></tr></table></figure>
+
+<p><strong>2.文件的触发time修改的情况</strong></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">atime（<span class="hljs-keyword">Access</span> <span class="hljs-type">Time</span>）：在读取文件或者执行文件时更改的任何对inode的访问都会使此处改变<br>mtime（Modify <span class="hljs-type">Time</span>）：在写入文件时随文件内容的更改而更改的<br>ctime（Change <span class="hljs-type">Time</span>）：在写入文件、更改所有者、权限或链接设置（更改状态）时随 Inode 的内容更改而更改的<br></code></pre></td></tr></table></figure>
+
+<p><strong>3.文件夹触发time修改的情况</strong></p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs coq">atime（Access <span class="hljs-keyword">Time</span>）：读取文件或者执行文件时更改的（cd不会ls会改变）<br>mtime（Modify <span class="hljs-keyword">Time</span>）：在文件夹中有文件的新建才会改变，注意使用vi在文件夹内新建文件即使退出时也会变mtime，而只更改文件夹内文件内容不会修改文件夹的mtime<br>ctime（Change <span class="hljs-keyword">Time</span>）：ctime 基本同文件的ctime，其体现的是inode的<span class="hljs-built_in">change</span> <span class="hljs-built_in">time</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>4.注意事项，mtime与ctime</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">mtime的改变必然导致ctime的改变，但是ctime不一定导致mtime的更改<br></code></pre></td></tr></table></figure>
+
+<p><strong>二、stat命令查看文件的时间</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">stat</span> test001.txt<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382213157-27.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>三、ll命令查看文件时间（对照stat命令可验证）</strong></p>
+<p><strong>1.默认显示mtime</strong></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">ll </span>test001.txt  <span class="hljs-comment">#默认显示mtime</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382215546-30.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>2.展示ctime</strong></p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">ll</span> <span class="hljs-built_in">--time=ctime</span> <span class="hljs-string">test001</span>.<span class="hljs-string">txt</span> <span class="hljs-comment">#展示ctime</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382217489-33.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>3.展示atime</strong></p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">ll</span> <span class="hljs-built_in">--time=atime</span> <span class="hljs-string">test001</span>.<span class="hljs-string">txt</span> <span class="hljs-comment">#展示atime</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382223787-36.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>四、测试创建/修改文件的时间</strong></p>
+<p>假定目前的时间是：2022-10-05 13:15:40</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl">date <span class="hljs-string">&quot;+%Y-%m-%d %H:%M:%S&quot;</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382226232-39.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>1.创建文件后测试，文件atime、ctime、mtime均一样</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">touch</span> test001.txtstat test001.txt<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382227820-42.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>2.修改文件后查看，文件atime不变，ctime、mtime更新</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">echo <span class="hljs-number">123</span> &gt; test001<span class="hljs-selector-class">.txtstat</span> test001<span class="hljs-selector-class">.txt</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382229816-45.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>3.更改文件属主后:文件atime、mtime不变，ctime更新</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">chown -R root<span class="hljs-selector-pseudo">:root</span> test001<span class="hljs-selector-class">.txtstat</span> test001<span class="hljs-selector-class">.txt</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382231715-48.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>4.创建文件夹，文件atime、ctime、mtime均一样</strong></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">mkdir test001mdrstat test001mdr<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382233711-51.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>5.文件夹内新建文件，文件夹atime不变，ctime与mtime均发生改变</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">vi test001mdr/test001.txtstat test001mdr<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382236136-54.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>6.修改文件夹的属主，文件夹的atime、mtime不变，ctime更新</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chown</span> -R root:root ./test001mdrstat test001mdr<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382238662-57.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>五、常用命令关于文件时间相关(24h为一天前时间节点，0为当前时间)</strong></p>
+<p><strong>1.在当前目录下查询3天内修改过的文件（72h~0）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> .  -mtime -<span class="hljs-number">3</span> #查询<span class="hljs-number">3</span>天内修改过的文件<br></code></pre></td></tr></table></figure>
+
+<p><strong>2.在当前目录下查询1天内访问过的文件（24h~0）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> . -atime -<span class="hljs-number">1</span> #查询<span class="hljs-number">1</span>天内访问过的文件<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382240954-60.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>3.查找50-100 天修改过的文件（100d~50d）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> / -mtime +<span class="hljs-number">50</span> -mtime -<span class="hljs-number">100</span> #查找<span class="hljs-number">50</span>-<span class="hljs-number">100</span> 天修改过的文件<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382242980-63.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>4.查找过去 1 小时内更改过的文件（60min~0）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> . -mmin -<span class="hljs-number">60</span> #过去<span class="hljs-number">1</span>小时内更改过的文件<br></code></pre></td></tr></table></figure>
+
+<p><strong>5.查找前一天修改过的文件（48h~24h）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> . -mtime <span class="hljs-number">1</span> #查找前一天修改过的文件（<span class="hljs-number">48</span>h~<span class="hljs-number">24</span>h）<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382245671-66.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>6.查找一天前修改过的文件（~48h）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> . -mtime +<span class="hljs-number">1</span> #查找一天前修改过的文件（~<span class="hljs-number">48</span>h）<br></code></pre></td></tr></table></figure>
+
+<p><strong>7.查找早于指定日期修改的文件（~=day）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">find</span> .  -newermt <span class="hljs-number">2022</span>-<span class="hljs-number">10</span>-<span class="hljs-number">04</span>  #查找早于指定日期（包含）修改的文件<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382247791-69.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>8.查找24小时内修改的文件（24h~0）</strong></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe">find .  -<span class="hljs-keyword">new</span><span class="hljs-type">ermt</span> <span class="hljs-string">&#x27;-24hours&#x27;</span>  <span class="hljs-meta">#查找24小时内修改的文件</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382250031-72.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>9.查找10分钟之内修改过的文件（10min~0）</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">find <span class="hljs-regexp">/home/</span> -type f -newermt <span class="hljs-string">&#x27;-10 minutes&#x27;</span> <span class="hljs-comment">#查找10分钟之内修改过的文件</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382252038-75.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>10.查找1天之内修改过的文件（24h~0）</strong></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe">find . -<span class="hljs-keyword">new</span><span class="hljs-type">ermt</span> <span class="hljs-string">&#x27;1 day ago&#x27;</span> <span class="hljs-meta">#查找1天之前到现在修改的文件</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382255010-78.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>11.查找昨天到现在修改的文件-同上（24h~0）</strong></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe">find .  -<span class="hljs-keyword">new</span><span class="hljs-type">ermt</span> <span class="hljs-string">&#x27;yesterday&#x27;</span> <span class="hljs-meta">#查找昨天到现在修改的文件</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382257520-81.png" srcset="/img/loading.gif" lazyload alt="图片"> </p>
+<p><strong>三.本地备份脚本</strong><br><strong>1.本地备份命令测试</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkdir -p <span class="hljs-regexp">/root/</span>backup/`date <span class="hljs-string">&quot;+%Y-%m-%d&quot;</span>`<br>tar -zcvPf <span class="hljs-regexp">/root/</span>backup<span class="hljs-regexp">/`date &quot;+%Y-%m-%d&quot;`/</span>test20221009.tar.gz <span class="hljs-regexp">/root/</span>test2022100<br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382259464-84.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>2.封装shell脚本:compress_backup.sh</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br><span class="hljs-comment">#!/bin/bash</span><br>source_folder=/root/test20221009<br>backup_folder=/root/backup/`<span class="hljs-built_in">date</span> <span class="hljs-string">&quot;+%Y-%m-%d&quot;</span>`<br>source_folder_name=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$source_folder</span> |awk -F <span class="hljs-string">&quot;/&quot;</span> <span class="hljs-string">&#x27;&#123;print $3&#125;&#x27;</span>`.tar.gz<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;source_folder：<span class="hljs-variable">$source_folder</span>&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;backup_folder: <span class="hljs-variable">$backup_folder</span>&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;source_folder_name: <span class="hljs-variable">$source_folder_name</span>&quot;</span><br><br><span class="hljs-comment">#新建立文件夹</span><br><span class="hljs-built_in">mkdir</span> -p /root/backup/`<span class="hljs-built_in">date</span> <span class="hljs-string">&quot;+%Y-%m-%d&quot;</span>`<br><span class="hljs-comment">#压缩命令</span><br>tar -zcvPf <span class="hljs-variable">$backup_folder</span>/<span class="hljs-variable">$source_folder_name</span>  <span class="hljs-variable">$source_folder</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$source_folder_name</span>文件备份成功&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382262189-87.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>3.加入crond定时任务并将输出与错误重定向至文件</strong></p>
+<p>编辑添加crond定时任务列表</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">crontab -e</span><br></code></pre></td></tr></table></figure>
+
+<p>设置每天00:00执行一次备份任务，并将标准输出与标准错误重定向至日志文件</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">0 </span><span class="hljs-number">0</span> * * * sh /root/backup/compress_backup.sh <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> &gt; /root/backup<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">/log_$(<span class="hljs-keyword">date</span> +\%Y-\%m-\%d)<br></code></pre></td></tr></table></figure>
+
+<p>测试查看任务执行情况：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arcade">tail <span class="hljs-number">-5</span> /<span class="hljs-keyword">var</span>/<span class="hljs-built_in">log</span>/cron<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382265005-90.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>查看备份文件与本地日志正确生成</p>
+<p><img src="640-1690382267091-93.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>四.异地备份脚本</strong></p>
+<p><strong>1.异地备份命令测试：</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">scp -C -r <span class="hljs-regexp">/root/</span>backup<span class="hljs-regexp">/2022-10-10/</span> mrswhite@<span class="hljs-number">192.168</span>.<span class="hljs-number">37.9</span>:<span class="hljs-regexp">/root/</span>back_up_offsite<br><br></code></pre></td></tr></table></figure>
+
+<p>提示输入密码后进行备份</p>
+<p><img src="640-1690382270217-96.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 查看对端文件备份成功</p>
+<p><img src="640-1690382272314-99.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>2.封装expect脚本offsite_backup.expect，当提示输入密码时可自动对应输入密码</strong></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/expect -f# </span><br>获取当前日期 例如：2022-10-12<br><br><span class="hljs-built_in">set</span> date [<span class="hljs-built_in"> clock </span>format [<span class="hljs-built_in"> clock </span>seconds ] -format <span class="hljs-string">&quot;%Y-%m-%d&quot;</span> ]<br><br><span class="hljs-comment"># 传输用户名</span><br><span class="hljs-built_in">set</span> username mrswhite<br><span class="hljs-comment"># 对端hostIP地址</span><br><span class="hljs-built_in">set</span> host 192.168.37.9<br><span class="hljs-comment"># 密码</span><br><span class="hljs-built_in">set</span> password test20221012<br><span class="hljs-comment">#设置本地传输路径-前缀</span><br><span class="hljs-built_in">set</span> source_folder /root/backup<br><span class="hljs-comment">#设置兑换传输路径</span><br><span class="hljs-built_in">set</span> backup_folder /root/back_up_offsite<br><br><span class="hljs-comment">#  expect默认timeout为30S  超过30s未传输完会停止，设置为 -1 则不限制超时时间</span><br><span class="hljs-built_in">set</span> timeout -1<br><span class="hljs-comment"># 压缩  递归   本地绝对路径           用户名   目标IP   目标路径 </span><br>spawn  /usr/bin/scp  -C   -r    <span class="hljs-variable">$source_folder</span>/<span class="hljs-variable">$date</span>/   <span class="hljs-variable">$username</span>@<span class="hljs-variable">$host</span>:<span class="hljs-variable">$backup_folder</span><br>expect  &#123;<br><span class="hljs-string">&quot;*yes/no&quot;</span> &#123;send <span class="hljs-string">&quot;yes\r&quot;</span>;exp_continue&#125;<br><span class="hljs-string">&quot;*password:&quot;</span> &#123;send <span class="hljs-string">&quot;<span class="hljs-variable">$password</span>\r&quot;</span>&#125;<br>&#125;<br>expect eof<br><br></code></pre></td></tr></table></figure>
+
+<p>运行后查询结果，已实现了无人值守备份的功能</p>
+<p><img src="640-1690382275774-102.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 查看异地文件已生成：</p>
+<p><img src="640-1690382277699-105.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>3.加入crond定时任务并将输出与错误重定向至文件</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">crontab -e</span><br></code></pre></td></tr></table></figure>
+
+<p>设置每天02:00执行一次异地备份任务，（给本地备份充足的时间预留）并将标准输出与标准错误重定向至日志文件</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">0 </span><span class="hljs-number">1</span> * * * expect /root/backup/offsite_backup.expect <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> &gt;  /root/back<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">up/offsite_log_$(<span class="hljs-keyword">date</span> +\%Y-\%m-\%d)<br></code></pre></td></tr></table></figure>
+
+<p>修改系统时间，重启crond服务等待定时任务的执行，并查询日志：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-built_in">date</span> -s <span class="hljs-string">&quot;2022-10-10 00:59:50&quot;</span><br>service crond restart<br>tail <span class="hljs-number">-5</span> /<span class="hljs-keyword">var</span>/<span class="hljs-built_in">log</span>/cron<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382280549-108.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 检查异地文件备份成功：</p>
+<p><img src="640-1690382282866-111.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>五.定期删除备份</strong></p>
+<p><strong>1.定期删除命令测试：</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">find <span class="hljs-regexp">/root/</span>backup/ -mtime +<span class="hljs-number">180</span> | xargs rm -rf &#123;&#125;  <span class="hljs-comment">#删除180天前的文件与文件夹的信</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="640-1690382285105-114.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>2.封装shell脚本delete_expire_backupfile.sh，清理的目录与过期时间可配置</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><br><span class="hljs-comment">#待清除目录</span><br><span class="hljs-built_in">dir</span>=/root/backup/<br><span class="hljs-comment">#文件的过期周期</span><br>day_expireDay=10<br><span class="hljs-comment">#删除最终为day_expireDay前的备份文件与文件夹信息</span><br>find <span class="hljs-variable">$dir</span> -mtime +<span class="hljs-variable">$day_expireDay</span> | xargs <span class="hljs-built_in">rm</span> -rf &#123;&#125;<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$dir</span>下的<span class="hljs-variable">$day_expireDay</span>天前的文件清理成功&quot;</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+<p>查看文件清理效果如下：</p>
+<p><img src="640-1690382287658-117.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>3.加入crond定时任务并将输出与错误重定向至文件</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">crontab -e</span><br></code></pre></td></tr></table></figure>
+
+<p>设置每天00:00执行一次异地备份任务，并将标准输出与标准错误重定向至日志文件</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">0 </span><span class="hljs-number">0</span> * * * sh /root/backup/delete_expire_backupfile.sh <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> &gt; /root/backup/delete_log__$(date +\%Y-\%m-\%d)<br></code></pre></td></tr></table></figure>
+
+<p>修改系统时间，重启crond服务等待定时任务的执行，并查询日志，文件已清理成功</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-built_in">date</span> -s <span class="hljs-string">&quot;2022-10-12 23:59:50&quot;</span><br>service crond restart<br>tail <span class="hljs-number">-5</span> /<span class="hljs-keyword">var</span>/<span class="hljs-built_in">log</span>/cron<br><br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/26/linux%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux基础总结</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/26/shell-%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F-%E5%87%BD%E6%95%B0/">
+                        <span class="hidden-mobile">shell 特殊变量 函数</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

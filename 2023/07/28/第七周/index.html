@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1、postgresql架构与原理 PostgreSQL 是当前功能最强大的开源的关系型数据库系统，支持跨平台的多种操作系统，基于C语言开发。通常简称为PG或PGSQL。 PostgreSQL 宣称是世界上最先进的开源数据库。PostgreSQL的狂热者认为它的性能和Oracle不分上下，而且没有高成本的负担。 官网 中文社区 中文手册   基本要素：  存储引擎：这是PostgreSQL用来存储">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第七周">
+<meta property="og:url" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="1、postgresql架构与原理 PostgreSQL 是当前功能最强大的开源的关系型数据库系统，支持跨平台的多种操作系统，基于C语言开发。通常简称为PG或PGSQL。 PostgreSQL 宣称是世界上最先进的开源数据库。PostgreSQL的狂热者认为它的性能和Oracle不分上下，而且没有高成本的负担。 官网 中文社区 中文手册   基本要素：  存储引擎：这是PostgreSQL用来存储">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202626903-702756861.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202627648-1559238990.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202628098-1731997520.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202629096-789509727.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202629599-582889119.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202630071-1565291608.png">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202630660-1637903724.png">
+<meta property="article:published_time" content="2023-07-28T19:09:46.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.201Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/%E7%AC%AC%E4%B8%83%E5%91%A8/2792175-20221121202626903-702756861.png">
+  
+  
+  <title>第七周 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第七周">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 19:09" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      20k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      166 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第七周</h1>
+            
+            <div class="markdown-body">
+              <h1 id=""><a href="#" class="headerlink" title=""></a></h1><h2 id="1、postgresql架构与原理"><a href="#1、postgresql架构与原理" class="headerlink" title="1、postgresql架构与原理"></a>1、postgresql架构与原理</h2><blockquote>
+<p>PostgreSQL 是当前功能最强大的开源的关系型数据库系统，支持跨平台的多种操作系统，基于C语言开发。通常简称为<strong>PG</strong>或<strong>PGSQL</strong>。</p>
+<p>PostgreSQL 宣称是世界上最先进的开源数据库。PostgreSQL的狂热者认为它的<strong>性能和Oracle不分上下</strong>，<strong>而且没有高成本的负担</strong>。</p>
+<p><strong><a target="_blank" rel="noopener" href="https://www.postgresql.org/">官网</a></strong></p>
+<p><strong><a target="_blank" rel="noopener" href="http://www.postgres.cn/">中文社区</a></strong></p>
+<p><strong><a target="_blank" rel="noopener" href="http://www.postgres.cn/docs/12/index.html">中文手册</a></strong></p>
+</blockquote>
+<blockquote>
+<p><strong>基本要素：</strong></p>
+<ol>
+<li>存储引擎：这是PostgreSQL用来存储数据的核心组件。它负责将数据存储在磁盘上，并支持查询和事务处理。PostgreSQL有多种不同的存储引擎可供选择，包括B-树存储引擎（默认存储引擎）和哈希存储引擎。</li>
+<li>缓冲池：这是一个用于缓存数据和索引的内存区域。当数据或索引需要被访问时，它们会被加载到缓冲池中。这样，在之后的访问中就可以快速访问数据，而不必再次从磁盘中加载。</li>
+<li>事务日志：PostgreSQL使用事务日志来记录所有的修改操作，以便在发生故障时恢复数据。事务日志还被用于支持复制和恢复数据库。</li>
+<li>SQL解释器：这是PostgreSQL用来解析和执行SQL语句的组件。它根据SQL语句的内容生成执行计划，并将其传递给存储引擎来执行。</li>
+</ol>
+</blockquote>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><hr>
+<h2 id="2、基于流复制完成postgresql的高可用"><a href="#2、基于流复制完成postgresql的高可用" class="headerlink" title="2、基于流复制完成postgresql的高可用"></a>2、基于流复制完成postgresql的高可用</h2><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">主库：10.0.0.136 从库：10.0.0.138<br><br>主库上配置：<br>创建复制用户：create user repluser with replication  password <span class="hljs-string">&#x27;123456&#x27;</span>;<br>在pg_hba.conf中添加：host    replication     all             0.0.0.0/0               md5 <span class="hljs-comment">#允许任何用户从任何地址使用密码验证复制数据</span><br><span class="hljs-comment">#重启服务</span><br>systemctl restart pgsql.service<br><br>从节点配置：<br>systemctl stop postgresql.service <span class="hljs-comment">#停止服务</span><br><span class="hljs-built_in">rm</span> -rf /pgsql/data/* <span class="hljs-comment">#删除数据文件</span><br><span class="hljs-built_in">rm</span> -rf /archive/*  <span class="hljs-comment">#删除归档日志文件</span><br><br><span class="hljs-comment">#全量备份</span><br>pg_basebackup -D /pgsql/backup/ -Ft -Pv -Upostgres -h 10.0.0.136 -p 5432 -R<br><br><span class="hljs-comment">#恢复数据文件</span><br>tar xf /pgsql/backup/base.tar -C /pgsql/data/<br>tar xf /pgsql/backup/pg_wal.tar -C /archive/<br><br><span class="hljs-comment">#修改配置文件</span><br>vim /pgsql/data/postgres.conf<br>primary_conninfo = <span class="hljs-string">&#x27;host=10.0.0.136 port=5432 user=repluser password=123456&#x27;</span><br>restore_command = <span class="hljs-string">&#x27;cp /archive/%f %p&#x27;</span><br><br><span class="hljs-comment">#启动服务</span><br>systemctl start postgresql.service<br><br>结果：<br>主库状态：<br>pg_controldata <br>pg_control version number:            1300<br>Catalog version number:               202107181<br>Database system identifier:           7150164135374356869<br>Database cluster state:               <span class="hljs-keyword">in</span> production<br>pg_control last modified:             Wed 19 Oct 2022 10:55:49 PM CST<br>Latest checkpoint location:           0/2D000228<br>Latest checkpoint<span class="hljs-string">&#x27;s REDO location:    0/2D0001F0</span><br><span class="hljs-string">Latest checkpoint&#x27;</span>s REDO WAL file:    00000002000000000000002D<br><br>从库状态：<br>pg_controldata <br>pg_control version number:            1300<br>Catalog version number:               202107181<br>Database system identifier:           7150164135374356869<br>Database cluster state:               <span class="hljs-keyword">in</span> archive recovery<br>pg_control last modified:             Thu 20 Oct 2022 06:57:53 AM CST<br>Latest checkpoint location:           0/2D000228<br>Latest checkpoint<span class="hljs-string">&#x27;s REDO location:    0/2D0001F0</span><br><span class="hljs-string">Latest checkpoint&#x27;</span>s REDO WAL file:    00000002000000000000002D<br></code></pre></td></tr></table></figure>
+
+<h2 id="-2"><a href="#-2" class="headerlink" title=""></a></h2><hr>
+<h2 id="3、实现postgresql的时间点还原"><a href="#3、实现postgresql的时间点还原" class="headerlink" title="3、实现postgresql的时间点还原"></a>3、实现postgresql的时间点还原</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#######场景：每天定时全量备份，第二天误删数据库，然后恢复########</span><br><span class="hljs-comment">#主服务器PG库</span><br><br><span class="hljs-comment">#开启归档日志</span><br>vim /pgsql/data/postgres.conf<br>archive_mode = on<br>archive_command = <span class="hljs-string">&#x27;[ ! -f /archive/%f ] &amp;&amp;cp %p /archive/%f&#x27;</span><br><br><span class="hljs-comment">#重启服务</span><br>pg_ctl restart -D <span class="hljs-variable">$PGDATA</span> <br><br><span class="hljs-comment">#创建测试数据库</span><br>create database testdb;<br>\c testdb<br>create table tb1(<span class="hljs-built_in">id</span> int);<br>insert into tb1 values(1);<br><br><span class="hljs-comment">#备份服务器上做全量备份</span><br><span class="hljs-comment">#提前在备份服务安装好postgresql数据库，创建/pgsql/backup和/archive目录，并设置所有者</span><br><br><span class="hljs-comment">#全量备份</span><br>pg_basebackup -D /pgsql/backup/ -Ft -Pv -Upostgres -h 10.0.0.136 -p 5432 -R<br><br><span class="hljs-comment">#主服务器PG库继续写入数据</span><br>\c testdb<br>insert into tb1 values(2);<br>insert into tb1 values(3);<br><br><span class="hljs-comment">#删除数据库</span><br>drop database testdb;<br><br><span class="hljs-comment">#发现故障停止用户访问，</span><br><br><span class="hljs-comment">#查看当前日志文件</span><br>select pg_walfile_name(pg_current_wal_lsn());<br><span class="hljs-comment">#查看事务ID</span><br>select txid_current();<br><br><span class="hljs-comment">#在PG服务器上切换归档日志</span><br>select pg_switch_wal();<br><br><span class="hljs-comment">#接下来在备份服务器操作</span><br><br>pg_ctl stop -D <span class="hljs-variable">$PGDATA</span> <span class="hljs-comment">#停止服务</span><br><span class="hljs-built_in">rm</span> -rf /pgsql/data/* <span class="hljs-comment">#删除数据文件</span><br><span class="hljs-built_in">rm</span> -rf /archive/*  <span class="hljs-comment">#删除归档日志文件</span><br><br><span class="hljs-comment">#恢复数据文件</span><br>tar xf /pgsql/backup/base.tar -C /pgsql/data/<br><span class="hljs-comment">#恢复归档日志</span><br>rsync -a 10.0.0.136:/archive/ /archive/<br><br><span class="hljs-comment">#查看故障事务点ID</span><br>pg_waldump /archive/000000020000000000000025 | grep -B 10 <span class="hljs-string">&quot;DROP dir&quot;</span><br>rmgr: Standby     len (rec/tot):     50/    50, tx:          0, lsn: 0/25000028, prev 0/24000138, desc: RUNNING_XACTS nextXid 783 latestCompletedXid 782 oldestRunningXid 783<br>rmgr: Heap        len (rec/tot):     54/   150, tx:        783, lsn: 0/25000060, prev 0/25000028, desc: INSERT off 2 flags 0x00, blkref <span class="hljs-comment">#0: rel 1663/13025/24657 blk 0 FPW</span><br>rmgr: Transaction len (rec/tot):     34/    34, tx:        783, lsn: 0/250000F8, prev 0/25000060, desc: COMMIT 2022-10-18 21:31:51.510019 CST<br>rmgr: Standby     len (rec/tot):     50/    50, tx:          0, lsn: 0/25000120, prev 0/250000F8, desc: RUNNING_XACTS nextXid 784 latestCompletedXid 783 oldestRunningXid 784<br>rmgr: Heap        len (rec/tot):     59/  2583, tx:        784, lsn: 0/25000158, prev 0/25000120, desc: DELETE off 11 flags 0x00 KEYS_UPDATED , blkref <span class="hljs-comment">#0: rel 1664/0/1262 blk 0 FPW</span><br>rmgr: Standby     len (rec/tot):     54/    54, tx:          0, lsn: 0/25000B70, prev 0/25000158, desc: RUNNING_XACTS nextXid 785 latestCompletedXid 783 oldestRunningXid 784; 1 xacts: 784<br>rmgr: Standby     len (rec/tot):     54/    54, tx:          0, lsn: 0/25000BA8, prev 0/25000B70, desc: RUNNING_XACTS nextXid 785 latestCompletedXid 783 oldestRunningXid 784; 1 xacts: 784<br>rmgr: XLOG        len (rec/tot):    114/   114, tx:          0, lsn: 0/25000BE0, prev 0/25000BA8, desc: CHECKPOINT_ONLINE redo 0/25000BA8; tli 2; prev tli 2; fpw <span class="hljs-literal">true</span>; xid 0:785; oid 32848; multi 1; offset 0; oldest xid 726 <span class="hljs-keyword">in</span> DB 1; oldest multi 1 <span class="hljs-keyword">in</span> DB 1; oldest/newest commit timestamp xid: 0/0; oldest running xid 784; online<br>rmgr: Database    len (rec/tot):     38/    38, tx:        784, lsn: 0/25000C58, prev 0/25000BE0, desc: DROP <span class="hljs-built_in">dir</span> 1663/24656<br><br><span class="hljs-comment">#最下面一行发现故障点ID为784，则正常数据事件ID为783，而正常事务ID的COMMIT时间为2022-10-18 21:31:51（已用红字标注）</span><br><br><span class="hljs-comment">#修改配置文件</span><br>vi /pgsql/data/postgresql.conf<br>recovery_target_name = <span class="hljs-string">&#x27;restore_point&#x27;</span> <span class="hljs-comment">#指定还原点名称</span><br>recovery_target_time = <span class="hljs-string">&#x27;2022-10-18 21:31:51&#x27;</span> <span class="hljs-comment">#指定还原至时间点</span><br>recovery_target_lsn = <span class="hljs-string">&#x27;0/250000F8&#x27;</span> <span class="hljs-comment">#指定还原到LSN号的位置</span><br><br><span class="hljs-comment">#启动服务</span><br>pg_ctl start -D <span class="hljs-variable">$PGDATA</span><br><br><span class="hljs-comment">#查看数据是否恢复</span><br><br><span class="hljs-comment">###########恢复完成后发现数据库只能读取，无法写入。</span><br>insert into t1 values(4);<br>ERROR: cannot execute INSERT <span class="hljs-keyword">in</span> a read-only transaction<br><br><span class="hljs-comment">#查看数据库状态，发现是归档恢复状态</span><br>pg_controldata<br>Database cluster state: <span class="hljs-keyword">in</span> archive recovery<br><span class="hljs-comment">#</span><br><span class="hljs-comment">#恢复可读可写模式</span><br>select pg_wal_replay_resume();<br><span class="hljs-comment">#数据库状态变为</span><br>Database cluster state: <span class="hljs-keyword">in</span> production<br><br><span class="hljs-comment">#还原完成</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="-3"><a href="#-3" class="headerlink" title=""></a></h2><h1 id="4-wordpress-nfs架构"><a href="#4-wordpress-nfs架构" class="headerlink" title="4.wordpress+nfs架构"></a>4.wordpress+nfs架构</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">环境：<br>10.0.0.128 apache+wordpress服务，数据库主库指向10.0.0.132，基于docker来安装，映射出来，docker安装wordpress<br>10.0.0.132 MySQL(主)，备份服务器<br>10.0.0.129 MySQL(从)，NAS服务器，NAS服务器指向<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-docker搭建wordpress-MySQL"><a href="#1-docker搭建wordpress-MySQL" class="headerlink" title="1.docker搭建wordpress+MySQL"></a>1.docker搭建wordpress+MySQL</h2><p>docker run的时候，需要-v映射到nfs的共享目录，单个docker的映射目录()</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull wordpress<br>docker run --name wordpress -p 8002:80 -v /apps/wordpress:/var/www/html/  -d wordpress<br><br><span class="hljs-comment">#docker run --name wordpress -p 8002:80 -v /apps/uploads:/var/www/html/wp-content/uploads  -d wordpress</span><br><br>docker stop `docker ps  | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br>docker <span class="hljs-built_in">rm</span> -f `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br><br><span class="hljs-comment">##查看工作目录，查看从docker仓库下载下来的docker image镜像</span><br><span class="hljs-comment">##docker inspect imageID/image name，就是查看dockerfile</span><br>[root@master ~]<span class="hljs-comment">#docker inspect wordpress | grep -i working</span><br><span class="hljs-string">&quot;WorkingDir&quot;</span>: <span class="hljs-string">&quot;/var/www/html&quot;</span>,<br><br>[root@master ~]<span class="hljs-comment">#docker ps</span><br>CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                                   NAMES<br>974257bc8c36   wordpress   <span class="hljs-string">&quot;docker-entrypoint.s…&quot;</span>   4 seconds ago   Up 3 seconds   0.0.0.0:8002-&gt;80/tcp, :::8002-&gt;80/tcp   wordpress<br><br>ss -ntl | grep 8002<br>LISTEN     0      128          *:8002                     *:*                  <br>LISTEN     0      128       [::]:8002                  [::]:*      <br><br>10.0.0.128:8002<br><br><span class="hljs-comment">##MySQL操作，需要提前建库和用户</span><br><span class="hljs-comment">##所有的建站信息全部存放在表里</span><br><br>[(none)]&gt;create database wordpress;<br>Query OK, 1 row affected (0.01 sec)<br><br>[(none)]&gt;grant all on wordpress.* to wp@<span class="hljs-string">&#x27;%&#x27;</span>;<br>Query OK, 0 rows affected (0.01 sec)<br><br>[(none)]&gt;flush privileges;<br>Query OK, 0 rows affected (0.00 sec)<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221121202626903-702756861.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>新建一篇文章发布</p>
+<p><img src="2792175-20221121202627648-1559238990.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="2-rsync直接同步uploads目录到备份机-wp"><a href="#2-rsync直接同步uploads目录到备份机-wp" class="headerlink" title="2.rsync直接同步uploads目录到备份机[wp]"></a>2.rsync直接同步uploads目录到备份机[wp]</h2><p>docker搭建映射出来的路径，不能再进行一次挂载，所以说API服务器有两个，IP+相同的端口号，uploads的rsync直接指向到10.0.0.132的复制目录，/data/bak</p>
+<p>[root<a target="_blank" rel="noopener" href="https://www.cnblogs.com/catyer/p/16913112.html">@master </a>uploads]#exportfs -r<br>exportfs: /apps/wordpress/wp-content/uploads does not support NFS export</p>
+<p>如果是多个web前端的话，程序可以控制写到LB的IP，负载均衡两个WEB，两个WEB的图片备份都指向备份机器，且两台WEB之间同步图片</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##安装rsync工具和inotify-tools工具</span><br>rpm -q rsync &amp;&gt; /dev/null  || yum -y install rsync<br>rpm -q inotify-tools &amp;&gt; /dev/null  || yum -y install inotify-tools<br><br><span class="hljs-comment">#1.站点图片目录，有记录日期，直接同步这个文件夹，发布新文章，新图片上面都有</span><br>/apps/wordpress/wp-content/uploads<br><br>[root@master 10]<span class="hljs-comment">#ls</span><br>0923test-01-1024x640.jpg  0923test-01-300x188.jpg  0923test-01.jpg     image-150x150.png   image-1568x842.png  image-768x412.png<br>0923test-01-150x150.jpg   0923test-01-768x480.jpg  image-1024x550.png  image-1536x825.png  image-300x161.png   image.png<br><br><span class="hljs-comment">#2.直接使用sersync或者是脚本同步uploads到备份服务器10.0.0.132</span><br>scp sersync2.5.4_64bit_binary_stable_final.tar.gz 10.0.0.128:/root<br>tar xf sersync2.5.4_64bit_binary_stable_final.tar.gz /apps/sersync<br><br><span class="hljs-comment">#3.编辑xml文件</span><br>vim confxml.xml<br>&lt;sersync&gt;<br>        &lt;localpath watch=<span class="hljs-string">&quot;/apps/wordpress/wp-content/uploads&quot;</span>&gt; &lt;!--/apps/wordpress/wp-content/uploads --&gt;<br>            &lt;remote ip=<span class="hljs-string">&quot;10.0.0.132&quot;</span> name=<span class="hljs-string">&quot;wp&quot;</span>/&gt; &lt;!--修改远端rsync备份服务器和备份目录 --&gt;<br>        &lt;/localpath&gt;<br>        &lt;rsync&gt;<br>            &lt;commonParams params=<span class="hljs-string">&quot;-artuz&quot;</span>/&gt;<br>            &lt;auth start=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-built_in">users</span>=<span class="hljs-string">&quot;rsyncuser&quot;</span> passwordfile=<span class="hljs-string">&quot;/etc/rsync.pas&quot;</span>/&gt; &lt;!--鉴权用户名，调用本地的password文件 --&gt;<br><br><span class="hljs-comment">#4.编辑备份端</span><br>rpm -q rsync &amp;&gt; /dev/null  || yum -y install rsync<br><br>vim /etc/rsyncd.conf<br>[wp]<br>path = /data/wordpress/<br><span class="hljs-comment">##记得要写path/</span><br><span class="hljs-built_in">read</span> only = no<br><span class="hljs-comment">##不只读，可写</span><br>auth <span class="hljs-built_in">users</span> = rsyncuser<br><span class="hljs-comment">##默认用户</span><br>secrets file = /etc/rsync.pas<br><span class="hljs-comment">##默认密码</span><br><br><span class="hljs-comment">##重启服务</span><br>systemctl restart rsyncd<br><br><span class="hljs-comment">#5.运行脚本，监控/data/wordpress/2022/10/的变化</span><br><span class="hljs-comment">#同步前先进行scp同步一遍先</span><br>scp /apps/wordpress/wp-content/uploads/* 10.0.0.132:/data/wordpress/<br><br><span class="hljs-comment">#执行脚本</span><br>master:[root@master GNU-Linux-x86]<span class="hljs-comment">#./sersync2 -dro confxml.xml</span><br><span class="hljs-built_in">nohup</span> ./sersync2 -dro confxml.xml<br><br>ps aux | grep ser<br>root      13227  0.0  0.0 125108   712 ?        Ssl  23:02   0:00 ./sersync2 -dro confxml.xml<br><br><span class="hljs-comment">##监控变化</span><br>backup:watch -n0.5 ll /data/wordpress/2022/10/<br><br>在wordpress站点发布图片，图片名字为10044444test.jpg<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20221121202628098-1731997520.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="3-rsync使用脚本-在没有包的情况下，常用"><a href="#3-rsync使用脚本-在没有包的情况下，常用" class="headerlink" title="3.rsync使用脚本(在没有包的情况下，常用)"></a>3.rsync使用脚本(在没有包的情况下，常用)</h2><p>顺便安装了rsync和inotify，可以作为定时任务，或者nohup也行</p>
+<p>缺点：调用多次rsync，有点小毛病，调用多次create，attribu等指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim inotify_rsync.sh<br><span class="hljs-built_in">nohup</span> ./inotify_rsync.sh<br><br><span class="hljs-comment">##监控NAS目录的变化</span><br>SRC=<span class="hljs-string">&#x27;/apps/wordpress/wp-content/uploads/&#x27;</span><br><span class="hljs-comment">##备份服务器为132的bak，调用rsync的协议</span><br>DEST=<span class="hljs-string">&#x27;rsyncuser@10.0.0.132::wp&#x27;</span><br><br>rpm -q rsync &amp;&gt; /dev/null  || yum -y install rsync<br>rpm -q inotify-tools &amp;&gt; /dev/null  || yum -y install inotify-tools<br><br><span class="hljs-comment">#修改参数，监控文件数量</span><br><span class="hljs-built_in">echo</span> 50000000 &gt; /proc/sys/fs/inotify/max_user_watches<br><span class="hljs-built_in">echo</span> 327679 &gt; /proc/sys/fs/inotify/max_queued_events<br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;starting monitor file change...&quot;</span><br><span class="hljs-built_in">sleep</span> 2<br><span class="hljs-comment">#持续前台监控特定事件,定义时间格式、日期格式、动作(新建、删除、移动---重命名、写入、权限变化) + nas目录，输入到while内</span><br>inotifywait  -mrq  --exclude=<span class="hljs-string">&quot;.*\.swp&quot;</span> --timefmt <span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span> --format <span class="hljs-string">&#x27;%T %w %f&#x27;</span> -e create,delete,moved_to,close_write,attrib <span class="hljs-variable">$&#123;SRC&#125;</span> |<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> DATE TIME DIR FILE;<span class="hljs-keyword">do</span><br>        FILEPATH=<span class="hljs-variable">$&#123;DIR&#125;</span><span class="hljs-variable">$&#123;FILE&#125;</span><br>        <span class="hljs-comment">##表示新建=新建，删除=删除</span><br>        rsync -az --delete  --password-file=/etc/rsync.pas <span class="hljs-variable">$SRC</span> <span class="hljs-variable">$DEST</span> <br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;At <span class="hljs-variable">$&#123;TIME&#125;</span> on <span class="hljs-variable">$&#123;DATE&#125;</span>, file <span class="hljs-variable">$FILEPATH</span> was backuped up via rsync&quot;</span> &gt;&gt; /var/log/changelist.log<br>        <span class="hljs-comment">#日志在129上面，在129上执行的脚本</span><br><span class="hljs-keyword">done</span><br><br>Every 0.5s: tree /data/wordpress/2022/10/  <br>├── test11-1024x640.jpg<br>├── test11-150x150.jpg<br>├── test11-300x188.jpg<br>├── test11-768x480.jpg<br></code></pre></td></tr></table></figure>
+
+<h2 id="nohup-英文全称-no-hang-up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。"><a href="#nohup-英文全称-no-hang-up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。" class="headerlink" title="nohup 英文全称 no hang up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。"></a><strong>nohup</strong> 英文全称 no hang up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。</h2><p>如果不执行nohup则是前台执行</p>
+<h2 id="4-负载均衡架构"><a href="#4-负载均衡架构" class="headerlink" title="4.负载均衡架构"></a>4.负载均衡架构</h2><p>nginx：前端负载均衡</p>
+<p>web01，web02：docker部署</p>
+<p>备份服务器：web01和web02互相使用rsync脚本同步，同步前先完成一遍复制确保一致</p>
+<p>web01和web02再备份一次到备份服务器</p>
+<p>3方—4方—多方同步解决</p>
+<p>目前只能实现docker单节点部署wordpress，通过脚本自动备份到远端132的机器</p>
+<p>1.环境：可以在slave1上面搭建web02站点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs bash">搭建docker环境，搭建私有仓库<br>1.关闭防火墙，SELINUX<br>sed <span class="hljs-string">&#x27;s/enable/disabled/g&#x27;</span> /etc/config/selinux<br><br>2.卸载旧版本的docker包<br>rpm -qa | grep docker<br>yum -y remove docker*，删除掉所有的依赖<br><br>3.docker安装存储库<br>yum install -y yum-utils device-mapper-persistent-data lvm2<br><br>4.添加阿里云的yum源<br>    yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo<br>修改内部的gpgcheck<br>:%s/gpgcheck=1/gpgcheck=0/g<br>sed -i <span class="hljs-string">&#x27;s/gpgcheck=1/gpgcheck=0/g&#x27;</span> /etc/yum.repos.d/docker-ce.repo<br><br>5.安装docker-ce<br>yum install docker-ce docker-ce-cli containerd.io -y<br><br>scp -r /etc/docker/* 10.0.0.129:/etc/docker/<br><br>6.修改docker的源daemon.json<br><br>systemctl daemon-reload;systemctl restart docker<br><br>7.测试安装服务<br>docker images<br>docker ps -a<br><br><br>yum -y install httpd php php-mysqlnd php-json<br><span class="hljs-built_in">chown</span> apache.apache /var/www/html/*<br>ll /var/www/html/*<br></code></pre></td></tr></table></figure>
+
+<p>2.拷贝所有web01站点的信息过去，docker需要映射出来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs bash">1.配置docker基础环境<br><br>--拉取最新镜像<br>docker pull wordpress<br><br>--拉取仓库镜像，运行<br>docker pull registry<br>docker run -d -p 5000:5000 --restart=always --name registry -v /apps/myregistry:/var/lib/registry registry<br><br>--打标签<br>docker image tag wordpress 10.0.0.128:5000/wordpress:v1.0<br>[root@master registry]<span class="hljs-comment">#docker images</span><br>REPOSITORY                  TAG       IMAGE ID       CREATED         SIZE<br>10.0.0.128:5000/wordpress   v1.0      c3c92cc3dcb1   9 months ago    616MB<br><br>--配置insucure的镜像仓库地址<br>vim /etc/docker/daemon.json<br>&#123;<br>    <span class="hljs-string">&quot;registry-mirrors&quot;</span>: [<br>        <span class="hljs-string">&quot;https://plqjafsr.mirror.aliyuncs.com&quot;</span><br>    ],<br>    <span class="hljs-string">&quot;exec-opts&quot;</span>: [<br>        <span class="hljs-string">&quot;native.cgroupdriver=systemd&quot;</span><br>    ],<br>    <span class="hljs-string">&quot;log-driver&quot;</span>: <span class="hljs-string">&quot;json-file&quot;</span>,<br>    <span class="hljs-string">&quot;log-opts&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;max-size&quot;</span>: <span class="hljs-string">&quot;100m&quot;</span><br>    &#125;,<br>    <span class="hljs-string">&quot;storage-driver&quot;</span>: <span class="hljs-string">&quot;overlay2&quot;</span>,<br>    <span class="hljs-string">&quot;insecure-registries&quot;</span>: [<span class="hljs-string">&quot;10.0.0.128:5000&quot;</span>] ---配置本地仓库<br>&#125;<br><br>--重新加载<br>systemctl daemon-reload<br>systemctl restart docker<br><br>--推送，查看<br>docker push 10.0.0.128:5000/wordpress:v1.0<br>curl http://10.0.0.128:5000/v2/_catalog<br>&#123;<span class="hljs-string">&quot;repositories&quot;</span>:[<span class="hljs-string">&quot;wordpress&quot;</span>]&#125;<br><br>--slave1尝试<br>[root@slave1 ~]<span class="hljs-comment">#curl http://10.0.0.128:5000/v2/_catalog</span><br>&#123;<span class="hljs-string">&quot;repositories&quot;</span>:[<span class="hljs-string">&quot;wordpress&quot;</span>]&#125;<br><br><br>2.slave1拉取镜像，运行<br><br>--slave1<br>docker pull 10.0.0.128:5000/wordpress:v1.0<br><br>docker run --name wordpress -p 8002:80 --restart=always -v /apps/wordpress:/var/www/html/  -d 10.0.0.128:5000/wordpress:v1.0<br>docker run --name wordpress -p 8002:80 --restart=always -v /apps/wordpress:/var/www/html/  -d wordpress<br>docker start `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br><br>--拷贝web01的文件到/apps/wordpress<br>scp -r -p /apps/wordpress/* 10.0.0.129:/apps/wordpress/<br><br>rsync -a /apps/wordpress/* 10.0.0.129:/apps/wordpress/<br><br>3.试运行<br>docker stop `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br>docker start `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br>docker <span class="hljs-built_in">rm</span> -f `docker ps -a | grep wordpress | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`<br></code></pre></td></tr></table></figure>
+
+<p>3.配置WEB01的DNS解析，添加A记录</p>
+<p>4.前端添加一个nginx，实现前端负载均衡</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##mysql创建库和用户</span><br>1.部署数据库<br>create database wordpress;<br><br>[(none)]&gt;drop user wordpress@<span class="hljs-string">&#x27;%&#x27;</span>;<br>Query OK, 0 rows affected (0.00 sec)<br><br>[(none)]&gt;flush privileges;<br>Query OK, 0 rows affected (0.00 sec)<br><br><span class="hljs-comment">##删除用户后需要刷新权限</span><br><br>[(none)]&gt;create user wordpress@<span class="hljs-string">&#x27;%&#x27;</span> identified by <span class="hljs-string">&#x27;wordpress&#x27;</span>;<br>Query OK, 0 rows affected (0.02 sec)<br><br>[(none)]&gt;grant all on wordpress.* to wordpress@<span class="hljs-string">&#x27;%&#x27;</span>;<br>Query OK, 0 rows affected (0.01 sec)<br><br>[(none)]&gt;flush privileges;<br>Query OK, 0 rows affected (0.00 sec)<br><br>2.获取wordpress包，修改wordpress的权限<br>wget https://cn.wordpress.org/latest-zh_CN.tar.gz<br><br>[root@master wordpress]<span class="hljs-comment">#cp -p -r wordpress/* /apps/nginx/html/php/</span><br><span class="hljs-built_in">cp</span>: overwrite ‘/apps/nginx/html/php/index.php’? y<br><br><span class="hljs-built_in">chown</span> -R nginx.nginx php/<br><br>3.修改nginx代理支持php，安装mysql支持包，json包，因为里面有json格式的文件<br>yum -y install php-fpm php-mysqlnd php-json<br><br><span class="hljs-comment">##非.php的文件，会在本机找，所以本机需要有这些文件，最好是PHP程序和nginx在一台机器上，不用分开找这些文件</span><br>root /apps/nginx/html/mobile/php;<br><br>[root@slave1 mobile]<span class="hljs-comment">#ls php/</span><br>index.php    readme.html  wp-activate.php  wp-blog-header.php    wp-config-sample.php  wp-cron.php  wp-links-opml.php  wp-login.php  wp-settings.php  wp-trackback.php<br>license.txt  test.php     wp-admin         wp-comments-post.php  wp-content            wp-includes  wp-load.php        wp-mail.php   wp-signup.php    xmlrpc.php<br><br><br>location ~ \.php$ &#123;<br>                root /apps/nginx/html/php; <span class="hljs-comment">##默认是html/php</span><br>                fastcgi_pass 10.0.0.128:9000; <span class="hljs-comment">##PHP服务器地址，默认本机</span><br>                fastcgi_index index.php; <span class="hljs-comment">##默认php页面          </span><br>                fastcgi_param SCRIPT_FILENAME $document_root<span class="hljs-variable">$fastcgi_script_name</span>;<br>                include fastcgi_params; <span class="hljs-comment">#此文件默认系统已提供,存放的相对路径为/conf下，是一个固定的参数，用于nginx转换到fastcgi</span><br>        &#125;<br><br>        location ~ ^/(ping|php_status)$ &#123;<br>        fastcgi_pass 10.0.0.128:9000;<br>        <span class="hljs-comment">#fastcgi_pass 127.0.0.1:9000;</span><br>        fastcgi_param PATH_TRANSLATED $document_root<span class="hljs-variable">$fastcgi_script_name</span>;<br>        include fastcgi_params;<br>        &#125;<br><br>4.访问http://mobile.catyer.cn/wp-admin/<br>5.部署<br>6.修改上传最大size<br>				access_log  /apps/nginx/logs/mobile_access.log main;<br>        root /apps/nginx/html/mobile/php;<br>        index index.php;<br>        client_max_body_size 20m; <span class="hljs-comment">##nginx参数</span><br><br><span class="hljs-comment">##仅存在于代理服务器+php服务器的情况</span><br>7.使用nfs共享PHP服务器的路径<br>vim /etc/exports<br>/apps/nginx/html/php *(rw,no_root_squash)<br><br><span class="hljs-comment">##生效，show一下路径</span><br>[root@master html]<span class="hljs-comment">#exportfs -r</span><br>[root@master html]<span class="hljs-comment">#exportfs -v</span><br>/apps/nginx/html/php<br>		&lt;world&gt;(<span class="hljs-built_in">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,no_root_squash,no_all_squash)<br><br><span class="hljs-comment">##129挂载</span><br>[root@slave1 conf.d]<span class="hljs-comment">#mount 10.0.0.128:/apps/nginx/html/php /apps/nginx/html/mobile/php</span><br>10.0.0.128:/apps/nginx/html/php nfs4       38G   22G   17G  57% /apps/nginx/html/mobile/php<br><br>8.写入到永久挂载<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;10.0.0.128:/apps/nginx/html/php /apps/nginx/html/mobile/php nfs defaults,_netdev 0 0&quot;</span> &gt;&gt; /etc/fstab<br><br>9.如果是多个wordpress机器，则使用nfs共享目录即可，nginx服务可以是两个机器，目录一个即可，rsync来备份upload下面的信息即可<br>[root@slave1 uploads]<span class="hljs-comment">#pwd</span><br>/apps/nginx/html/mobile/php/wp-content/uploads<br><br>sersync同步过去即可，带权限同步到备份机器<br>rsync -a /apps/nginx/html/mobile/php/wp-content/uploads<br><br>10.代理可以转发到后端的两台php机器，php机器只要保证目录数据一致即可，PHP支持程序代码<br><br>upstream wordpress&#123;<br>	ip_hash;<br>	server 10.0.0.128 weight=1;<br>	server 10.0.0.129 weight=1;<br>&#125;<br><br>location /php &#123;<br>	proxy_pass https://wordpress/;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="5-redis数据类型有哪些？"><a href="#5-redis数据类型有哪些？" class="headerlink" title="5. redis数据类型有哪些？"></a>5. redis数据类型有哪些？</h1><h2 id="key：string类型，指定键值对"><a href="#key：string类型，指定键值对" class="headerlink" title="key：string类型，指定键值对"></a>key：string类型，指定键值对</h2><p>字符串类型</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##key的</span><br><span class="hljs-built_in">set</span> key value<br>get key<br><br>mset key1 value1 key2 value2...<br>mget key1 key2...<br><br><span class="hljs-comment">##key大小写敏感，不一样的大小写的key不一样</span><br><span class="hljs-comment">##可选选项</span><br>127.0.0.1:6379&gt; <span class="hljs-built_in">set</span> key value [EX seconds|PX milliseconds|EXAT timestamp|PXAT milliseconds-timestamp|KEEPTTL] [NX|XX] [GET]<br><br><span class="hljs-comment">##设置这个变量10s后过期，比如红包100块，10s后过期</span><br><span class="hljs-built_in">set</span> hongbao 100 EX 10<br>127.0.0.1:6379&gt; get hongbao<br>(nil)<br><br><span class="hljs-comment">##type：查看key类型</span><br>127.0.0.1:6379&gt; <span class="hljs-built_in">set</span> c1 1<br>OK<br>127.0.0.1:6379&gt; <span class="hljs-built_in">set</span> c2 2<br>OK<br>127.0.0.1:6379&gt; <span class="hljs-built_in">type</span> c1<br>string<br><br><span class="hljs-comment">##ttl：查看key的有效期</span><br>127.0.0.1:6379&gt; <span class="hljs-built_in">set</span> hongbao 100 ex 100<br>OK<br>127.0.0.1:6379&gt; ttl hongbao<br>(<span class="hljs-built_in">integer</span>) 97<br><br><span class="hljs-comment">##递增INCR=INCREMENT，类似MySQL的主键递增，id auto_increment</span><br>127.0.0.1:6379&gt; <span class="hljs-built_in">set</span> num 10<br>OK<br>127.0.0.1:6379&gt; INCR num<br>(<span class="hljs-built_in">integer</span>) 11<br>127.0.0.1:6379&gt; INCR num<br>(<span class="hljs-built_in">integer</span>) 12<br></code></pre></td></tr></table></figure>
+
+<h2 id="list：类似数组，称为列表"><a href="#list：类似数组，称为列表" class="headerlink" title="list：类似数组，称为列表"></a>list：类似数组，称为列表</h2><p>类似数组</p>
+<p><img src="2792175-20221121202629096-789509727.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>定义一个数组</p>
+<p>array=(0,1,2,3)</p>
+<p>下标：array[0]，[1]以此类推</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">LPUSH：从左边开始编号，索引为0,1,2,3...<br>RPUSH：从右边开始编号，索引为-1.-2,-3...<br><br>lindex：从左边开始查看<br>rindex：从右边<br><br><span class="hljs-comment">##顺序：a b c，先推c，再ba</span><br>127.0.0.1:6379&gt; lpush list1 c b a<br>(<span class="hljs-built_in">integer</span>) 3<br>127.0.0.1:6379&gt; lindex list1 0 ---&gt;最左边为a<br><span class="hljs-string">&quot;a&quot;</span><br>127.0.0.1:6379&gt; lindex list1 -1 ---&gt;最右边为c<br><span class="hljs-string">&quot;c&quot;</span><br><br><span class="hljs-built_in">type</span> list1<br>127.0.0.1:6379&gt; <span class="hljs-built_in">type</span> list1<br>list<br></code></pre></td></tr></table></figure>
+
+<h2 id="sets：集合，取交集-并集-差集，共同认识的好友"><a href="#sets：集合，取交集-并集-差集，共同认识的好友" class="headerlink" title="sets：集合，取交集/并集/差集，共同认识的好友"></a>sets：集合，取交集/并集/差集，共同认识的好友</h2><p>集合：无序的字符串放在里面，同一个集合内的元素不能重复，唯一的；不同的集合之间可以取并集，实现统计，例如共同好友等</p>
+<p>里面可以是各种字符串</p>
+<p>集合之间的操作</p>
+<p><img src="2792175-20221121202629599-582889119.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##定义两个无序集合</span><br>sadd my mary tom bob<br>sadd your mary tony jerry<br><br><br><span class="hljs-comment">##里面有3个元素</span><br>127.0.0.1:6379&gt; sadd my mary tom bob<br>(<span class="hljs-built_in">integer</span>) 3<br>127.0.0.1:6379&gt; sadd your mary tony jerry<br>(<span class="hljs-built_in">integer</span>) 3<br><br><span class="hljs-comment">##集合之间的操作，sinter：共同的元素，交集</span><br><span class="hljs-comment">##smembers：查看集合的元素</span><br>127.0.0.1:6379&gt; smembers my<br>1) <span class="hljs-string">&quot;tom&quot;</span><br>2) <span class="hljs-string">&quot;bob&quot;</span><br>3) <span class="hljs-string">&quot;mary&quot;</span><br>127.0.0.1:6379&gt; smembers your<br>1) <span class="hljs-string">&quot;tony&quot;</span><br>2) <span class="hljs-string">&quot;jerry&quot;</span><br>3) <span class="hljs-string">&quot;mary&quot;</span><br>127.0.0.1:6379&gt; sinter my your<br>1) <span class="hljs-string">&quot;mary&quot;</span><br><br><span class="hljs-comment">##sunion：并集，所有合起来，不包括重复的，因为集合内的元素都是唯一的</span><br>127.0.0.1:6379&gt; sunion my your<br>1) <span class="hljs-string">&quot;mary&quot;</span><br>2) <span class="hljs-string">&quot;bob&quot;</span><br>3) <span class="hljs-string">&quot;tom&quot;</span><br>4) <span class="hljs-string">&quot;tony&quot;</span><br>5) <span class="hljs-string">&quot;jerry&quot;</span><br><br><span class="hljs-comment">##sdiff：差集，set1有set2没有，或者是set2有set1没有，比如一群朋友就是一个集合等；社交场景可能认识的人</span><br>127.0.0.1:6379&gt; sdiff my your<br>1) <span class="hljs-string">&quot;tom&quot;</span><br>2) <span class="hljs-string">&quot;bob&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="sorted-sets：有序集合，常用于排行榜-名字-分数对"><a href="#sorted-sets：有序集合，常用于排行榜-名字-分数对" class="headerlink" title="sorted sets：有序集合，常用于排行榜(名字-分数对)"></a>sorted sets：有序集合，常用于排行榜(名字-分数对)</h2><p>按照一定的次序进行集合内的排序，比如排行榜，百度搜索的集合；或者是基于ES推荐的</p>
+<p>ES内存储的就是无序集合</p>
+<p><img src="2792175-20221121202630071-1565291608.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>每个元素都是由score和value组成的，可以根据分数来对人(value)进行排名，或者是别的值，比如说商品根据购买量、好评数等参数来进行排序，就可以使用有序集合sorted</p>
+<p><img src="2792175-20221121202630660-1637903724.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##添加一个集合，music歌手的排行榜</span><br><span class="hljs-comment">##有序集合内有多个键值对</span><br>127.0.0.1:6379&gt; ZADD music 99 jay 90 eason 85 feiniao 70 joey<br>(<span class="hljs-built_in">integer</span>) 4<br><br><span class="hljs-comment">##正序排序，由小到大，=order by ，最左边是最后插入的，索引为0；最右边为最先插入的，索引为1，这条是遍历所有的值</span><br>127.0.0.1:6379&gt; ZREVRANGE music 0 -1<br>1) <span class="hljs-string">&quot;jay&quot;</span><br>2) <span class="hljs-string">&quot;eason&quot;</span><br>3) <span class="hljs-string">&quot;feiniao&quot;</span><br>4) <span class="hljs-string">&quot;joey&quot;</span><br><br><span class="hljs-comment">##倒序排序</span><br>127.0.0.1:6379&gt; ZRANGE music 0 -1<br>1) <span class="hljs-string">&quot;joey&quot;</span><br>2) <span class="hljs-string">&quot;feiniao&quot;</span><br>3) <span class="hljs-string">&quot;eason&quot;</span><br>4) <span class="hljs-string">&quot;jay&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="hash：哈希值"><a href="#hash：哈希值" class="headerlink" title="hash：哈希值"></a>hash：哈希值</h2><p>hash map操作</p>
+<h1 id="6-redis-RDB和AOF比较？"><a href="#6-redis-RDB和AOF比较？" class="headerlink" title="6. redis RDB和AOF比较？"></a>6. redis RDB和AOF比较？</h1><p>redis RDB：实现redis的持久化存储，重启redis服务会重新加载rdb存储，存储路径可以在redis内自定义，RDB类似MySQL的mysqldump，全量复制</p>
+<p>可以基于.RDB文件进行定时的备份，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">data rdb save <span class="hljs-built_in">dir</span><br></code></pre></td></tr></table></figure>
+
+<p>AOF：实时的数据更新，只要有redis库的数据更新，则更新一份.aof文件，包括增删改等操作；</p>
+<p>采用COW机制：copy on write，只要有数据更新，就会实时写入到.aof文件，无论是增加（set value）、删除（del value）、修改（set value）都一样</p>
+<p>AOF的优先级高于RDB，如果两项都开启的话，默认redis读.aof</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">.aof的数据写入磁盘规则，每秒钟写一次磁盘，无论在1s(everysec)内有多少数据更新都是整合成一次IO进行写入<br>always规则：已有更新就写入，适用于金融型的场景的交易数据，需要写成always<br><br>--appendfsync always<br>--appendfsync everysec<br><span class="hljs-comment"># appendfsync no</span><br><span class="hljs-comment">##共同点</span><br>都可以实现redis保存数据的持久化，不必说redis重启或者其他操作导致数据丢失<br><br><span class="hljs-comment">##执行方式</span><br>1.RDB：通过save/bgsave来保存当前状态下的快照，不会实时记录数据变化<br>2.AOF：实时记录数据变化，实时写入AOF文件<br><br><span class="hljs-comment">##缺点</span><br>1.RDB：不会实时记录数据变化，安全性较低<br>2.AOF：造成大量数据的写入，占用磁盘空间<br><br><span class="hljs-comment">##应用场景</span><br>1.如果redis只是缓存，则只启动RDB就行，主要的备份还是MySQL那些，因为主要的数据加速读写还是MySQL、sql server作为主库<br>2.如果数据安全性要求高，建议RDB和AOF同时开启<br></code></pre></td></tr></table></figure>
+
+<h1 id="7-redis配置文件详解。"><a href="#7-redis配置文件详解。" class="headerlink" title="7. redis配置文件详解。"></a>7. redis配置文件详解。</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs bash">        sed -i -e <span class="hljs-string">&#x27;s/bind 127.0.0.1/bind 0.0.0.0/&#x27;</span>  -e <span class="hljs-string">&quot;/# requirepass/a requirepass <span class="hljs-variable">$PASSWORD</span>&quot;</span>  -e <span class="hljs-string">&quot;/^dir .*/c dir <span class="hljs-variable">$&#123;INSTALL_DIR&#125;</span>/data/&quot;</span>  -e <span class="hljs-string">&quot;/logfile .*/c logfile <span class="hljs-variable">$&#123;INSTALL_DIR&#125;</span>/log/redis-6379.log&quot;</span>  -e  <span class="hljs-string">&quot;/^pidfile .*/c  pidfile <span class="hljs-variable">$&#123;INSTALL_DIR&#125;</span>/run/redis_6379.pid&quot;</span> <span class="hljs-variable">$&#123;INSTALL_DIR&#125;</span>/etc/redis.conf<br><br>sed -e表示修改多个地方<br><br><span class="hljs-built_in">bind</span> 0.0.0.0 <span class="hljs-comment">##修改监听，远程连接，/^bind</span><br>requirepass 123456 <span class="hljs-comment">##启用密码,/^require</span><br><span class="hljs-built_in">dir</span> /apps/redis/data/ <span class="hljs-comment">##数据目录</span><br>logfile /apps/redis/log/redis-6379.<span class="hljs-built_in">log</span> <span class="hljs-comment">##日志目录，记录redis的日志</span><br>=pidfile /apps/redis/run/redis_6379.pid <span class="hljs-comment">##进程ID号文件</span><br><br>slowlog-log-slower-than 1000 <span class="hljs-comment">##默认10ms，还是太长了</span><br>slowlog-max-len 128 <span class="hljs-comment">#记录最近的128条慢日志</span><br><br><span class="hljs-comment"># will silently truncate it to the value of /proc/sys/net/core/somaxconn so</span><br>tcp-backlog 511：全连接队列，这里必须是写的511，所以之前的net.core.somaxconn = 1024，需要根据程序调大一点<br><br>dbfilename dump.rdb <span class="hljs-comment">##持久化数据文件，默认开启RDB功能</span><br><br><span class="hljs-comment">##查看配置文件，默认值，自动触发bgsave的默认配置规则</span><br>/^<span class="hljs-comment"># save</span><br>save 3600 1<br>save 300 100<br>save 60 10000<br><br><span class="hljs-comment">##aof配置</span><br>appendonly <span class="hljs-built_in">yes</span><br><span class="hljs-comment"># The name of the append only file (default: &quot;appendonly.aof&quot;)</span><br>appendfilename <span class="hljs-string">&quot;appendonly.aof&quot;</span><br><br><span class="hljs-comment">#单节点客户端最高是10000并发</span><br>maxclients 10000<br><span class="hljs-comment"># maxclients 10000</span><br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%AC%AC%E5%85%AB%E5%91%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第八周</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%AC%AC%E5%85%AD%E5%91%A8/">
+                        <span class="hidden-mobile">第六周</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

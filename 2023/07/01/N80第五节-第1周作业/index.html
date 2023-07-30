@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="#N80054-完成作业  图文并茂解释开源许可证 GPL、BSD、MIT、Mozilla、Apache和LGPL的区别？   GPL：来源自由软件联盟GNU，GPL&#x2F;LGPL侧重于代码及衍生代码的开源与免费使用。GPL协议的主要内容是只要在一个软件中使用GPL协议的产品，则该软件产品必须也采用GPL协议，既必须也是开源和免费。GPL协议的产品作为一个单独的产品使用没有任何问题，还可以享受免费的优">
+<meta property="og:type" content="article">
+<meta property="og:title" content="N80第五节 第1周作业">
+<meta property="og:url" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="#N80054-完成作业  图文并茂解释开源许可证 GPL、BSD、MIT、Mozilla、Apache和LGPL的区别？   GPL：来源自由软件联盟GNU，GPL&#x2F;LGPL侧重于代码及衍生代码的开源与免费使用。GPL协议的主要内容是只要在一个软件中使用GPL协议的产品，则该软件产品必须也采用GPL协议，既必须也是开源和免费。GPL协议的产品作为一个单独的产品使用没有任何问题，还可以享受免费的优">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1614236867231-1688223725835-38-1688223726975-40.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741127-6742-6852280-6016d328a294afaa.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741127-8621-6852280-65cf11e662ddb6fa.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741127-8160-6852280-f77b143952798416.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741127-7673-6852280-15cf157374d2efa3.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741127-8184-6852280-a3a071809202f96c.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741128-9117-6852280-dedd2c755b23a861.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741128-7947-6852280-737966b7f1b4d699.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741128-6505-6852280-e8218062ff2ad62c.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741128-4035-6852280-3fbd3ba6ef3db5c3.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741129-7800-6852280-ee1ff4143a1f2904.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741129-9031-6852280-d07dc33a8be765c2.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741129-1671-6852280-763c60ffdfbbe98f.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741129-1215-6852280-b7ffd2ce4e5dda00.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741129-8362-6852280-b482f1c7221e96e8.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741130-7604-6852280-954605e222159a8c.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741131-7575-6852280-748f2d5827858c46.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741130-7755-6852280-0396726c05e65267.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741131-7639-6852280-8f44bd8c808496a6.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741130-4879-6852280-60a45c6a565cac0a.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741131-4241-6852280-954e6acf6d2fbcca.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741132-6485-6852280-6d6d494624515221.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741132-3806-6852280-989a4d1bc37e8653.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741132-5326-6852280-d050f186e0bfe8f9.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741133-3994-6852280-f9a4c0d843e33e67.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741132-4825-6852280-2de5dc94e57889cf.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741133-5208-6852280-8c610fe61d6453e2.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741133-6207-6852280-9cf6c1bfc94af8aa.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741134-1468-6852280-e191eb949c3ade15.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741134-6460-6852280-ba3981d9d0abc6b2.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741135-8053-6852280-5ccb5f9263bdea37.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741136-6945-6852280-7499015d9886f456.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741136-3293-6852280-15c1ad128b939d3a.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741137-2746-6852280-1c3bc52d69c87514.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741137-7559-6852280-8e8a950ea172b810.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741137-4187-6852280-4fcc12834c856eaa.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741138-1859-6852280-b040822db036b2e3.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741138-5137-6852280-f69ac0f0bc2f4ec6.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741139-1805-6852280-6772bfbb7b3f094a.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741139-9489-6852280-062dd21af5e9d11e.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1564741140-4954-6852280-f9ad65ac39453b74.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/image-20230701203147658-1688223122376-31.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/image-20230701203233377-1688223156411-33.png">
+<meta property="og:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/image-20230701203309473-1688223170911-35.png">
+<meta property="article:published_time" content="2023-07-01T18:55:36.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.039Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="第一周">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/01/N80%E7%AC%AC%E4%BA%94%E8%8A%82-%E7%AC%AC1%E5%91%A8%E4%BD%9C%E4%B8%9A/1614236867231-1688223725835-38-1688223726975-40.png">
+  
+  
+  <title>N80第五节 第1周作业 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="N80第五节 第1周作业">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-01 18:55" pubdate>
+        July 1, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      52 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">N80第五节 第1周作业</h1>
+            
+            <div class="markdown-body">
+              <p>#N80054-完成作业</p>
+<ol>
+<li>图文并茂解释开源许可证 GPL、BSD、MIT、Mozilla、Apache和LGPL的区别？</li>
+</ol>
+<p><img src="1614236867231-1688223725835-38-1688223726975-40.png" srcset="/img/loading.gif" lazyload alt="1614236867231"></p>
+<p>GPL：来源自由软件联盟GNU，GPL/LGPL侧重于代码及衍生代码的开源与免费使用。GPL协议的主要内容是只要在一个软件中使用GPL协议的产品，则该软件产品必须也采用GPL协议，既必须也是开源和免费。GPL协议的产品作为一个单独的产品使用没有任何问题，还可以享受免费的优势。GPL的出发点是代码的开源/免费使用和引用/修改/衍生代码的开源/免费使用，但不允许修改后和衍生的代码做为闭源的商业软件发布和销售。</p>
+<p>BSD：BSD是”Berkeley Software Distribution”的缩写，意思是”伯克利软件发行版”。BSD开源协议是一个给于使用者很大自由的协议。可以自由的使用，修改源代码，也可以将修改后的代码作为开源或者专有软件再发布。 当你发布使用了BSD协议的代码，或则以BSD协议代码为基础做二次开发自己的产品时，需要满足三个条件：<br>1．如果再发布的产品中包含源代码，则在源代码中必须带有原来代码中的BSD协议。<br>2．如果再发布的只是二进制类库/软件，则需要在类库/软件的文档和版权声明中包含原来代码中的BSD协议。<br>3．不可以用开源代码的作者/机构名字和原来产品的名字做市场推广。<br>BSD代码鼓励代码共享，但需要尊重代码作者的著作权。BSD由于允许使用者修改和重新发布代码，也允许使用或在BSD代码上开发商业软件发布和销售，因此是对商业集成很友好的协议。</p>
+<p>MIT：MIT是和BSD一样宽范的许可协议,源自麻省理工学院（Massachusetts Institute of Technology, MIT）。作者只想保留版权,而无任何其他了限制。MIT与BSD类似，但是比BSD协议更加宽松，是目前最少限制的协议。这个协议唯一的条件就是在修改后的代码或者发行包包含原作者的许可信息。适用商业软件。使用MIT的软件项目有：jquery、Node.js。</p>
+<p>Mozilla：Mozilla公共许可证（英语：Mozilla Public License，简称MPL）是个自由、开源、详细的软件许可证，由Mozilla基金会开发并维护。该协议融合了BSD许可证和GNU通用公共许可协议的特性，追求平衡专有软件和开源软件开发者之间的顾虑。MPL允许在其授权下的源代码与其他授权的文件进行混合，包括私有许可证。但在MPL授权下的代码文件必须保持MPL授权，并且保持开源。</p>
+<p>Apache：Apache License（Apache许可证），是Apache软件基金会发布的一个自由软件许可证。该协议和BSD类似，同样鼓励代码共享和最终原作者的著作权，同样允许源代码修改和再发布。但是也需要遵循以下条件：<br>1.需要给代码的用户一份Apache Licence。<br>2.如果修改了代码，需要再被修改的文件中说明。<br>3.在衍生的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明。<br>使用这个协议的好处是:永久权利 一旦被授权，永久拥有。全球范围的权利 在一个国家获得授权，适用于所有国家。假如你在美国，许可是从印度授权的，也没有问题。授权免费 无版税， 前期、后期均无任何费用。授权无排他性 任何人都可以获得授权授权不可撤消 一旦获得授权，没有任何人可以取消。比如，你基于该产品代码开发了衍生产品，你不用担心会在某一天被禁止使用该代码</p>
+<p>LGPL：GNU宽通用公共许可证，简称LGPL(GNU Lesser General Public License)，被用于一些GNU程序库。这个许可证以前被称为GNU库(Library)通用公共许可证。LGPL是GPL的一个为主要为类库使用设计的开源协议。LGPL是GPL的变种，也是GNU为了得到更多的甚至是商用软件开发商的支持而提出的。与GPL的最大不同是，可以私有使用LGPL授权的自由软件，开发出来的新软件可以是私有的而不需要是自由软件。所以任何公司在使用自由软件之前应该保证在LGPL或其它GPL变种的授权下。但是如果修改LGPL协议的代码或者衍生，则所有修改的代码，涉及修改部分的额外代码和衍生的代码都必须采用LGPL协议。因此LGPL协议的开源代码很适合作为第三方类库被商业软件引用。GPL/LGPL都保障原作者的知识产权，避免有人利用开源代码复制并开发类似的产品。</p>
+<ol>
+<li><p>安装各发行版系统的安装(centos, rockylinux, ubuntu, 等) 【任选1个】 1.软硬件准备</p>
+<p>软件：推荐使用 VMware，我用的是 VMware 12</p>
+<p>镜像：CentOS6 ,如果没有镜像可以在阿里云下载 <a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/centos/">centos安装包下载_开源镜像站-阿里云</a></p>
+<p><img src="1564741127-6742-6852280-6016d328a294afaa.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>硬件：因为是在宿主机上运行虚拟化软件安装centos，所以对宿主机的配置有一定的要求。最起码I5CPU双核、硬盘500G、内存4G以上。</p>
+<p><img src="1564741127-8621-6852280-65cf11e662ddb6fa.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="2-虚拟机准备"><a href="#2-虚拟机准备" class="headerlink" title="2.虚拟机准备"></a>2.虚拟机准备</h3><p>1.打开VMware选择新建虚拟机</p>
+<p><img src="1564741127-8160-6852280-f77b143952798416.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>2.典型安装与自定义安装</p>
+<p>典型安装：VMware会将主流的配置应用在虚拟机的操作系统上，对于新手来很友好。</p>
+<p>自定义安装：自定义安装可以针对性的把一些资源加强，把不需要的资源移除。避免资源的浪费。</p>
+<p>这里我选择自定义安装。</p>
+<p><img src="1564741127-7673-6852280-15cf157374d2efa3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>3.虚拟机兼容性选择</p>
+<p>这里要注意兼容性，如果是VMware12创建的虚拟机复制到VM11、10或者更低的版本会出现一不兼容的现象。如果是用VMware10创建的虚拟机在VMware12中打开则不会出现兼容性问题。</p>
+<p><img src="1564741127-8184-6852280-a3a071809202f96c.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>4.选择稍后安装操作系统</p>
+<p><img src="1564741128-9117-6852280-dedd2c755b23a861.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>5.操作系统的选择</p>
+<p>这里选择之后安装的操作系统，正确的选择会让vm tools更好的兼容。这里选择linux下的CentOS</p>
+<p><img src="1564741128-7947-6852280-737966b7f1b4d699.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>6.虚拟机位置与命名</p>
+<p>虚拟机名称就是一个名字，在虚拟机多的时候方便自己找到。</p>
+<p>VMware的默认位置是在C盘下，我这里改成F盘。</p>
+<p><img src="1564741128-6505-6852280-e8218062ff2ad62c.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>7.处理器与内存的分配</p>
+<p>处理器分配要根据自己的实际需求来分配。在使用过程中CPU不够的话是可以再增加的。这次只做安装CentOS演示，所以处理器与核心都选1.</p>
+<p><img src="1564741128-4035-6852280-3fbd3ba6ef3db5c3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>内存也是要根据实际的需求分配。我的宿主机内存是8G所以我给虚拟机分配2G内存。</p>
+<p><img src="1564741129-7800-6852280-ee1ff4143a1f2904.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>8.网络连接类型的选择，网络连接类型一共有桥接、NAT、仅主机和不联网四种。</p>
+<p>桥接：选择桥接模式的话虚拟机和宿主机在网络上就是平级的关系，相当于连接在同一交换机上。</p>
+<p>NAT：NAT模式就是虚拟机要联网得先通过宿主机才能和外面进行通信。</p>
+<p>仅主机：虚拟机与宿主机直接连起来</p>
+<p>桥接与NAT模式访问互联网过程，如下图所示</p>
+<p><img src="1564741129-9031-6852280-d07dc33a8be765c2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>桥接与NAT区别</strong></p>
+<p>这里选择桥接模式</p>
+<p><img src="1564741129-1671-6852280-763c60ffdfbbe98f.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>9.其余两项按虚拟机默认选项即可</p>
+<p><img src="1564741129-1215-6852280-b7ffd2ce4e5dda00.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>10.磁盘容量</p>
+<p>磁盘容量暂时分配100G即可后期可以随时增加，不要勾选立即分配所有磁盘，否则虚拟机会将100G直接分配给CentOS，会导致宿主机所剩硬盘容量减少。 勾选将虚拟磁盘拆分成多个文件，这样可以使虚拟机方便用储存设备拷贝复制。</p>
+<p><img src="1564741129-8362-6852280-b482f1c7221e96e8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>11.磁盘名称，默认即可</p>
+<p><img src="1564741130-7604-6852280-954605e222159a8c.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>12.取消不需要的硬件</p>
+<p>点击自定义硬件</p>
+<p><img src="1564741131-7575-6852280-748f2d5827858c46.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>选择声卡、打印机等不需要的硬件然后移除。</p>
+<p><img src="1564741130-7755-6852280-0396726c05e65267.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>13.点击完成，已经创建好虚拟机。</p>
+<p><img src="1564741131-7639-6852280-8f44bd8c808496a6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="3-安装CentOS"><a href="#3-安装CentOS" class="headerlink" title="3.安装CentOS"></a>3.安装CentOS</h3><p>1.连接光盘</p>
+<p>右击刚创建的虚拟机，选择设置</p>
+<p><img src="1564741130-4879-6852280-60a45c6a565cac0a.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>先选择CD/DVD，再选择使用ISO映像文件，最后选择浏览找到下载好的镜像文件。启动时连接一定要勾选上后确定。</p>
+<p><img src="1564741131-4241-6852280-954e6acf6d2fbcca.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>2.开启虚拟机</p>
+<p><img src="1564741132-6485-6852280-6d6d494624515221.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>3.安装操作系统</p>
+<p>开启虚拟机后会出现以下界面:</p>
+<ul>
+<li>Install CentOS 7 安装CentOS 7</li>
+<li>Test this media &amp; install CentOS 7 测试安装文件并安装CentOS 7</li>
+<li>Troubleshooting 修复故障</li>
+</ul>
+<p>选择第一项，安装直接CentOS 7，回车，进入下面的界面</p>
+<p><img src="1564741132-3806-6852280-989a4d1bc37e8653.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>选择安装过程中使用的语言，这里选择英文、键盘选择美式键盘。点击Continue</p>
+<p><img src="1564741132-5326-6852280-d050f186e0bfe8f9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>首先设置时间</p>
+<p><img src="1564741133-3994-6852280-f9a4c0d843e33e67.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>时区选择上海，查看时间是否正确。然后点击Done</p>
+<p><img src="1564741132-4825-6852280-2de5dc94e57889cf.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>选择需要安装的软件</p>
+<p><img src="1564741133-5208-6852280-8c610fe61d6453e2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>选择 Server with Gui，然后点击Done</p>
+<p><img src="1564741133-6207-6852280-9cf6c1bfc94af8aa.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>选择安装位置，在这里可以进行磁盘划分。</p>
+<p><img src="1564741134-1468-6852280-e191eb949c3ade15.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>选择i wil configure partitioning（我将会配置分区），然后点击done</p>
+<p><img src="1564741134-6460-6852280-ba3981d9d0abc6b2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>如下图所示，点击加号，选择/boot，给boot分区分200M。最后点击Add</p>
+<p><img src="1564741135-8053-6852280-5ccb5f9263bdea37.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>然后以同样的办法给其他三个区分配好空间后点击Done</p>
+<p><img src="1564741136-6945-6852280-7499015d9886f456.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>然后会弹出摘要信息，点击AcceptChanges(接受更改)</p>
+<p><img src="1564741136-3293-6852280-15c1ad128b939d3a.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>设置主机名与网卡信息</p>
+<p><img src="1564741137-2746-6852280-1c3bc52d69c87514.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>首先要打开网卡，然后查看是否能获取到IP地址(我这里是桥接)，再更改主机名后点击Done。</p>
+<p><img src="1564741137-7559-6852280-8e8a950ea172b810.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>最后选择Begin Installation(开始安装)</p>
+<p><img src="1564741137-4187-6852280-4fcc12834c856eaa.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>设置root密码</p>
+<p><img src="1564741138-1859-6852280-b040822db036b2e3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>设置root密码后点击Done</p>
+<p><img src="1564741138-5137-6852280-f69ac0f0bc2f4ec6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>点击USER CREATION 创建管理员用户</p>
+<p><img src="1564741139-1805-6852280-6772bfbb7b3f094a.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>输入用户名密码后点击Done</p>
+<p><img src="1564741139-9489-6852280-062dd21af5e9d11e.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>等待系统安装完毕重启系统即可</p>
+<p><img src="1564741140-4954-6852280-f9ad65ac39453b74.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p>Linux中总结，</p>
+<p>1）如何通过一个简短的关键字 【man -k man -k process 】，例如process 获取相关的命令。</p>
+<p> linux中ls是“list files”的缩写,是列出文件的意思。<br> ls命令的参数详解：<br>-a 列出目录下的所有文件，包括以 . 开头的隐含文件。<br>-b 把文件名中不可输出的字符用反斜杠加字符编号(就象在C语言里一样)的形式列出。<br>-c 输出文件的 i 节点的修改时间，并以此排序。<br>-d 将目录象文件一样显示，而不是显示其下的文件。<br>-e 输出时间的全部信息，而不是输出简略信息。<br>ls -l 、ls -a 、ls -d 等。</p>
+<p>linux中cd是Change Directory的缩写，这是用来切换工作目录的命令。<br>cd / 、cd ~ 、cd /etc/passwd 等。</p>
+<p>2）通过命令的描述，选择一个命令，获取命令的man文档。【 man top】</p>
+<p><img src="image-20230701203147658-1688223122376-31.png" srcset="/img/loading.gif" lazyload alt="image-20230701203147658"></p>
+<p>3）解读man文档，man分几个部分？man每个部分的解释，特别是语法部分。&lt;&gt;, [] …等各代表什么含义。</p>
+<p>man命令是Linux下的帮助指令，通过man指令可以查看Linux中的指令帮助、配置文件帮助和编程帮助等信息。</p>
+<p>语法：man（选项)(参数）</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><pre><code class="hljs inform7">选项<br>   <br>-a：在所有的<span class="hljs-keyword">man</span>帮助手册中搜索。<br>   <br>-f：等价于whatis指令，显示给定关键字的简短描述信息。<br>   <br>-p：指定<span class="hljs-keyword">man</span>手册搜索的路径。<br>   <br>参数<br>   <br>数字：指定从哪本<span class="hljs-keyword">man</span>手册中搜索帮助; 关键字：指定要搜索帮助的关键字。<br>   <br>符号含义<br>   <br><span class="hljs-comment">[ ]</span>：可选内容<br>   <br>&lt;&gt;：必须给出内容<br>   <br>a|b|c：多选一<br>   <br>…：可以有多个<br></code></pre></td></tr></table></figure>
+
+<p>4）根据语法部分 简要的写几个操作。</p>
+<p><strong>man ls | more、man ssh、man cd</strong></p>
+</li>
+<li><p>切换到/etc/目录，列出fstab文件的详细信息，详细解决fstab一行，每个或每几个字符的详细含义。 【cd /etc; ls -l /etc/fstab】 </p>
+<p><img src="image-20230701203233377-1688223156411-33.png" srcset="/img/loading.gif" lazyload alt="image-20230701203233377"></p>
+<p>含义分别为：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs gradle">设备信息：如: <span class="hljs-regexp">/dev/</span>cdrom、<span class="hljs-regexp">/dev/</span>sda1、&lt;host&gt;:&lt;dir&gt;<br>   <br>挂载点：如： <span class="hljs-regexp">/、/</span>home、/boot<br>   <br>文件系统类型，如：ext4、nfs、xfs等<br>   <br>挂载选项：参考mount命令，<span class="hljs-keyword">default</span>表示使用默认选项<br>   <br>使用<span class="hljs-keyword">dump</span>命令时否需要备份该文件系统<br>   <br>重启时文件系统的监测顺序<br></code></pre></td></tr></table></figure></li>
+<li><p>简要说明FHS结构。</p>
+<p>FHS(Filesystem Hierarchy Standard)，即文件系统层次化标准。</p>
+<p>FHS主要目的是为了给用户提供一个管理系统以及目录结构的一个参考，都能够遵循FHS的标准。</p>
+<p>Linux系统目录结构</p>
+<p>登录系统后，在当前命令窗口下输入命令：ls</p>
+<p>Linux系统目录结构</p>
+<p><img src="image-20230701203309473-1688223170911-35.png" srcset="/img/loading.gif" lazyload alt="image-20230701203309473"></p>
+<p>/bin：所有用户可用的基本命令程序文件。</p>
+<p>/lib：为系统启动或根文件系统上的应用程序（/bin、/sbin等）提供共享库，以及为内核提供内核模块。</p>
+<p>/boot：引导加载器必须用到的各种静态文件，如kernel、grub等。</p>
+<p>/dev：设备文件与特殊文件。</p>
+<p>/etc：系统程序的静态配置文件。</p>
+<p>/home：普通的家目录的集中位置，一般每个普通用户的家目录默认为此目录下与用户名同名的子目录。</p>
+<p>/root：管理员的家目录。</p>
+<p>/mnt：挂载点目录，通常挂载额外的临时文件系统。</p>
+<p>/sys：sysfs虚拟文件系统提供了一种比proc更为理想的访问内核数据的途径；其主要作用在于为管理Linux设备提供一种统一模型的的接口。</p>
+<p>/run：存放动态的，不持久的应用程序运行数据。</p>
+<p>/sbin：供管理员的使用的工具程序。</p>
+<p>/tmp：临时文件。</p>
+<p>/user：全局共享的只读数据路径。</p>
+</li>
+<li><p>用自己的理解总结 文件管理，用户管理，组用户，权限管理相关的命令。文件: 【touch/rm/rmdir/cat/head/less/more】。用户及组：user/group 【useradd/userdel/usermode; groupadd/groupdel/groupmod; chsh/…】。权限 【chmod/chown/setfacl】”</p>
+</li>
+</ol>
+<p>文件管理：<br>touch 文件名：创建一个空文件。</p>
+<p>cat 文件名：查看文件内容，适用于内容较少的文件。</p>
+<p>head 文件名：默认查看文件前10行内容。</p>
+<p>tail 文件名：默认查看文件后10行内容。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">选项<span class="hljs-operator">-f</span>：会把文件里的最尾部内容显示在屏幕上，并且不断刷新，常用于查阅正在改变的日志文件。<br></code></pre></td></tr></table></figure>
+
+<p>more文件名：分页显示，适用于内容较多的文件。</p>
+<p>less： 与 more 类似，但是比 more 更好的是，他可以往前翻页。</p>
+<p>rm ：删除文件</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs diff">选项：<br><br><span class="hljs-deletion">-f：不提示，强制删除文件或目录；</span><br><br> -i：删除已有文件或目录之前先询问用户；<br><br><span class="hljs-deletion">-r,-R：递归删除，将指定目录下的所有文件与子目录一并删除；</span><br><br> -v：显示指令的详细执行过程。<br></code></pre></td></tr></table></figure>
+
+<p>mv：移动文件，若目标文件已经存在时，会覆盖。</p>
+<p>cp ：文件复制</p>
+<p>用户管理：<br>useradd：创建新用户</p>
+<figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ldif">选项：<br><br><span class="hljs-literal">-</span>u UID: <span class="hljs-comment">#指定用户UID号</span><br><br><span class="hljs-literal">-</span>d 家目录：<span class="hljs-comment">#指定用户家目录</span><br><br><span class="hljs-literal">-</span>g 组名：<span class="hljs-comment">#指定用户的初始组</span><br><br><span class="hljs-literal">-</span>G 组名：<span class="hljs-comment">#指定用户的附加组</span><br><br><span class="hljs-literal">-</span>s SHELL：<span class="hljs-comment">#指定用户登陆的shell，默认为/bin/bash</span><br></code></pre></td></tr></table></figure>
+
+<p>usermod：修改用户权限</p>
+<figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs ldif">选项：<br><br><span class="hljs-literal">-</span>u UID: <span class="hljs-comment">#修改用户UID号</span><br><br><span class="hljs-literal">-</span>d 家目录：<span class="hljs-comment">#修改用户家目录</span><br><br><span class="hljs-literal">-</span>G 组名：<span class="hljs-comment">#修改用户的附加组</span><br></code></pre></td></tr></table></figure>
+
+<p>userdel：删除用户</p>
+<figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ldif">选项：<br><br><span class="hljs-literal">-</span>f ：<span class="hljs-comment">#连通用户家目录一起删除</span><br></code></pre></td></tr></table></figure>
+
+<p>组用户管理：<br>groupadd：创建用户组</p>
+<figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ldif">选项：<br><br><span class="hljs-literal">-</span>g GID：<span class="hljs-comment">#指定组ID</span><br></code></pre></td></tr></table></figure>
+
+<p>groupmod：修改用户组</p>
+<figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs ldif">选项：<br><br><span class="hljs-literal">-</span>g GID：<span class="hljs-comment">#修改组ID</span><br><br><span class="hljs-literal">-</span>n 新组名：<span class="hljs-comment">#修改组名</span><br></code></pre></td></tr></table></figure>
+
+<p>groupdel 组名：删除用户组</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-meta">#如果该组没有初始用户才可进行删除，要想删除，要优先删除初始用户。</span><br></code></pre></td></tr></table></figure>
+
+<p>权限管理：<br>chown: #修改文件或目录的拥有者</p>
+<p>chgrp：#修改文件或目录属组</p>
+<p>chmod ：改变文件或目录权限，可以简单的使用三个数字分别对应拥有者/组和其他用户的权限</p>
+<p>chmod +/- rwx文件名|目录名</p>
+<p>对文件的权限<br>r 可使用文件查看类工具，比如：cat，可以获取其内容<br>w 可修改其内容，文件的是否被删除和文件的权限无关<br>x 可以把此文件提请内核启动为一个进程，即可以执行（运行）的文件（次文件的内容必须是可执行）</p>
+<p>常见的数字组合有（u表示用户、g表示组、o表示其他）</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-number">777</span><span class="hljs-operator">=</span>（u<span class="hljs-operator">=</span>rwx，g<span class="hljs-operator">=</span>rwx，o<span class="hljs-operator">=</span>rwx）<br><br><span class="hljs-number">755</span><span class="hljs-operator">=</span>（u<span class="hljs-operator">=</span>rwx，g<span class="hljs-operator">=</span>rx，o<span class="hljs-operator">=</span>rx）<br><br><span class="hljs-number">644</span><span class="hljs-operator">=</span>（u<span class="hljs-operator">=</span>rw，g<span class="hljs-operator">=</span>r，o<span class="hljs-operator">=</span>r）<br><br> --- <span class="hljs-number">0</span><br> --- <span class="hljs-number">0</span><br> r   <span class="hljs-number">4</span><br> r-x <span class="hljs-number">5</span><br> rw  <span class="hljs-number">6</span><br> rwx <span class="hljs-number">7</span><br></code></pre></td></tr></table></figure>
+
+<p>chmod +x 脚本名 #给脚本赋执行权限</p>
+<span id="more"></span>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AC%AC%E4%BA%94%E8%8A%82/">第五节</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AC%AC%E4%B8%80%E5%91%A8/">第一周</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/03/N80%E7%AC%AC%E5%85%AD%E8%8A%82%20%E7%AC%AC2%E5%91%A8%E4%BD%9C%E4%B8%9A/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">N80-第二周作业</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/28/linux%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">
+                        <span class="hidden-mobile">linux学习路线</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

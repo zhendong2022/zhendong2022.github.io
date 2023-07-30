@@ -1,0 +1,568 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="文档目录： 一、tar：打包备份 二、gzip：压缩或解压文件 三、zip：打包和压缩文件 四、unzip：解压zip文件 五、scp：远程文件复制 六、rsync：文件同步工具 预置相关文件数据：  一、tar：打包备份  1、tar -zcvf www.tar.gz .&#x2F;html&#x2F; #打包，z-giz的解压或压缩，v过程，c建立tar包，f指定压缩的文件名字  2、tar -ztvf www.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux文件备份与压缩">
+<meta property="og:url" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="文档目录： 一、tar：打包备份 二、gzip：压缩或解压文件 三、zip：打包和压缩文件 四、unzip：解压zip文件 五、scp：远程文件复制 六、rsync：文件同步工具 预置相关文件数据：  一、tar：打包备份  1、tar -zcvf www.tar.gz .&#x2F;html&#x2F; #打包，z-giz的解压或压缩，v过程，c建立tar包，f指定压缩的文件名字  2、tar -ztvf www.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665119281-3-1689665119985-5.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665123030-7.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665128788-10.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665131040-13.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665133096-16.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665136237-19.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665138089-22.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665139569-25.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665141557-28.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665143782-31.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665145262-34.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665147022-37.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665150657-40.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665153465-43.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665156038-46.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665157862-49.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665159423-52.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665161018-55.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665162893-58.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665164410-61.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665172413-67-1689665305114-70.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665167960-64.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665331158-78.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665311738-72.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665316417-75.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665341527-81.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665343844-84.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665346133-87.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665349317-90.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665351159-93.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665353326-96.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665354950-99.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665356900-102.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665358669-105.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665360215-108.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665361776-111.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665363844-114.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665365215-117.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665367432-120.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665371924-123.png">
+<meta property="og:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665375671-126.png">
+<meta property="article:published_time" content="2023-07-18T15:24:37.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:40.919Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/18/Linux%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%8E%8B%E7%BC%A9/640-1689665119281-3-1689665119985-5.png">
+  
+  
+  <title>Linux文件备份与压缩 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux文件备份与压缩">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-18 15:24" pubdate>
+        July 18, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      16 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux文件备份与压缩</h1>
+            
+            <div class="markdown-body">
+              <p>文档目录：</p>
+<p>一、tar：打包备份</p>
+<p>二、gzip：压缩或解压文件</p>
+<p>三、zip：打包和压缩文件</p>
+<p>四、unzip：解压zip文件</p>
+<p>五、scp：远程文件复制</p>
+<p>六、rsync：文件同步工具</p>
+<p>预置相关文件数据：</p>
+<p><img src="640-1689665119281-3-1689665119985-5.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>一、tar：打包备份</strong></p>
+<p> 1、tar -zcvf <a target="_blank" rel="noopener" href="http://www.tar.gz/">www.tar.gz</a> ./html/ #打包，z-giz的解压或压缩，v过程，c建立tar包，f指定压缩的文件名字<img src="640-1689665123030-7.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、tar -ztvf <a target="_blank" rel="noopener" href="http://www.tar.gz/">www.tar.gz</a> #t查看压缩包中内容，z可省略，v可省略</p>
+<p><img src="640-1689665128788-10.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、tar -zxvf <a target="_blank" rel="noopener" href="http://www.tar.gz/">www.tar.gz</a> -C /tmp/ #C指定解压的路径，不在就解压在当前目录</p>
+<p><img src="640-1689665131040-13.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、tar -zcvf <a target="_blank" rel="noopener" href="http://www.tar2.gz/">www.tar2.gz</a> ./html/ –exclude=html/mrwhite/test #排除目录打包，目录结尾不要加/，否则会报错</p>
+<p> <img src="640-1689665133096-16.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>5、tar -zcvf <a target="_blank" rel="noopener" href="http://www.tar3.gz/">www.tar3.gz</a> ./html/ –exclude=html/mrwhite/test –exclude html/mrwhite #排除两个目录</p>
+<p><img src="640-1689665136237-19.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、tar zcvfX paichu.tar.gz list.txt ./html/ #排除指定文件内目录</p>
+<p><img src="640-1689665138089-22.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 7、tar zcvfh local.tar2.gz rc.local #h打包实际的文件</p>
+<p><img src="640-1689665139569-25.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 8、注意：</p>
+<p>如需要打包的目录为相对路径，–exclude只能接相对路径</p>
+<p>如需要打包的目录为绝对路径，–exclude可以接绝对路径也能接相对路径</p>
+<p>9、tar zcf etc.tar.gz <code>find . -type f</code> #打包所有普通文件，使用tar内 反引号中嵌套find语</p>
+<p><img src="640-1689665141557-28.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>二、gzip：压缩或解压文件</strong></p>
+<p> 1、gzip *.html #压缩所有.html结尾的文件为.gz，并且自动删除源文件</p>
+<p><img src="640-1689665143782-31.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、gzip -l *.gz #不解压显示压缩文件的信息</p>
+<p><img src="640-1689665145262-34.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、gzip -dv *.gz #d为解压，v为过程</p>
+<p><img src="640-1689665147022-37.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、gzip -c test.html &gt; test.gz #-c压缩时重定向</p>
+<p><img src="640-1689665150657-40.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、gzip -dc test.gz &gt; test1.html #-dc解压缩时重定向</p>
+<p><img src="640-1689665153465-43.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、zcat test.txt.gz #直接查看压缩包文件</p>
+<p><img src="640-1689665156038-46.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>三、zip：打包和压缩文件</strong></p>
+<p> 1、zip test.zip 123.txt 124.txt #将123，124文件压缩为test.zip</p>
+<p><img src="640-1689665157862-49.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、zip -r test3.zip 12345/ #将12345文件夹以及下面的文件压缩成test3.zip</p>
+<p><img src="640-1689665159423-52.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、zip -r test4.zip ./12345/ -x 12345/test.zip #压缩12345文件夹中内容但是排除掉其中的test.zip</p>
+<p><img src="640-1689665161018-55.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>四、unzip：解压zip文件</strong></p>
+<p>1、unzip -l test2.zip #看压缩文件列表</p>
+<p> <img src="640-1689665162893-58.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 2、unzip test.zip #解压缩文件</p>
+<p><img src="640-1689665164410-61.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、unzip test.zip #如已有文件 ，y替换，n不替换，A所有文件替换，N所有文件不替换，r重命名</p>
+<p><img src="640-1689665172413-67-1689665305114-70.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>4、unzip -v test.zip # 解压缩并显示信息</p>
+<p><img src="640-1689665167960-64.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>5、unzip -o test.zip #解压缩并不替换覆盖</p>
+<p><img src="640-1689665331158-78.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>6、unzip -d /haha/ test.zip #解压缩并指定目录</p>
+<p><img src="640-1689665311738-72.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>五、scp：远程文件复制(适合全量)</strong></p>
+<p> 1、scp testScp.txt 192.168.37.9:/root/mytest2020122702/ #远程拷贝</p>
+<p><img src="640-1689665316417-75.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 查看远程服务器</p>
+<p><img src="640-1689665341527-81.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>2、scp -p testScp.txt 192.168.37.9:/root/mytest2020122702/ #文件属性不变</p>
+<p><img src="640-1689665343844-84.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 远程服务器，文件属性一致</p>
+<p><img src="640-1689665346133-87.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、scp -r mytest202012* 192.168.37.9:/root/ #-r递归复制目录 </p>
+<p><img src="640-1689665349317-90.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 查看远程主机对应目录</p>
+<p><img src="640-1689665351159-93.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、scp -rp 192.168.37.9:/root/mytest20201228 . #远程拷贝文件至当前目录</p>
+<p><img src="640-1689665353326-96.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <strong>六、rsync：文件同步工具(适合增量)</strong></p>
+<p>1、rsync -av data1/ data2/ #-a为递归+保持属性，等价于-rtopgDl -v为详细输出 ，带斜杠为复制文件下的内容</p>
+<p><img src="640-1689665354950-99.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>2、rsync -av data1 data2/ #不带斜杠为复制目录本身及目录下的文件</p>
+<p><img src="640-1689665356900-102.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 3、rsync data1/test1 data2 #复制data1下文件至data2目录下</p>
+<p><img src="640-1689665358669-105.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 4、rsync -av –delete data2/ data1/ #删除data1中内容使其与data2中保持一致</p>
+<p><img src="640-1689665360215-108.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 5、rsync -av 192.168.37.8:/root/mytestRsync/ mytestRsync2/ #远程拉取目录</p>
+<p><img src="640-1689665361776-111.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="640-1689665363844-114.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> 6、rsync -av mytestRsync 192.168.37.9:/root/  #推送至远程目录</p>
+<p><img src="640-1689665365215-117.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <img src="640-1689665367432-120.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <em>7、rsync -av -e ‘ssh -p 22’ . 192.168.37.9:/root/mytestRsync/ #-e选项借助ssh隧道加密</em></p>
+<p><img src="640-1689665371924-123.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> <img src="640-1689665375671-126.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/24/%E7%AC%AC%E5%9B%9B%E5%91%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第四周</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/18/Linux%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/">
+                        <span class="hidden-mobile">Linux文件与目录操作</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

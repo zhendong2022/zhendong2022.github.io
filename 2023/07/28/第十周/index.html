@@ -1,0 +1,447 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1、zabbix 架构原理，及常用组件及用途分析1.1、zabbix架构图  1.2、常用组件及用途 1234567891011121314151617架构Zabbix 由几个主要的功能组件组成，其职责如下所示。ServerZabbix server 是 Zabbix agent 向其报告可用性、系统完整性信息和统计信息的核心组件。是存储所有配置信息、统计信息和操作信息的核心存储库。数据库所有配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十周">
+<meta property="og:url" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E5%91%A8/index.html">
+<meta property="og:site_name" content="Mgedu-N80054">
+<meta property="og:description" content="1、zabbix 架构原理，及常用组件及用途分析1.1、zabbix架构图  1.2、常用组件及用途 1234567891011121314151617架构Zabbix 由几个主要的功能组件组成，其职责如下所示。ServerZabbix server 是 Zabbix agent 向其报告可用性、系统完整性信息和统计信息的核心组件。是存储所有配置信息、统计信息和操作信息的核心存储库。数据库所有配置">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E5%91%A8/zabbix-%E6%9E%B6%E6%9E%84-scaled.jpeg">
+<meta property="article:published_time" content="2023-07-28T20:35:59.000Z">
+<meta property="article:modified_time" content="2023-07-30T21:21:41.295Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/07/28/%E7%AC%AC%E5%8D%81%E5%91%A8/zabbix-%E6%9E%B6%E6%9E%84-scaled.jpeg">
+  
+  
+  <title>第十周 - Mgedu-N80054</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>JohnBackus</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第十周">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-07-28 20:35" pubdate>
+        July 28, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      92 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第十周</h1>
+            
+            <div class="markdown-body">
+              <h3 id="1、zabbix-架构原理，及常用组件及用途分析"><a href="#1、zabbix-架构原理，及常用组件及用途分析" class="headerlink" title="1、zabbix 架构原理，及常用组件及用途分析"></a>1、zabbix 架构原理，及常用组件及用途分析</h3><p>1.1、zabbix架构图</p>
+<p><img src="zabbix-%E6%9E%B6%E6%9E%84-scaled.jpeg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>1.2、常用组件及用途</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></div></td><td class="code"><pre><code class="hljs routeros">架构<br>Zabbix 由几个主要的功能组件组成，其职责如下所示。<br><span class="hljs-built_in"></span><br><span class="hljs-built_in">Server</span><br><span class="hljs-built_in"></span>Zabbix<span class="hljs-built_in"> server </span>是 Zabbix agent 向其报告可用性、系统完整性信息和统计信息的核心组件。是存储所有配置信息、统计信息和操作信息的核心存储库。<br><br>数据库<br>所有配置信息以及 Zabbix 收集到的数据都被存储在数据库中。<br><br>Web 界面<br>为了从任何地方和任何平台轻松访问 Zabbix ，我们提供了基于 web 的界面。该界面是 Zabbix<span class="hljs-built_in"> server </span>的一部分，通常（但不一定）和 Zabbix<span class="hljs-built_in"> server </span>运行在同一台物理机器上。<br><span class="hljs-built_in"></span><br><span class="hljs-built_in">Proxy</span><br><span class="hljs-built_in"></span>Zabbix<span class="hljs-built_in"> proxy </span>可以替 Zabbix<span class="hljs-built_in"> server </span>收集性能和可用性数据。Zabbix<span class="hljs-built_in"> proxy </span>是 Zabbix 环境部署的可选部分；然而，它对于单个 Zabbix<span class="hljs-built_in"> server </span>负载的分担是非常有益的。<br><br>Agent<br>Zabbix agents 部署在被监控目标上，用于主动监控本地资源和应用程序，并将收集的数据发送给 Zabbix server。<br></code></pre></td></tr></table></figure>
+
+<h3 id="2、监控LNMP架构，并配置报警升级，0-5分钟不报警执行重启应用，5-30分钟通知运维，30-60分钟短信通过总监。"><a href="#2、监控LNMP架构，并配置报警升级，0-5分钟不报警执行重启应用，5-30分钟通知运维，30-60分钟短信通过总监。" class="headerlink" title="2、监控LNMP架构，并配置报警升级，0-5分钟不报警执行重启应用，5-30分钟通知运维，30-60分钟短信通过总监。"></a>2、监控LNMP架构，并配置报警升级，0-5分钟不报警执行重启应用，5-30分钟通知运维，30-60分钟短信通过总监。</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><code class="hljs awk">环境：<br>zabbix_server:<span class="hljs-number">10.0</span>.<span class="hljs-number">0.129</span><br>zabbix_agent:<span class="hljs-number">10.0</span>.<span class="hljs-number">0.135</span><br><br><span class="hljs-number">1</span>）安装server和关联agent就不多讲了，主要是准备agent的LNMP环境，<br>nginx一键编译安装，之前的文章里有脚本。最后的配置文件代理PHP页面即可<br>cat <span class="hljs-regexp">/apps/</span>nginx<span class="hljs-regexp">/conf/</span>nginx.conf<br>    server &#123;<br>        listen       <span class="hljs-number">80</span>; <br>        server_name  localhost;<br>            root <span class="hljs-regexp">/data/</span>nginx/wordpress;<br>        index index.php;<br>            server_tokens off;<br>        location / &#123; <br>                    client_max_body_size <span class="hljs-number">2000</span>M;<br>                    <span class="hljs-comment">#client_body_buffer_size 1024k;</span><br>                    <span class="hljs-comment">#client_body_temp_path /apps/nginx/client_body_temp/ 1 2 2;</span><br>            root <span class="hljs-regexp">/data/</span>nginx/wordpress; <span class="hljs-comment">#指定数据目录</span><br>            index index.php index.html index.htm; <span class="hljs-comment">#指定默认主页</span><br>                    try_files <span class="hljs-variable">$uri</span> <span class="hljs-variable">$uri</span><span class="hljs-regexp">/ /i</span>ndex.php?<span class="hljs-variable">$args</span>;<br>        &#125;   <br><br>        location ~ \.php$ &#123;<br>            root           <span class="hljs-regexp">/data/</span>nginx/wordpress;<br>            fastcgi_pass   <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">9000</span>;<br>            fastcgi_index  index.php;<br>            fastcgi_param  SCRIPT_FILENAME  <span class="hljs-variable">$document_root</span><span class="hljs-variable">$fastcgi_script_name</span>;<br>            include        fastcgi_params;<br>        &#125;   <br>        location ~ ^/(ping|pm_status)$ &#123; <span class="hljs-comment">#实现状态页</span><br>                include fastcgi_params;<br>                fastcgi_pass <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">9000</span>;<br>                fastcgi_param SCRIPT_FILENAME <span class="hljs-variable">$document_root</span><span class="hljs-variable">$fastcgi_script_name</span>;<br>                <span class="hljs-comment">#fastcgi_param PATH_TRANSLATED $document_root$fastcgi_script_name; 此配置也可以</span><br>        &#125;   <br><span class="hljs-number">2</span>）安装php环境，这里有坑，准备的干净主机想编译安装php74，花了几个小时，一直有依赖错误，解决不了。。。干脆yum安装，实现功能即可。<br><br><span class="hljs-comment">#安装源</span><br>yum install epel-release<br>yum install http:<span class="hljs-regexp">//</span>rpms.remirepo.net<span class="hljs-regexp">/enterprise/</span>remi-release-<span class="hljs-number">7</span>.rpm<br><span class="hljs-comment">#安装php和依赖</span><br>yum install php74-php-gd php74-php-pdo php74-php-mbstring php74-php-cli php74-php-fpm php74-php-mysqlnd<br><span class="hljs-comment">#修改配置文件</span><br>grep <span class="hljs-string">&#x27;^[a-Z]&#x27;</span> <span class="hljs-regexp">/etc/</span>php-fpm.d/www.conf.rpmsave <br>listen = <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">9000</span><br>user = apache<br>group = apache<br>pm = dynamic<br>pm.max_children = <span class="hljs-number">50</span><br>pm.start_servers = <span class="hljs-number">5</span><br>pm.min_spare_servers = <span class="hljs-number">5</span><br>pm.max_spare_servers = <span class="hljs-number">35</span><br>slowlog = <span class="hljs-regexp">/var/</span>log<span class="hljs-regexp">/php-fpm/</span>www-slow.log<br>php_admin_value[error_log] = <span class="hljs-regexp">/var/</span>log<span class="hljs-regexp">/php-fpm/</span>www-error.log<br>php_admin_flag[log_errors] = on<br>php_value[session.save_handler] = files<br>php_value[session.save_path] = <span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/php/</span>session<br><span class="hljs-comment">#启动服务</span><br>systemctl start php74-php-fpm<br><br><span class="hljs-number">3</span>）创建数据库授权即可，使用mariadb和msyql都可以<br>create database wordpress; <span class="hljs-comment">#创建数据库</span><br>create user wordpress@<span class="hljs-string">&#x27;10.0.0.%&#x27;</span> identified by <span class="hljs-string">&#x27;123456&#x27;</span>; <span class="hljs-comment">#创建用户和密码</span><br>grant all on wordpress.* to wordpress@<span class="hljs-string">&#x27;10.0.0.%&#x27;</span>; <span class="hljs-comment">#授权从10.0.0.%段访问wordpress都可以</span><br>flush privileges; <span class="hljs-comment">#刷新权限</span><br><span class="hljs-number">4</span>）结果<br><br><br><br><span class="hljs-number">5</span>）这里先对端口做监控，查看服务是否正常<br><br><span class="hljs-number">6</span>）要想远程执行命令必须在zabbix_agent开启执行命令的配置，不然无法执行。<br><br>AllowKey=system.run[*] <span class="hljs-comment">#zabbix5.0版本以上,代替EnableRemoteCommands,agent2默认没有此命令手工加入</span><br> <span class="hljs-comment">#EnableRemoteCommands=1 #开启远程执行命令,此指令在zabbix5.0版本以上淘汰</span><br>AllowRoot=<span class="hljs-number">1</span>  <span class="hljs-comment">#开启此项,直接使用root进行远程管理,而无须对zabbix用户授权sudo权限</span><br>UnsafeUserParameters=<span class="hljs-number">1</span>  <span class="hljs-comment">#允许远程执行命令的时候使用不安全的参数(特殊字符串,如: \ &#x27; * ? [] &#123;&#125; ~ $ ! &amp; ; ( ) &lt; &gt; 等 )</span><br><br><span class="hljs-number">7</span>）创建<span class="hljs-number">80</span>端口的触发器，<span class="hljs-number">3306</span>端口克隆即可<br><br><br><br><span class="hljs-number">8</span>）创建动作<br><br><br><br><br><span class="hljs-number">9</span>）最终结果<br><br><br><br><br><span class="hljs-comment">###动作日志</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3、zabbix-api批量添加多个主机，要求一些不走代理，一些支持走代理"><a href="#3、zabbix-api批量添加多个主机，要求一些不走代理，一些支持走代理" class="headerlink" title="3、zabbix api批量添加多个主机，要求一些不走代理，一些支持走代理"></a>3、zabbix api批量添加多个主机，要求一些不走代理，一些支持走代理</h3><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">环境：<br>zabbix_server：10.0.0.129<br>zabbix_proxy：10.0.0.130<br>zabbix_agent-active：10.0.0.128<br>zabbix_agent-passive：10.0.0.138<br>1）要想通过API批量添加主机，前提是主机上已经安装了zabbix_agent，并且已经对配置文件进行修改，安装这里就不讲了，官网文档都有。直接上干货<br>2）代理agent的配置文件：<br>[root@rocky5 ~]<span class="hljs-comment">#grep &#x27;^[a-Z]&#x27; /etc/zabbix/zabbix_agent2.conf </span><br>PidFile=<span class="hljs-string">/var/run/zabbix/zabbix_agent2.pid</span><br>LogFile=<span class="hljs-string">/var/log/zabbix/zabbix_agent2.log</span><br>LogFileSize=0<br>Server=10.0.0.130<br>ServerActive=10.0.0.130<br>Hostname=10.0.0.128 <br>Include=<span class="hljs-string">/etc/zabbix/zabbix_agent2.d/</span>*<span class="hljs-string">.conf</span><br>ControlSocket=<span class="hljs-string">/tmp/agent.sock</span><br>3）无代理的agent配置文件<br>[root@rocky ~]<span class="hljs-comment">#grep &#x27;^[a-Z]&#x27; /etc/zabbix/zabbix_agentd.conf    </span><br>PidFile=<span class="hljs-string">/var/run/zabbix/zabbix_agentd.pid</span><br>LogFile=<span class="hljs-string">/var/log/zabbix/zabbix_agentd.log</span><br>LogFileSize=0<br>Server=10.0.0.129<br>ListenPort=10050<br>ServerActive=127.0.0.1<br>Hostname=10.0.0.138<br>Include=<span class="hljs-string">/etc/zabbix/zabbix_agentd.d/</span>*<span class="hljs-string">.conf</span><br>4）准备获取zabbix_server的token脚本<br>cat <span class="hljs-string">/data/sh/zabbix_api-token.sh</span><br><span class="hljs-comment">#!/bin/bash</span><br>ZABBIX_SERVER=10.0.0.129<br>curl -s -XPOST -H <span class="hljs-string">&quot;Content-Type: application/json-rpc&quot;</span> -d &#x27;                    <br>                     <br>&#123;<br><span class="hljs-string">&quot;jsonrpc&quot;</span>: <span class="hljs-string">&quot;2.0&quot;</span>,<br><span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;user.login&quot;</span>,<br><span class="hljs-string">&quot;params&quot;</span>: &#123;<br><span class="hljs-string">&quot;user&quot;</span>: <span class="hljs-string">&quot;Admin&quot;</span>,<br><span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;zabbix&quot;</span><br>&#125;,<br><span class="hljs-string">&quot;id&quot;</span>: 1,<br><span class="hljs-string">&quot;auth&quot;</span>: null<br>&#125;&#x27; http:<span class="hljs-string">//</span>$&#123;ZABBIX_SERVER&#125;<span class="hljs-string">/zabbix/api_jsonrpc.php</span><br>5）准备通过api添加主机脚本<br>cat zabbix-api_addhost.sh <br><span class="hljs-comment">#!/bin/bash</span><br>ZABBIX_SERVER=10.0.0.129<br>TOKEN=$<span class="hljs-params">(./zabbix-api-token.sh| awk -F&#x27;&quot;&#x27; &#x27;&#123;print $8&#125;&#x27;)</span><br>ACTIVE_IP=10.0.0.128<br>PASSIVE_IP=10.0.0.138<br>active <span class="hljs-params">()</span> &#123;<br>for HOST in $ACTIVE_IP;do<br>curl -s -XPOST -H <span class="hljs-string">&quot;Content-Type: application/json-rpc&quot;</span> -d &#x27;<br>&#123;<br><span class="hljs-string">&quot;jsonrpc&quot;</span>: <span class="hljs-string">&quot;2.0&quot;</span>,<br><span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;host.create&quot;</span>,<br><span class="hljs-string">&quot;params&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;host&quot;</span>: <span class="hljs-string">&quot;&#x27;$HOST&#x27;&quot;</span>,<br>    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;&#x27;web-$HOST&#x27;&quot;</span>,<br>    <span class="hljs-string">&quot;proxy_hostid&quot;</span>: <span class="hljs-string">&quot;10442&quot;</span>,<br>    <span class="hljs-string">&quot;interfaces&quot;</span>: [<br>       &#123;<br>        <span class="hljs-string">&quot;type&quot;</span>: 1,<br>        <span class="hljs-string">&quot;main&quot;</span>: 1,<br>        <span class="hljs-string">&quot;useip&quot;</span>: 1,<br>        <span class="hljs-string">&quot;ip&quot;</span>: <span class="hljs-string">&quot;&#x27;$HOST&#x27;&quot;</span>,<br>        <span class="hljs-string">&quot;dns&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,<br>        <span class="hljs-string">&quot;port&quot;</span>: <span class="hljs-string">&quot;10050&quot;</span><br>       &#125;<br>   ],<br>    <span class="hljs-string">&quot;groups&quot;</span>: [<br>       &#123;<br>            <span class="hljs-string">&quot;groupid&quot;</span>: <span class="hljs-string">&quot;2&quot;</span><br>       &#125;<br>   ],<br>    <span class="hljs-string">&quot;templates&quot;</span>: [<br>       &#123;<br>            <span class="hljs-string">&quot;templateid&quot;</span>: <span class="hljs-string">&quot;10001&quot;</span><br>       &#125;<br>   ]<br> &#125;,<br><span class="hljs-string">&quot;id&quot;</span>: 1,<br><span class="hljs-string">&quot;auth&quot;</span>: <span class="hljs-string">&quot;&#x27;$TOKEN&#x27;&quot;</span><br>&#125;&#x27; http:<span class="hljs-string">//</span>$&#123;ZABBIX_SERVER&#125;<span class="hljs-string">/zabbix/api_jsonrpc.php</span><br>done<br>&#125;<br><br><br>passive <span class="hljs-params">()</span> &#123;<br>for HOST in $PASSIVE_IP;do<br>curl -s -XPOST -H <span class="hljs-string">&quot;Content-Type: application/json-rpc&quot;</span> -d &#x27;<br>&#123;<br><span class="hljs-string">&quot;jsonrpc&quot;</span>: <span class="hljs-string">&quot;2.0&quot;</span>,<br><span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;host.create&quot;</span>,<br><span class="hljs-string">&quot;params&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;host&quot;</span>: <span class="hljs-string">&quot;&#x27;$HOST&#x27;&quot;</span>,<br>    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;&#x27;db-$HOST&#x27;&quot;</span>,<br>    <span class="hljs-string">&quot;interfaces&quot;</span>: [<br>       &#123;<br>        <span class="hljs-string">&quot;type&quot;</span>: 1,<br>        <span class="hljs-string">&quot;main&quot;</span>: 1,<br>        <span class="hljs-string">&quot;useip&quot;</span>: 1,<br>        <span class="hljs-string">&quot;ip&quot;</span>: <span class="hljs-string">&quot;&#x27;$HOST&#x27;&quot;</span>,<br>        <span class="hljs-string">&quot;dns&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,<br>        <span class="hljs-string">&quot;port&quot;</span>: <span class="hljs-string">&quot;10050&quot;</span><br>       &#125;<br>   ],<br>    <span class="hljs-string">&quot;groups&quot;</span>: [<br>       &#123;<br>            <span class="hljs-string">&quot;groupid&quot;</span>: <span class="hljs-string">&quot;2&quot;</span><br>       &#125;<br>   ],<br>    <span class="hljs-string">&quot;templates&quot;</span>: [<br>       &#123;<br>            <span class="hljs-string">&quot;templateid&quot;</span>: <span class="hljs-string">&quot;10001&quot;</span><br>       &#125;<br>   ]<br> &#125;,<br><span class="hljs-string">&quot;id&quot;</span>: 1,<br><span class="hljs-string">&quot;auth&quot;</span>: <span class="hljs-string">&quot;&#x27;$TOKEN&#x27;&quot;</span><br>&#125;&#x27; http:<span class="hljs-string">//</span>$&#123;ZABBIX_SERVER&#125;<span class="hljs-string">/zabbix/api_jsonrpc.php</span><br>done<br>&#125;<br><br>active<br>passive<br>6）当前主机只要一个server和proxy两台<br><br>7）执行脚本查看结果<br>sh <span class="hljs-string">/data/sh/zabbix-api_addhost.sh</span><br><span class="hljs-comment">###这里看到两台主机一台走代理，一台没走代理。因为是刚加上可用性还没返回数据</span><br><br><br><span class="hljs-comment">###等待一段时间后发现已经上线</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4、总结zabbix自定义监控项，基于自定义监控项监控nginx"><a href="#4、总结zabbix自定义监控项，基于自定义监控项监控nginx" class="headerlink" title="4、总结zabbix自定义监控项，基于自定义监控项监控nginx"></a>4、总结zabbix自定义监控项，基于自定义监控项监控nginx</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">4.1</span> 自定义监控项<br><br>监控项键值的格式（包括键值的参数）必须遵循语法规则。<br>UserParameter=&lt;key&gt;,&lt;shell command&gt;<br><br>要构建有效的监控项键值，首先要指定键值的名称，然后选择是否具有参数<br>键值名称<br>Key（键值）名称本身具有字符范围的限制，允许的字符是：<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-zA-Z_-.<br><br>客户端可以自定义监控项，在Zabbix Agent 配置文件添加内容,格式如下<br><span class="hljs-comment">#cat /etc/zabbix/zabbix_agentd.conf</span><br><span class="hljs-comment">#cat /etc/zabbix/zabbix_agent2.conf</span><br>UserParameter=&lt;key&gt;,&lt;shell command&gt;<br>Include=<span class="hljs-regexp">/etc/</span>zabbix<span class="hljs-regexp">/zabbix_agentd.d/</span>*.conf<br>例：获取根分区的磁盘利用率<br>UserParameter=root_filesystem_use,df|awk -F<span class="hljs-string">&#x27; +|%&#x27;</span> <span class="hljs-string">&#x27;$7 == &quot;/&quot; &#123;print $5 &#125;&#x27;</span><br><br><span class="hljs-number">4.2</span>  自定义监控项监控nginx<br><br><span class="hljs-comment">####先在agent上安装nginx,yum -y install nginx</span><br><span class="hljs-comment">####设置监控页面vim /etc/nginx/nginx.conf</span><br>location /nginx_status &#123;<br>                stub_status;<br>                access_log off;<br>                allow <span class="hljs-number">10.0</span>.<span class="hljs-number">0.129</span>; <span class="hljs-comment">#允许zabbix_server访问</span><br>                allow <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>; <span class="hljs-comment">#允许本机访问</span><br>                deny all; <span class="hljs-comment">#拒绝所有</span><br>        &#125;<br><span class="hljs-comment">####nginx -t 检查语法</span><br><span class="hljs-comment">####nginx -s reload</span><br><br><span class="hljs-number">1</span>）在agent上编写脚本<br>cat <span class="hljs-regexp">/etc/</span>zabbix<span class="hljs-regexp">/zabbix_agent.d/</span>nginx.sh<br><span class="hljs-comment">#!/bin/bash </span><br><br>nginx_status_fun()&#123; <span class="hljs-comment">#函数内容</span><br>	NGINX_PORT=<span class="hljs-variable">$1</span> <span class="hljs-comment">#端口，函数的第一个参数是脚本的第二个参数，即脚本的第二个参数是段端口号</span><br>	NGINX_COMMAND=<span class="hljs-variable">$2</span> <span class="hljs-comment">#命令，函数的第二个参数是脚本的第三个参数，即脚本的第三个参数是命令</span><br>	nginx_active()&#123; <span class="hljs-comment">#获取nginx_active数量，以下相同，这是开启了nginx状态但是只能从本机看到</span><br>        <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/curl &quot;http:/</span><span class="hljs-regexp">/127.0.0.1:&quot;$NGINX_PORT&quot;/</span>nginx_status<span class="hljs-regexp">/&quot; 2&gt;/</span>dev/null| grep <span class="hljs-string">&#x27;Active&#x27;</span> | awk <span class="hljs-string">&#x27;&#123;print $NF&#125;&#x27;</span><br>        &#125;<br>	nginx_reading()&#123; <span class="hljs-comment">#获取nginx_reading状态的数量</span><br>        <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/curl &quot;http:/</span><span class="hljs-regexp">/127.0.0.1:&quot;$NGINX_PORT&quot;/</span>nginx_status<span class="hljs-regexp">/&quot; 2&gt;/</span>dev/null| grep <span class="hljs-string">&#x27;Reading&#x27;</span> | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span><br>       &#125;<br>	nginx_writing()&#123;<br>        <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/curl &quot;http:/</span><span class="hljs-regexp">/127.0.0.1:&quot;$NGINX_PORT&quot;/</span>nginx_status<span class="hljs-regexp">/&quot; 2&gt;/</span>dev/null| grep <span class="hljs-string">&#x27;Writing&#x27;</span> | awk <span class="hljs-string">&#x27;&#123;print $4&#125;&#x27;</span><br>       &#125;<br>	nginx_waiting()&#123;<br>        <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/curl &quot;http:/</span><span class="hljs-regexp">/127.0.0.1:&quot;$NGINX_PORT&quot;/</span>nginx_status<span class="hljs-regexp">/&quot; 2&gt;/</span>dev/null| grep <span class="hljs-string">&#x27;Waiting&#x27;</span> | awk <span class="hljs-string">&#x27;&#123;print $6&#125;&#x27;</span><br>       &#125;<br>	nginx_accepts()&#123;<br>        <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/curl &quot;http:/</span><span class="hljs-regexp">/127.0.0.1:&quot;$NGINX_PORT&quot;/</span>nginx_status<span class="hljs-regexp">/&quot; 2&gt;/</span>dev/null| awk NR==<span class="hljs-number">3</span> | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span><br>       &#125;<br>	nginx_handled()&#123;<br>        <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/curl &quot;http:/</span><span class="hljs-regexp">/127.0.0.1:&quot;$NGINX_PORT&quot;/</span>nginx_status<span class="hljs-regexp">/&quot; 2&gt;/</span>dev/null| awk NR==<span class="hljs-number">3</span> | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span><br>       &#125;<br>	nginx_requests()&#123;<br>        <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/curl &quot;http:/</span><span class="hljs-regexp">/127.0.0.1:&quot;$NGINX_PORT&quot;/</span>nginx_status<span class="hljs-regexp">/&quot; 2&gt;/</span>dev/null| awk NR==<span class="hljs-number">3</span> | awk <span class="hljs-string">&#x27;&#123;print $3&#125;&#x27;</span><br>       &#125;<br>  	case <span class="hljs-variable">$NGINX_COMMAND</span> <span class="hljs-keyword">in</span><br>		active)<br>			nginx_active;<br>			;;<br>		reading)<br>			nginx_reading;<br>			;;<br>		writing)<br>			nginx_writing;<br>			;;<br>		waiting)<br>			nginx_waiting;<br>			;;<br>		accepts)<br>			nginx_accepts;<br>			;;<br>		handled)<br>			nginx_handled;<br>			;;<br>		requests)<br>			nginx_requests;<br>		esac <br>&#125;<br><br>main()&#123; <span class="hljs-comment">#主函数内容</span><br>	case <span class="hljs-variable">$1</span> <span class="hljs-keyword">in</span> <span class="hljs-comment">#分支结构，用于判断用户的输入而进行响应的操作</span><br>		nginx_status) <span class="hljs-comment">#当输入nginx_status就调用nginx_status_fun，并传递第二和第三个参数</span><br>			nginx_status_fun <span class="hljs-variable">$2</span> <span class="hljs-variable">$3</span>;<br>			;;<br>		*) <span class="hljs-comment">#其他的输入打印帮助信息</span><br>			echo $<span class="hljs-string">&quot;Usage: $0 &#123;nginx_status key&#125;&quot;</span><br>	esac <span class="hljs-comment">#分支结束符</span><br>&#125;<br><br>main <span class="hljs-variable">$1</span> <span class="hljs-variable">$2</span> <span class="hljs-variable">$3</span><br><br><span class="hljs-number">2</span>)cat <span class="hljs-regexp">/etc/</span>zabbix/zabbix_agent.conf<br>UserParameter=nginx.status[*],<span class="hljs-regexp">/etc/</span>zabbix<span class="hljs-regexp">/zabbix_agent2.d/</span>nginx.sh <span class="hljs-string">&quot;$1&quot;</span> <span class="hljs-string">&quot;$2&quot;</span> <span class="hljs-string">&quot;$3&quot;</span><br><br><span class="hljs-number">3</span>)重启agent<br>systemctl restart zabbix_agent.service<br><br><span class="hljs-number">4</span>)在zabbix_server上测试是否拿到数据<br>zabbix_get -s <span class="hljs-number">10.0</span>.<span class="hljs-number">0.128</span> -k nginx.status[<span class="hljs-string">&quot;nginx_statux&quot;</span>,<span class="hljs-number">80</span>,<span class="hljs-string">&quot;active&quot;</span>]<br><br><span class="hljs-number">5</span>)在zabbix_server的web页面上添加模板和监控项<br><br><br><span class="hljs-comment">####创建监控项，这里创建一个，其他的克隆即可</span><br><br><br><span class="hljs-comment">####创建监控端口的监控项</span><br><br><br><br><span class="hljs-comment">####创建触发器</span><br><br><br><span class="hljs-comment">####创建图形</span><br><br><span class="hljs-comment">####模板创建完成</span><br><br><span class="hljs-comment">####主机内关联模板</span><br><br><br><span class="hljs-comment">####查看最新数据及图形</span><br><br><br><br><br><span class="hljs-comment">####nginx自定义监控创建完成</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5、基于zabbix实现邮件或微信告警"><a href="#5、基于zabbix实现邮件或微信告警" class="headerlink" title="5、基于zabbix实现邮件或微信告警"></a>5、基于zabbix实现邮件或微信告警</h3><figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">1)使用163邮箱获取授权码</span><br><span class="language-xml"></span><br><span class="language-xml">2）管理--&gt;报警媒介类型--&gt;创建报警媒介类型</span><br><span class="language-xml"></span><br><span class="language-xml">3）添加报警信息模板用于发送信息</span><br><span class="language-xml"></span><br><span class="language-xml">#可以修改两个消息模板</span><br><span class="language-xml"># 问题</span><br><span class="language-xml">主题: 告警: </span><span class="hljs-template-variable">&#123;EVENT.NAME&#125;</span><span class="language-xml"></span><br><span class="language-xml">告警主机：</span><span class="hljs-template-variable">&#123;HOST.NAME1&#125;</span><span class="language-xml"></span><br><span class="language-xml">告警服务: </span><span class="hljs-template-variable">&#123;ITEM.NAME1&#125;</span><span class="language-xml"></span><br><span class="language-xml">告警Key1: </span><span class="hljs-template-variable">&#123;ITEM.KEY1&#125;</span><span class="language-xml">：</span><span class="hljs-template-variable">&#123;ITEM.VALUE1&#125;</span><span class="language-xml"></span><br><span class="language-xml">告警Key2: </span><span class="hljs-template-variable">&#123;ITEM.KEY2&#125;</span><span class="language-xml">：</span><span class="hljs-template-variable">&#123;ITEM.VALUE2&#125;</span><span class="language-xml"></span><br><span class="language-xml">严重级别: </span><span class="hljs-template-variable">&#123;TRIGGER.SEVERITY&#125;</span><span class="language-xml"></span><br><span class="language-xml"># 恢复 Problem Recovery</span><br><span class="language-xml">主题: 恢复: </span><span class="hljs-template-variable">&#123;EVENT.DURATION&#125;</span><span class="language-xml">: </span><span class="hljs-template-variable">&#123;EVENT.NAME&#125;</span><span class="language-xml"></span><br><span class="language-xml">恢复主机：</span><span class="hljs-template-variable">&#123;HOST.NAME1&#125;</span><span class="language-xml"></span><br><span class="language-xml">恢复服务： </span><span class="hljs-template-variable">&#123;ITEM.NAME1&#125;</span><span class="language-xml"></span><br><span class="language-xml">恢复Key1：</span><span class="hljs-template-variable">&#123;ITEM.KEY1&#125;</span><span class="language-xml">：</span><span class="hljs-template-variable">&#123;ITEM.VALUE1&#125;</span><span class="language-xml"></span><br><span class="language-xml">恢复Key2: </span><span class="hljs-template-variable">&#123;ITEM.KEY2&#125;</span><span class="language-xml">：</span><span class="hljs-template-variable">&#123;ITEM.VALUE2&#125;</span><span class="language-xml"></span><br><span class="language-xml">4）添加完后测试是否可收到邮件</span><br><span class="language-xml"></span><br><span class="language-xml">#收到邮件</span><br><span class="language-xml"></span><br><span class="language-xml">5）配置用户的收件邮箱和使用的动作</span><br><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml">#默认动作</span><br><span class="language-xml"></span><br><span class="language-xml">6）停止nginx和启动nginx，查看是否发送故障和恢复邮件。上面自定义监控项里已设置80端口触发器</span><br><span class="language-xml">systemctl stop nginx</span><br><span class="language-xml"></span><br><span class="language-xml">systemctl start nginx</span><br><span class="language-xml"></span><br><span class="language-xml">###邮箱收到的邮件列表</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6、总结zabbix自动发现监控"><a href="#6、总结zabbix自动发现监控" class="headerlink" title="6、总结zabbix自动发现监控"></a>6、总结zabbix自动发现监控</h3><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs armasm">之前都是手动一台一台主机的添加到 Zabbix 中进行监控,很是繁琐,可以利用自动发现功能,自动添加被监控的主机，当众多的服务器都已经安装了agent或者snmp后，利用自动发现功能,Zabbix server 可以自动扫描预先配置好的<span class="hljs-built_in">ip</span>段，自动添加主机，自动关联模板，自动加到主机组里等等。<br>网络发现功能更快速的部署zabbix、简化zabbix管理、并且在经常变动的环境里面也不需要花太多的精力，毕竟网络发现也能随时发现变化。<br>当然网络发现也不是万能的,虽然网络发现能干很多事情，但是它无法发现网络拓扑的变化。由于自动发现效率比较低,严重消耗Zabbix Server资源和网络带宽,大规模环境中较少使用自动发现虽然能自动完成发现并添加主机，但仍然存在一些问题<br><span class="hljs-number">1</span>）发现时间长，效率较低<br><span class="hljs-number">2</span>）扫描过程中容易漏扫<br><span class="hljs-number">3</span>）当<span class="hljs-built_in">IP</span>地址不固定难以实现<br><span class="hljs-number">4</span>）无法实现不同类型主机关联不同模板<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/28/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%91%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第十一周</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/28/MYSQL%E5%AE%9E%E6%88%98/">
+                        <span class="hidden-mobile">MYSQL实战</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=A5I1aDMT5p5nmi3zDa8t7gWOHawJhjyi&noverify=0&personal_qrcode_source=4" target="_blank" rel="nofollow noopener"><span>JohnBakcu</span></a> <i class="iconfont icon-love"></i> <a href="https://www.magedu.com"  target="_blank" rel="nofollow noopener"><span>Mgedu</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
